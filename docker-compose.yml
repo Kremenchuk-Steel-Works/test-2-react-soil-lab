@@ -1,0 +1,16 @@
+services:
+  frontend:
+    build:
+      context: .
+      target: production
+    image: steelworks-react-ui:latest
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    environment:
+      NODE_ENV: production

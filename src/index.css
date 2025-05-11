@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@layer base {
+  h1.layout-text {
+    @apply text-5xl font-bold leading-tight;
+  }
+  h2.layout-text {
+    @apply text-4xl font-semibold leading-snug;
+  }
+  h3.layout-text {
+    @apply text-3xl font-semibold leading-snug;
+  }
+  h4.layout-text {
+    @apply text-2xl font-medium leading-snug;
+  }
+  h5.layout-text {
+    @apply text-xl font-medium leading-relaxed;
+  }
+  h6.layout-text {
+    @apply text-lg font-medium leading-relaxed;
+  }
+  p.layout-text {
+    @apply text-base leading-relaxed;
+  }
+
+  html {
+    /* Перенос строк */
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
