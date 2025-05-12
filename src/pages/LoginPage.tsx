@@ -47,11 +47,9 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-800">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-xl">
-        <h4 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
-          Вхід у систему
-        </h4>
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="w-full max-w-md p-8 rounded-xl">
+        <h4 className="text-3xl font-bold text-center mb-8">Вхід у систему</h4>
 
         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-2">
@@ -71,7 +69,7 @@ export default function LoginPage() {
             />
           </div>
 
-          <label className="flex items-center space-x-2 text-gray-700 dark:text-gray-200 cursor-pointer select-none text-sm">
+          <label className="flex items-center space-x-2 cursor-pointer select-none text-sm">
             <input
               type="checkbox"
               className="h-5 w-5 border rounded-md focus:ring-0 transition cursor-pointer"

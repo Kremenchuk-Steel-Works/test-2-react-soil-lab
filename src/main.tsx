@@ -5,13 +5,16 @@ import { RouterProvider } from "react-router-dom"
 import { initApp } from "./init.ts"
 import { AuthProvider } from "./components/AuthProvider/AuthProvider.tsx"
 import { router } from "./routes/AppRoutes.tsx"
+import { SidebarProvider } from "./components/Template/SidebarProvider"
 
 initApp()
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <SidebarProvider>
+        <RouterProvider router={router} />
+      </SidebarProvider>
     </AuthProvider>
   </StrictMode>
 )

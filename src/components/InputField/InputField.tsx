@@ -10,8 +10,7 @@ const InputField: React.FC<InputFieldProps> = ({ label, ...props }) => {
         className={`
           peer
           w-full px-4 pt-5 pb-2 border border-gray-300 dark:border-gray-600 rounded-md
-          bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white
-          focus:outline-none focus:ring-2 focus:ring-blue-500
+          bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500
         `}
         placeholder=" "
       />

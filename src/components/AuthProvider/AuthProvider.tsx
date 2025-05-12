@@ -8,44 +8,32 @@ import AuthContext from "./AuthContext"
 import log from "../../utils/logger"
 import { apiUsersMe } from "../../services/user"
 
+// Функции для чтения данных из storage:
+const getStoredItem = (itemName: string): string | null => {
+  return (
+    localStorage.getItem(itemName) || sessionStorage.getItem(itemName) || null
+  )
+}
+
 // Компонент-провайдер
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [accessToken, setAccessToken] = useState<string | null>()
-  const [refreshToken, setRefreshToken] = useState<string | null>()
+  const [accessToken, setAccessToken] = useState<string | null>(() =>
+    getStoredItem("accessToken")
+  )
+  const [refreshToken, setRefreshToken] = useState<string | null>(() =>
+    getStoredItem("refreshToken")
+  )
   const [currentUser, setCurrentUser] = useState<User | null>()
-
-  // Проверяем, есть ли токены в storage
-  useEffect(() => {
-    log.debug("Проверяем, есть ли токены в storage")
-    const storedAccessToken =
-      localStorage.getItem("accessToken") ||
-      sessionStorage.getItem("accessToken")
-    const storedRefreshToken =
-      localStorage.getItem("refreshToken") ||
-      sessionStorage.getItem("refreshToken")
-
-    // Если токены есть, устанавливаем их
-    if (storedAccessToken) {
-      setAccessToken(storedAccessToken)
-    } else {
-      setAccessToken(null)
-    }
-    if (storedRefreshToken) {
-      setRefreshToken(storedRefreshToken)
-    } else {
-      setRefreshToken(null)
-      setCurrentUser(null)
-    }
-  }, [])
 
   // Функция входа
   const login = async ({ email, password, rememberMe }: FormLoginFields) => {
-    log.debug("Вход в систему")
+    log.debug("Выполняем вход в систему")
     const response = await apiLogin({ email, password })
 
     // logout чтобы точно очистить все старые данные пользователя
     logout()
     log.debug(response.access_token)
+
     setAccessToken(response.access_token)
     setRefreshToken(response.refresh_token)
 
@@ -56,7 +44,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Функция выхода
   const logout = async () => {
-    log.debug("Выход из системы")
+    log.debug("Выполняем выход из системы")
     setAccessToken(null)
     setRefreshToken(null)
     setCurrentUser(null)
@@ -143,6 +131,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Актуальные данные пользователя
   useEffect(() => {
     if (!accessToken) {
+      log.debug("accessToken не найден, пользователь не авторизован")
+      setCurrentUser(null)
       return
     }
 

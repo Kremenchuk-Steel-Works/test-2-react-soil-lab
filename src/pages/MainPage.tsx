@@ -3,7 +3,6 @@ import Layout from "../components/Template/Layout"
 import { useAuth } from "../components/AuthProvider/AuthContext"
 import log from "../utils/logger"
 import { useNavigate } from "react-router-dom"
-import { PATHS } from "../routes/AppRoutes"
 
 export default function MainPage() {
   const { currentUser } = useAuth()
@@ -28,12 +27,9 @@ export default function MainPage() {
     <Layout>
       <div className="space-y-2">
         <h4 className="layout-text">Головна сторінка</h4>
-        <div className="flex flex-wrap space-x-2">
+        <div className="flex flex-wrap gap-x-2 gap-y-2">
           {getAccessPages().map((p) => (
-            <Button
-              key={p.name}
-              onClick={() => navigate(PATHS.SPECTRAL_ANALYSIS)}
-            >
+            <Button key={p.name} onClick={() => navigate(p.name)}>
               {p.description}
             </Button>
           ))}

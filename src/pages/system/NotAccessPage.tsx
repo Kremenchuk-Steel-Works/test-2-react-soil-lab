@@ -2,21 +2,15 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft, House, Lock } from "lucide-react"
 import Button from "../../components/Button/Button"
 import { PATHS } from "../../routes/AppRoutes"
+import { CenteredWrapper } from "../../components/CenteredWrapper"
 
 export default function NotAccessPage() {
   const navigate = useNavigate()
 
   return (
-    // этот контейнер займёт всю высоту main и выровняет содержимое по центру
-    <div className="min-h-full flex items-center justify-center">
+    <CenteredWrapper>
       {/* сама “карточка” */}
-      <div
-        className="
-          w-full max-w-md
-          flex flex-col items-center justify-center space-y-4
-          bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white
-        "
-      >
+      <div className="w-full max-w-md flex flex-col items-center justify-center space-y-4">
         <Lock className="h-16 w-16 text-red-500" />
         <h1 className="text-2xl font-semibold">Доступ заборонено</h1>
         <p className="max-w-sm">
@@ -37,6 +31,6 @@ export default function NotAccessPage() {
           </Button>
         </div>
       </div>
-    </div>
+    </CenteredWrapper>
   )
 }
