@@ -5,4 +5,11 @@ module.exports = {
     extend: {},
   },
   plugins: [],
+  theme: {
+    extend: {
+      transitionProperty: {
+        height: "height, max-height",
+      },
+    },
+  },
 }

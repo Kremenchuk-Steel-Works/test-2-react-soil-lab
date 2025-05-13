@@ -1,13 +1,13 @@
+import Sidebar from "../Sidebar/Sidebar"
 import Navbar from "./Navbar"
-import Sidebar from "./Sidebar"
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white">
+    <div className="flex flex-col h-full">
       <Navbar />
-      <div className="flex">
+      <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <main className="flex-grow p-4 min-h-screen">{children}</main>
+        <main className="flex-1 h-full overflow-auto p-4">{children}</main>
       </div>
     </div>
   )

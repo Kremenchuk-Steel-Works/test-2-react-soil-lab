@@ -5,7 +5,7 @@ import { RouterProvider } from "react-router-dom"
 import { initApp } from "./init.ts"
 import { AuthProvider } from "./components/AuthProvider/AuthProvider.tsx"
 import { router } from "./routes/AppRoutes.tsx"
-import { SidebarProvider } from "./components/Template/SidebarProvider"
+import { SidebarProvider } from "./components/Sidebar/SidebarProvider.tsx"
 
 initApp()
 

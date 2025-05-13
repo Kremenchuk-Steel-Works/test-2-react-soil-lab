@@ -2,29 +2,32 @@ import { User, Shield, LogOut, Menu } from "lucide-react"
 import { Link } from "react-router-dom"
 import { PATHS } from "../../routes/AppRoutes"
 import { useAuth } from "../AuthProvider/AuthContext"
-import { useSidebar } from "./SidebarProvider"
+import { useSidebar } from "../Sidebar/SidebarProvider"
 
 const Navbar: React.FC = () => {
   const { logout, currentUser } = useAuth()
-  const { collapsed, setCollapsed } = useSidebar()
+  const { toggleSidebar, closeSidebar, collapsed, broken } = useSidebar()
 
   const handleLogout = async () => {
     await logout()
   }
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-md">
+    <nav className="relative z-50 bg-white dark:bg-gray-900 shadow-md">
       <div className="mx-auto pr-4">
         <div className="flex items-center justify-between h-14">
           {/* Кнопка-гамбургер перед заголовком */}
           <button
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={toggleSidebar}
             className="p-4 focus:outline-none cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700"
           >
             <Menu className="w-6 h-6" />
           </button>
           {/* Логотип */}
-          <div className="flex-shrink-0 pl-4">
+          <div
+            className="flex-shrink-0 pl-4"
+            onClick={() => collapsed && broken && closeSidebar()}
+          >
             <Link
               to={PATHS.MAIN}
               className="text-2xl font-bold text-blue-600 dark:text-white"
