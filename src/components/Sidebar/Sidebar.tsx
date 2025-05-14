@@ -2,7 +2,6 @@ import { useSidebar } from "./SidebarProvider"
 import { FlaskConical, Database, Package } from "lucide-react"
 import { SubMenu } from "./SubMenu"
 import { SubMenuItem } from "./SubMenuItem"
-import { SubMenuSubItem } from "./SubMenuISubItem"
 import getAccessPages from "../../utils/accessPage"
 
 const Sidebar: React.FC = () => {
