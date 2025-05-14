@@ -16,9 +16,9 @@ export default function SteamlitPage() {
         >
           <ArrowLeft className="w-5 h-5" /> <span>Назад</span>
         </Button>
-        <div className="flex flex-wrap space-x-2">
+        <div className="w-full h-full block">
           <iframe
-            src="http://195.189.63.125:8555"
+            src="http://195.189.63.125:8501"
             width="100%"
             height="700px"
           />

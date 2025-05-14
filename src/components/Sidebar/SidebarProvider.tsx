@@ -7,7 +7,7 @@ type SidebarContextType = {
   closeSidebar: () => void
   expandedSubMenus: Set<string>
   collapsedSubMenu: string | null
-  toggleSubMenu: (id: string) => void
+  toggleSubMenu: (id: string, forceCollapsed?: boolean) => void
   closeSubMenu: () => void
 }
 
@@ -65,8 +65,8 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
   const closeSidebar = () => setCollapsed(true)
 
   // unified toggler: branch on collapsed
-  const toggleSubMenu = (id: string) => {
-    if (collapsed) {
+  const toggleSubMenu = (id: string, forceCollapsed = false) => {
+    if (collapsed && forceCollapsed) {
       // collapsed: single popup
       setCollapsedSubMenu((prev) => (prev === id ? null : id))
     } else {

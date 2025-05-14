@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "tailwind-scrollbar-hide";
 
 @layer base {
   h1.layout-text {
