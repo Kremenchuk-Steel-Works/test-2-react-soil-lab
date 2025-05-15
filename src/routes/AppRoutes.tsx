@@ -4,12 +4,7 @@ import { UnAuthRoute } from "./UnAuthRoute"
 
 import LoginPage from "../pages/LoginPage"
 import MainPage from "../pages/MainPage"
-
-import SpectralAnalysisList from "../pages/SpectralAnalysis/List"
-import SpectralAnalysisAdd from "../pages/SpectralAnalysis/Add"
-import SpectralAnalysisLayout from "../pages/SpectralAnalysis/Layout"
-
-import StreamlitPage from "../pages/StreamlitPage"
+import { APP_ROUTES } from "./routes"
 
 export const PATHS = {
   LOGIN: "/login",
@@ -35,35 +30,24 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-  {
-    path: PATHS.SPECTRAL_ANALYSIS,
+  // map every route in APP_ROUTES
+  ...APP_ROUTES.map((route) => ({
+    path: route.path,
     element: (
-      <ProtectedRoute allowedPermissions={["spectral_analysis_view"]}>
-        <SpectralAnalysisLayout />
+      <ProtectedRoute allowedPermissions={route.requiredPermissions}>
+        {route.component}
       </ProtectedRoute>
     ),
-    children: [
-      { index: true, element: <SpectralAnalysisList /> },
-      {
-        path: "add",
-        element: (
-          <ProtectedRoute allowedPermissions={["spectral_analysis_add"]}>
-            <SpectralAnalysisAdd />
-          </ProtectedRoute>
-        ),
-      },
-      // { path: ":id", element: <SpectralAnalysisDetail /> },
-      // { path: ":id/edit", element: <SpectralAnalysisEdit /> },
-    ],
-  },
-  {
-    path: PATHS.STREAMLIT_QUALITY_DASH,
-    element: (
-      <ProtectedRoute>
-        <StreamlitPage />
-      </ProtectedRoute>
-    ),
-  },
+    children: route.children?.map((child) => ({
+      index: child.path === "",
+      path: child.path,
+      element: (
+        <ProtectedRoute allowedPermissions={child.requiredPermissions}>
+          {child.component}
+        </ProtectedRoute>
+      ),
+    })),
+  })),
   {
     path: "*",
     element: <Navigate to={PATHS.MAIN} replace />,

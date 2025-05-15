@@ -58,14 +58,14 @@ const Popup = ({
   return createPortal(
     <>
       {/* Клик вне элементов popup */}
-      <div className="fixed inset-0 z-40" onClick={closeSubMenu} />
+      <div className="fixed inset-0" onClick={closeSubMenu} />
       <div
         ref={containerRef}
         className="
           w-70
           fixed
           bg-blue-50 dark:bg-[#0e1523]
-          shadow-lg z-40
+          shadow-lg z-50
           max-h-[50vh]  /* ограничиваем % высоты экрана */
           overflow-y-auto scrollbar-hide"
         style={style}

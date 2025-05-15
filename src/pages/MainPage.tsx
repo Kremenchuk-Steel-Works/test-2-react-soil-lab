@@ -1,11 +1,11 @@
 import Button from "../components/Button/Button"
 import Layout from "../components/Template/Layout"
+import useAccessPages from "../hooks/useAccessPages"
 import log from "../utils/logger"
 import { useNavigate } from "react-router-dom"
-import getAccessPages from "../utils/accessPage"
 
 export default function MainPage() {
-  const accessPages = getAccessPages()
+  const accessPages = useAccessPages()
   const navigate = useNavigate()
   log.debug(accessPages)
 

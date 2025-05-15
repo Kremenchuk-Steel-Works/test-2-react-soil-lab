@@ -1,13 +1,15 @@
 import { useSidebar } from "./SidebarProvider"
-import { FlaskConical, Database, Package } from "lucide-react"
 import { SubMenu } from "./SubMenu"
-import { SubMenuItem } from "./SubMenuItem"
-import getAccessPages from "../../utils/accessPage"
 import React from "react"
+import MenuItem from "./MenuItem"
+import { useVisibleRoutes } from "../../hooks/usePermissions"
 
 const Sidebar: React.FC = () => {
-  const { collapsed, broken, closeSidebar } = useSidebar()
-  const accessPages = getAccessPages()
+  const { closeSidebar, closeSubMenu, expandedSubMenus, collapsed, broken } =
+    useSidebar()
+
+  // filter top‑level items user can view
+  const visibleRoutes = useVisibleRoutes()
 
   const baseClasses = `
     z-50 flex flex-col bg-white dark:bg-gray-900 shadow-md transition-all duration-300 ease-in-out overflow-hidden
@@ -26,33 +28,42 @@ const Sidebar: React.FC = () => {
         <div className="fixed inset-0 bg-black/50" onClick={closeSidebar} />
       )}
 
-      <aside className={`${baseClasses} ${modeClasses} flex flex-col h-full`}>
+      <aside
+        className={`${baseClasses} ${modeClasses} h-full`}
+        onClick={() =>
+          (collapsed && expandedSubMenus && closeSubMenu()) ||
+          (broken && !collapsed && closeSidebar())
+        }
+      >
         {/* Обёртка для скролла */}
         <div className="flex-1 overflow-y-auto scrollbar-hide">
-          <nav>
-            {accessPages.map((p) => (
-              <SubMenuItem
-                key={p.name}
-                label={p.description}
-                Icon={Package}
-                to={`/${p.name}`}
-              />
-            ))}
-            {accessPages.map((p) => (
-              <SubMenu
-                key={p.name}
-                id={p.name}
-                label={p.description}
-                Icon={FlaskConical}
-              >
-                <SubMenuItem
-                  key={p.name}
-                  label={p.description}
-                  Icon={Database}
-                  to={`/${p.name}`}
+          <nav onClick={(e) => e.stopPropagation()}>
+            {visibleRoutes.map((route) =>
+              !route.children ? (
+                <MenuItem
+                  key={route.key}
+                  label={route.label}
+                  Icon={route.icon}
+                  to={route.path}
                 />
-              </SubMenu>
-            ))}
+              ) : (
+                <SubMenu
+                  key={route.key}
+                  id={route.key}
+                  label={route.label}
+                  Icon={route.icon}
+                >
+                  {route.children.map((child) => (
+                    <MenuItem
+                      key={child.key}
+                      label={child.label}
+                      Icon={child.icon}
+                      to={`${route.path}/${child.path}`}
+                    ></MenuItem>
+                  ))}
+                </SubMenu>
+              )
+            )}
           </nav>
         </div>
       </aside>

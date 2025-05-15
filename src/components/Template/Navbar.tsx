@@ -6,7 +6,14 @@ import { useSidebar } from "../Sidebar/SidebarProvider"
 
 const Navbar: React.FC = () => {
   const { logout, currentUser } = useAuth()
-  const { toggleSidebar, closeSidebar, collapsed, broken } = useSidebar()
+  const {
+    toggleSidebar,
+    closeSidebar,
+    closeSubMenu,
+    expandedSubMenus,
+    collapsed,
+    broken,
+  } = useSidebar()
 
   const handleLogout = async () => {
     await logout()
@@ -15,7 +22,13 @@ const Navbar: React.FC = () => {
   return (
     <nav className="relative z-50 bg-white dark:bg-gray-900 shadow-md">
       <div className="mx-auto pr-4">
-        <div className="flex items-center justify-between h-14">
+        <div
+          className="flex items-center justify-between h-14"
+          onClick={() =>
+            (collapsed && expandedSubMenus && closeSubMenu()) ||
+            (broken && !collapsed && closeSidebar())
+          }
+        >
           {/* Кнопка-гамбургер перед заголовком */}
           <button
             onClick={toggleSidebar}
@@ -24,10 +37,7 @@ const Navbar: React.FC = () => {
             <Menu className="w-6 h-6" />
           </button>
           {/* Логотип */}
-          <div
-            className="flex-shrink-0"
-            onClick={() => collapsed && broken && closeSidebar()}
-          >
+          <div className="flex-shrink-0">
             <Link
               to={PATHS.MAIN}
               className="block px-5 py-2 text-2xl font-bold text-blue-600 dark:text-white"

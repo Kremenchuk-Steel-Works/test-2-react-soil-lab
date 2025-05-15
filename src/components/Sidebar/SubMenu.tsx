@@ -39,7 +39,10 @@ export const SubMenu: React.FC<SubMenuProps> = ({
         onClick={() => toggleSubMenu(elementId, isMainMenu)}
         className="w-full flex items-center justify-between px-4.5 py-4 cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-700"
       >
-        <div className={`flex items-center gap-2 min-w-0`}>
+        <div
+          className={`flex items-center gap-2 min-w-0`}
+          {...(isTruncated || collapsed ? { title: label } : {})}
+        >
           <div
             className={`transition-colors duration-300 ${
               !collapsed && isMainMenu && isExpandedOpen
@@ -54,22 +57,31 @@ export const SubMenu: React.FC<SubMenuProps> = ({
             className={`truncate whitespace-nowrap flex-shrink min-w-0 overflow-hidden transition-[max-width] duration-300 ease-in-out ${
               collapsed && isMainMenu ? "max-w-0" : "max-w-full"
             } ${isExpandedOpen ? "font-bold" : ""}`}
-            {...(isTruncated ? { title: label } : {})}
           >
             {label}
           </div>
         </div>
 
         {/* иконки */}
-        {!collapsed || !isMainMenu ? (
-          <ChevronRight
-            className={`w-5 h-5 flex-shrink-0 transform transition-transform duration-300 ease-in-out 
+        <ChevronRight
+          className={`flex-shrink-0 transform transition-all duration-300 ease-in-out 
               ${isExpandedOpen ? "rotate-90" : "rotate-0"}
-  `}
-          />
-        ) : (
-          <span className="absolute right-2 block w-1.5 h-1.5 rounded-full bg-current/50" />
-        )}
+              ${
+                !collapsed || !isMainMenu
+                  ? "opacity-100 w-5 h-5"
+                  : "opacity-0 w-0 h-0"
+              }
+              `}
+        />
+        <span
+          className={`absolute right-2 block rounded-full bg-current/50 transform transition-all duration-300 ease-in-out
+            ${
+              !collapsed || !isMainMenu
+                ? "opacity-0 w-0 h-0"
+                : "opacity-100 w-1.5 h-1.5"
+            }
+          `}
+        />
       </button>
 
       {/* Открытие Submenu с анимацией */}

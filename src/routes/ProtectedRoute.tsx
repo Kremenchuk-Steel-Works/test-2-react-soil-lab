@@ -1,13 +1,13 @@
 import type { PropsWithChildren } from "react"
-import type { User } from "../types/User"
 import { Navigate } from "react-router-dom"
 import { PATHS } from "./AppRoutes"
 import { useAuth } from "../components/AuthProvider/AuthContext"
 import LoadingPage from "../pages/system/LoadingPage"
 import NotAccessPage from "../pages/system/NotAccessPage"
+import { useUserPermissionsSet } from "../hooks/usePermissions"
 
 type ProtectedRouteProps = PropsWithChildren & {
-  allowedPermissions?: User["permissions"][number]["name"][]
+  allowedPermissions?: string[]
 }
 
 export default function ProtectedRoute({
@@ -15,6 +15,7 @@ export default function ProtectedRoute({
   children,
 }: ProtectedRouteProps) {
   const { currentUser } = useAuth()
+  const userPermissions = useUserPermissionsSet()
 
   if (currentUser === undefined) {
     return <LoadingPage />
@@ -26,7 +27,7 @@ export default function ProtectedRoute({
 
   if (
     allowedPermissions &&
-    !currentUser.permissions.some((p) => allowedPermissions.includes(p.name))
+    !allowedPermissions.every((perm) => userPermissions.has(perm))
   ) {
     return <NotAccessPage />
   }

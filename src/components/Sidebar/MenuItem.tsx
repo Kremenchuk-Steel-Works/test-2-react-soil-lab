@@ -28,12 +28,11 @@ export default function MenuItem({ label, Icon, to }: MenuItemProps) {
       to={to}
       onClick={handleClick}
       className="flex items-center gap-2 px-4.5 py-4 hover:bg-blue-200 dark:hover:bg-blue-700"
+      {...(isTruncated || collapsed ? { title: label } : {})}
     >
       {Icon && <Icon className="w-5 h-5 flex-shrink-0" />}
       <div ref={ref} className={"truncate flex-shrink min-w-0 overflow-hidden"}>
-        <span key={label} {...(isTruncated ? { title: label } : {})}>
-          {label}
-        </span>
+        <span key={label}>{label}</span>
       </div>
     </Link>
   )
