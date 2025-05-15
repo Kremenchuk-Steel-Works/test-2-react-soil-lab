@@ -15,7 +15,7 @@ export const PATHS = {
   LOGIN: "/login",
   MAIN: "/",
   SPECTRAL_ANALYSIS: "/spectral_analysis",
-  STREAMLIT: "/streamlit",
+  STREAMLIT_QUALITY_DASH: "/quality_dash",
 }
 
 export const router = createBrowserRouter([
@@ -57,7 +57,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: PATHS.STREAMLIT,
+    path: PATHS.STREAMLIT_QUALITY_DASH,
     element: (
       <ProtectedRoute>
         <StreamlitPage />

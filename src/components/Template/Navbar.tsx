@@ -25,14 +25,18 @@ const Navbar: React.FC = () => {
           </button>
           {/* Логотип */}
           <div
-            className="flex-shrink-0 pl-4"
+            className="flex-shrink-0"
             onClick={() => collapsed && broken && closeSidebar()}
           >
             <Link
               to={PATHS.MAIN}
-              className="text-2xl font-bold text-blue-600 dark:text-white"
+              className="block px-5 py-2 text-2xl font-bold text-blue-600 dark:text-white"
             >
-              Steel
+              <img
+                src="/cz-logo-v111.png"
+                alt="CZ Logo"
+                className="h-10 object-contain"
+              />
             </Link>
           </div>
 

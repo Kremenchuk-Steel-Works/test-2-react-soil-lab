@@ -3,6 +3,7 @@ import { FlaskConical, Database, Package } from "lucide-react"
 import { SubMenu } from "./SubMenu"
 import { SubMenuItem } from "./SubMenuItem"
 import getAccessPages from "../../utils/accessPage"
+import React from "react"
 
 const Sidebar: React.FC = () => {
   const { collapsed, broken, closeSidebar } = useSidebar()
@@ -26,7 +27,7 @@ const Sidebar: React.FC = () => {
       )}
 
       <aside className={`${baseClasses} ${modeClasses} flex flex-col h-full`}>
-        {/* обёртка для скролла */}
+        {/* Обёртка для скролла */}
         <div className="flex-1 overflow-y-auto scrollbar-hide">
           <nav>
             {accessPages.map((p) => (
@@ -45,146 +46,13 @@ const Sidebar: React.FC = () => {
                 Icon={FlaskConical}
               >
                 <SubMenuItem
+                  key={p.name}
                   label={p.description}
                   Icon={Database}
                   to={`/${p.name}`}
                 />
               </SubMenu>
             ))}
-            {/* <SubMenu id="123" label="Analytics" Icon={FlaskConical}>
-              <SubMenuItem
-                label="Spectral"
-                Icon={FlaskConical}
-                to="/spectral_analysis"
-              />
-              <SubMenuItem label="Streamlit" Icon={Database} to="/streamlit" />
-            </SubMenu>
-            <SubMenu id="1234" label="Example" Icon={FlaskConical}>
-              <SubMenuItem
-                label="Test 1"
-                Icon={Database}
-                to="/spectral_analysis"
-              />
-              <SubMenuItem
-                label="Test 2"
-                Icon={Database}
-                to="/spectral_analysis"
-              />
-              <SubMenuSubItem
-                id="12345"
-                label="Analytics Test"
-                Icon={FlaskConical}
-              >
-                <SubMenuItem
-                  label="Spectral"
-                  Icon={FlaskConical}
-                  to="/spectral_analysis"
-                />
-                <SubMenuItem
-                  label="Streamlit"
-                  Icon={Database}
-                  to="/streamlit"
-                />
-                <SubMenuSubItem
-                  id="123456"
-                  label="Analytics"
-                  Icon={FlaskConical}
-                >
-                  <SubMenuItem
-                    label="Spectral"
-                    Icon={FlaskConical}
-                    to="/spectral_analysis"
-                  />
-                  <SubMenuItem
-                    label="Streamlit"
-                    Icon={Database}
-                    to="/streamlit"
-                  />
-                </SubMenuSubItem>
-              </SubMenuSubItem>
-              <SubMenuItem
-                label="Спектральний аналіз"
-                Icon={FlaskConical}
-                to="/spectral_analysis/add"
-              />
-            </SubMenu>
-            <SubMenu id="1" label="Example" Icon={FlaskConical}>
-              <SubMenuItem
-                label="Test 1"
-                Icon={Database}
-                to="/spectral_analysis"
-              />
-              <SubMenuItem
-                label="Test 2"
-                Icon={Database}
-                to="/spectral_analysis"
-              />
-              <SubMenuSubItem
-                id="11"
-                label="Analytics Test"
-                Icon={FlaskConical}
-              >
-                <SubMenuItem
-                  label="Spectral"
-                  Icon={FlaskConical}
-                  to="/spectral_analysis"
-                />
-                <SubMenuItem
-                  label="Streamlit"
-                  Icon={Database}
-                  to="/streamlit"
-                />
-                <SubMenuSubItem id="111" label="Analytics" Icon={FlaskConical}>
-                  <SubMenuItem
-                    label="Spectral"
-                    Icon={FlaskConical}
-                    to="/spectral_analysis"
-                  />
-                  <SubMenuItem
-                    label="Streamlit"
-                    Icon={Database}
-                    to="/streamlit"
-                  />
-                  <SubMenuSubItem
-                    id="11111"
-                    label="Analytics Test"
-                    Icon={FlaskConical}
-                  >
-                    <SubMenuItem
-                      label="Spectral"
-                      Icon={FlaskConical}
-                      to="/spectral_analysis"
-                    />
-                    <SubMenuItem
-                      label="Streamlit"
-                      Icon={Database}
-                      to="/streamlit"
-                    />
-                    <SubMenuSubItem
-                      id="111111"
-                      label="Analytics"
-                      Icon={FlaskConical}
-                    >
-                      <SubMenuItem
-                        label="Spectral"
-                        Icon={FlaskConical}
-                        to="/spectral_analysis"
-                      />
-                      <SubMenuItem
-                        label="Streamlit"
-                        Icon={Database}
-                        to="/streamlit"
-                      />
-                    </SubMenuSubItem>
-                  </SubMenuSubItem>
-                </SubMenuSubItem>
-              </SubMenuSubItem>
-              <SubMenuItem
-                label="Спектральний аналіз"
-                Icon={FlaskConical}
-                to="/spectral_analysis/add"
-              />
-            </SubMenu> */}
           </nav>
         </div>
       </aside>

@@ -9,7 +9,7 @@ export default function SteamlitPage() {
   return (
     <Layout>
       <div className="space-y-2">
-        <h4 className="layout-text">Streamlit</h4>
+        <h4 className="layout-text">Quality Dash</h4>
         <Button
           className="flex items-center justify-center gap-1 whitespace-nowrap"
           onClick={() => navigate(PATHS.MAIN)}
@@ -20,7 +20,7 @@ export default function SteamlitPage() {
           <iframe
             src="http://195.189.63.125:8501"
             width="100%"
-            height="700px"
+            height="900px"
           />
         </div>
       </div>
