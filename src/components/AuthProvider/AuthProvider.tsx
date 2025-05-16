@@ -86,12 +86,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       async (error) => {
         const originalRequest = error.config
 
-        log.debug("Обновляем токен", error.response.data.detail)
+        log.debug(
+          "Ошибка, проверяем нужно ли обновить токен",
+          error.response.data.detail
+        )
         if (
           !(error.response.status >= 200 && error.response.status < 300) &&
           error.response.data.detail === "Token has expired."
         ) {
           try {
+            log.debug("Обновляем токен", error.response.data.detail)
             const response = await api.post(
               `/auth/refresh`,
               { refresh_token: refreshToken },

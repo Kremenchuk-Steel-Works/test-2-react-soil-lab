@@ -24,6 +24,17 @@
     @apply text-base leading-relaxed;
   }
 
+  /* Убираем стандартный number WebKit-браузеры: Chrome, Safari, Edge, Opera */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    @apply appearance-none m-0;
+  }
+
+  /* Убираем стандартный number Firefox */
+  input[type="number"] {
+    @apply appearance-none;
+  }
+
   html {
     /* Перенос строк */
     overflow-wrap: anywhere;

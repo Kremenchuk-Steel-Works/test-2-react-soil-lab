@@ -6,13 +6,13 @@ import ButtonWithError from "../components/Button/ButtonWithError"
 import { useAuth } from "../components/AuthProvider/AuthContext"
 import log from "../utils/logger"
 
-const schema = z.object({
+const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(4),
   rememberMe: z.boolean(),
 })
 
-export type FormLoginFields = z.infer<typeof schema>
+export type FormLoginFields = z.infer<typeof loginSchema>
 
 export default function LoginPage() {
   const { login } = useAuth()
@@ -27,7 +27,7 @@ export default function LoginPage() {
       password: "1111",
       rememberMe: false,
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(loginSchema),
   })
 
   const onSubmit: SubmitHandler<FormLoginFields> = async (data) => {

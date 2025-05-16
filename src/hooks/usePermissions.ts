@@ -1,5 +1,4 @@
 import { useAuth } from "../components/AuthProvider/AuthContext"
-import type { Permission } from "../routes/routes"
 import type { AppRoute } from "../routes/routes"
 import { APP_ROUTES } from "../routes/routes"
 
@@ -12,20 +11,26 @@ export function useUserPermissionsSet(): Set<string> {
   return new Set(useUserPermissionNames())
 }
 
-// Фильтрует список маршрутов, возвращая только те, для которых у пользователя есть все requiredPermissions
-export function filterRoutes<T extends { requiredPermissions: Permission[] }>(
-  routes: T[],
+// Рекурсивно фильтрует массив маршрутов, оставляя только те, у которых нет requiredPermissions или у пользователя есть все нужные права
+export function filterRoutes(
+  routes: AppRoute[],
   perms: Set<string>
-): T[] {
+): AppRoute[] {
   return routes
-    .filter((r) => r.requiredPermissions.every((p) => perms.has(p)))
+    .filter((r) =>
+      // если нет requiredPermissions - считаем маршрут открытым
+      (r.requiredPermissions ?? []).every((p) => perms.has(p))
+    )
     .map((r) => {
-      if (!r.hasOwnProperty("children")) {
+      // если нет дочерних маршрутов - возвращаем сам объект
+      if (!r.children || r.children.length === 0) {
         return r
       }
-      const withChildren = { ...(r as any) } as T & { children?: T[] }
-      withChildren.children = filterRoutes(withChildren.children!, perms)
-      return withChildren
+      // иначе рекурсивно фильтруем children и возвращаем новый объект
+      return {
+        ...r,
+        children: filterRoutes(r.children, perms),
+      }
     })
 }
 

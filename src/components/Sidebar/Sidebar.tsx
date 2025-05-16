@@ -7,14 +7,12 @@ import { useVisibleRoutes } from "../../hooks/usePermissions"
 const Sidebar: React.FC = () => {
   const { closeSidebar, closeSubMenu, expandedSubMenus, collapsed, broken } =
     useSidebar()
-
-  // filter top‑level items user can view
   const visibleRoutes = useVisibleRoutes()
 
   const baseClasses = `
     z-50 flex flex-col bg-white dark:bg-gray-900 shadow-md transition-all duration-300 ease-in-out overflow-hidden
   `
-  // При broken-mode — fixed overlay, иначе — static в потоке
+  // При broken-mode — fixed overlay, иначе - static в потоке
   const modeClasses = broken
     ? `fixed top-14 bottom-0 left-0
        transform ${collapsed ? "-translate-x-full" : "translate-x-0"}
@@ -38,32 +36,36 @@ const Sidebar: React.FC = () => {
         {/* Обёртка для скролла */}
         <div className="flex-1 overflow-y-auto scrollbar-hide">
           <nav onClick={(e) => e.stopPropagation()}>
-            {visibleRoutes.map((route) =>
-              !route.children ? (
-                <MenuItem
-                  key={route.key}
-                  label={route.label}
-                  Icon={route.icon}
-                  to={route.path}
-                />
-              ) : (
-                <SubMenu
-                  key={route.key}
-                  id={route.key}
-                  label={route.label}
-                  Icon={route.icon}
-                >
-                  {route.children.map((child) => (
-                    <MenuItem
-                      key={child.key}
-                      label={child.label}
-                      Icon={child.icon}
-                      to={`${route.path}/${child.path}`}
-                    ></MenuItem>
-                  ))}
-                </SubMenu>
-              )
-            )}
+            {visibleRoutes
+              .filter((route) => route.inSidebar !== false)
+              .map((route) =>
+                !route.children ? (
+                  <MenuItem
+                    key={route.key}
+                    label={route.label}
+                    Icon={route.icon}
+                    to={route.path}
+                  />
+                ) : (
+                  <SubMenu
+                    key={route.key}
+                    id={route.key}
+                    label={route.label}
+                    Icon={route.icon}
+                  >
+                    {route.children
+                      .filter((child) => child.inSidebar !== false)
+                      .map((child) => (
+                        <MenuItem
+                          key={child.key}
+                          label={child.label}
+                          Icon={child.icon}
+                          to={`${route.path}/${child.path}`}
+                        ></MenuItem>
+                      ))}
+                  </SubMenu>
+                )
+              )}
           </nav>
         </div>
       </aside>

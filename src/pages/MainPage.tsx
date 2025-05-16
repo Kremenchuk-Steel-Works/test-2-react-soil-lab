@@ -1,24 +1,28 @@
 import Button from "../components/Button/Button"
 import Layout from "../components/Template/Layout"
-import useAccessPages from "../hooks/useAccessPages"
-import log from "../utils/logger"
 import { useNavigate } from "react-router-dom"
+import { useVisibleRoutes } from "../hooks/usePermissions"
 
 export default function MainPage() {
-  const accessPages = useAccessPages()
+  const visibleRoutes = useVisibleRoutes()
   const navigate = useNavigate()
-  log.debug(accessPages)
 
   return (
     <Layout>
       <div className="space-y-2">
         <h4 className="layout-text">Головна сторінка</h4>
         <div className="flex flex-wrap gap-x-2 gap-y-2">
-          {accessPages.map((p) => (
-            <Button key={p.name} onClick={() => navigate(p.name)}>
-              {p.description}
-            </Button>
-          ))}
+          {visibleRoutes
+            .filter((route) => route.inSidebar !== false)
+            .map((route) => (
+              <Button
+                key={route.key}
+                className="flex items-center justify-center gap-1 whitespace-nowrap"
+                onClick={() => navigate(route.path)}
+              >
+                <route.icon className="w-5 h-5" /> <span>{route.label}</span>
+              </Button>
+            ))}
         </div>
       </div>
     </Layout>

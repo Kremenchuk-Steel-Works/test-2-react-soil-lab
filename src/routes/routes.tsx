@@ -1,22 +1,29 @@
-// routes.ts
 import {
-  FlaskConical,
   Database,
   type LucideIcon,
   View,
   Plus,
+  Users,
+  Activity,
+  UserCheck,
+  UserRoundSearch,
+  UserPen,
 } from "lucide-react"
 import SpectralAnalysisLayout from "../pages/SpectralAnalysis/Layout"
 import SpectralAnalysisList from "../pages/SpectralAnalysis/List"
 import SpectralAnalysisAdd from "../pages/SpectralAnalysis/Add"
 import StreamlitPage from "../pages/StreamlitPage"
+import AdminUsersLayout from "../pages/AdminUsers/Layout"
+import AdminUsersList from "../pages/AdminUsers/List"
+import AdminUsersisAdd from "../pages/AdminUsers/Add"
+import AdminUsersDetails from "../pages/AdminUsers/Details"
+import AdminUsersEdit from "../pages/AdminUsers/Edit"
 
 export type Permission =
   | "admin"
   | "spectral_analysis_view"
   | "spectral_analysis_add"
   | "quality_dash_view"
-// …extend as you add features
 
 export interface AppRoute {
   key: string // unique id, e.g. "spectral_analysis"
@@ -24,21 +31,22 @@ export interface AppRoute {
   label: string // human‑readable name
   icon: LucideIcon // sidebar icon
   component: React.ReactNode // top‑level component or layout
-  requiredPermissions: Permission[]
+  requiredPermissions?: Permission[]
+  inSidebar?: boolean
   children?: AppRoute[] // nested sub‑routes
 }
 
 export const APP_ROUTES: AppRoute[] = [
   {
-    key: "spectral_analysis",
-    path: "/spectral_analysis",
-    label: "Спектральний аналіз 7657567565464",
-    icon: FlaskConical,
+    key: "spectralAnalysis",
+    path: "/spectral-analysis",
+    label: "Спектральний аналіз",
+    icon: Activity,
     component: <SpectralAnalysisLayout />,
     requiredPermissions: ["spectral_analysis_view"],
     children: [
       {
-        key: "spectral_analysis_list",
+        key: "spectralAnalysisList",
         path: "",
         label: "Список аналізів",
         icon: View,
@@ -46,12 +54,52 @@ export const APP_ROUTES: AppRoute[] = [
         requiredPermissions: ["spectral_analysis_view"],
       },
       {
-        key: "spectral_analysis_add",
+        key: "spectralAnalysisAdd",
         path: "add",
         label: "Додати аналіз",
         icon: Plus,
         component: <SpectralAnalysisAdd />,
         requiredPermissions: ["spectral_analysis_add"],
+      },
+    ],
+  },
+  {
+    key: "adminUsers",
+    path: "/admin-users",
+    label: "Користувачі",
+    icon: Users,
+    component: <AdminUsersLayout />,
+    requiredPermissions: ["admin"],
+    children: [
+      {
+        key: "adminUsersList",
+        path: "",
+        label: "Список користувачів",
+        icon: Users,
+        component: <AdminUsersList />,
+      },
+      {
+        key: "adminUsersAdd",
+        path: "add",
+        label: "Додати користувача",
+        icon: UserRoundSearch,
+        component: <AdminUsersisAdd />,
+      },
+      {
+        key: "adminUsersDetail",
+        path: ":id",
+        label: "Деталі користувача",
+        icon: UserCheck,
+        component: <AdminUsersDetails />,
+        inSidebar: false,
+      },
+      {
+        key: "adminUsersEdit",
+        path: ":id/edit",
+        label: "Редагування користувача",
+        icon: UserPen,
+        component: <AdminUsersEdit />,
+        inSidebar: false,
       },
     ],
   },

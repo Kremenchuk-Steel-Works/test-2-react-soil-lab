@@ -30,7 +30,6 @@ export const router = createBrowserRouter([
       </ProtectedRoute>
     ),
   },
-  // map every route in APP_ROUTES
   ...APP_ROUTES.map((route) => ({
     path: route.path,
     element: (

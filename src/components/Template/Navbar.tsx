@@ -40,7 +40,7 @@ const Navbar: React.FC = () => {
           <div className="flex-shrink-0">
             <Link
               to={PATHS.MAIN}
-              className="block px-5 py-2 text-2xl font-bold text-blue-600 dark:text-white"
+              className="block px-5 py-2 text-2xl font-bold text-blue-500 dark:text-white"
             >
               <img
                 src="/cz-logo-v111.png"
