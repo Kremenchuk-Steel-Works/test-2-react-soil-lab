@@ -9,7 +9,7 @@ import { z } from "zod"
 
 // Создание новой схемы без поля raw_password
 export const userSchemaWithoutPassword = userSchema.omit({ raw_password: true })
-export type FormUserFieldsWithoutPassword = z.infer<
+export type UserFormFieldsWithoutPassword = z.infer<
   typeof userSchemaWithoutPassword
 >
 
@@ -28,7 +28,7 @@ export default function AdminUsersEdit() {
     enabled: !!id && /^\d+$/.test(id),
   })
 
-  const handleSubmit = async (data: FormUserFieldsWithoutPassword) => {
+  const handleSubmit = async (data: UserFormFieldsWithoutPassword) => {
     await apiUsersEdit(id!, {
       email: data.email,
       profile: data.profile,
@@ -53,7 +53,7 @@ export default function AdminUsersEdit() {
       {!isLoading && !isError && user && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
-            <UserForm<FormUserFieldsWithoutPassword>
+            <UserForm<UserFormFieldsWithoutPassword>
               defaultValues={user}
               onSubmit={handleSubmit}
               submitBtnName="Змінити"

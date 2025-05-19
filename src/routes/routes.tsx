@@ -14,7 +14,7 @@ import SpectralAnalysisList from "../pages/SpectralAnalysis/List"
 import SpectralAnalysisAdd from "../pages/SpectralAnalysis/Add"
 import StreamlitPage from "../pages/StreamlitPage"
 import AdminUsersLayout from "../pages/AdminUsers/Layout"
-import AdminUsersList from "../pages/AdminUsers/List"
+import AdminUsersList from "../pages/AdminUsers/ListTable"
 import AdminUsersisAdd from "../pages/AdminUsers/Add"
 import AdminUsersDetails from "../pages/AdminUsers/Details"
 import AdminUsersEdit from "../pages/AdminUsers/Edit"
@@ -37,32 +37,32 @@ export interface AppRoute {
 }
 
 export const APP_ROUTES: AppRoute[] = [
-  {
-    key: "spectralAnalysis",
-    path: "/spectral-analysis",
-    label: "Спектральний аналіз",
-    icon: Activity,
-    component: <SpectralAnalysisLayout />,
-    requiredPermissions: ["spectral_analysis_view"],
-    children: [
-      {
-        key: "spectralAnalysisList",
-        path: "",
-        label: "Список аналізів",
-        icon: View,
-        component: <SpectralAnalysisList />,
-        requiredPermissions: ["spectral_analysis_view"],
-      },
-      {
-        key: "spectralAnalysisAdd",
-        path: "add",
-        label: "Додати аналіз",
-        icon: Plus,
-        component: <SpectralAnalysisAdd />,
-        requiredPermissions: ["spectral_analysis_add"],
-      },
-    ],
-  },
+  // {
+  //   key: "spectralAnalysis",
+  //   path: "/spectral-analysis",
+  //   label: "Спектральний аналіз",
+  //   icon: Activity,
+  //   component: <SpectralAnalysisLayout />,
+  //   requiredPermissions: ["spectral_analysis_view"],
+  //   children: [
+  //     {
+  //       key: "spectralAnalysisList",
+  //       path: "",
+  //       label: "Список аналізів",
+  //       icon: View,
+  //       component: <SpectralAnalysisList />,
+  //       requiredPermissions: ["spectral_analysis_view"],
+  //     },
+  //     {
+  //       key: "spectralAnalysisAdd",
+  //       path: "add",
+  //       label: "Додати аналіз",
+  //       icon: Plus,
+  //       component: <SpectralAnalysisAdd />,
+  //       requiredPermissions: ["spectral_analysis_add"],
+  //     },
+  //   ],
+  // },
   {
     key: "adminUsers",
     path: "/admin-users",

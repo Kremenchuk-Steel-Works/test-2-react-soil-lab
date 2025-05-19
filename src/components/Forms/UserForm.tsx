@@ -18,17 +18,17 @@ export const userSchema = z.object({
   }),
 })
 
-export type FormUserFields = z.infer<typeof userSchema>
+export type UserFormFields = z.infer<typeof userSchema>
 
 export interface UserFormProps<T> {
-  defaultValues?: Partial<FormUserFields>
+  defaultValues?: Partial<UserFormFields>
   onSubmit: SubmitHandler<T>
   submitBtnName: string
   showPasswordField?: boolean
   schema: ZodSchema<T>
 }
 
-export function UserForm<T extends Partial<FormUserFields> = FormUserFields>({
+export function UserForm<T extends Partial<UserFormFields> = UserFormFields>({
   defaultValues,
   onSubmit,
   submitBtnName,

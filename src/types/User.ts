@@ -24,11 +24,16 @@ export type User = {
   updated_at: string
 }
 
+export type UserResponse = Omit<
+  User,
+  "permissions" | "created_at" | "updated_at"
+>
+
 export type UsersData = {
+  users: UserResponse[]
   page: number
-  total_items: number
   total_pages: number
-  users: Omit<User, "permissions" | "created_at" | "updated_at">[]
+  total_items: number
 }
 
 export type UsersAdd = {

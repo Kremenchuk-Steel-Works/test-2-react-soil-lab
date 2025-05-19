@@ -5,13 +5,13 @@ import { apiUsersAdd } from "../../services/user"
 import {
   UserForm,
   userSchema,
-  type FormUserFields,
+  type UserFormFields,
 } from "../../components/Forms/UserForm"
 
 export default function AdminUsersAdd() {
   const navigate = useNavigate()
 
-  const handleSubmit = async (data: FormUserFields) => {
+  const handleSubmit = async (data: UserFormFields) => {
     await apiUsersAdd({
       email: data.email,
       raw_password: data.raw_password!,
@@ -33,7 +33,7 @@ export default function AdminUsersAdd() {
 
       <div className="flex flex-wrap gap-x-2 gap-y-2">
         <div className="w-full">
-          <UserForm<FormUserFields>
+          <UserForm<UserFormFields>
             schema={userSchema}
             onSubmit={handleSubmit}
             submitBtnName="Додати"
