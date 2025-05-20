@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react"
 import { twMerge } from "tailwind-merge"
-import { ChevronDown, ChevronUp } from "lucide-react"
+import { ChevronUp } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 export type SelectOption = {
