@@ -1,4 +1,4 @@
-import clsx from "clsx"
+import { twMerge } from "tailwind-merge"
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {}
 
@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({
   `
 
   return (
-    <button {...rest} type={type} className={clsx(baseStyles, className)}>
+    <button {...rest} type={type} className={twMerge(baseStyles, className)}>
       {children}
     </button>
   )

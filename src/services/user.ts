@@ -1,6 +1,7 @@
 import type { AxiosError } from "axios"
 import { api } from "../api/client"
 import type { User, UsersAdd, UsersData, UsersEdit } from "../types/User"
+import type { PageParams } from "../types/page"
 
 export async function apiUsersMe() {
   try {
@@ -21,9 +22,9 @@ export async function apiUsersMe() {
   }
 }
 
-export async function apiUsers() {
+export async function apiUsers(params?: PageParams) {
   try {
-    const response = await api.get(`/users`)
+    const response = await api.get(`/users`, { params })
     const usersData: UsersData = response.data
     return usersData
   } catch (err) {
