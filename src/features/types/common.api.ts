@@ -1,4 +1,4 @@
 export interface PageParams {
   page?: number
-  perPage?: number
+  per_page?: number
 }

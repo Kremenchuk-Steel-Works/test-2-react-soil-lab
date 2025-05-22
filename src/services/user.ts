@@ -2,6 +2,7 @@ import type { AxiosError } from "axios"
 import { api } from "../api/client"
 import type { User, UsersAdd, UsersData, UsersEdit } from "../types/User"
 import type { PageParams } from "../types/page"
+import snakecaseKeys from "snakecase-keys"
 
 export async function apiUsersMe() {
   try {
@@ -24,7 +25,8 @@ export async function apiUsersMe() {
 
 export async function apiUsers(params?: PageParams) {
   try {
-    const response = await api.get(`/users`, { params })
+    const snakeParams = snakecaseKeys({ ...params })
+    const response = await api.get(`/users`, { params: snakeParams })
     const usersData: UsersData = response.data
     return usersData
   } catch (err) {

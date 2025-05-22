@@ -3,6 +3,7 @@ import { SubMenu } from "./SubMenu"
 import React from "react"
 import MenuItem from "./MenuItem"
 import { useVisibleRoutes } from "../../hooks/usePermissions"
+import { getFullPath } from "../../utils/path"
 
 const Sidebar: React.FC = () => {
   const { closeSidebar, closeSubMenu, expandedSubMenus, collapsed, broken } =
@@ -60,7 +61,7 @@ const Sidebar: React.FC = () => {
                           key={child.key}
                           label={child.label}
                           Icon={child.icon}
-                          to={`${route.path}/${child.path}`}
+                          to={getFullPath(route.path, child.path)}
                         ></MenuItem>
                       ))}
                   </SubMenu>

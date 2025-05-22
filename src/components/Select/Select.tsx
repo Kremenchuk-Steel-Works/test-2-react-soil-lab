@@ -73,7 +73,7 @@ const Select: React.FC<SelectProps> = ({
       <button
         type="button"
         className={twMerge(
-          "w-full flex items-center justify-between px-2 border rounded-md cursor-pointer",
+          "w-full flex items-center justify-between px-4 border rounded-md cursor-pointer",
           heightClass,
           "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700",
           "focus:outline-none focus:ring-2 focus:ring-blue-500",
@@ -83,11 +83,7 @@ const Select: React.FC<SelectProps> = ({
         disabled={disabled}
       >
         {/* Текст */}
-        <span
-          className={twMerge(
-            value ? "text-gray-900 dark:text-gray-100" : "text-gray-400"
-          )}
-        >
+        <span className={twMerge(value ? "" : "text-gray-400")}>
           {selectedLabel}
         </span>
 

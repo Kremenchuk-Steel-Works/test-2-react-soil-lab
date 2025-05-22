@@ -27,7 +27,7 @@ export default function ProtectedRoute({
 
   if (
     allowedPermissions &&
-    !allowedPermissions.every((perm) => userPermissions.has(perm))
+    !allowedPermissions.some((perm) => userPermissions.has(perm))
   ) {
     return <NotAccessPage />
   }
