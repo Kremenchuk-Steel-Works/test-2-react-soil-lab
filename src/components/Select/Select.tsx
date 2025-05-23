@@ -1,22 +1,23 @@
 import React, { useState, useRef, useEffect } from "react"
 import { twMerge } from "tailwind-merge"
-import { ChevronUp } from "lucide-react"
+import { ChevronUp, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 export type SelectOption = {
-  value: string | number
+  value: string | number | boolean | undefined
   label: string
   disabled?: boolean
 }
 
 export interface SelectProps {
   options: SelectOption[]
-  value?: string | number
-  onChange?: (value: string | number) => void
+  value?: string | number | boolean | undefined
+  onChange?: (value: string | number | boolean | undefined) => void
   placeholder?: string
   className?: string
   disabled?: boolean
   heightClass?: string
+  isClearable?: boolean
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -27,6 +28,7 @@ const Select: React.FC<SelectProps> = ({
   className,
   disabled,
   heightClass = "py-2",
+  isClearable = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -53,6 +55,12 @@ const Select: React.FC<SelectProps> = ({
     if (!disabled) setIsOpen((prev) => !prev)
   }
 
+  const handleClear = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    onChange?.(undefined)
+    setIsOpen(false)
+  }
+
   const handleSelect = (opt: SelectOption) => {
     if (!opt.disabled) {
       onChange?.(opt.value)
@@ -69,38 +77,50 @@ const Select: React.FC<SelectProps> = ({
         className
       )}
     >
-      {/* Кнопка селекта*/}
-      <button
-        type="button"
+      <div
         className={twMerge(
-          "w-full flex items-center justify-between px-4 border rounded-md cursor-pointer",
+          "w-full flex items-center justify-between px-4 border rounded-md",
           heightClass,
           "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700",
           "focus:outline-none focus:ring-2 focus:ring-blue-500",
-          disabled && "cursor-not-allowed"
+          disabled && "cursor-not-allowed",
+          disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
         )}
         onClick={toggleOpen}
-        disabled={disabled}
       >
-        {/* Текст */}
-        <span className={twMerge(value ? "" : "text-gray-400")}>
+        {/* Левая часть (label) */}
+        <span
+          className={twMerge(
+            value !== undefined && value !== null ? "" : "text-gray-400"
+          )}
+        >
           {selectedLabel}
         </span>
 
-        <div className="flex items-center">
-          {/* Разделитель между текстом и иконкой */}
-          <span className="border-l border-gray-300 dark:border-gray-600 h-5 mx-1"></span>
-          {/* Иконка */}
+        {/* Правая часть: кнопка очистки и стрелка */}
+        <div className="flex items-center space-x-1">
+          {/* Кнопка очистки */}
+          {isClearable && value !== undefined && value !== null && (
+            <button
+              type="button"
+              onClick={handleClear}
+              className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded transition-colors"
+            >
+              <X size={16} />
+            </button>
+          )}
+          <span className="border-l border-gray-300 dark:border-gray-600 h-5 mx-1" />
+          {/* Стрелка */}
           <ChevronUp
             size={20}
             className={twMerge(
               "transform transition-transform duration-300 ease-in-out",
-              "text-gray-500 dark:text-gray-400",
+              "text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300",
               isOpen ? "rotate-0" : "rotate-180"
             )}
           />
         </div>
-      </button>
+      </div>
 
       <AnimatePresence>
         {isOpen && (
@@ -113,7 +133,7 @@ const Select: React.FC<SelectProps> = ({
           >
             {options.map((opt) => (
               <li
-                key={opt.value}
+                key={String(opt.value)}
                 onClick={() => handleSelect(opt)}
                 className={twMerge(
                   "cursor-pointer px-4 py-2",

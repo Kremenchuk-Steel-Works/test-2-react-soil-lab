@@ -2,10 +2,10 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Person } from "../../../features/people/types"
-import { peopleService } from "../../../features/people/services/service"
+import type { User } from "../../../features/users/types"
+import { usersService } from "../../../features/users/services/service"
 
-export default function AdminPeopleDetails() {
+export default function AdminUsersDetails() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
 
@@ -14,9 +14,9 @@ export default function AdminPeopleDetails() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<Person, Error>({
-    queryKey: ["adminPersonData", id],
-    queryFn: () => peopleService.getById(id!),
+  } = useQuery<User, Error>({
+    queryKey: ["adminUserData", id],
+    queryFn: () => usersService.getById(id!),
     enabled: !!id,
   })
 
@@ -40,6 +40,7 @@ export default function AdminPeopleDetails() {
             <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-slate-100">
               Деталі
             </h2>
+
             <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
               <div>
                 <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
@@ -47,6 +48,15 @@ export default function AdminPeopleDetails() {
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
                   {data.id}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Person ID
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.personId}
                 </dd>
               </div>
 
@@ -61,42 +71,22 @@ export default function AdminPeopleDetails() {
                 </div>
               )}
 
-              <div className="md:col-span-2">
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Повне ім'я
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.lastName} {data.firstName} {data.middleName ?? ""}
-                </dd>
-              </div>
-
               <div>
                 <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Стать
+                  Статус
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.gender}
+                  {data.isActive ? "Активний" : "Неактивний"}
                 </dd>
               </div>
 
-              {data.birthDate && (
+              {data.lastLoginAt && (
                 <div>
                   <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                    Дата народження
+                    Останній вхід
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                    {new Date(data.birthDate).toLocaleDateString()}
-                  </dd>
-                </div>
-              )}
-
-              {data.phoneNumber && (
-                <div>
-                  <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                    Телефон
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                    {data.phoneNumber}
+                    {new Date(data.lastLoginAt).toLocaleString()}
                   </dd>
                 </div>
               )}
@@ -118,22 +108,8 @@ export default function AdminPeopleDetails() {
                   {new Date(data.updatedAt).toLocaleString()}
                 </dd>
               </div>
-
-              {data.photoUrl && (
-                <div className="md:col-span-2">
-                  <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                    Фото
-                  </dt>
-                  <dd className="mt-1">
-                    <img
-                      src={data.photoUrl}
-                      alt="Фото користувача"
-                      className="h-32 w-32 object-cover rounded"
-                    />
-                  </dd>
-                </div>
-              )}
             </dl>
+
             <div className="flex justify-between items-center py-2">
               <Button
                 className="flex items-center justify-center gap-1 whitespace-nowrap bg-orange-500 hover:bg-orange-600"

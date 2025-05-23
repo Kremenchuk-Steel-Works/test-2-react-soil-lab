@@ -3,11 +3,11 @@ import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
-import { adminPeopleColumns } from "./columns"
-import type { PeopleListResponse } from "../../../../features/people/types"
-import { peopleService } from "../../../../features/people/services/service"
+import { adminOrganizationsColumns } from "./columns"
+import type { OrganizationsListResponse } from "../../../../features/organizations/types"
+import { organizationsService } from "../../../../features/organizations/services/service"
 
-export default function AdminPeopleList() {
+export default function AdminOrganizationsList() {
   // Состояние из URL
   const [searchParams, setSearchParams] = useSearchParams()
   const pageFromUrl = Number(searchParams.get("page")) || 1
@@ -22,10 +22,10 @@ export default function AdminPeopleList() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<PeopleListResponse, Error>({
-    queryKey: ["adminPeopleData", pageFromUrl, perPageFromUrl],
+  } = useQuery<OrganizationsListResponse, Error>({
+    queryKey: ["adminOgranizationsData", pageFromUrl, perPageFromUrl],
     queryFn: () => {
-      return peopleService.getList({
+      return organizationsService.getList({
         page: pageFromUrl,
         perPage: perPageFromUrl,
       })
@@ -56,8 +56,8 @@ export default function AdminPeopleList() {
 
       {!isLoading && !isError && data && (
         <DataTable
-          data={data?.people ?? []}
-          columns={adminPeopleColumns}
+          data={data?.organizations ?? []}
+          columns={adminOrganizationsColumns}
           setSearchParams={setSearchParams}
           page={pageFromUrl}
           perPage={perPageFromUrl}

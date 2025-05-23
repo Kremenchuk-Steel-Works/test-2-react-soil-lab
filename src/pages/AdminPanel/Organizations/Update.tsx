@@ -2,27 +2,27 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Person } from "../../../features/people/types"
-import { peopleService } from "../../../features/people/services/service"
-import PeopleForm from "../../../features/people/forms/form"
-import type { PeopleFormFields } from "../../../features/people/forms/schema"
+import type { Organization } from "../../../features/organizations/types"
+import { organizationsService } from "../../../features/organizations/services/service"
+import type { OrganizationsFormFields } from "../../../features/organizations/forms/schema"
+import OrganizationsForm from "../../../features/organizations/forms/form"
 
-export default function AdminPeopleUpdate() {
+export default function AdminOrganizationsUpdate() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
 
   const {
-    data,
+    data: person,
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<Person, Error>({
-    queryKey: ["adminPersonData", id],
-    queryFn: () => peopleService.getById(id!),
+  } = useQuery<Organization, Error>({
+    queryKey: ["adminOrganizationData", id],
+    queryFn: () => organizationsService.getById(id!),
     enabled: !!id,
   })
 
-  const handleSubmit = async (data: PeopleFormFields) => {
+  const handleSubmit = async (data: OrganizationsFormFields) => {
     // await apiPeopleAdd()
     navigate("..")
     return data
@@ -42,12 +42,12 @@ export default function AdminPeopleUpdate() {
       {isError && (
         <p className="text-red-600">Помилка: {queryError?.message}</p>
       )}
-      {!isLoading && !isError && data && (
+      {!isLoading && !isError && person && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
-            <PeopleForm
+            <OrganizationsForm
               onSubmit={handleSubmit}
-              defaultValues={data}
+              defaultValues={person}
               submitBtnName="Оновити"
             />
           </div>

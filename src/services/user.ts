@@ -1,8 +1,8 @@
 import type { AxiosError } from "axios"
 import { api } from "../api/client"
 import type { User, UsersAdd, UsersData, UsersEdit } from "../types/User"
-import type { PageParams } from "../types/page"
 import snakecaseKeys from "snakecase-keys"
+import type { PageParams } from "../types/pagination.types"
 
 export async function apiUsersMe() {
   try {

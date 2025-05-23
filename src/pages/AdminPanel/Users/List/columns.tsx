@@ -1,8 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
-import type { Person } from "../../../../features/people/types"
+import type { User } from "../../../../features/users/types"
 
-export const adminPeopleColumns: ColumnDef<Person, string>[] = [
+export const adminUsersColumns: ColumnDef<User, string>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -17,46 +17,11 @@ export const adminPeopleColumns: ColumnDef<Person, string>[] = [
     ),
   },
   {
-    accessorKey: "firstName",
-    header: "First Name",
+    accessorKey: "personId",
+    header: "Person ID",
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
-  },
-  {
-    accessorKey: "middleName",
-    header: "Middle Name",
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "lastName",
-    header: "Last Name",
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "gender",
-    header: "Gender",
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "birthDate",
-    header: "Birth Date",
-    enableSorting: true,
-    enableColumnFilter: true,
-    cell: ({ getValue }) =>
-      getValue() ? new Date(getValue()).toLocaleDateString() : "",
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleDateString()
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
   },
   {
     accessorKey: "email",
@@ -66,15 +31,19 @@ export const adminPeopleColumns: ColumnDef<Person, string>[] = [
     filterFn: "includesString",
   },
   {
-    accessorKey: "phoneNumber",
-    header: "Phone",
+    accessorKey: "isActive",
+    header: "Active",
+    cell: ({ getValue }) => (getValue() ? "Yes" : "No"),
     enableSorting: true,
     enableColumnFilter: true,
-    filterFn: "includesString",
+    filterFn: (row, columnId, filterValue) => {
+      const displayValue = row.getValue<boolean>(columnId) ? "Yes" : "No"
+      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
+    },
   },
   {
-    accessorKey: "createdAt",
-    header: "Created",
+    accessorKey: "lastLoginAt",
+    header: "Last Login",
     enableSorting: true,
     enableColumnFilter: true,
     cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
@@ -86,8 +55,8 @@ export const adminPeopleColumns: ColumnDef<Person, string>[] = [
     },
   },
   {
-    accessorKey: "updatedAt",
-    header: "Updated",
+    accessorKey: "createdAt",
+    header: "Created",
     enableSorting: true,
     enableColumnFilter: true,
     cell: ({ getValue }) => new Date(getValue()).toLocaleString(),

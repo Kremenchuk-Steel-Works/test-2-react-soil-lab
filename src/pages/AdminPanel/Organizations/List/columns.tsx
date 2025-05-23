@@ -1,8 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
-import type { Person } from "../../../../features/people/types"
+import type { Organization } from "../../../../features/organizations/types"
 
-export const adminPeopleColumns: ColumnDef<Person, string>[] = [
+export const adminOrganizationsColumns: ColumnDef<Organization, string>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -17,57 +17,22 @@ export const adminPeopleColumns: ColumnDef<Person, string>[] = [
     ),
   },
   {
-    accessorKey: "firstName",
-    header: "First Name",
+    accessorKey: "name",
+    header: "Name",
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
-    accessorKey: "middleName",
-    header: "Middle Name",
+    accessorKey: "country",
+    header: "Country",
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
-  },
-  {
-    accessorKey: "lastName",
-    header: "Last Name",
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "gender",
-    header: "Gender",
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "birthDate",
-    header: "Birth Date",
-    enableSorting: true,
-    enableColumnFilter: true,
-    cell: ({ getValue }) =>
-      getValue() ? new Date(getValue()).toLocaleDateString() : "",
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleDateString()
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
   },
   {
     accessorKey: "email",
     header: "Email",
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "phoneNumber",
-    header: "Phone",
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",

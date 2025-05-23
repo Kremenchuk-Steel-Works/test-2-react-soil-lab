@@ -1,13 +1,13 @@
 import Button from "../../../components/Button/Button"
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import { type PeopleFormFields } from "../../../features/people/forms/schema"
-import PeopleForm from "../../../features/people/forms/form"
+import type { UserFormFields } from "../../../features/users/forms/schema"
+import UsersForm from "../../../features/users/forms/form"
 
-export default function AdminPeopleAdd() {
+export default function AdminUsersAdd() {
   const navigate = useNavigate()
 
-  const handleSubmit = async (data: PeopleFormFields) => {
+  const handleSubmit = async (data: UserFormFields) => {
     // await apiPeopleAdd()
     navigate("..")
     return data
@@ -26,7 +26,7 @@ export default function AdminPeopleAdd() {
 
       <div className="flex flex-wrap gap-x-2 gap-y-2">
         <div className="w-full">
-          <PeopleForm onSubmit={handleSubmit} submitBtnName="Додати" />
+          <UsersForm onSubmit={handleSubmit} submitBtnName="Додати" />
         </div>
       </div>
     </>

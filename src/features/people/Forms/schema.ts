@@ -1,7 +1,7 @@
 import { z } from "zod"
 import optionalObject from "../../../utils/zodHelpers"
 
-const employeeProfileSchema = z.object({
+export const peopleEmployeeProfileSchema = z.object({
   employeeNumber: z
     .string()
     .nonempty()
@@ -19,11 +19,11 @@ const employeeProfileSchema = z.object({
   ]),
 })
 
-const organizationsSchema = z.object({
+export const peopleOrganizationsSchema = z.object({
   organizationId: z.string().nonempty(),
 })
 
-const positionsSchema = z.object({
+export const peoplePositionsSchema = z.object({
   positionId: z.string().nonempty(),
 })
 
@@ -41,7 +41,9 @@ export const peopleSchema = z.object({
     .refine((val) => !val || /^\+?\d+$/.test(val), {
       message: "Номер має містити лише цифри та, можливо, + на початку",
     }),
-  employeeProfiles: optionalObject(employeeProfileSchema),
-  organizations: optionalObject(organizationsSchema),
-  positions: optionalObject(positionsSchema),
+  employeeProfiles: optionalObject(peopleEmployeeProfileSchema),
+  organizations: optionalObject(peopleOrganizationsSchema),
+  positions: optionalObject(peoplePositionsSchema),
 })
+
+export type PeopleFormFields = z.infer<typeof peopleSchema>
