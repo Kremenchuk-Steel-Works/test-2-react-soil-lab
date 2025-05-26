@@ -4,8 +4,8 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
 import { adminPeopleColumns } from "./columns"
-import type { PeopleListResponse } from "../../../../features/people/types"
-import { peopleService } from "../../../../features/people/services/service"
+import type { PeopleListResponse } from "../../../../features/admin/people/types"
+import { peopleService } from "../../../../features/admin/people/services/service"
 
 export default function AdminPeopleList() {
   // Состояние из URL

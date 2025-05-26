@@ -1,12 +1,12 @@
 import { useEffect, useLayoutEffect, useState } from "react"
 import { apiLogin } from "../../services/auth"
 import type { FormLoginFields } from "../../pages/LoginPage"
-import type { User } from "../../types/User"
+import type { User } from "../../types/user"
 import { api } from "../../api/client"
 import type { AuthContextType } from "./AuthContext"
 import AuthContext from "./AuthContext"
-import log from "../../utils/logger"
 import { apiUsersMe } from "../../services/user"
+import { logger } from "../../utils/logger"
 
 // Функции для чтения данных из storage:
 const getStoredItem = (itemName: string): string | null => {
@@ -27,12 +27,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Функция входа
   const login = async ({ email, password, rememberMe }: FormLoginFields) => {
-    log.debug("Выполняем вход в систему")
+    logger.debug("Выполняем вход в систему")
     const response = await apiLogin({ email, password })
 
     // logout чтобы точно очистить все старые данные пользователя
     logout()
-    log.debug(response.access_token)
+    logger.debug(response.access_token)
 
     setAccessToken(response.access_token)
     setRefreshToken(response.refresh_token)
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Функция выхода
   const logout = async () => {
-    log.debug("Выполняем выход из системы")
+    logger.debug("Выполняем выход из системы")
     setAccessToken(null)
     setRefreshToken(null)
     setCurrentUser(null)
@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const cfg = config as typeof config & { _retry?: boolean }
 
       // ЛОГ: метод, URL, заголовки
-      log.debug(`[AuthInterceptor] ${cfg.method?.toUpperCase()} → ${cfg.url}`, {
+      logger.debug(`${cfg.method?.toUpperCase()} → ${cfg.url}`, {
         headersBefore: { ...cfg.headers },
       })
 
@@ -68,9 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         !cfg._retry && accessToken
           ? `Bearer ${accessToken}`
           : cfg.headers.Authorization
-      log.debug(
-        `[AuthInterceptor] Добавлен токен → ${cfg.headers.Authorization}`
-      )
+      logger.debug(`Добавлен токен → ${cfg.headers.Authorization}`)
       return cfg
     })
 
@@ -86,7 +84,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       async (error) => {
         const originalRequest = error.config
 
-        log.debug(
+        logger.debug(
           "Ошибка, проверяем нужно ли обновить токен",
           error.response.data.detail
         )
@@ -95,7 +93,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           error.response.data.detail === "Token has expired."
         ) {
           try {
-            log.debug("Обновляем токен", error.response.data.detail)
+            logger.debug("Обновляем токен", error.response.data.detail)
             const response = await api.post(
               `/auth/refresh`,
               { refresh_token: refreshToken },
@@ -105,7 +103,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 },
               }
             )
-            log.debug("Токен обновлен", response.data.access_token)
+            logger.debug("Токен обновлен", response.data.access_token)
 
             // Обновляем токены
             setAccessToken(response.data.access_token)
@@ -120,7 +118,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             return api(originalRequest)
           } catch (err) {
             setAccessToken(null)
-            log.debug("Токен не получилось обновить", err)
+            logger.debug("Токен не получилось обновить", err)
           }
         }
 
@@ -135,17 +133,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // Актуальные данные пользователя
   useEffect(() => {
     if (!accessToken) {
-      log.debug("accessToken не найден, пользователь не авторизован")
+      logger.debug("accessToken не найден, пользователь не авторизован")
       setCurrentUser(null)
       return
     }
 
-    log.debug("Получаем актуальные данные пользователя")
+    logger.debug("Получаем актуальные данные пользователя")
     const fetchMe = async () => {
       try {
         const user = await apiUsersMe()
         setCurrentUser(user)
-        log.debug(user)
+        logger.debug(user)
       } catch (error) {
         setCurrentUser(null)
         throw error

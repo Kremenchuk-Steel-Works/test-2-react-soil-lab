@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react"
-import type { User } from "../../types/User"
+import type { User } from "../../types/user"
 
 // Определяем тип контекста
 export type AuthContextType = {

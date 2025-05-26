@@ -2,8 +2,8 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Role } from "../../../features/roles/types"
-import { rolesService } from "../../../features/roles/services/service"
+import type { Role } from "../../../features/admin/roles/types"
+import { rolesService } from "../../../features/admin/roles/services/service"
 
 export default function AdminRolesDetails() {
   const navigate = useNavigate()

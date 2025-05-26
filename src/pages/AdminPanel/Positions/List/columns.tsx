@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
-import type { Position } from "../../../../features/positions/types"
+import type { Position } from "../../../../features/admin/positions/types"
 
 export const adminPositionsColumns: ColumnDef<Position, string>[] = [
   {

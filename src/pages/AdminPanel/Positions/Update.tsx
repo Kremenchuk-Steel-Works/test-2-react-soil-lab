@@ -2,17 +2,17 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Position } from "../../../features/positions/types"
-import { positionsService } from "../../../features/positions/services/service"
-import type { PositionsFormFields } from "../../../features/positions/forms/schema"
-import PositionsForm from "../../../features/positions/forms/form"
+import type { Position } from "../../../features/admin/positions/types"
+import { positionsService } from "../../../features/admin/positions/services/service"
+import type { PositionsFormFields } from "../../../features/admin/positions/forms/schema"
+import PositionsForm from "../../../features/admin/positions/forms/form"
 
 export default function AdminPositionsUpdate() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
 
   const {
-    data: person,
+    data,
     isLoading,
     isError,
     error: queryError,
@@ -42,12 +42,12 @@ export default function AdminPositionsUpdate() {
       {isError && (
         <p className="text-red-600">Помилка: {queryError?.message}</p>
       )}
-      {!isLoading && !isError && person && (
+      {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
             <PositionsForm
               onSubmit={handleSubmit}
-              defaultValues={person}
+              defaultValues={data}
               submitBtnName="Оновити"
             />
           </div>

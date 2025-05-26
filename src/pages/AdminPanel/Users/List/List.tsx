@@ -3,8 +3,8 @@ import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
-import type { UsersListResponse } from "../../../../features/users/types"
-import { usersService } from "../../../../features/users/services/service"
+import type { UsersListResponse } from "../../../../features/admin/users/types"
+import { usersService } from "../../../../features/admin/users/services/service"
 import { adminUsersColumns } from "./columns"
 
 export default function AdminUsersList() {

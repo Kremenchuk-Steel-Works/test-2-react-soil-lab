@@ -30,6 +30,7 @@
     "react-hook-form": "^7.56.2",
     "react-i18next": "^15.5.1",
     "react-router-dom": "^7.5.3",
+    "react-select": "^5.10.1",
     "snakecase-keys": "^8.0.1",
     "tailwind-merge": "^3.3.0",
     "tailwind-scrollbar-hide": "^2.0.0",

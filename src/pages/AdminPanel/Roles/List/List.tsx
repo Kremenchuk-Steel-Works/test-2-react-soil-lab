@@ -3,8 +3,8 @@ import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
-import type { RolesListResponse } from "../../../../features/roles/types"
-import { rolesService } from "../../../../features/roles/services/service"
+import type { RolesListResponse } from "../../../../features/admin/roles/types"
+import { rolesService } from "../../../../features/admin/roles/services/service"
 import { adminRolesColumns } from "./columns"
 
 export default function AdminRolesList() {

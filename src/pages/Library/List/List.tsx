@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams, useResolvedPath } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
-import type { UsersData } from "../../../types/User"
+import type { UsersData } from "../../../types/user"
 import { apiUsers } from "../../../services/user"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../components/Button/Button"
@@ -29,7 +29,7 @@ export default function LibraryList() {
     queryFn: () => {
       return apiUsers({
         page: pageFromUrl,
-        per_page: perPageFromUrl,
+        perPage: perPageFromUrl,
       })
     },
     placeholderData: keepPreviousData,

@@ -1,8 +1,8 @@
 import Button from "../../../components/Button/Button"
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import type { OrganizationsFormFields } from "../../../features/organizations/forms/schema"
-import OrganizationsForm from "../../../features/organizations/forms/form"
+import type { OrganizationsFormFields } from "../../../features/admin/organizations/forms/schema"
+import OrganizationsForm from "../../../features/admin/organizations/forms/form"
 
 export default function AdminOrganizationsAdd() {
   const navigate = useNavigate()

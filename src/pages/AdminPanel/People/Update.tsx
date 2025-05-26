@@ -2,10 +2,10 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Person } from "../../../features/people/types"
-import { peopleService } from "../../../features/people/services/service"
-import PeopleForm from "../../../features/people/forms/form"
-import type { PeopleFormFields } from "../../../features/people/forms/schema"
+import type { Person } from "../../../features/admin/people/types"
+import { peopleService } from "../../../features/admin/people/services/service"
+import PeopleForm from "../../../features/admin/people/forms/form"
+import type { PeopleFormFields } from "../../../features/admin/people/forms/schema"
 
 export default function AdminPeopleUpdate() {
   const navigate = useNavigate()

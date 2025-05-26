@@ -58,6 +58,16 @@ import AdminUsersList from "../pages/AdminPanel/Users/List/List"
 import AdminUsersAdd from "../pages/AdminPanel/Users/Add"
 import AdminUsersDetails from "../pages/AdminPanel/Users/Details"
 import AdminUsersUpdate from "../pages/AdminPanel/Users/Update"
+import AdminDepartmentsLayout from "../pages/AdminPanel/Departments/Layout"
+import AdminDepartmentsList from "../pages/AdminPanel/Departments/List/List"
+import AdminDepartmentsAdd from "../pages/AdminPanel/Departments/Add"
+import AdminDepartmentsDetails from "../pages/AdminPanel/Departments/Details"
+import AdminDepartmentsUpdate from "../pages/AdminPanel/Departments/Update"
+import AdminPermissionsLayout from "../pages/AdminPanel/Permissions/Layout"
+import AdminPermissionsList from "../pages/AdminPanel/Permissions/List/List"
+import AdminPermissionsAdd from "../pages/AdminPanel/Permissions/Add"
+import AdminPermissionsDetails from "../pages/AdminPanel/Permissions/Details"
+import AdminPermissionsUpdate from "../pages/AdminPanel/Permissions/Update"
 
 export type Permission =
   | "admin"
@@ -282,43 +292,43 @@ export const APP_ROUTES: AppRoute[] = [
           },
         ],
       },
-      // {
-      //   key: "adminDepartments",
-      //   path: "departments",
-      //   label: "Відділи",
-      //   icon: Layers,
-      //   component: <AdminUsersisAdd />,
-      //   children: [
-      //     {
-      //       key: "adminDepartmentsList",
-      //       path: "",
-      //       label: "Список",
-      //       icon: Database,
-      //       component: <AdminUsersList />,
-      //     },
-      //     {
-      //       key: "adminDepartmentsAdd",
-      //       path: "add",
-      //       label: "Додати",
-      //       icon: CirclePlus,
-      //       component: <AdminUsersList />,
-      //     },
-      //     {
-      //       key: "adminDepartmentsDetail",
-      //       path: ":id",
-      //       label: "Деталі",
-      //       icon: Info,
-      //       component: <AdminUsersList />,
-      //     },
-      //     {
-      //       key: "adminDepartmentsUpdate",
-      //       path: ":id/update",
-      //       label: "Оновити",
-      //       icon: RefreshCcw,
-      //       component: <AdminUsersList />,
-      //     },
-      //   ],
-      // },
+      {
+        key: "adminDepartments",
+        path: "departments",
+        label: "Відділи",
+        icon: Layers,
+        component: <AdminDepartmentsLayout />,
+        children: [
+          {
+            key: "adminDepartmentsList",
+            path: "",
+            label: "Список",
+            icon: Database,
+            component: <AdminDepartmentsList />,
+          },
+          {
+            key: "adminDepartmentsAdd",
+            path: "add",
+            label: "Додати",
+            icon: CirclePlus,
+            component: <AdminDepartmentsAdd />,
+          },
+          {
+            key: "adminDepartmentsDetail",
+            path: ":id",
+            label: "Деталі",
+            icon: Info,
+            component: <AdminDepartmentsDetails />,
+          },
+          {
+            key: "adminDepartmentsUpdate",
+            path: ":id/update",
+            label: "Оновити",
+            icon: RefreshCcw,
+            component: <AdminDepartmentsUpdate />,
+          },
+        ],
+      },
       {
         key: "adminRoles",
         path: "roles",
@@ -356,43 +366,43 @@ export const APP_ROUTES: AppRoute[] = [
           },
         ],
       },
-      // {
-      //   key: "adminPermissions",
-      //   path: "permissions",
-      //   label: "Права доступу",
-      //   icon: Lock,
-      //   component: <AdminUsersisAdd />,
-      //   children: [
-      //     {
-      //       key: "adminPermissionsList",
-      //       path: "",
-      //       label: "Список",
-      //       icon: Database,
-      //       component: <AdminUsersList />,
-      //     },
-      //     {
-      //       key: "adminPermissionsAdd",
-      //       path: "add",
-      //       label: "Додати",
-      //       icon: CirclePlus,
-      //       component: <AdminUsersList />,
-      //     },
-      //     {
-      //       key: "adminPermissionsDetail",
-      //       path: ":id",
-      //       label: "Деталі",
-      //       icon: Info,
-      //       component: <AdminUsersList />,
-      //     },
-      //     {
-      //       key: "adminPermissionsUpdate",
-      //       path: ":id/update",
-      //       label: "Оновити",
-      //       icon: RefreshCcw,
-      //       component: <AdminUsersList />,
-      //     },
-      //   ],
-      // },
+      {
+        key: "adminPermissions",
+        path: "permissions",
+        label: "Права доступу",
+        icon: Lock,
+        component: <AdminPermissionsLayout />,
+        children: [
+          {
+            key: "adminPermissionsList",
+            path: "",
+            label: "Список",
+            icon: Database,
+            component: <AdminPermissionsList />,
+          },
+          {
+            key: "adminPermissionsAdd",
+            path: "add",
+            label: "Додати",
+            icon: CirclePlus,
+            component: <AdminPermissionsAdd />,
+          },
+          {
+            key: "adminPermissionsDetail",
+            path: ":id",
+            label: "Деталі",
+            icon: Info,
+            component: <AdminPermissionsDetails />,
+          },
+          {
+            key: "adminPermissionsUpdate",
+            path: ":id/update",
+            label: "Оновити",
+            icon: RefreshCcw,
+            component: <AdminPermissionsUpdate />,
+          },
+        ],
+      },
     ],
   },
   {

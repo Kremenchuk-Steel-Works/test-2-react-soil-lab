@@ -2,8 +2,8 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Person } from "../../../features/people/types"
-import { peopleService } from "../../../features/people/services/service"
+import type { Person } from "../../../features/admin/people/types"
+import { peopleService } from "../../../features/admin/people/services/service"
 
 export default function AdminPeopleDetails() {
   const navigate = useNavigate()

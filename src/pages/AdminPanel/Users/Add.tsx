@@ -1,8 +1,8 @@
 import Button from "../../../components/Button/Button"
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import type { UserFormFields } from "../../../features/users/forms/schema"
-import UsersForm from "../../../features/users/forms/form"
+import type { UserFormFields } from "../../../features/admin/users/forms/schema"
+import UsersForm from "../../../features/admin/users/forms/form"
 
 export default function AdminUsersAdd() {
   const navigate = useNavigate()

@@ -2,17 +2,17 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Organization } from "../../../features/organizations/types"
-import { organizationsService } from "../../../features/organizations/services/service"
-import type { OrganizationsFormFields } from "../../../features/organizations/forms/schema"
-import OrganizationsForm from "../../../features/organizations/forms/form"
+import type { Organization } from "../../../features/admin/organizations/types"
+import { organizationsService } from "../../../features/admin/organizations/services/service"
+import type { OrganizationsFormFields } from "../../../features/admin/organizations/forms/schema"
+import OrganizationsForm from "../../../features/admin/organizations/forms/form"
 
 export default function AdminOrganizationsUpdate() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
 
   const {
-    data: person,
+    data,
     isLoading,
     isError,
     error: queryError,
@@ -42,12 +42,12 @@ export default function AdminOrganizationsUpdate() {
       {isError && (
         <p className="text-red-600">Помилка: {queryError?.message}</p>
       )}
-      {!isLoading && !isError && person && (
+      {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
             <OrganizationsForm
               onSubmit={handleSubmit}
-              defaultValues={person}
+              defaultValues={data}
               submitBtnName="Оновити"
             />
           </div>

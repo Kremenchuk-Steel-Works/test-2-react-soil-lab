@@ -2,7 +2,7 @@ import type { PropsWithChildren, ReactNode } from "react"
 import { Navigate } from "react-router-dom"
 import { PATHS } from "./AppRoutes"
 import { useAuth } from "../components/AuthProvider/AuthContext"
-import log from "../utils/logger"
+import { logger } from "../utils/logger"
 
 type UnAuthRouteProps = PropsWithChildren & {
   children: ReactNode
@@ -12,7 +12,7 @@ export const UnAuthRoute = ({ children }: UnAuthRouteProps) => {
   const { currentUser } = useAuth()
   // Если пользователь залогинен, возвращаем обратно
   if (currentUser !== null && currentUser !== undefined) {
-    log.debug("Пользователь авторизован, переходим на главную")
+    logger.debug("Пользователь авторизован, переходим на главную")
     return <Navigate to={PATHS.MAIN} replace />
   }
   return <>{children}</>

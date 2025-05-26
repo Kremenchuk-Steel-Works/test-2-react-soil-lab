@@ -1,8 +1,8 @@
 import Button from "../../../components/Button/Button"
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import { type PeopleFormFields } from "../../../features/people/forms/schema"
-import PeopleForm from "../../../features/people/forms/form"
+import { type PeopleFormFields } from "../../../features/admin/people/forms/schema"
+import PeopleForm from "../../../features/admin/people/forms/form"
 
 export default function AdminPeopleAdd() {
   const navigate = useNavigate()

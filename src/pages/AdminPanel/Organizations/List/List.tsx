@@ -4,8 +4,8 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
 import { adminOrganizationsColumns } from "./columns"
-import type { OrganizationsListResponse } from "../../../../features/organizations/types"
-import { organizationsService } from "../../../../features/organizations/services/service"
+import type { OrganizationsListResponse } from "../../../../features/admin/organizations/types"
+import { organizationsService } from "../../../../features/admin/organizations/services/service"
 
 export default function AdminOrganizationsList() {
   // Состояние из URL

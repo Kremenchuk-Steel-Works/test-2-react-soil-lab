@@ -1,6 +1,6 @@
 import type { AxiosError } from "axios"
 import { api } from "../api/client"
-import type { User, UsersAdd, UsersData, UsersEdit } from "../types/User"
+import type { User, UsersAdd, UsersData, UsersEdit } from "../types/user"
 import snakecaseKeys from "snakecase-keys"
 import type { PageParams } from "../types/pagination.types"
 
@@ -56,9 +56,7 @@ export async function apiUsersAdd({ email, raw_password, profile }: UsersAdd) {
     const error = err as AxiosError
     if (error.response) {
       // Сервер ответил, но статус не 2xx
-      if (error.response.status === 401) {
-        throw new Error("Невірний email або пароль")
-      } else if (error.response.status >= 400 && error.response.status < 500) {
+      if (error.response.status >= 400 && error.response.status < 500) {
         throw new Error("Некоректні дані")
       } else {
         throw new Error(`Помилка сервера: ${error.response.status}`)
@@ -104,9 +102,7 @@ export async function apiUsersEdit(id: string, { email, profile }: UsersEdit) {
     const error = err as AxiosError
     if (error.response) {
       // Сервер ответил, но статус не 2xx
-      if (error.response.status === 401) {
-        throw new Error("Невірний email або пароль")
-      } else if (error.response.status >= 400 && error.response.status < 500) {
+      if (error.response.status >= 400 && error.response.status < 500) {
         throw new Error("Некоректні дані")
       } else {
         throw new Error(`Помилка сервера: ${error.response.status}`)

@@ -1,10 +1,12 @@
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import InputFieldWithError from "../components/InputField/InputFieldWithError"
-import ButtonWithError from "../components/Button/ButtonWithError"
 import { useAuth } from "../components/AuthProvider/AuthContext"
-import log from "../utils/logger"
+import {
+  ButtonWithError,
+  InputFieldWithError,
+} from "../components/WithError/fieldsWithError"
+import { logger } from "../utils/logger"
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -38,11 +40,11 @@ export default function LoginPage() {
         rememberMe: data.rememberMe,
       })
 
-      log.debug("Авторизация прошла успешно")
+      logger.debug("Авторизация прошла успешно")
     } catch (err) {
       const error = err as Error
       setError("root", { message: `${error.message}` })
-      log.error(err)
+      logger.error(err)
     }
   }
 

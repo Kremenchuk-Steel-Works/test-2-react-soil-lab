@@ -1,6 +1,6 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
-import type { Organization } from "../../../../features/organizations/types"
+import type { Organization } from "../../../../features/admin/organizations/types"
 
 export const adminOrganizationsColumns: ColumnDef<Organization, string>[] = [
   {

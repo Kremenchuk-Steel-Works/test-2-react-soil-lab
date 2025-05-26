@@ -1,9 +1,11 @@
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { z, ZodSchema } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import log from "../../utils/logger"
-import InputFieldWithError from "../../components/InputField/InputFieldWithError"
-import ButtonWithError from "../../components/Button/ButtonWithError"
+import {
+  ButtonWithError,
+  InputFieldWithError,
+} from "../WithError/fieldsWithError"
+import { logger } from "../../utils/logger"
 
 export const userSchema = z.object({
   email: z.string().email(),
@@ -48,10 +50,10 @@ export function UserForm<T extends Partial<UserFormFields> = UserFormFields>({
   const submitHandler: SubmitHandler<T> = async (data) => {
     try {
       const response = await onSubmit(data)
-      log.debug("Форма успешно выполнена", response)
+      logger.debug("Форма успешно выполнена", response)
     } catch (err: any) {
       setError("root" as any, { message: err.message })
-      log.error(err)
+      logger.error(err)
     }
   }
 

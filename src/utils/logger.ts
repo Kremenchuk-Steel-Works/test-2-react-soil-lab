@@ -3,4 +3,4 @@ import { DEBUG } from "../config/env"
 
 log.setLevel(DEBUG ? "debug" : "warn")
 
-export default log
+export const logger = log

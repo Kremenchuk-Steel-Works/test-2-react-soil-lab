@@ -1,8 +1,8 @@
 import Button from "../../../components/Button/Button"
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import type { PositionsFormFields } from "../../../features/positions/forms/schema"
-import PositionsForm from "../../../features/positions/forms/form"
+import type { PositionsFormFields } from "../../../features/admin/positions/forms/schema"
+import PositionsForm from "../../../features/admin/positions/forms/form"
 
 export default function AdminPositionsAdd() {
   const navigate = useNavigate()
