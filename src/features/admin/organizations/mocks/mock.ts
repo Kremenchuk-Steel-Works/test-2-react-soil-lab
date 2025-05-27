@@ -1,9 +1,9 @@
-import type { Organization } from "../types"
+import type { OrganizationResponse } from "../types/response.dto"
 
-export const mockOrganizations: Organization[] = [
+export const mockOrganizations: OrganizationResponse[] = [
   {
     id: "b1f2e9d1-0f8e-4a9b-9f2a-4eaf9d9d86c1",
-    name: "Acme Corporation",
+    legalName: "Acme Corporation",
     country: "USA",
     email: "contact@acme.com",
     createdAt: "2025-01-15T08:30:00Z",
@@ -11,7 +11,7 @@ export const mockOrganizations: Organization[] = [
   },
   {
     id: "c2a4db0d-10f2-4c7f-8b9e-3023b8f3d9f0",
-    name: "Globex Ltd.",
+    legalName: "Globex Ltd.",
     country: "UK",
     email: "info@globex.co.uk",
     createdAt: "2024-11-20T14:00:00Z",
@@ -19,7 +19,7 @@ export const mockOrganizations: Organization[] = [
   },
   {
     id: "e301a9f4-5691-4af1-8b2d-3e827bc456e7",
-    name: "Initech",
+    legalName: "Initech",
     country: "Canada",
     email: "hello@initech.ca",
     createdAt: "2025-03-01T12:00:00Z",
@@ -27,7 +27,7 @@ export const mockOrganizations: Organization[] = [
   },
   {
     id: "b90fa40a-eaaa-4e63-84b1-890d5e7b7d67",
-    name: "Hooli",
+    legalName: "Hooli",
     country: "USA",
     email: "support@hooli.com",
     createdAt: "2025-02-01T09:00:00Z",
@@ -35,7 +35,7 @@ export const mockOrganizations: Organization[] = [
   },
   {
     id: "9f3b01c0-498f-4e02-a8bb-96e7eb1ef282",
-    name: "Umbrella Corp",
+    legalName: "Umbrella Corp",
     country: "Germany",
     email: "admin@umbrella.de",
     createdAt: "2024-12-01T07:00:00Z",
@@ -43,7 +43,7 @@ export const mockOrganizations: Organization[] = [
   },
   {
     id: "2fa1f320-4b90-4b96-8b68-dc7813d2218b",
-    name: "Stark Industries",
+    legalName: "Stark Industries",
     country: "USA",
     email: "contact@starkindustries.com",
     createdAt: "2025-01-10T08:00:00Z",
@@ -51,7 +51,7 @@ export const mockOrganizations: Organization[] = [
   },
   {
     id: "af8d6b4f-d12a-4420-9022-35e60b63ea59",
-    name: "Wayne Enterprises",
+    legalName: "Wayne Enterprises",
     country: "USA",
     email: "ceo@wayneenterprises.com",
     createdAt: "2024-10-05T06:00:00Z",
@@ -59,7 +59,7 @@ export const mockOrganizations: Organization[] = [
   },
   {
     id: "7e9fa51b-c2a4-44f4-a2c7-23a5ef2e18a4",
-    name: "Wonka Industries",
+    legalName: "Wonka Industries",
     country: "UK",
     email: "info@wonka.co.uk",
     createdAt: "2024-11-15T10:00:00Z",
@@ -67,7 +67,7 @@ export const mockOrganizations: Organization[] = [
   },
   {
     id: "b41d9a9c-d2f0-4a15-9a17-fc54198cfc0d",
-    name: "Cyberdyne Systems",
+    legalName: "Cyberdyne Systems",
     country: "Japan",
     email: "info@cyberdyne.jp",
     createdAt: "2024-09-30T13:00:00Z",
@@ -75,7 +75,7 @@ export const mockOrganizations: Organization[] = [
   },
   {
     id: "35cb2fa3-f4f9-498c-b4e5-dfea457afe69",
-    name: "Tyrell Corporation",
+    legalName: "Tyrell Corporation",
     country: "USA",
     email: "contact@tyrell.com",
     createdAt: "2025-01-25T11:00:00Z",

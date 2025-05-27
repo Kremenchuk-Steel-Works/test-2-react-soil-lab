@@ -68,6 +68,11 @@ import AdminPermissionsList from "../pages/AdminPanel/Permissions/List/List"
 import AdminPermissionsAdd from "../pages/AdminPanel/Permissions/Add"
 import AdminPermissionsDetails from "../pages/AdminPanel/Permissions/Details"
 import AdminPermissionsUpdate from "../pages/AdminPanel/Permissions/Update"
+import AdminUsersLayout2 from "../pages/AdminUsers/Layout"
+import AdminUsersList2 from "../pages/AdminUsers/AdminUsersList/List"
+import AdminUsersAdd2 from "../pages/AdminUsers/Add"
+import AdminUsersDetails2 from "../pages/AdminUsers/Details"
+import AdminUsersEdit2 from "../pages/AdminUsers/Edit"
 
 export type Permission =
   | "admin"
@@ -88,46 +93,46 @@ export interface AppRoute {
 }
 
 export const APP_ROUTES: AppRoute[] = [
-  // {
-  //   key: "adminUsers",
-  //   path: "/admin-users",
-  //   label: "Користувачі",
-  //   icon: Users,
-  //   component: <AdminUsersLayout />,
-  //   requiredPermissions: ["admin"],
-  //   children: [
-  //     {
-  //       key: "adminUsersList",
-  //       path: "",
-  //       label: "Список користувачів",
-  //       icon: Users,
-  //       component: <AdminUsersList />,
-  //     },
-  //     {
-  //       key: "adminUsersAdd",
-  //       path: "add",
-  //       label: "Додати користувача",
-  //       icon: UserRoundSearch,
-  //       component: <AdminUsersisAdd />,
-  //     },
-  //     {
-  //       key: "adminUsersDetail",
-  //       path: ":id",
-  //       label: "Деталі користувача",
-  //       icon: UserCheck,
-  //       component: <AdminUsersDetails />,
-  //       inSidebar: false,
-  //     },
-  //     {
-  //       key: "adminUsersEdit",
-  //       path: ":id/edit",
-  //       label: "Редагування користувача",
-  //       icon: UserPen,
-  //       component: <AdminUsersEdit />,
-  //       inSidebar: false,
-  //     },
-  //   ],
-  // },
+  {
+    key: "adminUsers",
+    path: "/admin-users",
+    label: "Користувачі",
+    icon: Users,
+    component: <AdminUsersLayout2 />,
+    requiredPermissions: ["admin"],
+    children: [
+      {
+        key: "adminUsersList",
+        path: "",
+        label: "Список користувачів",
+        icon: Users,
+        component: <AdminUsersList2 />,
+      },
+      {
+        key: "adminUsersAdd",
+        path: "add",
+        label: "Додати користувача",
+        icon: UserRoundSearch,
+        component: <AdminUsersAdd2 />,
+      },
+      {
+        key: "adminUsersDetail",
+        path: ":id",
+        label: "Деталі користувача",
+        icon: UserCheck,
+        component: <AdminUsersDetails2 />,
+        inSidebar: false,
+      },
+      {
+        key: "adminUsersEdit",
+        path: ":id/edit",
+        label: "Редагування користувача",
+        icon: UserPen,
+        component: <AdminUsersEdit2 />,
+        inSidebar: false,
+      },
+    ],
+  },
   {
     key: "admin",
     path: "/admin",

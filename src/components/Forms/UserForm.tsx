@@ -7,30 +7,32 @@ import {
 } from "../WithError/fieldsWithError"
 import { logger } from "../../utils/logger"
 
-export const userSchema = z.object({
+export const userSchema2 = z.object({
   email: z.string().email(),
-  raw_password: z.string().min(4),
+  rawPassword: z.string().min(4),
   profile: z.object({
-    first_name: z.string().nonempty(),
-    last_name: z.string().nonempty(),
-    employee_number: z
+    firstName: z.string().nonempty(),
+    lastName: z.string().nonempty(),
+    employeeNumber: z
       .string()
       .nonempty()
       .regex(/^\d+$/, { message: "Тільки цифри" }),
   }),
 })
 
-export type UserFormFields = z.infer<typeof userSchema>
+export type UserFormFields2 = z.infer<typeof userSchema2>
 
 export interface UserFormProps<T> {
-  defaultValues?: Partial<UserFormFields>
+  defaultValues?: Partial<UserFormFields2>
   onSubmit: SubmitHandler<T>
   submitBtnName: string
   showPasswordField?: boolean
   schema: ZodSchema<T>
 }
 
-export function UserForm<T extends Partial<UserFormFields> = UserFormFields>({
+export function UserForm2<
+  T extends Partial<UserFormFields2> = UserFormFields2
+>({
   defaultValues,
   onSubmit,
   submitBtnName,
@@ -72,8 +74,8 @@ export function UserForm<T extends Partial<UserFormFields> = UserFormFields>({
           <InputFieldWithError
             label="Пароль"
             type="password"
-            errorMessage={(errors as any).raw_password?.message}
-            {...register("raw_password" as any)}
+            errorMessage={(errors as any).rawPassword?.message}
+            {...register("rawPassword" as any)}
           />
         </div>
       )}
@@ -83,16 +85,16 @@ export function UserForm<T extends Partial<UserFormFields> = UserFormFields>({
       <div className="space-y-2">
         <InputFieldWithError
           label="Им'я"
-          errorMessage={(errors as any).profile?.first_name?.message}
-          {...register("profile.first_name" as any)}
+          errorMessage={(errors as any).profile?.firstName?.message}
+          {...register("profile.firstName" as any)}
         />
       </div>
 
       <div className="space-y-2">
         <InputFieldWithError
           label="Прізвище"
-          errorMessage={(errors as any).profile?.last_name?.message}
-          {...register("profile.last_name" as any)}
+          errorMessage={(errors as any).profile?.lastName?.message}
+          {...register("profile.lastName" as any)}
         />
       </div>
 
@@ -101,8 +103,8 @@ export function UserForm<T extends Partial<UserFormFields> = UserFormFields>({
           label="Номер працівника"
           inputMode="numeric"
           type="number"
-          errorMessage={(errors as any).profile?.employee_number?.message}
-          {...register("profile.employee_number" as any)}
+          errorMessage={(errors as any).profile?.employeeNumber?.message}
+          {...register("profile.employeeNumber" as any)}
         />
       </div>
 

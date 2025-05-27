@@ -1,13 +1,13 @@
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
-import type { UsersData } from "../../../types/User"
 import { apiUsers } from "../../../services/user"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../components/Button/Button"
-import { adminUsersColumns } from "./columns"
+import { adminUsersColumns2 } from "./columns"
 import { DataTable } from "../../../components/Table/DataTable"
+import type { UsersData } from "../../../types/user"
 
-export default function AdminUsersList() {
+export default function AdminUsersList2() {
   // Состояние из URL
   const [searchParams, setSearchParams] = useSearchParams()
   const pageFromUrl = Number(searchParams.get("page")) || 1
@@ -57,11 +57,11 @@ export default function AdminUsersList() {
       {!isLoading && !isError && usersData && (
         <DataTable
           data={usersData?.users ?? []}
-          columns={adminUsersColumns}
+          columns={adminUsersColumns2}
           setSearchParams={setSearchParams}
           page={pageFromUrl}
           perPage={perPageFromUrl}
-          totalPages={usersData?.total_pages}
+          totalPages={usersData?.totalPages}
         />
       )}
     </>

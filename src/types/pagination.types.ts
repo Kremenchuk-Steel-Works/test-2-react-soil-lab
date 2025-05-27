@@ -3,9 +3,8 @@ export interface PageParams {
   perPage?: number
 }
 
-export type PaginatedListResponse<TDataKey extends string, TItem> = {
-  [key in TDataKey]: TItem[]
-} & {
+export type PaginatedListResponse<TItem> = {
+  data: TItem[]
   page: number
   totalPages: number
   totalItems: number

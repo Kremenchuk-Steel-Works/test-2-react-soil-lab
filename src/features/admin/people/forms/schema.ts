@@ -1,5 +1,26 @@
 import { z } from "zod"
 import optionalObject from "../../../../utils/zodHelpers"
+import { contactTypes } from "../../contact/types/contact"
+import { addressTypes } from "../../address/types/address"
+import { employmentStatuses } from "../../employeeProfile/types/employmentStatus"
+import { genderTypes } from "../types/gender"
+
+export const contactSchema = z.object({
+  isPrimary: z.boolean(),
+  type: z.enum(contactTypes),
+  value: z.string().nonempty(),
+  note: z.string().nullable(),
+})
+
+export const addressSchema = z.object({
+  street: z.string().nonempty(),
+  cityName: z.string().nonempty(),
+  countryName: z.string().nonempty(),
+  postalCode: z.string().nullable(),
+  isPrimary: z.boolean(),
+  type: z.enum(addressTypes),
+  note: z.string().nullable(),
+})
 
 export const peopleEmployeeProfileSchema = z.object({
   employeeNumber: z
@@ -9,14 +30,7 @@ export const peopleEmployeeProfileSchema = z.object({
       message: "Тільки цифри",
     }),
   hiredAt: z.string().nonempty(),
-  employmentStatus: z.enum([
-    "employed",
-    "on_leave",
-    "on_maternity",
-    "terminated",
-    "probation",
-    "inactive",
-  ]),
+  employmentStatus: z.enum(employmentStatuses),
 })
 
 export const peopleOrganizationsSchema = z.object({
@@ -31,16 +45,11 @@ export const peopleSchema = z.object({
   firstName: z.string().nonempty(),
   lastName: z.string().nonempty(),
   middleName: z.string().optional(),
-  gender: z.enum(["male", "female", "other"]),
+  gender: z.enum(genderTypes),
   birthDate: z.string().optional(),
   photoUrl: z.string().url().optional().or(z.literal("")),
-  email: z.string().email().optional().or(z.literal("")),
-  phoneNumber: z
-    .string()
-    .optional()
-    .refine((val) => !val || /^\+?\d+$/.test(val), {
-      message: "Номер має містити лише цифри та, можливо, + на початку",
-    }),
+  contacts: contactSchema,
+  addresses: addressSchema,
   employeeProfiles: optionalObject(peopleEmployeeProfileSchema),
   organizations: optionalObject(peopleOrganizationsSchema),
   positions: optionalObject(peoplePositionsSchema),

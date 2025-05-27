@@ -1,8 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table"
-import type { UserResponse } from "../../../types/User"
 import { Link } from "react-router-dom"
+import type { UserResponse } from "../../../types/user"
 
-export const adminUsersColumns: ColumnDef<UserResponse, string>[] = [
+export const adminUsersColumns2: ColumnDef<UserResponse, string>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -26,7 +26,7 @@ export const adminUsersColumns: ColumnDef<UserResponse, string>[] = [
   {
     accessorKey: "fullName",
     header: "Full Name",
-    accessorFn: (row) => `${row.profile.first_name} ${row.profile.last_name}`,
+    accessorFn: (row) => `${row.profile.firstName} ${row.profile.lastName}`,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
@@ -34,7 +34,7 @@ export const adminUsersColumns: ColumnDef<UserResponse, string>[] = [
   {
     accessorKey: "employee_number",
     header: "Number",
-    accessorFn: (row) => `${row.profile.employee_number}`,
+    accessorFn: (row) => `${row.profile.employeeNumber}`,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",

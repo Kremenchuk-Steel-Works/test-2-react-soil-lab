@@ -43,11 +43,11 @@ export async function apiUsers(params?: PageParams) {
   }
 }
 
-export async function apiUsersAdd({ email, raw_password, profile }: UsersAdd) {
+export async function apiUsersAdd({ email, rawPassword, profile }: UsersAdd) {
   try {
     const response = await api.post(`/users/`, {
       email,
-      raw_password,
+      rawPassword,
       profile,
     })
     const user: User = response.data

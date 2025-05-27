@@ -1,6 +1,7 @@
 import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
+  contactSchema,
   peopleEmployeeProfileSchema,
   peopleSchema,
   type PeopleFormFields,
@@ -57,12 +58,75 @@ export default function PeopleForm({
   //   option: ({ isSelected }: { isSelected?: boolean }) =>
   //     isSelected ? "bg-red-500 text-white" : "hover:bg-red-100",
   // }
+
   const genderOptions = [
     ...peopleSchema.shape.gender.options.map((value) => ({
       value,
-      label:
-        value === "male" ? "Чоловіча" : value === "female" ? "Жіноча" : "Інша",
+      label: (() => {
+        switch (value) {
+          case "male":
+            return "Чоловіча"
+          case "female":
+            return "Жіноча"
+          case "other":
+            return "Інша"
+          default:
+            return "Невідомо"
+        }
+      })(),
     })),
+  ]
+
+  const contactOptions = [
+    ...contactSchema.shape.type.options.map((value) => ({
+      value,
+      label: (() => {
+        switch (value) {
+          case "email":
+            return "Email"
+          case "phone":
+            return "Телефон"
+          case "telegram":
+            return "Телеграм"
+          case "linkedin":
+            return "Linkedin"
+          case "website":
+            return "Сайт"
+          default:
+            return "Невідомо"
+        }
+      })(),
+    })),
+  ]
+
+  const employmentStatusOptions = [
+    ...peopleEmployeeProfileSchema.shape.employmentStatus.options.map(
+      (value) => ({
+        value,
+        label: (() => {
+          switch (value) {
+            case "intern":
+              return "Стажер"
+            case "full-time":
+              return "Повна зайнятість"
+            case "part-time":
+              return "Неповна зайнятість"
+            case "contract":
+              return "Контракт"
+            case "on-leave":
+              return "У відпустці"
+            case "suspended":
+              return "Призупинено"
+            case "terminated":
+              return "Звільнений"
+            case "retired":
+              return "На пенсії"
+            default:
+              return "Невідомо"
+          }
+        })(),
+      })
+    ),
   ]
 
   return (
@@ -85,7 +149,7 @@ export default function PeopleForm({
         {...register("middleName")}
       />
 
-      <Controller
+      {/* <Controller
         name="gender"
         control={control}
         render={({ field }) => (
@@ -110,7 +174,7 @@ export default function PeopleForm({
             errorMessage={errors.gender?.message}
           />
         )}
-      />
+      /> */}
 
       <Controller
         name="gender"
@@ -141,18 +205,59 @@ export default function PeopleForm({
         {...register("photoUrl")}
       />
 
-      <InputFieldWithError
-        label="Email"
-        type="email"
-        errorMessage={errors.email?.message}
-        {...register("email")}
-      />
+      <div className="space-y-3">
+        <h4 className="layout-text">Контакти</h4>
 
-      <InputFieldWithError
-        label="Телефонний номер"
-        errorMessage={errors.phoneNumber?.message}
-        {...register("phoneNumber")}
-      />
+        <InputFieldWithError
+          label="isPrimary"
+          errorMessage={errors.contacts?.isPrimary?.message}
+          {...register("contacts.isPrimary")}
+        />
+
+        <Controller
+          name="contacts.type"
+          control={control}
+          render={({ field }) => (
+            <ReactSelectWithError
+              placeholder="Оберіть тип"
+              isClearable={true}
+              options={contactOptions}
+              value={contactOptions.find((opt) => opt.value === field.value)}
+              onChange={(option) => field.onChange(option?.value)}
+              errorMessage={
+                errors.contacts?.type &&
+                typeof errors.contacts.type === "object" &&
+                "message" in errors.contacts.type
+                  ? errors.contacts.type.message
+                  : undefined
+              }
+            />
+          )}
+        />
+
+        <InputFieldWithError
+          label="Value"
+          errorMessage={errors.contacts?.value?.message}
+          {...register("contacts.value")}
+        />
+
+        <InputFieldWithError
+          label="Note"
+          errorMessage={errors.contacts?.note?.message}
+          {...register("contacts.note")}
+        />
+      </div>
+
+      <div className="space-y-3">
+        <h4 className="layout-text">Адреса</h4>
+
+        <InputFieldWithError
+          label="Номер робітника"
+          type="number"
+          errorMessage={errors.employeeProfiles?.employeeNumber?.message}
+          {...register("employeeProfiles.employeeNumber")}
+        />
+      </div>
 
       <div className="space-y-3">
         <h4 className="layout-text">Організація</h4>
@@ -200,27 +305,7 @@ export default function PeopleForm({
               heightClass="py-3.5"
               placeholder="Оберіть статус працевлаштування"
               isClearable={true}
-              options={[
-                ...peopleEmployeeProfileSchema.shape.employmentStatus.options.map(
-                  (value) => ({
-                    value,
-                    label:
-                      value === "employed"
-                        ? "Працює"
-                        : value === "on_leave"
-                        ? "У відпустці"
-                        : value === "on_maternity"
-                        ? "У декреті"
-                        : value === "terminated"
-                        ? "Звільнений"
-                        : value === "probation"
-                        ? "Випробувальний термін"
-                        : value === "inactive"
-                        ? "Неактивний"
-                        : "Невідомо",
-                  })
-                ),
-              ]}
+              options={employmentStatusOptions}
               value={field.value}
               onChange={field.onChange}
               errorMessage={errors.employeeProfiles?.employmentStatus?.message}

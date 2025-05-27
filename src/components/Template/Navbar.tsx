@@ -62,11 +62,11 @@ const Navbar: React.FC = () => {
               <User className="w-4 h-4 flex-shrink-0" />
               <span className="truncate">
                 <span className="hidden sm:inline">
-                  {currentUser?.profile.first_name}&nbsp;
-                  {currentUser?.profile.last_name}
+                  {currentUser?.profile.firstName}&nbsp;
+                  {currentUser?.profile.lastName}
                 </span>
                 <span className="inline sm:hidden">
-                  {currentUser?.profile.first_name}
+                  {currentUser?.profile.firstName}
                 </span>
               </span>
             </div>

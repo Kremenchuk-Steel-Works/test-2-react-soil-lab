@@ -1,12 +1,12 @@
 import { useEffect, useLayoutEffect, useState } from "react"
-import { apiLogin } from "../../services/auth"
-import type { FormLoginFields } from "../../pages/LoginPage"
 import type { User } from "../../types/user"
 import { api } from "../../api/client"
 import type { AuthContextType } from "./AuthContext"
 import AuthContext from "./AuthContext"
 import { apiUsersMe } from "../../services/user"
 import { logger } from "../../utils/logger"
+import { authService } from "../../features/auth/services/service"
+import type { LoginFormFields } from "../../features/auth/forms/schema"
 
 // Функции для чтения данных из storage:
 const getStoredItem = (itemName: string): string | null => {
@@ -26,20 +26,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>()
 
   // Функция входа
-  const login = async ({ email, password, rememberMe }: FormLoginFields) => {
+  const login = async ({ email, password, rememberMe }: LoginFormFields) => {
     logger.debug("Выполняем вход в систему")
-    const response = await apiLogin({ email, password })
+    const response = await authService.login({ email, password })
 
     // logout чтобы точно очистить все старые данные пользователя
     logout()
-    logger.debug(response.access_token)
+    logger.debug(response.accessToken)
 
-    setAccessToken(response.access_token)
-    setRefreshToken(response.refresh_token)
+    setAccessToken(response.accessToken)
+    setRefreshToken(response.refreshToken)
 
     const storage = rememberMe ? localStorage : sessionStorage
-    storage.setItem("accessToken", response.access_token)
-    storage.setItem("refreshToken", response.refresh_token)
+    storage.setItem("accessToken", response.accessToken)
+    storage.setItem("refreshToken", response.refreshToken)
   }
 
   // Функция выхода
@@ -94,26 +94,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         ) {
           try {
             logger.debug("Обновляем токен", error.response.data.detail)
-            const response = await api.post(
-              `/auth/refresh`,
-              { refresh_token: refreshToken },
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            )
-            logger.debug("Токен обновлен", response.data.access_token)
 
-            // Обновляем токены
-            setAccessToken(response.data.access_token)
+            if (!refreshToken) {
+              logger.warn("Отсутствует корректный refreshToken")
+              return Promise.reject(error)
+            }
+            const response = await authService.refresh({ refreshToken })
+
+            logger.debug("Токен обновлен", response.accessToken)
+
+            // Обновляем токены в состоянии
+            setAccessToken(response.accessToken)
             const storage = sessionStorage.getItem("accessToken")
               ? sessionStorage
               : localStorage
-            storage.setItem("accessToken", response.data.access_token)
+            storage.setItem("accessToken", response.accessToken)
 
             // Повторяем запрос
-            originalRequest.headers.Authorization = `Bearer ${response.data.access_token}`
+            originalRequest.headers.Authorization = `Bearer ${response.accessToken}`
             originalRequest._retry = true
             return api(originalRequest)
           } catch (err) {

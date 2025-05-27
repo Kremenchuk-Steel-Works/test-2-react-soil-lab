@@ -2,13 +2,13 @@ export type User = {
   email: string
   id: number
   profile: {
-    first_name: string
-    last_name: string
-    employee_number: string
+    firstName: string
+    lastName: string
+    employeeNumber: string
     id: number
-    user_id: number
-    created_at: string
-    updated_at: string
+    userId: number
+    createdAt: string
+    updatedAt: string
   }
   roles: {
     name: string
@@ -20,8 +20,8 @@ export type User = {
     description: string
     id: number
   }[]
-  created_at: string
-  updated_at: string
+  createdAt: string
+  updatedAt: string
 }
 
 export type UserResponse = Omit<
@@ -32,18 +32,18 @@ export type UserResponse = Omit<
 export type UsersData = {
   users: UserResponse[]
   page: number
-  total_pages: number
-  total_items: number
+  totalPages: number
+  totalItems: number
 }
 
 export type UsersAdd = {
   email: string
-  raw_password: string
+  rawPassword: string
   profile: {
-    first_name: string
-    last_name: string
-    employee_number: string
+    firstName: string
+    lastName: string
+    employeeNumber: string
   }
 }
 
-export type UsersEdit = Omit<UsersAdd, "raw_password">
+export type UsersEdit = Omit<UsersAdd, "rawPassword">

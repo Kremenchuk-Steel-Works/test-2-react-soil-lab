@@ -3,18 +3,18 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { apiUsersAdd } from "../../services/user"
 import {
-  UserForm,
-  userSchema,
-  type UserFormFields,
+  UserForm2,
+  userSchema2,
+  type UserFormFields2,
 } from "../../components/Forms/UserForm"
 
 export default function LibraryAdd() {
   const navigate = useNavigate()
 
-  const handleSubmit = async (data: UserFormFields) => {
+  const handleSubmit = async (data: UserFormFields2) => {
     await apiUsersAdd({
       email: data.email,
-      raw_password: data.raw_password!,
+      rawPassword: data.rawPassword!,
       profile: data.profile,
     })
     navigate("..")
@@ -33,8 +33,8 @@ export default function LibraryAdd() {
 
       <div className="flex flex-wrap gap-x-2 gap-y-2">
         <div className="w-full">
-          <UserForm<UserFormFields>
-            schema={userSchema}
+          <UserForm2<UserFormFields2>
+            schema={userSchema2}
             onSubmit={handleSubmit}
             submitBtnName="Додати"
           />

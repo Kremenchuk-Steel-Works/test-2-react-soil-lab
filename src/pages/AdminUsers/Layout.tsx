@@ -1,7 +1,7 @@
 import Layout from "../../components/Template/Layout"
 import { Outlet } from "react-router-dom"
 
-export default function AdminUsersLayout() {
+export default function AdminUsersLayout2() {
   return (
     <Layout>
       <div className="flex flex-col flex-1 space-y-2">

@@ -42,8 +42,6 @@ export default function DepartmentsForm({
     }
   }
 
-  console.log(errors)
-
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError

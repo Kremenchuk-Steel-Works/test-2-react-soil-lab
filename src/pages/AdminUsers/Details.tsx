@@ -1,11 +1,11 @@
 import Button from "../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
-import type { User } from "../../types/User"
 import { apiUsersDetail } from "../../services/user"
 import { useQuery } from "@tanstack/react-query"
+import type { User } from "../../types/user"
 
-export default function AdminUsersDetails() {
+export default function AdminUsersDetails2() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
 
@@ -62,7 +62,7 @@ export default function AdminUsersDetails() {
                   Повне ім'я
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {user.profile.first_name} {user.profile.last_name}
+                  {user.profile.firstName} {user.profile.lastName}
                 </dd>
               </div>
               <div>
@@ -70,7 +70,7 @@ export default function AdminUsersDetails() {
                   Номер працівника
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {user.profile.employee_number}
+                  {user.profile.employeeNumber}
                 </dd>
               </div>
               {user.roles && user.roles.length > 0 && (
@@ -112,7 +112,7 @@ export default function AdminUsersDetails() {
                   Створено
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {new Date(user.created_at).toLocaleString()}
+                  {new Date(user.createdAt).toLocaleString()}
                 </dd>
               </div>
               <div>
@@ -120,7 +120,7 @@ export default function AdminUsersDetails() {
                   Оновлено
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {new Date(user.updated_at).toLocaleString()}
+                  {new Date(user.updatedAt).toLocaleString()}
                 </dd>
               </div>
               <div className="flex justify-between items-center">
