@@ -1,8 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
-import type { Person } from "../../../../features/admin/people/types"
+import type { PersonListItemResponse } from "../../../../features/admin/people/types/response.dto"
 
-export const adminPeopleColumns: ColumnDef<Person, string>[] = [
+export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
   {
     accessorKey: "id",
     header: "ID",

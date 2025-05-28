@@ -4,7 +4,7 @@ export interface ContactResponse {
   isPrimary: boolean
   type: ContactType
   value: string
-  note: string | null
+  note: string | undefined
   id: string
   createdAt: string
   updatedAt: string

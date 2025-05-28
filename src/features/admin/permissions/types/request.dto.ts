@@ -1,11 +1,11 @@
 export interface PermissionCreateRequest {
   name: string
-  description: string | null
+  description: string | undefined
   departmentId: string
 }
 
 export interface PermissionUpdateRequest {
-  name?: string | null
-  description?: string | null
-  departmentId?: string | null
+  name?: string | undefined
+  description?: string | undefined
+  departmentId?: string | undefined
 }

@@ -22,8 +22,9 @@ import {
   ListRestart,
 } from "lucide-react"
 import InputFieldNoLabel from "../InputField/InputFieldNoLabel"
-import Select from "../Select/Select"
 import type { SetURLSearchParams } from "react-router-dom"
+import ReactSelect from "../Select/ReactSelect"
+import type { StylesConfig } from "react-select"
 
 type DataTableProps<T> = {
   data: T[]
@@ -74,6 +75,41 @@ export function DataTable<T>({
     manualPagination: true,
     enableSortingRemoval,
   })
+
+  const pageSizeStyles: StylesConfig = {
+    control: (base) => ({
+      ...base,
+      minHeight: "36px",
+      padding: "0 8px",
+    }),
+    valueContainer: (base) => ({
+      ...base,
+      padding: "0 8px",
+    }),
+    input: (base) => ({
+      ...base,
+      margin: "0",
+    }),
+    dropdownIndicator: (base) => ({
+      ...base,
+      paddingTop: "0",
+      paddingBottom: "0",
+    }),
+    clearIndicator: (base) => ({
+      ...base,
+      paddingTop: "0",
+      paddingBottom: "0",
+    }),
+  }
+
+  const pageSizeClassName = {
+    control: () => "border-0",
+  }
+
+  const pageSizeOptions = [1, 5, 10, 15, 20].map((size) => ({
+    value: size,
+    label: String(size),
+  }))
 
   return (
     <>
@@ -159,21 +195,24 @@ export function DataTable<T>({
         </div>
         {/* Выбор числа строк */}
         <strong>
-          <Select
-            heightClass="h-9"
-            options={[1, 5, 10, 15, 20].map((size) => ({
-              value: size,
-              label: String(size),
-            }))}
-            value={table.getState().pagination.pageSize}
-            onChange={(newSize) => {
+          <ReactSelect
+            placeholder="Кількість"
+            customClassNames={pageSizeClassName}
+            customStyles={pageSizeStyles}
+            isClearable={false}
+            isSearchable={false}
+            options={pageSizeOptions}
+            value={pageSizeOptions.find(
+              (opt) => opt.value === table.getState().pagination.pageSize
+            )}
+            onChange={(selectedOption) => {
+              const newSize = selectedOption?.value
               setPagination((old) => ({
                 ...old,
                 pageSize: Number(newSize),
-                pageIndex: 0, // сброс на первую страницу
+                pageIndex: 0, // скидання на першу сторінку
               }))
             }}
-            placeholder="Кількість"
           />
         </strong>
       </div>

@@ -14,6 +14,7 @@ const InputField: React.FC<InputFieldProps> = ({ label, type, ...props }) => {
       <input
         ref={inputRef}
         type={type}
+        onWheel={(e) => e.currentTarget.blur()}
         {...props}
         className={`
           peer

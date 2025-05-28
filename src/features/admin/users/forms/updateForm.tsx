@@ -62,8 +62,8 @@ export default function UpdateUsersForm({
       <InputFieldWithError
         label="Пароль"
         type="password"
-        errorMessage={errors.password?.message}
-        {...register("password")}
+        errorMessage={errors.rawPassword?.message}
+        {...register("rawPassword")}
       />
 
       <Controller

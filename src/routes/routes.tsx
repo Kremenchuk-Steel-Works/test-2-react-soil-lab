@@ -93,46 +93,46 @@ export interface AppRoute {
 }
 
 export const APP_ROUTES: AppRoute[] = [
-  {
-    key: "adminUsers",
-    path: "/admin-users",
-    label: "Користувачі",
-    icon: Users,
-    component: <AdminUsersLayout2 />,
-    requiredPermissions: ["admin"],
-    children: [
-      {
-        key: "adminUsersList",
-        path: "",
-        label: "Список користувачів",
-        icon: Users,
-        component: <AdminUsersList2 />,
-      },
-      {
-        key: "adminUsersAdd",
-        path: "add",
-        label: "Додати користувача",
-        icon: UserRoundSearch,
-        component: <AdminUsersAdd2 />,
-      },
-      {
-        key: "adminUsersDetail",
-        path: ":id",
-        label: "Деталі користувача",
-        icon: UserCheck,
-        component: <AdminUsersDetails2 />,
-        inSidebar: false,
-      },
-      {
-        key: "adminUsersEdit",
-        path: ":id/edit",
-        label: "Редагування користувача",
-        icon: UserPen,
-        component: <AdminUsersEdit2 />,
-        inSidebar: false,
-      },
-    ],
-  },
+  // {
+  //   key: "adminUsers",
+  //   path: "/admin-users",
+  //   label: "Користувачі",
+  //   icon: Users,
+  //   component: <AdminUsersLayout2 />,
+  //   requiredPermissions: ["admin"],
+  //   children: [
+  //     {
+  //       key: "adminUsersList",
+  //       path: "",
+  //       label: "Список користувачів",
+  //       icon: Users,
+  //       component: <AdminUsersList2 />,
+  //     },
+  //     {
+  //       key: "adminUsersAdd",
+  //       path: "add",
+  //       label: "Додати користувача",
+  //       icon: UserRoundSearch,
+  //       component: <AdminUsersAdd2 />,
+  //     },
+  //     {
+  //       key: "adminUsersDetail",
+  //       path: ":id",
+  //       label: "Деталі користувача",
+  //       icon: UserCheck,
+  //       component: <AdminUsersDetails2 />,
+  //       inSidebar: false,
+  //     },
+  //     {
+  //       key: "adminUsersEdit",
+  //       path: ":id/edit",
+  //       label: "Редагування користувача",
+  //       icon: UserPen,
+  //       component: <AdminUsersEdit2 />,
+  //       inSidebar: false,
+  //     },
+  //   ],
+  // },
   {
     key: "admin",
     path: "/admin",

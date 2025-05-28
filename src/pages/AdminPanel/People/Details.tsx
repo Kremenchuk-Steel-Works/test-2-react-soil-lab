@@ -2,8 +2,9 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Person } from "../../../features/admin/people/types"
+
 import { peopleService } from "../../../features/admin/people/services/service"
+import type { PersonResponse } from "../../../features/admin/people/types/response.dto"
 
 export default function AdminPeopleDetails() {
   const navigate = useNavigate()
@@ -14,7 +15,7 @@ export default function AdminPeopleDetails() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<Person, Error>({
+  } = useQuery<PersonResponse, Error>({
     queryKey: ["adminPersonData", id],
     queryFn: () => peopleService.getById(id!),
     enabled: !!id,
@@ -50,17 +51,6 @@ export default function AdminPeopleDetails() {
                 </dd>
               </div>
 
-              {data.email && (
-                <div>
-                  <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                    Email
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                    {data.email}
-                  </dd>
-                </div>
-              )}
-
               <div className="md:col-span-2">
                 <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
                   Повне ім'я
@@ -86,17 +76,6 @@ export default function AdminPeopleDetails() {
                   </dt>
                   <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
                     {new Date(data.birthDate).toLocaleDateString()}
-                  </dd>
-                </div>
-              )}
-
-              {data.phoneNumber && (
-                <div>
-                  <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                    Телефон
-                  </dt>
-                  <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                    {data.phoneNumber}
                   </dd>
                 </div>
               )}

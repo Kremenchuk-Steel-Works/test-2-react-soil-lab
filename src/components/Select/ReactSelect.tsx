@@ -1,6 +1,6 @@
 import { ChevronDown, X } from "lucide-react"
 import React from "react"
-import Select from "react-select"
+import Select, { type StylesConfig } from "react-select"
 import {
   components,
   type ClearIndicatorProps,
@@ -40,6 +40,7 @@ interface ReactSelectProps {
   value?: Option | null
   onChange?: (option: Option | null) => void
   customClassNames?: ClassNamesConfig
+  customStyles?: StylesConfig
 }
 
 const baseClassNames: ClassNamesConfig = {
@@ -88,10 +89,12 @@ const ReactSelect: React.FC<ReactSelectProps> = ({
   isMulti = false,
   onChange,
   customClassNames = {},
+  customStyles = {},
 }) => {
   return (
     <Select
       options={options}
+      styles={customStyles}
       defaultValue={defaultValue}
       value={value}
       placeholder={placeholder}

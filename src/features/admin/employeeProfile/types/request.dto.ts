@@ -2,13 +2,13 @@ import type { EmploymentStatus } from "./employmentStatus"
 
 export interface EmployeeProfileCreateRequest {
   personId: string
-  employeeNumber: string | null
+  employeeNumber: string | undefined
   hiredAt: string
   employmentStatus: EmploymentStatus
 }
 
 export interface EmployeeProfileUpdateRequest {
-  employeeNumber?: string | null
-  hiredAt?: string | null
-  employmentStatus?: EmploymentStatus | null
+  employeeNumber?: string | undefined
+  hiredAt?: string | undefined
+  employmentStatus?: EmploymentStatus | undefined
 }

@@ -1,18 +1,15 @@
 import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  contactSchema,
-  peopleEmployeeProfileSchema,
-  peopleSchema,
-  type PeopleFormFields,
-} from "./schema"
+import { peopleSchema, type PeopleFormFields } from "./schema"
 import {
   InputFieldWithError,
   ButtonWithError,
-  SelectWithError,
   ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { logger } from "../../../../utils/logger"
+import { ContactForm } from "../../contact/forms/form"
+import { AddressForm } from "../../address/forms/form"
+import { EmployeeProfileForm } from "../../employeeProfile/forms/form"
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -50,15 +47,6 @@ export default function PeopleForm({
     }
   }
 
-  // const customClassNames = {
-  //   control: ({ isFocused }: { isFocused?: boolean }) =>
-  //     isFocused
-  //       ? "border-red-500 ring-red-300"
-  //       : "border-red-300 dark:border-red-600",
-  //   option: ({ isSelected }: { isSelected?: boolean }) =>
-  //     isSelected ? "bg-red-500 text-white" : "hover:bg-red-100",
-  // }
-
   const genderOptions = [
     ...peopleSchema.shape.gender.options.map((value) => ({
       value,
@@ -75,58 +63,6 @@ export default function PeopleForm({
         }
       })(),
     })),
-  ]
-
-  const contactOptions = [
-    ...contactSchema.shape.type.options.map((value) => ({
-      value,
-      label: (() => {
-        switch (value) {
-          case "email":
-            return "Email"
-          case "phone":
-            return "Телефон"
-          case "telegram":
-            return "Телеграм"
-          case "linkedin":
-            return "Linkedin"
-          case "website":
-            return "Сайт"
-          default:
-            return "Невідомо"
-        }
-      })(),
-    })),
-  ]
-
-  const employmentStatusOptions = [
-    ...peopleEmployeeProfileSchema.shape.employmentStatus.options.map(
-      (value) => ({
-        value,
-        label: (() => {
-          switch (value) {
-            case "intern":
-              return "Стажер"
-            case "full-time":
-              return "Повна зайнятість"
-            case "part-time":
-              return "Неповна зайнятість"
-            case "contract":
-              return "Контракт"
-            case "on-leave":
-              return "У відпустці"
-            case "suspended":
-              return "Призупинено"
-            case "terminated":
-              return "Звільнений"
-            case "retired":
-              return "На пенсії"
-            default:
-              return "Невідомо"
-          }
-        })(),
-      })
-    ),
   ]
 
   return (
@@ -148,33 +84,6 @@ export default function PeopleForm({
         errorMessage={errors.middleName?.message}
         {...register("middleName")}
       />
-
-      {/* <Controller
-        name="gender"
-        control={control}
-        render={({ field }) => (
-          <SelectWithError
-            className="w-full"
-            heightClass="py-3.5"
-            placeholder="Оберіть стать"
-            isClearable={true}
-            options={[
-              ...peopleSchema.shape.gender.options.map((value) => ({
-                value,
-                label:
-                  value === "male"
-                    ? "Чоловіча"
-                    : value === "female"
-                    ? "Жіноча"
-                    : "Інша",
-              })),
-            ]}
-            value={field.value}
-            onChange={field.onChange}
-            errorMessage={errors.gender?.message}
-          />
-        )}
-      /> */}
 
       <Controller
         name="gender"
@@ -205,67 +114,25 @@ export default function PeopleForm({
         {...register("photoUrl")}
       />
 
-      <div className="space-y-3">
-        <h4 className="layout-text">Контакти</h4>
+      <ContactForm<PeopleFormFields>
+        control={control}
+        register={register}
+        errors={errors}
+      />
 
-        <InputFieldWithError
-          label="isPrimary"
-          errorMessage={errors.contacts?.isPrimary?.message}
-          {...register("contacts.isPrimary")}
-        />
-
-        <Controller
-          name="contacts.type"
-          control={control}
-          render={({ field }) => (
-            <ReactSelectWithError
-              placeholder="Оберіть тип"
-              isClearable={true}
-              options={contactOptions}
-              value={contactOptions.find((opt) => opt.value === field.value)}
-              onChange={(option) => field.onChange(option?.value)}
-              errorMessage={
-                errors.contacts?.type &&
-                typeof errors.contacts.type === "object" &&
-                "message" in errors.contacts.type
-                  ? errors.contacts.type.message
-                  : undefined
-              }
-            />
-          )}
-        />
-
-        <InputFieldWithError
-          label="Value"
-          errorMessage={errors.contacts?.value?.message}
-          {...register("contacts.value")}
-        />
-
-        <InputFieldWithError
-          label="Note"
-          errorMessage={errors.contacts?.note?.message}
-          {...register("contacts.note")}
-        />
-      </div>
-
-      <div className="space-y-3">
-        <h4 className="layout-text">Адреса</h4>
-
-        <InputFieldWithError
-          label="Номер робітника"
-          type="number"
-          errorMessage={errors.employeeProfiles?.employeeNumber?.message}
-          {...register("employeeProfiles.employeeNumber")}
-        />
-      </div>
+      <AddressForm<PeopleFormFields>
+        control={control}
+        register={register}
+        errors={errors}
+      />
 
       <div className="space-y-3">
         <h4 className="layout-text">Організація</h4>
 
         <InputFieldWithError
           label="Організація ID"
-          errorMessage={errors.organizations?.organizationId?.message}
-          {...register("organizations.organizationId")}
+          {...register(`organizations.${0}.organizationId`)}
+          errorMessage={errors.organizations?.[0]?.organizationId?.message}
         />
       </div>
 
@@ -274,45 +141,16 @@ export default function PeopleForm({
 
         <InputFieldWithError
           label="Посада ID"
-          errorMessage={errors.positions?.positionId?.message}
-          {...register("positions.positionId")}
+          {...register(`positions.${0}.positionId`)}
+          errorMessage={errors.positions?.[0]?.positionId?.message}
         />
       </div>
 
-      <div className="space-y-3">
-        <h4 className="layout-text">Профіль робітника</h4>
-
-        <InputFieldWithError
-          label="Номер робітника"
-          type="number"
-          errorMessage={errors.employeeProfiles?.employeeNumber?.message}
-          {...register("employeeProfiles.employeeNumber")}
-        />
-
-        <InputFieldWithError
-          label="Дата найму"
-          type="date"
-          errorMessage={errors.employeeProfiles?.hiredAt?.message}
-          {...register("employeeProfiles.hiredAt")}
-        />
-
-        <Controller
-          name="employeeProfiles.employmentStatus"
-          control={control}
-          render={({ field }) => (
-            <SelectWithError
-              className="w-full"
-              heightClass="py-3.5"
-              placeholder="Оберіть статус працевлаштування"
-              isClearable={true}
-              options={employmentStatusOptions}
-              value={field.value}
-              onChange={field.onChange}
-              errorMessage={errors.employeeProfiles?.employmentStatus?.message}
-            />
-          )}
-        />
-      </div>
+      <EmployeeProfileForm<PeopleFormFields>
+        control={control}
+        register={register}
+        errors={errors}
+      />
 
       <ButtonWithError
         className="w-full"

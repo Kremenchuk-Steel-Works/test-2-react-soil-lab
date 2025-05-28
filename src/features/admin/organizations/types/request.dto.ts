@@ -9,18 +9,18 @@ import type {
 
 export interface OrganizationCreateRequest {
   legalName: string
-  registrationNumber: string | null
-  taxId: string | null
+  registrationNumber: string | undefined
+  taxId: string | undefined
   countryId: number
   contacts: ContactCreateRequest[]
   addresses: AddressCreateRequest[]
 }
 
 export interface OrganizationUpdateRequest {
-  countryId?: number | null
-  legalName?: string | null
-  registrationNumber?: string | null
-  taxId?: string | null
+  countryId?: number | undefined
+  legalName?: string | undefined
+  registrationNumber?: string | undefined
+  taxId?: string | undefined
   contactOperations: ContactOperationRequest[]
   addressOperations: AddressOperationRequest[]
 }

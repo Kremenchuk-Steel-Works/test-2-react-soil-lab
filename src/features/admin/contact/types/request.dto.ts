@@ -4,19 +4,19 @@ export interface ContactCreateRequest {
   isPrimary: boolean
   type: ContactType
   value: string
-  note: string | null
+  note: string | undefined
   parentId: string
 }
 
 export interface ContactOperationRequest {
   action: "create" | "update" | "delete"
-  data?: ContactCreateRequest | ContactUpdateRequest | null
-  id?: string | null
+  data?: ContactCreateRequest | ContactUpdateRequest | undefined
+  id?: string | undefined
 }
 
 export interface ContactUpdateRequest {
-  isPrimary?: boolean | null
-  type?: ContactType | null
-  value?: string | null
-  note?: string | null
+  isPrimary?: boolean | undefined
+  type?: ContactType | undefined
+  value?: string | undefined
+  note?: string | undefined
 }

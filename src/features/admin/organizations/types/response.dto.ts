@@ -5,8 +5,8 @@ import type { CountryResponse } from "../../country/types/response.dto"
 
 export interface OrganizationResponse {
   legalName: string
-  registrationNumber: string | null
-  taxId: string | null
+  registrationNumber: string | undefined
+  taxId: string | undefined
   id: string
   country: CountryResponse
   contacts: ContactResponse[]
@@ -17,8 +17,8 @@ export interface OrganizationResponse {
 
 export interface OrganizationListItemResponse {
   legalName: string
-  registrationNumber: string | null
-  taxId: string | null
+  registrationNumber: string | undefined
+  taxId: string | undefined
   id: string
   countryName: string
 }

@@ -1,11 +1,11 @@
 export interface RoleCreateRequest {
   name: string
-  description?: string | null
+  description?: string | undefined
   permissionIds?: number[]
 }
 
 export interface RoleUpdateRequest {
-  name?: string | null
-  description?: string | null
-  permissionIds?: number[] | null
+  name?: string | undefined
+  description?: string | undefined
+  permissionIds?: number[] | undefined
 }

@@ -1,9 +1,9 @@
 export interface DepartmentCreateRequest {
   name: string
-  description: string | null
+  description: string | undefined
 }
 
 export interface DepartmentUpdateRequest {
-  name?: string | null
-  description?: string | null
+  name?: string | undefined
+  description?: string | undefined
 }

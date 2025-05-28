@@ -3,7 +3,7 @@ import type { PermissionListItemResponse } from "../../permissions/types/respons
 
 export interface DepartmentResponse {
   name: string
-  description: string | null
+  description: string | undefined
   id: string
   permissions: PermissionListItemResponse[]
   createdAt: string
@@ -12,7 +12,7 @@ export interface DepartmentResponse {
 
 export interface DepartmentListItemResponse {
   name: string
-  description: string | null
+  description: string | undefined
   id: string
 }
 

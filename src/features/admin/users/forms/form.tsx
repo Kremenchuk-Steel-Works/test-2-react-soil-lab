@@ -1,10 +1,9 @@
-import { Controller, useForm, type SubmitHandler } from "react-hook-form"
+import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-  SelectWithError,
-  ReactSelectWithError,
+  CheckboxWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { userSchema, type UserFormFields } from "./schema"
 import { logger } from "../../../../utils/logger"
@@ -26,7 +25,6 @@ export default function UsersForm({
   const {
     register,
     handleSubmit,
-    control,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
@@ -44,11 +42,6 @@ export default function UsersForm({
       logger.error(err)
     }
   }
-
-  const activeOptions = [
-    { value: true, label: "Активний" },
-    { value: false, label: "Неактивний" },
-  ]
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
@@ -68,40 +61,20 @@ export default function UsersForm({
       <InputFieldWithError
         label="Пароль"
         type="password"
-        errorMessage={errors.password?.message}
-        {...register("password")}
+        errorMessage={errors.rawPassword?.message}
+        {...register("rawPassword")}
       />
 
-      <Controller
-        name="isActive"
-        control={control}
-        render={({ field }) => (
-          <SelectWithError
-            className="w-full"
-            heightClass="py-3.5"
-            placeholder="Оберіть статус"
-            isClearable={true}
-            options={activeOptions}
-            value={field.value}
-            onChange={field.onChange}
-            errorMessage={errors.isActive?.message}
-          />
-        )}
+      <CheckboxWithError
+        label="Активний"
+        {...register("isActive")}
+        errorMessage={errors.isActive?.message}
       />
 
-      <Controller
-        name="isActive"
-        control={control}
-        render={({ field }) => (
-          <ReactSelectWithError
-            placeholder="Оберіть статус"
-            isClearable={true}
-            options={activeOptions}
-            value={activeOptions.find((opt) => opt.value === field.value)}
-            onChange={(option) => field.onChange(option?.value)}
-            errorMessage={errors.isActive?.message}
-          />
-        )}
+      <CheckboxWithError
+        label="Адміністратор"
+        {...register("isSuperuser")}
+        errorMessage={errors.isSuperuser?.message}
       />
 
       <div className="space-y-3">

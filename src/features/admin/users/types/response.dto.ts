@@ -9,7 +9,7 @@ export interface UserResponse {
   person: PersonResponse
   isActive: boolean
   isSuperuser: boolean
-  lastLoginAt?: string | null
+  lastLoginAt?: string | undefined
   roles: RoleResponse[]
   permissions: PermissionResponse[]
   createdAt: string
@@ -22,7 +22,7 @@ export interface UserListItemResponse {
   fullName: string
   isActive: boolean
   isSuperuser: boolean
-  lastLoginAt?: string | null
+  lastLoginAt?: string | undefined
   roleNames: string[]
   permissionNames: string[]
 }

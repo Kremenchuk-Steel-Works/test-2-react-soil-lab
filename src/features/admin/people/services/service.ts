@@ -8,7 +8,7 @@ export const peopleService = {
   async getList(params?: PageParams): Promise<PeopleListResponse> {
     console.log(params)
     const responeData = {
-      people: mockData,
+      data: mockData,
       page: 1,
       totalPages: 1,
       totalItems: mockData.length,

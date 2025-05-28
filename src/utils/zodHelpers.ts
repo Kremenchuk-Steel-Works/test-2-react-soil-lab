@@ -16,3 +16,18 @@ export default function optionalObject<T extends ZodTypeAny>(
     return val
   }, z.union([schema, z.undefined()]))
 }
+
+export function getFieldError(error: unknown): string | undefined {
+  if (!error) return undefined
+  if (
+    typeof error === "object" &&
+    "message" in error &&
+    typeof error.message === "string"
+  ) {
+    return error.message
+  }
+  return undefined
+}
+
+export const parseNumber = (v: unknown) =>
+  v === "" || v === null || v === undefined ? undefined : Number(v)

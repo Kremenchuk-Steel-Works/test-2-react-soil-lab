@@ -8,14 +8,14 @@ import type { Gender } from "./gender"
 
 export interface PersonResponse {
   firstName: string
-  middleName?: string | null
+  middleName?: string | undefined
   lastName: string
   gender: Gender
-  birthDate: string | null
-  photoUrl: string | null
+  birthDate: string | undefined
+  photoUrl: string | undefined
   id: string
   isUser: boolean
-  employeeProfile?: EmployeeProfileResponse | null
+  employeeProfile?: EmployeeProfileResponse | undefined
   contacts?: ContactResponse[]
   addresses?: AddressResponse[]
   organizations?: OrganizationResponse[]

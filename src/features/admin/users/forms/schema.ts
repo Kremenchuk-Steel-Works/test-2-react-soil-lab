@@ -12,8 +12,9 @@ export const usersPermissionsSchema = z.object({
 export const userSchema = z.object({
   personId: z.string().nonempty(),
   email: z.string().email().nonempty(),
-  password: z.string().nonempty(),
+  rawPassword: z.string().nonempty(),
   isActive: z.boolean(),
+  isSuperuser: z.boolean(),
   roles: optionalObject(usersRolesSchema),
   permissions: optionalObject(usersPermissionsSchema),
 })
@@ -21,8 +22,9 @@ export const userSchema = z.object({
 export const updateUserSchema = z.object({
   personId: z.string().nonempty(),
   email: z.string().email().nonempty(),
-  password: z.string().optional(),
+  rawPassword: z.string().optional(),
   isActive: z.boolean(),
+  isSuperuser: z.boolean(),
   roles: optionalObject(usersRolesSchema),
   permissions: optionalObject(usersPermissionsSchema),
 })

@@ -4,8 +4,8 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
 import { adminOrganizationsColumns } from "./columns"
-import type { OrganizationsListResponse } from "../../../../features/admin/organizations/types"
 import { organizationsService } from "../../../../features/admin/organizations/services/service"
+import type { OrganizationListResponse } from "../../../../features/admin/organizations/types/response.dto"
 
 export default function AdminOrganizationsList() {
   // Состояние из URL
@@ -22,7 +22,7 @@ export default function AdminOrganizationsList() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<OrganizationsListResponse, Error>({
+  } = useQuery<OrganizationListResponse, Error>({
     queryKey: ["adminOgranizationsData", pageFromUrl, perPageFromUrl],
     queryFn: () => {
       return organizationsService.getList({
@@ -56,7 +56,7 @@ export default function AdminOrganizationsList() {
 
       {!isLoading && !isError && data && (
         <DataTable
-          data={data?.organizations ?? []}
+          data={data?.data ?? []}
           columns={adminOrganizationsColumns}
           setSearchParams={setSearchParams}
           page={pageFromUrl}

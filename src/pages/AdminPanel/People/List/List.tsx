@@ -4,8 +4,8 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
 import { adminPeopleColumns } from "./columns"
-import type { PeopleListResponse } from "../../../../features/admin/people/types"
 import { peopleService } from "../../../../features/admin/people/services/service"
+import type { PersonListResponse } from "../../../../features/admin/people/types/response.dto"
 
 export default function AdminPeopleList() {
   // Состояние из URL
@@ -22,7 +22,7 @@ export default function AdminPeopleList() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<PeopleListResponse, Error>({
+  } = useQuery<PersonListResponse, Error>({
     queryKey: ["adminPeopleData", pageFromUrl, perPageFromUrl],
     queryFn: () => {
       return peopleService.getList({
@@ -56,7 +56,7 @@ export default function AdminPeopleList() {
 
       {!isLoading && !isError && data && (
         <DataTable
-          data={data?.people ?? []}
+          data={data?.data ?? []}
           columns={adminPeopleColumns}
           setSearchParams={setSearchParams}
           page={pageFromUrl}

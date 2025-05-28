@@ -14,32 +14,32 @@ import type { Gender } from "./gender"
 
 export interface PersonCreateRequest {
   firstName: string
-  middleName?: string | null
+  middleName?: string | undefined
   lastName: string
   gender: Gender
-  birthDate: string | null
-  photoUrl: string | null
+  birthDate: string | undefined
+  photoUrl: string | undefined
   contacts: ContactCreateRequest[]
   addresses: AddressCreateRequest[]
-  employeeProfile?: EmployeeProfileCreateRequest | null
+  employeeProfile?: EmployeeProfileCreateRequest | undefined
   organizationIds: string[]
   positionIds: string[]
 }
 
 export interface PersonUpdateRequest {
-  firstName?: string | null
-  middleName?: string | null
-  lastName?: string | null
-  gender?: Gender | null
-  birthDate?: string | null
-  photoUrl?: string | null
-  employeeProfileAction?: "create" | "update" | "delete" | null
+  firstName?: string | undefined
+  middleName?: string | undefined
+  lastName?: string | undefined
+  gender?: Gender | undefined
+  birthDate?: string | undefined
+  photoUrl?: string | undefined
+  employeeProfileAction?: "create" | "update" | "delete" | undefined
   employeeProfileData?:
     | EmployeeProfileCreateRequest
     | EmployeeProfileUpdateRequest
-    | null
+    | undefined
   contactOperations: ContactOperationRequest[]
   addressOperations: AddressOperationRequest[]
-  organizationIds?: string[] | null
-  positionIds?: string[] | null
+  organizationIds?: string[] | undefined
+  positionIds?: string[] | undefined
 }

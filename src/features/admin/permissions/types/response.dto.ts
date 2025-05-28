@@ -3,7 +3,7 @@ import type { DepartmentResponse } from "../../departments/types/response.dto"
 
 export interface PermissionResponse {
   name: string
-  description: string | null
+  description: string | undefined
   id: number
   department: DepartmentResponse
   createdAt: string

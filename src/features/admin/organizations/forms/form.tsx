@@ -6,6 +6,9 @@ import {
 } from "../../../../components/WithError/fieldsWithError"
 import { organizationsSchema, type OrganizationsFormFields } from "./schema"
 import { logger } from "../../../../utils/logger"
+import { ContactForm } from "../../contact/forms/form"
+import { AddressForm } from "../../address/forms/form"
+import { formTransformers } from "../../../../utils/formTransformers"
 
 type FormFields = OrganizationsFormFields
 const schema = organizationsSchema
@@ -24,6 +27,7 @@ export default function OrganizationsForm({
   const {
     register,
     handleSubmit,
+    control,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
@@ -46,20 +50,39 @@ export default function OrganizationsForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Назва"
-        errorMessage={errors.name?.message}
-        {...register("name")}
+        errorMessage={errors.legalName?.message}
+        {...register("legalName")}
       />
 
       <InputFieldWithError
-        label="Країна"
-        errorMessage={errors.country?.message}
-        {...register("country")}
+        label="Номер реєстрації"
+        errorMessage={errors.registrationNumber?.message}
+        {...register("registrationNumber")}
       />
 
       <InputFieldWithError
-        label="Email"
-        errorMessage={errors.email?.message}
-        {...register("email")}
+        label="ІПН"
+        errorMessage={errors.taxId?.message}
+        {...register("taxId")}
+      />
+
+      <InputFieldWithError
+        label="Країна ID"
+        type="number"
+        errorMessage={errors.countryId?.message}
+        {...register("countryId", formTransformers.number)}
+      />
+
+      <ContactForm<OrganizationsFormFields>
+        control={control}
+        register={register}
+        errors={errors}
+      />
+
+      <AddressForm<OrganizationsFormFields>
+        control={control}
+        register={register}
+        errors={errors}
       />
 
       <ButtonWithError

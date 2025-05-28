@@ -3,7 +3,7 @@ import type { PermissionResponse } from "../../permissions/types/response.dto"
 
 export interface RoleResponse {
   name: string
-  description?: string | null
+  description?: string | undefined
   id: number
   permissions: PermissionResponse[]
   createdAt: string

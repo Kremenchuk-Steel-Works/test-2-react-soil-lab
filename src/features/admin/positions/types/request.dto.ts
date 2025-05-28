@@ -4,6 +4,6 @@ export interface PositionCreateRequest {
 }
 
 export interface PositionUpdateRequest {
-  name?: string | null
-  description?: string | null
+  name?: string | undefined
+  description?: string | undefined
 }

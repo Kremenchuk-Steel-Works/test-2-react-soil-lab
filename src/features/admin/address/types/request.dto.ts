@@ -4,25 +4,25 @@ export interface AddressCreateRequest {
   street: string
   cityName: string
   countryName: string
-  postalCode: string | null
+  postalCode: string | undefined
   isPrimary: boolean
   type: AddressType
-  note: string | null
+  note: string | undefined
   parentId: string
 }
 
 export interface AddressOperationRequest {
   action: "create" | "update" | "delete"
-  data?: AddressCreateRequest | AddressUpdateRequest | null
-  id?: string | null
+  data?: AddressCreateRequest | AddressUpdateRequest | undefined
+  id?: string | undefined
 }
 
 export interface AddressUpdateRequest {
-  street?: string | null
-  cityName?: string | null
-  countryName?: string | null
-  postalCode?: string | null
-  isPrimary?: boolean | null
-  type?: AddressType | null
-  note?: string | null
+  street?: string | undefined
+  cityName?: string | undefined
+  countryName?: string | undefined
+  postalCode?: string | undefined
+  isPrimary?: boolean | undefined
+  type?: AddressType | undefined
+  note?: string | undefined
 }

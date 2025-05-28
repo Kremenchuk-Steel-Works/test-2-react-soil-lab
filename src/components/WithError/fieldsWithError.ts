@@ -1,4 +1,5 @@
 import Button from "../Button/Button"
+import Checkbox from "../Checkbox/Checkox"
 import InputField from "../InputField/InputField"
 import ReactSelect from "../Select/ReactSelect"
 import Select from "../Select/Select"
@@ -8,3 +9,4 @@ export const InputFieldWithError = withError(InputField)
 export const ButtonWithError = withError(Button)
 export const SelectWithError = withError(Select)
 export const ReactSelectWithError = withError(ReactSelect)
+export const CheckboxWithError = withError(Checkbox)

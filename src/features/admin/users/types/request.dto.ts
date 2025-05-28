@@ -2,12 +2,12 @@ export interface UserCreateRequest {
   email: string
   personId: string
   rawPassword: string
-  isActive?: boolean | null
-  isSuperuser?: boolean | null
+  isActive?: boolean | undefined
+  isSuperuser?: boolean | undefined
 }
 
 export interface UserUpdateRequest {
-  email?: string | null
-  isActive?: boolean | null
-  isSuperuser?: boolean | null
+  email?: string | undefined
+  isActive?: boolean | undefined
+  isSuperuser?: boolean | undefined
 }

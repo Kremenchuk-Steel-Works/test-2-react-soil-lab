@@ -4,10 +4,10 @@ export interface AddressResponse {
   street: string
   cityName: string
   countryName: string
-  postalCode: string | null
+  postalCode: string | undefined
   isPrimary: boolean
   type: AddressType
-  note: string | null
+  note: string | undefined
   id: string
   createdAt: string
   updatedAt: string
