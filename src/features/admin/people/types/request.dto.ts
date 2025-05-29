@@ -10,36 +10,25 @@ import type {
   EmployeeProfileCreateRequest,
   EmployeeProfileUpdateRequest,
 } from "../../employeeProfile/types/request.dto"
-import type { Gender } from "./gender"
+import type { PersonBase } from "./base.model"
 
-export interface PersonCreateRequest {
-  firstName: string
-  middleName?: string | undefined
-  lastName: string
-  gender: Gender
-  birthDate: string | undefined
-  photoUrl: string | undefined
-  contacts: ContactCreateRequest[]
-  addresses: AddressCreateRequest[]
-  employeeProfile?: EmployeeProfileCreateRequest | undefined
+export interface PersonCreateRequest extends PersonBase {
+  contacts?: ContactCreateRequest[]
+  addresses?: AddressCreateRequest[]
+
+  employeeProfile?: EmployeeProfileCreateRequest
+
   organizationIds: string[]
   positionIds: string[]
 }
 
-export interface PersonUpdateRequest {
-  firstName?: string | undefined
-  middleName?: string | undefined
-  lastName?: string | undefined
-  gender?: Gender | undefined
-  birthDate?: string | undefined
-  photoUrl?: string | undefined
-  employeeProfileAction?: "create" | "update" | "delete" | undefined
+export interface PersonUpdateRequest extends Partial<PersonBase> {
+  employeeProfileAction?: "create" | "update" | "delete"
   employeeProfileData?:
     | EmployeeProfileCreateRequest
     | EmployeeProfileUpdateRequest
-    | undefined
   contactOperations: ContactOperationRequest[]
   addressOperations: AddressOperationRequest[]
-  organizationIds?: string[] | undefined
-  positionIds?: string[] | undefined
+  organizationIds?: string[]
+  positionIds?: string[]
 }

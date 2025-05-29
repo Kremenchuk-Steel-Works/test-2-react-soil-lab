@@ -1,84 +1,72 @@
-import type { OrganizationResponse } from "../types/response.dto"
+import type { OrganizationDetailResponse } from "../types/response.dto"
 
-export const mockOrganizations: OrganizationResponse[] = [
-  {
-    id: "b1f2e9d1-0f8e-4a9b-9f2a-4eaf9d9d86c1",
-    legalName: "Acme Corporation",
-    country: "USA",
-    email: "contact@acme.com",
-    createdAt: "2025-01-15T08:30:00Z",
-    updatedAt: "2025-03-01T10:45:00Z",
-  },
-  {
-    id: "c2a4db0d-10f2-4c7f-8b9e-3023b8f3d9f0",
-    legalName: "Globex Ltd.",
-    country: "UK",
-    email: "info@globex.co.uk",
-    createdAt: "2024-11-20T14:00:00Z",
-    updatedAt: "2025-01-10T09:30:00Z",
-  },
-  {
-    id: "e301a9f4-5691-4af1-8b2d-3e827bc456e7",
-    legalName: "Initech",
-    country: "Canada",
-    email: "hello@initech.ca",
-    createdAt: "2025-03-01T12:00:00Z",
-    updatedAt: "2025-03-15T15:30:00Z",
-  },
-  {
-    id: "b90fa40a-eaaa-4e63-84b1-890d5e7b7d67",
-    legalName: "Hooli",
-    country: "USA",
-    email: "support@hooli.com",
-    createdAt: "2025-02-01T09:00:00Z",
-    updatedAt: "2025-02-20T18:00:00Z",
-  },
-  {
-    id: "9f3b01c0-498f-4e02-a8bb-96e7eb1ef282",
-    legalName: "Umbrella Corp",
-    country: "Germany",
-    email: "admin@umbrella.de",
-    createdAt: "2024-12-01T07:00:00Z",
-    updatedAt: "2025-01-05T16:00:00Z",
-  },
-  {
-    id: "2fa1f320-4b90-4b96-8b68-dc7813d2218b",
-    legalName: "Stark Industries",
-    country: "USA",
-    email: "contact@starkindustries.com",
-    createdAt: "2025-01-10T08:00:00Z",
-    updatedAt: "2025-03-01T11:00:00Z",
-  },
-  {
-    id: "af8d6b4f-d12a-4420-9022-35e60b63ea59",
-    legalName: "Wayne Enterprises",
-    country: "USA",
-    email: "ceo@wayneenterprises.com",
-    createdAt: "2024-10-05T06:00:00Z",
-    updatedAt: "2025-02-14T17:00:00Z",
-  },
-  {
-    id: "7e9fa51b-c2a4-44f4-a2c7-23a5ef2e18a4",
-    legalName: "Wonka Industries",
-    country: "UK",
-    email: "info@wonka.co.uk",
-    createdAt: "2024-11-15T10:00:00Z",
-    updatedAt: "2025-01-01T10:00:00Z",
-  },
-  {
-    id: "b41d9a9c-d2f0-4a15-9a17-fc54198cfc0d",
-    legalName: "Cyberdyne Systems",
-    country: "Japan",
-    email: "info@cyberdyne.jp",
-    createdAt: "2024-09-30T13:00:00Z",
-    updatedAt: "2025-01-20T13:00:00Z",
-  },
-  {
-    id: "35cb2fa3-f4f9-498c-b4e5-dfea457afe69",
-    legalName: "Tyrell Corporation",
-    country: "USA",
-    email: "contact@tyrell.com",
-    createdAt: "2025-01-25T11:00:00Z",
-    updatedAt: "2025-03-22T12:00:00Z",
-  },
-]
+export const mockOrganizations: OrganizationDetailResponse[] = Array.from(
+  { length: 10 },
+  (_, i) => {
+    const id = `${i + 1}2a7a8bcf-5123-4466-a0f6-8bdbd21f8a91`
+    const timestamp = new Date().toISOString()
+
+    return {
+      id,
+      legalName: `Company ${i + 1} LLC`,
+      registrationNumber: `REG-${1000 + i}`,
+      taxId: `TAX-${2000 + i}`,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+
+      country: {
+        id: 100 + i,
+        code: `C${i + 1}`,
+        name: `Country ${i + 1}`,
+        nameLocal: `Країна ${i + 1}`,
+      },
+
+      contacts: [
+        {
+          id: `contact-${i}-1`,
+          type: "email",
+          value: `info${i}@company.com`,
+          note: "General inquiries",
+          isPrimary: true,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        },
+        {
+          id: `contact-${i}-2`,
+          type: "phone",
+          value: `+1234567890${i}`,
+          note: "Main line",
+          isPrimary: false,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        },
+      ],
+
+      addresses: [
+        {
+          id: `addr-${i}-1`,
+          street: `Main St. ${i + 1}`,
+          cityName: `City ${i + 1}`,
+          countryName: `Country ${i + 1}`,
+          postalCode: `1000${i}`,
+          isPrimary: true,
+          type: "office",
+          note: "Headquarters",
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        },
+        {
+          id: `addr-${i}-2`,
+          street: `Branch Ave. ${i + 1}`,
+          cityName: `Subcity ${i + 1}`,
+          countryName: `Country ${i + 1}`,
+          isPrimary: false,
+          type: "billing",
+          note: "Billing address",
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        },
+      ],
+    }
+  }
+)

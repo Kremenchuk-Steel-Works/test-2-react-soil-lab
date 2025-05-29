@@ -6,21 +6,16 @@ import type {
   ContactCreateRequest,
   ContactOperationRequest,
 } from "../../contact/types/request.dto"
+import type { OrganizationBase } from "./base.model"
 
-export interface OrganizationCreateRequest {
-  legalName: string
-  registrationNumber: string | undefined
-  taxId: string | undefined
+export interface OrganizationCreateRequest extends OrganizationBase {
   countryId: number
   contacts: ContactCreateRequest[]
   addresses: AddressCreateRequest[]
 }
 
-export interface OrganizationUpdateRequest {
-  countryId?: number | undefined
-  legalName?: string | undefined
-  registrationNumber?: string | undefined
-  taxId?: string | undefined
+export interface OrganizationUpdateRequest extends Partial<OrganizationBase> {
+  countryId?: number
   contactOperations: ContactOperationRequest[]
   addressOperations: AddressOperationRequest[]
 }

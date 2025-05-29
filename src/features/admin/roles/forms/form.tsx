@@ -54,8 +54,8 @@ export default function RolesForm({
 
       <InputFieldWithError
         label="Опис"
-        errorMessage={errors.desciption?.message}
-        {...register("desciption")}
+        errorMessage={errors.description?.message}
+        {...register("description")}
       />
 
       <ButtonWithError

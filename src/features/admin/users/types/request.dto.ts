@@ -1,13 +1,14 @@
-export interface UserCreateRequest {
-  email: string
+import type { UserBase } from "./base.model"
+
+export interface UserCreateRequest extends UserBase {
   personId: string
   rawPassword: string
-  isActive?: boolean | undefined
-  isSuperuser?: boolean | undefined
+
+  rolesIds?: number[]
+  permissionsIds?: number[]
 }
 
-export interface UserUpdateRequest {
-  email?: string | undefined
-  isActive?: boolean | undefined
-  isSuperuser?: boolean | undefined
+export interface UserUpdateRequest extends Partial<UserBase> {
+  rolesIds?: number[]
+  permissionsIds?: number[]
 }

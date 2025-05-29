@@ -1,11 +1,8 @@
-import type { ContactType } from "./contact"
+import type { Timestamps } from "../../../../types/common"
+import type { ContactBase } from "./base.model"
 
-export interface ContactResponse {
-  isPrimary: boolean
-  type: ContactType
-  value: string
-  note: string | undefined
+export interface ContactResponse extends ContactBase {
   id: string
-  createdAt: string
-  updatedAt: string
 }
+
+export interface ContactDetailResponse extends ContactResponse, Timestamps {}

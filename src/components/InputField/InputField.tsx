@@ -25,11 +25,7 @@ const InputField: React.FC<InputFieldProps> = ({ label, type, ...props }) => {
         placeholder=" "
       />
       <label
-        className={`
-          absolute left-4 top-1 text-gray-500 dark:text-gray-400
-          text-sm transition-all
-          peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400
-          peer-focus:top-1 peer-focus:text-sm peer-focus:text-blue-500 pointer-events-none
+        className={`absolute left-4 top-1 text-gray-500 dark:text-gray-400 text-sm transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-sm peer-focus:text-blue-500 pointer-events-none inline-block truncate w-full pr-5
         `}
       >
         {label}

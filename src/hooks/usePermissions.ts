@@ -1,6 +1,7 @@
 import { useAuth } from "../components/AuthProvider/AuthContext"
 import type { AppRoute } from "../routes/routes"
 import { APP_ROUTES } from "../routes/routes"
+import { match } from "path-to-regexp"
 
 export function useUserPermissionNames(): string[] {
   const { currentUser } = useAuth()
@@ -19,7 +20,9 @@ export function useUserPermissionsTo() {
     const checkAccess = (routes: AppRoute[], basePath = ""): boolean => {
       for (const route of routes) {
         const fullPath = `${basePath}/${route.path}`.replace(/\/+/g, "/")
-        if (fullPath === path) {
+        const matcher = match(fullPath, { decode: decodeURIComponent })
+
+        if (matcher(path)) {
           return true
         }
 

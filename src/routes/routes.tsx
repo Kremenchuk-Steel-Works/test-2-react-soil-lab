@@ -19,6 +19,8 @@ import {
   Info,
   RefreshCcw,
   BriefcaseBusiness,
+  Languages,
+  Globe,
 } from "lucide-react"
 import StreamlitPage from "../pages/StreamlitPage"
 // import AdminUsersLayout from "../pages/AdminUsers/Layout"
@@ -73,6 +75,16 @@ import AdminUsersList2 from "../pages/AdminUsers/AdminUsersList/List"
 import AdminUsersAdd2 from "../pages/AdminUsers/Add"
 import AdminUsersDetails2 from "../pages/AdminUsers/Details"
 import AdminUsersEdit2 from "../pages/AdminUsers/Edit"
+import AdminCityLayout from "../pages/AdminPanel/City/Layout"
+import AdminCityList from "../pages/AdminPanel/City/List/List"
+import AdminCityAdd from "../pages/AdminPanel/City/Add"
+import AdminCityDetails from "../pages/AdminPanel/City/Details"
+import AdminCityUpdate from "../pages/AdminPanel/City/Update"
+import AdminCountryLayout from "../pages/AdminPanel/Country/Layout"
+import AdminCountryList from "../pages/AdminPanel/Country/List/List"
+import AdminCountryAdd from "../pages/AdminPanel/Country/Add"
+import AdminCountryDetails from "../pages/AdminPanel/Country/Details"
+import AdminCountryUpdate from "../pages/AdminPanel/Country/Update"
 
 export type Permission =
   | "admin"
@@ -405,6 +417,80 @@ export const APP_ROUTES: AppRoute[] = [
             label: "Оновити",
             icon: RefreshCcw,
             component: <AdminPermissionsUpdate />,
+          },
+        ],
+      },
+      {
+        key: "adminCountry",
+        path: "country",
+        label: "Країни",
+        icon: Globe,
+        component: <AdminCountryLayout />,
+        children: [
+          {
+            key: "adminCountryList",
+            path: "",
+            label: "Список",
+            icon: Database,
+            component: <AdminCountryList />,
+          },
+          {
+            key: "adminCountryAdd",
+            path: "add",
+            label: "Додати",
+            icon: CirclePlus,
+            component: <AdminCountryAdd />,
+          },
+          {
+            key: "adminCountryDetail",
+            path: ":id",
+            label: "Деталі",
+            icon: Info,
+            component: <AdminCountryDetails />,
+          },
+          {
+            key: "adminCountryUpdate",
+            path: ":id/update",
+            label: "Оновити",
+            icon: RefreshCcw,
+            component: <AdminCountryUpdate />,
+          },
+        ],
+      },
+      {
+        key: "adminCity",
+        path: "city",
+        label: "Міста",
+        icon: Languages,
+        component: <AdminCityLayout />,
+        children: [
+          {
+            key: "adminCityList",
+            path: "",
+            label: "Список",
+            icon: Database,
+            component: <AdminCityList />,
+          },
+          {
+            key: "adminCityAdd",
+            path: "add",
+            label: "Додати",
+            icon: CirclePlus,
+            component: <AdminCityAdd />,
+          },
+          {
+            key: "adminCityDetail",
+            path: ":id",
+            label: "Деталі",
+            icon: Info,
+            component: <AdminCityDetails />,
+          },
+          {
+            key: "adminCityUpdate",
+            path: ":id/update",
+            label: "Оновити",
+            icon: RefreshCcw,
+            component: <AdminCityUpdate />,
           },
         ],
       },

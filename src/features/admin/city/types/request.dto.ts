@@ -1,13 +1,7 @@
-export interface CityCreateRequest {
-  name: string
-  nameLocal: string
+import type { CityBase } from "./base.model"
+
+export interface CityCreateRequest extends CityBase {
   countryId: number
 }
 
-export interface CityUpdateRequest {
-  code?: string | null
-  code3?: string | null
-  numericCode?: string | null
-  name?: string | null
-  nameLocal?: string | null
-}
+export interface CityUpdateRequest extends Partial<CityCreateRequest> {}

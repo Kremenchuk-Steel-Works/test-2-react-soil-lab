@@ -1,27 +1,34 @@
-import type { PaginatedListResponse } from "../../../../types/pagination.types"
-import type { AddressResponse } from "../../address/types/response.dto"
-import type { ContactResponse } from "../../contact/types/response.dto"
-import type { CountryResponse } from "../../country/types/response.dto"
+import type { Timestamps } from "../../../../types/common"
+import type { PaginatedListResponse } from "../../../../types/pagination"
+import type {
+  AddressDetailResponse,
+  AddressResponse,
+} from "../../address/types/response.dto"
+import type {
+  ContactDetailResponse,
+  ContactResponse,
+} from "../../contact/types/response.dto"
+import type { CountryShortResponse } from "../../country/types/response.dto"
+import type { OrganizationBase } from "./base.model"
 
-export interface OrganizationResponse {
-  legalName: string
-  registrationNumber: string | undefined
-  taxId: string | undefined
+export interface OrganizationResponse extends OrganizationBase {
   id: string
-  country: CountryResponse
+  country: CountryShortResponse
   contacts: ContactResponse[]
   addresses: AddressResponse[]
-  createdAt: string
-  updatedAt: string
 }
 
-export interface OrganizationListItemResponse {
-  legalName: string
-  registrationNumber: string | undefined
-  taxId: string | undefined
+export interface OrganizationDetailResponse
+  extends OrganizationResponse,
+    Timestamps {
+  contacts: ContactDetailResponse[]
+  addresses: AddressDetailResponse[]
+}
+
+export interface OrganizationShortResponse extends OrganizationBase {
   id: string
   countryName: string
 }
 
 export type OrganizationListResponse =
-  PaginatedListResponse<OrganizationListItemResponse>
+  PaginatedListResponse<OrganizationShortResponse>

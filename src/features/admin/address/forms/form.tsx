@@ -12,18 +12,21 @@ import {
 } from "../../../../components/WithError/fieldsWithError"
 import { getFieldError } from "../../../../utils/zodHelpers"
 import { addressSchema, type AddressFormFields } from "./schema"
+import { formTransformers } from "../../../../utils/formTransformers"
 
 export type FormFields = {
   addresses: AddressFormFields[]
 }
 
 interface FormProps<T extends FormFields> {
+  index: number
   control: Control<T>
   register: UseFormRegister<T>
   errors: FieldErrors<T>
 }
 
 export function AddressForm<T extends FormFields>({
+  index,
   control,
   register,
   errors,
@@ -55,40 +58,55 @@ export function AddressForm<T extends FormFields>({
 
   return (
     <div className="space-y-3">
-      <h4 className="layout-text">Адреса</h4>
+      <h4 className="layout-text">Адреса {index + 1}</h4>
 
       <CheckboxWithError
         label="Основна"
-        {...register(`addresses.${0}.isPrimary` as Path<T>)}
-        errorMessage={err.addresses?.[0]?.isPrimary?.message}
+        {...register(
+          `addresses.${index}.isPrimary` as Path<T>,
+          formTransformers.string
+        )}
+        errorMessage={err.addresses?.[index]?.isPrimary?.message}
       />
 
       <InputFieldWithError
         label="Вулиця"
-        {...register(`addresses.${0}.street` as Path<T>)}
-        errorMessage={err.addresses?.[0]?.street?.message}
+        {...register(
+          `addresses.${index}.street` as Path<T>,
+          formTransformers.string
+        )}
+        errorMessage={err.addresses?.[index]?.street?.message}
       />
 
       <InputFieldWithError
         label="Місто"
-        {...register(`addresses.${0}.cityName` as Path<T>)}
-        errorMessage={err.addresses?.[0]?.cityName?.message}
+        {...register(
+          `addresses.${index}.cityName` as Path<T>,
+          formTransformers.string
+        )}
+        errorMessage={err.addresses?.[index]?.cityName?.message}
       />
 
       <InputFieldWithError
         label="Країна"
-        {...register(`addresses.${0}.countryName` as Path<T>)}
-        errorMessage={err.addresses?.[0]?.countryName?.message}
+        {...register(
+          `addresses.${index}.countryName` as Path<T>,
+          formTransformers.string
+        )}
+        errorMessage={err.addresses?.[index]?.countryName?.message}
       />
 
       <InputFieldWithError
         label="Поштовий код"
-        {...register(`addresses.${0}.postalCode` as Path<T>)}
-        errorMessage={err.addresses?.[0]?.postalCode?.message}
+        {...register(
+          `addresses.${index}.postalCode` as Path<T>,
+          formTransformers.string
+        )}
+        errorMessage={err.addresses?.[index]?.postalCode?.message}
       />
 
       <Controller
-        name={`addresses.${0}.type` as Path<T>}
+        name={`addresses.${index}.type` as Path<T>}
         control={control}
         render={({ field }) => (
           <ReactSelectWithError
@@ -97,15 +115,18 @@ export function AddressForm<T extends FormFields>({
             options={addressOptions}
             value={addressOptions.find((opt) => opt.value === field.value)}
             onChange={(option) => field.onChange(option?.value)}
-            errorMessage={getFieldError(err.addresses?.type)}
+            errorMessage={getFieldError(err.addresses?.[index]?.type)}
           />
         )}
       />
 
       <InputFieldWithError
         label="Примітка"
-        {...register(`addresses.${0}.note` as Path<T>)}
-        errorMessage={err.addresses?.[0]?.note?.message}
+        {...register(
+          `addresses.${index}.note` as Path<T>,
+          formTransformers.string
+        )}
+        errorMessage={err.addresses?.[index]?.note?.message}
       />
     </div>
   )

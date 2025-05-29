@@ -1,11 +1,13 @@
-import type { PaginatedListResponse } from "../../../../types/pagination.types"
+import type { Timestamps } from "../../../../types/common"
+import type { PaginatedListResponse } from "../../../../types/pagination"
+import type { PositionBase } from "./base.model"
 
-export interface PositionResponse {
-  name: string
-  description: string
+export interface PositionResponse extends PositionBase {
   id: string
-  createdAt: string
-  updatedAt: string
 }
 
-export type PositionListResponse = PaginatedListResponse<PositionResponse>
+export interface PositionDetailResponse extends PositionResponse, Timestamps {}
+
+export interface PositionShortResponse extends PositionResponse {}
+
+export type PositionListResponse = PaginatedListResponse<PositionShortResponse>

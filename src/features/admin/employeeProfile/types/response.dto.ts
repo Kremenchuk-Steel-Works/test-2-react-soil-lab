@@ -1,10 +1,10 @@
-import type { EmploymentStatus } from "./employmentStatus"
+import type { Timestamps } from "../../../../types/common"
+import type { EmployeeProfileBase } from "./base.model"
 
-export interface EmployeeProfileResponse {
+export interface EmployeeProfileResponse extends EmployeeProfileBase {}
+
+export interface EmployeeProfileDetailResponse
+  extends EmployeeProfileResponse,
+    Timestamps {
   personId: string
-  employeeNumber: string | undefined
-  hiredAt: string
-  employmentStatus: EmploymentStatus
-  createdAt: string
-  updatedAt: string
 }

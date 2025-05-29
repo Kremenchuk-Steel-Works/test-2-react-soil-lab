@@ -1,9 +1,6 @@
-export interface DepartmentCreateRequest {
-  name: string
-  description: string | undefined
-}
+import type { DepartmentBase } from "./base.model"
 
-export interface DepartmentUpdateRequest {
-  name?: string | undefined
-  description?: string | undefined
-}
+export interface DepartmentCreateRequest extends DepartmentBase {}
+
+export interface DepartmentUpdateRequest
+  extends Partial<DepartmentCreateRequest> {}

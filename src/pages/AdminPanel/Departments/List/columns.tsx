@@ -1,9 +1,9 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
-import type { DepartmentListItemResponse } from "../../../../features/admin/departments/types/response.dto"
+import type { DepartmentShortResponse } from "../../../../features/admin/departments/types/response.dto"
 
 export const adminDepartmentsColumns: ColumnDef<
-  DepartmentListItemResponse,
+  DepartmentShortResponse,
   string
 >[] = [
   {
@@ -32,31 +32,5 @@ export const adminDepartmentsColumns: ColumnDef<
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Created",
-    enableSorting: true,
-    enableColumnFilter: true,
-    cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleString()
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
-  },
-  {
-    accessorKey: "updatedAt",
-    header: "Updated",
-    enableSorting: true,
-    enableColumnFilter: true,
-    cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleString()
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
   },
 ]

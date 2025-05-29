@@ -1,20 +1,19 @@
-import type { PaginatedListResponse } from "../../../../types/pagination.types"
-import type { PermissionListItemResponse } from "../../permissions/types/response.dto"
+import type { Timestamps } from "../../../../types/common"
+import type { PaginatedListResponse } from "../../../../types/pagination"
+import type { PermissionShortResponse } from "../../permissions/types/response.dto"
+import type { DepartmentBase } from "./base.model"
 
-export interface DepartmentResponse {
-  name: string
-  description: string | undefined
-  id: string
-  permissions: PermissionListItemResponse[]
-  createdAt: string
-  updatedAt: string
-}
-
-export interface DepartmentListItemResponse {
-  name: string
-  description: string | undefined
+export interface DepartmentResponse extends DepartmentBase {
   id: string
 }
 
-export type DepartmentsListResponse =
-  PaginatedListResponse<DepartmentListItemResponse>
+export interface DepartmentDetailResponse
+  extends DepartmentResponse,
+    Timestamps {
+  permissions: PermissionShortResponse[]
+}
+
+export interface DepartmentShortResponse extends DepartmentResponse {}
+
+export type DepartmentListResponse =
+  PaginatedListResponse<DepartmentShortResponse>

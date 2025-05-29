@@ -12,18 +12,21 @@ import {
 } from "../../../../components/WithError/fieldsWithError"
 import { contactSchema, type ContactFormFields } from "./schema"
 import { getFieldError } from "../../../../utils/zodHelpers"
+import { formTransformers } from "../../../../utils/formTransformers"
 
 export type FormFields = {
   contacts: ContactFormFields[]
 }
 
 interface FormProps<T extends FormFields> {
+  index: number
   control: Control<T>
   register: UseFormRegister<T>
   errors: FieldErrors<T>
 }
 
 export function ContactForm<T extends FormFields>({
+  index,
   control,
   register,
   errors,
@@ -52,16 +55,19 @@ export function ContactForm<T extends FormFields>({
   ]
   return (
     <div className="space-y-3">
-      <h4 className="layout-text">Контакт</h4>
+      <h4 className="layout-text">Контакт {index + 1}</h4>
 
       <CheckboxWithError
         label="Основний"
-        {...register(`contacts.${0}.isPrimary` as Path<T>)}
-        errorMessage={err.contacts?.[0]?.isPrimary?.message}
+        {...register(
+          `contacts.${index}.isPrimary` as Path<T>,
+          formTransformers.string
+        )}
+        errorMessage={err.contacts?.[index]?.isPrimary?.message}
       />
 
       <Controller
-        name={`contacts.${0}.type` as Path<T>}
+        name={`contacts.${index}.type` as Path<T>}
         control={control}
         render={({ field }) => (
           <ReactSelectWithError
@@ -70,21 +76,27 @@ export function ContactForm<T extends FormFields>({
             options={contactOptions}
             value={contactOptions.find((opt) => opt.value === field.value)}
             onChange={(option) => field.onChange(option?.value)}
-            errorMessage={getFieldError(err.contacts?.type)}
+            errorMessage={getFieldError(err.contacts?.[index]?.type)}
           />
         )}
       />
 
       <InputFieldWithError
         label="Значення"
-        {...register(`contacts.${0}.value` as Path<T>)}
-        errorMessage={err.contacts?.[0]?.value?.message}
+        {...register(
+          `contacts.${index}.value` as Path<T>,
+          formTransformers.string
+        )}
+        errorMessage={err.contacts?.[index]?.value?.message}
       />
 
       <InputFieldWithError
         label="Примітка"
-        {...register(`contacts.${0}.note` as Path<T>)}
-        errorMessage={err.contacts?.[0]?.note?.message}
+        {...register(
+          `contacts.${index}.note` as Path<T>,
+          formTransformers.string
+        )}
+        errorMessage={err.contacts?.[index]?.note?.message}
       />
     </div>
   )

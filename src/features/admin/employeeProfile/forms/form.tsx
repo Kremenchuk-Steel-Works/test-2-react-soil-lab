@@ -10,6 +10,7 @@ import {
   ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { employeeProfileSchema, type EmployeeProfileFormFields } from "./schema"
+import { formTransformers } from "../../../../utils/formTransformers"
 
 export type FormFields = {
   employeeProfile?: EmployeeProfileFormFields
@@ -62,14 +63,20 @@ export function EmployeeProfileForm<T extends FormFields>({
       <InputFieldWithError
         label="Номер робітника"
         type="number"
-        {...register("employeeProfile.employeeNumber" as Path<T>)}
+        {...register(
+          "employeeProfile.employeeNumber" as Path<T>,
+          formTransformers.string
+        )}
         errorMessage={err.employeeProfile?.employeeNumber?.message}
       />
 
       <InputFieldWithError
         label="Дата найму"
         type="date"
-        {...register("employeeProfile.hiredAt" as Path<T>)}
+        {...register(
+          "employeeProfile.hiredAt" as Path<T>,
+          formTransformers.string
+        )}
         errorMessage={err.employeeProfile?.hiredAt?.message}
       />
 

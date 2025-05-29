@@ -1,11 +1,7 @@
-export interface RoleCreateRequest {
-  name: string
-  description?: string | undefined
+import type { RoleBase } from "./base.model"
+
+export interface RoleCreateRequest extends RoleBase {
   permissionIds?: number[]
 }
 
-export interface RoleUpdateRequest {
-  name?: string | undefined
-  description?: string | undefined
-  permissionIds?: number[] | undefined
-}
+export interface RoleUpdateRequest extends Partial<RoleCreateRequest> {}

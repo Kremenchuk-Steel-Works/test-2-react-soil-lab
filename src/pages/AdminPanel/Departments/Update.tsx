@@ -2,10 +2,10 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Department } from "../../../features/admin/departments/types"
 import { departmentsService } from "../../../features/admin/departments/services/service"
 import type { DepartmentsFormFields } from "../../../features/admin/departments/forms/schema"
 import DepartmentsForm from "../../../features/admin/departments/forms/form"
+import type { DepartmentDetailResponse } from "../../../features/admin/departments/types/response.dto"
 
 export default function AdminDepartmentsUpdate() {
   const navigate = useNavigate()
@@ -16,7 +16,7 @@ export default function AdminDepartmentsUpdate() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<Department, Error>({
+  } = useQuery<DepartmentDetailResponse, Error>({
     queryKey: ["adminDepartmentData", id],
     queryFn: () => departmentsService.getById(id!),
     enabled: !!id,

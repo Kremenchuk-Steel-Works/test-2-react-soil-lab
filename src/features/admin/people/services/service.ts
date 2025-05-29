@@ -1,4 +1,4 @@
-import type { PageParams } from "../../../../types/pagination.types"
+import type { PageParams } from "../../../../types/pagination"
 import { mockPeople } from "../mocks/mock"
 import type { PeopleListResponse, Person } from "../types"
 

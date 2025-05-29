@@ -1,15 +1,5 @@
-export interface CountryCreateRequest {
-  code: string
-  code3: string | null
-  numericCode: string | null
-  name: string
-  nameLocal: string
-}
+import type { CountryBase } from "./base.model"
 
-export interface CountryUpdateRequest {
-  code?: string | null
-  code3?: string | null
-  numericCode?: string | null
-  name?: string | null
-  nameLocal?: string | null
-}
+export interface CountryCreateRequest extends CountryBase {}
+
+export interface CountryUpdateRequest extends Partial<CountryBase> {}

@@ -1,9 +1,5 @@
-export interface PositionCreateRequest {
-  name: string
-  description: string
-}
+import type { PositionBase } from "./base.model"
 
-export interface PositionUpdateRequest {
-  name?: string | undefined
-  description?: string | undefined
-}
+export interface PositionCreateRequest extends PositionBase {}
+
+export interface PositionUpdateRequest extends Partial<PositionBase> {}

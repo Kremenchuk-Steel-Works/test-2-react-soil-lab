@@ -1,36 +1,57 @@
-import type { PaginatedListResponse } from "../../../../types/pagination.types"
-import type { AddressResponse } from "../../address/types/response.dto"
-import type { ContactResponse } from "../../contact/types/response.dto"
-import type { EmployeeProfileResponse } from "../../employeeProfile/types/response.dto"
-import type { OrganizationResponse } from "../../organizations/types/response.dto"
-import type { PositionResponse } from "../../positions/types/response.dto"
+import type { Timestamps } from "../../../../types/common"
+import type { PaginatedListResponse } from "../../../../types/pagination"
+import type {
+  AddressDetailResponse,
+  AddressResponse,
+} from "../../address/types/response.dto"
+import type {
+  ContactDetailResponse,
+  ContactResponse,
+} from "../../contact/types/response.dto"
+import type {
+  EmployeeProfileDetailResponse,
+  EmployeeProfileResponse,
+} from "../../employeeProfile/types/response.dto"
+import type { OrganizationShortResponse } from "../../organizations/types/response.dto"
+import type { PositionShortResponse } from "../../positions/types/response.dto"
+import type { PersonBase } from "./base.model"
 import type { Gender } from "./gender"
 
-export interface PersonResponse {
-  firstName: string
-  middleName?: string | undefined
-  lastName: string
-  gender: Gender
-  birthDate: string | undefined
-  photoUrl: string | undefined
-  id: string
-  isUser: boolean
-  employeeProfile?: EmployeeProfileResponse | undefined
-  contacts?: ContactResponse[]
-  addresses?: AddressResponse[]
-  organizations?: OrganizationResponse[]
-  positions?: PositionResponse[]
-  createdAt: string
-  updatedAt: string
-}
-
-export interface PersonListItemResponse {
+export interface PersonShortResponse {
   id: string
   fullName: string
   gender: Gender
-  photoUrl: string
+  photoUrl?: string
+}
+
+export interface PersonResponse extends PersonShortResponse {
+  employeeProfile?: EmployeeProfileResponse
+  contacts?: ContactResponse[]
+  addresses?: AddressResponse[]
+
+  organizationNames: string[]
+  positionNames: string[]
+}
+
+export interface PersonDetailResponse extends PersonBase, Timestamps {
+  id: string
+  isUser: boolean
+
+  employeeProfile?: EmployeeProfileDetailResponse
+  contacts: ContactDetailResponse[]
+  addresses: AddressDetailResponse[]
+
+  organizations: OrganizationShortResponse[]
+  positions: PositionShortResponse[]
+}
+
+export interface PersonListItemResponse extends PersonShortResponse {
   isUser: boolean
   isEmployee: boolean
+
+  contactsCount: number
+  addressesCount: number
+
   organizationNames: string[]
   positionNames: string[]
 }

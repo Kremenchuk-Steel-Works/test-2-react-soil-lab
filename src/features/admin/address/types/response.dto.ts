@@ -1,14 +1,8 @@
-import type { AddressType } from "./address"
+import type { Timestamps } from "../../../../types/common"
+import type { AddressBase } from "./base.model"
 
-export interface AddressResponse {
-  street: string
-  cityName: string
-  countryName: string
-  postalCode: string | undefined
-  isPrimary: boolean
-  type: AddressType
-  note: string | undefined
+export interface AddressResponse extends AddressBase {
   id: string
-  createdAt: string
-  updatedAt: string
 }
+
+export interface AddressDetailResponse extends AddressResponse, Timestamps {}

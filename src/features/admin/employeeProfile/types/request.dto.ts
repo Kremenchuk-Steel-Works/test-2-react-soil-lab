@@ -1,14 +1,8 @@
-import type { EmploymentStatus } from "./employmentStatus"
+import type { EmployeeProfileBase } from "./base.model"
 
-export interface EmployeeProfileCreateRequest {
+export interface EmployeeProfileCreateRequest extends EmployeeProfileBase {
   personId: string
-  employeeNumber: string | undefined
-  hiredAt: string
-  employmentStatus: EmploymentStatus
 }
 
-export interface EmployeeProfileUpdateRequest {
-  employeeNumber?: string | undefined
-  hiredAt?: string | undefined
-  employmentStatus?: EmploymentStatus | undefined
-}
+export interface EmployeeProfileUpdateRequest
+  extends Partial<EmployeeProfileBase> {}

@@ -1,19 +1,16 @@
-import type { PaginatedListResponse } from "../../../../types/pagination.types"
-import type { CountryResponse } from "../../country/types/response.dto"
+import type { Timestamps } from "../../../../types/common"
+import type { PaginatedListResponse } from "../../../../types/pagination"
+import type { CityBase } from "./base.model"
 
-export interface CityResponse {
-  name: string
-  nameLocal: string
+export interface CityResponse extends CityBase {
   id: number
-  country: CountryResponse
-  createdAt: string
-  updatedAt: string
+  countryId: number
 }
 
-export interface CityListItemResponse {
-  name: string
-  nameLocal: string
+export interface CityDetailResponse extends CityResponse, Timestamps {}
+
+export interface CityShortResponse extends CityBase {
   id: number
 }
 
-export type CityListResponse = PaginatedListResponse<CityListItemResponse>
+export type CityListResponse = PaginatedListResponse<CityShortResponse>

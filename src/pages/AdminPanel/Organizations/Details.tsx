@@ -2,8 +2,8 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Organization } from "../../../features/admin/organizations/types"
 import { organizationsService } from "../../../features/admin/organizations/services/service"
+import type { OrganizationDetailResponse } from "../../../features/admin/organizations/types/response.dto"
 
 export default function AdminOrganizationsDetails() {
   const navigate = useNavigate()
@@ -14,7 +14,7 @@ export default function AdminOrganizationsDetails() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<Organization, Error>({
+  } = useQuery<OrganizationDetailResponse, Error>({
     queryKey: ["adminOrganizationData", id],
     queryFn: () => organizationsService.getById(id!),
     enabled: !!id,
@@ -56,7 +56,25 @@ export default function AdminOrganizationsDetails() {
                   Назва
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.name}
+                  {data.legalName}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Реєстраційний номер
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.registrationNumber}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Податковий номер
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.taxId}
                 </dd>
               </div>
 
@@ -65,7 +83,7 @@ export default function AdminOrganizationsDetails() {
                   Країна
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.country}
+                  {data.country.name}
                 </dd>
               </div>
 
@@ -74,7 +92,8 @@ export default function AdminOrganizationsDetails() {
                   Email
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.email}
+                  {data.contacts.find((c) => c.type === "email" && c.isPrimary)
+                    ?.value || "—"}
                 </dd>
               </div>
 

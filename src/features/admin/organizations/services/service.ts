@@ -1,8 +1,8 @@
-import type { PageParams } from "../../../../types/pagination.types"
+import type { PageParams } from "../../../../types/pagination"
 import { mockOrganizations } from "../mocks/mock"
 import type {
+  OrganizationDetailResponse,
   OrganizationListResponse,
-  OrganizationResponse,
 } from "../types/response.dto"
 
 const mockData = mockOrganizations
@@ -10,8 +10,12 @@ const mockData = mockOrganizations
 export const organizationsService = {
   async getList(params?: PageParams): Promise<OrganizationListResponse> {
     console.log(params)
+    const newData = mockData.map((item) => ({
+      ...item,
+      countryName: item.country.name ?? item.country.nameLocal ?? "",
+    }))
     const responeData = {
-      data: mockData,
+      data: newData,
       page: 1,
       totalPages: 1,
       totalItems: mockData.length,
@@ -19,7 +23,7 @@ export const organizationsService = {
     return responeData
   },
 
-  async getById(id: string): Promise<OrganizationResponse> {
+  async getById(id: string): Promise<OrganizationDetailResponse> {
     console.log(id)
     const data = mockData.find((obj) => obj.id === id)
 

@@ -5,7 +5,7 @@ import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
 import { adminDepartmentsColumns } from "./columns"
 import { departmentsService } from "../../../../features/admin/departments/services/service"
-import type { DepartmentsListResponse } from "../../../../features/admin/departments/types/response.dto"
+import type { DepartmentListResponse } from "../../../../features/admin/departments/types/response.dto"
 
 export default function AdminDepartmentsList() {
   // Состояние из URL
@@ -22,7 +22,7 @@ export default function AdminDepartmentsList() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<DepartmentsListResponse, Error>({
+  } = useQuery<DepartmentListResponse, Error>({
     queryKey: ["adminDepartmentsData", pageFromUrl, perPageFromUrl],
     queryFn: () => {
       return departmentsService.getList({

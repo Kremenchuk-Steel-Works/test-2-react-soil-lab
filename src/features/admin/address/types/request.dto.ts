@@ -1,28 +1,18 @@
-import type { AddressType } from "./address"
+import type { AddressBase } from "./base.model"
 
-export interface AddressCreateRequest {
-  street: string
-  cityName: string
-  countryName: string
-  postalCode: string | undefined
-  isPrimary: boolean
-  type: AddressType
-  note: string | undefined
-  parentId: string
+export interface AddressCreateRequest extends AddressBase {
+  associationId: string
+  countryId: number
+  cityId: number
+}
+
+export interface AddressUpdateRequest extends Partial<AddressBase> {
+  countryId?: number
+  cityId?: number
 }
 
 export interface AddressOperationRequest {
   action: "create" | "update" | "delete"
-  data?: AddressCreateRequest | AddressUpdateRequest | undefined
-  id?: string | undefined
-}
-
-export interface AddressUpdateRequest {
-  street?: string | undefined
-  cityName?: string | undefined
-  countryName?: string | undefined
-  postalCode?: string | undefined
-  isPrimary?: boolean | undefined
-  type?: AddressType | undefined
-  note?: string | undefined
+  data?: AddressCreateRequest | AddressUpdateRequest
+  id?: string
 }

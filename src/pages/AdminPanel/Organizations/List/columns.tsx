@@ -1,9 +1,9 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
-import type { OrganizationListItemResponse } from "../../../../features/admin/organizations/types/response.dto"
+import type { OrganizationShortResponse } from "../../../../features/admin/organizations/types/response.dto"
 
 export const adminOrganizationsColumns: ColumnDef<
-  OrganizationListItemResponse,
+  OrganizationShortResponse,
   string
 >[] = [
   {
@@ -20,50 +20,31 @@ export const adminOrganizationsColumns: ColumnDef<
     ),
   },
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "countryName",
+    header: "CountryName",
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
-    accessorKey: "country",
-    header: "Country",
+    accessorKey: "legalName",
+    header: "LegalName",
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "registrationNumber",
+    header: "RegistrationNumber",
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
-    accessorKey: "createdAt",
-    header: "Created",
+    accessorKey: "taxId",
+    header: "TaxId",
     enableSorting: true,
     enableColumnFilter: true,
-    cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleString()
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
-  },
-  {
-    accessorKey: "updatedAt",
-    header: "Updated",
-    enableSorting: true,
-    enableColumnFilter: true,
-    cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleString()
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
+    filterFn: "includesString",
   },
 ]

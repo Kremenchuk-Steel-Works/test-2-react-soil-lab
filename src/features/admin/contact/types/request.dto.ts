@@ -1,22 +1,13 @@
-import type { ContactType } from "./contact"
+import type { ContactBase } from "./base.model"
 
-export interface ContactCreateRequest {
-  isPrimary: boolean
-  type: ContactType
-  value: string
-  note: string | undefined
-  parentId: string
+export interface ContactCreateRequest extends ContactBase {
+  associationId: string
 }
+
+export interface ContactUpdateRequest extends Partial<ContactBase> {}
 
 export interface ContactOperationRequest {
   action: "create" | "update" | "delete"
-  data?: ContactCreateRequest | ContactUpdateRequest | undefined
-  id?: string | undefined
-}
-
-export interface ContactUpdateRequest {
-  isPrimary?: boolean | undefined
-  type?: ContactType | undefined
-  value?: string | undefined
-  note?: string | undefined
+  data?: ContactCreateRequest | ContactUpdateRequest
+  id?: string
 }

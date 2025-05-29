@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 import { departmentsService } from "../../../features/admin/departments/services/service"
-import type { DepartmentResponse } from "../../../features/admin/departments/types/response.dto"
+import type { DepartmentDetailResponse } from "../../../features/admin/departments/types/response.dto"
 
 export default function AdminDepartmentsDetails() {
   const navigate = useNavigate()
@@ -14,7 +14,7 @@ export default function AdminDepartmentsDetails() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<DepartmentResponse, Error>({
+  } = useQuery<DepartmentDetailResponse, Error>({
     queryKey: ["adminDepartmentData", id],
     queryFn: () => departmentsService.getById(id!),
     enabled: !!id,
@@ -84,6 +84,22 @@ export default function AdminDepartmentsDetails() {
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
                   {new Date(data.updatedAt).toLocaleString()}
+                </dd>
+              </div>
+
+              <div className="md:col-span-2">
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Права доступу
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300 space-y-2">
+                  {data.permissions?.map((perm, index) => (
+                    <div key={index}>
+                      <div className="font-medium">{perm.name}</div>
+                      <div className="text-sm text-gray-500 dark:text-slate-400">
+                        {perm.description}
+                      </div>
+                    </div>
+                  ))}
                 </dd>
               </div>
             </dl>
