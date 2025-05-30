@@ -1,15 +1,7 @@
 import {
   Database,
   Users,
-  UserCheck,
-  UserRoundSearch,
-  UserPen,
   type LucideIcon,
-  Library,
-  FileStack,
-  FilePlus,
-  FileText,
-  FilePen,
   Shield,
   Building,
   Layers,
@@ -28,15 +20,10 @@ import StreamlitPage from "../pages/StreamlitPage"
 // import AdminUsersisAdd from "../pages/AdminUsers/Add"
 // import AdminUsersDetails from "../pages/AdminUsers/Details"
 // import AdminUsersEdit from "../pages/AdminUsers/Edit"
-import LibraryLayout from "../pages/Library/Layout"
-import LibraryList from "../pages/Library/List/List"
-import LibraryAdd from "../pages/Library/Add"
-import LibraryDetails from "../pages/Library/Details"
 import AdminPeopleLayout from "../pages/AdminPanel/People/Layout"
 import AdminPeopleAdd from "../pages/AdminPanel/People/Add"
 import AdminPeopleDetails from "../pages/AdminPanel/People/Details"
 import AdminPeopleUpdate from "../pages/AdminPanel/People/Update"
-import LibraryEdit from "../pages/Library/Edit"
 import AdminPeopleList from "../pages/AdminPanel/People/List/List"
 import AdminPanelMain from "../pages/AdminPanel/Main"
 import AdminOrganizationsLayout from "../pages/AdminPanel/Organizations/Layout"
@@ -70,11 +57,6 @@ import AdminPermissionsList from "../pages/AdminPanel/Permissions/List/List"
 import AdminPermissionsAdd from "../pages/AdminPanel/Permissions/Add"
 import AdminPermissionsDetails from "../pages/AdminPanel/Permissions/Details"
 import AdminPermissionsUpdate from "../pages/AdminPanel/Permissions/Update"
-import AdminUsersLayout2 from "../pages/AdminUsers/Layout"
-import AdminUsersList2 from "../pages/AdminUsers/AdminUsersList/List"
-import AdminUsersAdd2 from "../pages/AdminUsers/Add"
-import AdminUsersDetails2 from "../pages/AdminUsers/Details"
-import AdminUsersEdit2 from "../pages/AdminUsers/Edit"
 import AdminCityLayout from "../pages/AdminPanel/City/Layout"
 import AdminCityList from "../pages/AdminPanel/City/List/List"
 import AdminCityAdd from "../pages/AdminPanel/City/Add"
@@ -496,48 +478,48 @@ export const APP_ROUTES: AppRoute[] = [
       },
     ],
   },
-  {
-    key: "library",
-    path: "/library",
-    label: "Бібліотека",
-    icon: Library,
-    component: <LibraryLayout />,
-    inSidebar: false,
-    children: [
-      {
-        key: "libraryList",
-        path: "",
-        label: "Архів",
-        icon: FileStack,
-        component: <LibraryList />,
-      },
-      {
-        key: "libraryAdd",
-        path: "add",
-        label: "Додати документ",
-        icon: FilePlus,
-        component: <LibraryAdd />,
-        requiredPermissions: ["library_edit", "admin"],
-      },
-      {
-        key: "libraryDetail",
-        path: ":id",
-        label: "Деталі",
-        icon: FileText,
-        component: <LibraryDetails />,
-        inSidebar: false,
-      },
-      {
-        key: "libraryEdit",
-        path: ":id/edit",
-        label: "Редагування",
-        icon: FilePen,
-        component: <LibraryEdit />,
-        inSidebar: false,
-        requiredPermissions: ["library_edit", "admin"],
-      },
-    ],
-  },
+  // {
+  //   key: "library",
+  //   path: "/library",
+  //   label: "Бібліотека",
+  //   icon: Library,
+  //   component: <LibraryLayout />,
+  //   inSidebar: false,
+  //   children: [
+  //     {
+  //       key: "libraryList",
+  //       path: "",
+  //       label: "Архів",
+  //       icon: FileStack,
+  //       component: <LibraryList />,
+  //     },
+  //     {
+  //       key: "libraryAdd",
+  //       path: "add",
+  //       label: "Додати документ",
+  //       icon: FilePlus,
+  //       component: <LibraryAdd />,
+  //       requiredPermissions: ["library_edit", "admin"],
+  //     },
+  //     {
+  //       key: "libraryDetail",
+  //       path: ":id",
+  //       label: "Деталі",
+  //       icon: FileText,
+  //       component: <LibraryDetails />,
+  //       inSidebar: false,
+  //     },
+  //     {
+  //       key: "libraryEdit",
+  //       path: ":id/edit",
+  //       label: "Редагування",
+  //       icon: FilePen,
+  //       component: <LibraryEdit />,
+  //       inSidebar: false,
+  //       requiredPermissions: ["library_edit", "admin"],
+  //     },
+  //   ],
+  // },
   {
     key: "quality_dash",
     path: "/quality_dash",
