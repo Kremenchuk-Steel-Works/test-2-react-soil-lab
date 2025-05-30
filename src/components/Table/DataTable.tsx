@@ -23,7 +23,7 @@ import {
 } from "lucide-react"
 import InputFieldNoLabel from "../InputField/InputFieldNoLabel"
 import type { SetURLSearchParams } from "react-router-dom"
-import ReactSelect from "../Select/ReactSelect"
+import ReactSelect, { type Option } from "../Select/ReactSelect"
 import type { StylesConfig } from "react-select"
 
 type DataTableProps<T> = {
@@ -76,7 +76,7 @@ export function DataTable<T>({
     enableSortingRemoval,
   })
 
-  const pageSizeStyles: StylesConfig = {
+  const pageSizeStyles: StylesConfig<Option, false> = {
     control: (base) => ({
       ...base,
       minHeight: "36px",
@@ -195,7 +195,7 @@ export function DataTable<T>({
         </div>
         {/* Выбор числа строк */}
         <strong>
-          <ReactSelect
+          <ReactSelect<Option>
             placeholder="Кількість"
             customClassNames={pageSizeClassName}
             customStyles={pageSizeStyles}
