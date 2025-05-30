@@ -2,7 +2,7 @@ import { z } from "zod"
 
 export const permissionsSchema = z.object({
   name: z.string().nonempty(),
-  desciption: z.string().optional(),
+  description: z.string().nonempty(),
   departmentId: z.string().nonempty(),
 })
 

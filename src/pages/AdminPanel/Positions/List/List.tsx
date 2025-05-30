@@ -4,8 +4,8 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
 import { adminPositionsColumns } from "./columns"
-import type { PositionsListResponse } from "../../../../features/admin/positions/types"
 import { positionsService } from "../../../../features/admin/positions/services/service"
+import type { PositionListResponse } from "../../../../features/admin/positions/types/response.dto"
 
 export default function AdminPositionsList() {
   // Состояние из URL
@@ -22,7 +22,7 @@ export default function AdminPositionsList() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<PositionsListResponse, Error>({
+  } = useQuery<PositionListResponse, Error>({
     queryKey: ["adminPositionsData", pageFromUrl, perPageFromUrl],
     queryFn: () => {
       return positionsService.getList({
@@ -56,7 +56,7 @@ export default function AdminPositionsList() {
 
       {!isLoading && !isError && data && (
         <DataTable
-          data={data?.positions ?? []}
+          data={data?.data ?? []}
           columns={adminPositionsColumns}
           setSearchParams={setSearchParams}
           page={pageFromUrl}

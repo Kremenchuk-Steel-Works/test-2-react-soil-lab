@@ -2,8 +2,8 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Role } from "../../../features/admin/roles/types"
 import { rolesService } from "../../../features/admin/roles/services/service"
+import type { RoleDetailResponse } from "../../../features/admin/roles/types/response.dto"
 
 export default function AdminRolesDetails() {
   const navigate = useNavigate()
@@ -14,7 +14,7 @@ export default function AdminRolesDetails() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<Role, Error>({
+  } = useQuery<RoleDetailResponse, Error>({
     queryKey: ["adminRoleData", id],
     queryFn: () => rolesService.getById(id!),
     enabled: !!id,
@@ -84,6 +84,28 @@ export default function AdminRolesDetails() {
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
                   {new Date(data.updatedAt).toLocaleString()}
+                </dd>
+              </div>
+
+              <div className="md:col-span-2">
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Права доступу
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300 space-y-1">
+                  {data.permissions.length > 0 ? (
+                    <ul className="list-disc list-inside space-y-1">
+                      {data.permissions.map((perm) => (
+                        <div key={perm.id}>
+                          <span className="font-semibold">{perm.name}</span> —{" "}
+                          <span className="text-gray-600 dark:text-slate-400">
+                            {perm.departmentName}
+                          </span>
+                        </div>
+                      ))}
+                    </ul>
+                  ) : (
+                    <span>Немає прав доступу</span>
+                  )}
                 </dd>
               </div>
             </dl>

@@ -4,7 +4,7 @@ import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 
 import { peopleService } from "../../../features/admin/people/services/service"
-import type { PersonResponse } from "../../../features/admin/people/types/response.dto"
+import type { PersonDetailResponse } from "../../../features/admin/people/types/response.dto"
 
 export default function AdminPeopleDetails() {
   const navigate = useNavigate()
@@ -15,7 +15,7 @@ export default function AdminPeopleDetails() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<PersonResponse, Error>({
+  } = useQuery<PersonDetailResponse, Error>({
     queryKey: ["adminPersonData", id],
     queryFn: () => peopleService.getById(id!),
     enabled: !!id,
@@ -41,6 +41,7 @@ export default function AdminPeopleDetails() {
             <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-slate-100">
               Деталі
             </h2>
+
             <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
               <div>
                 <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
@@ -66,6 +67,60 @@ export default function AdminPeopleDetails() {
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
                   {data.gender}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Користувач
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.isUser ? "Так" : "Ні"}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Працівник
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.employeeProfile ? "Так" : "Ні"}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Кількість контактів
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.contacts.length}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Кількість адрес
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.addresses.length}
+                </dd>
+              </div>
+
+              <div className="md:col-span-2">
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Організації
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.organizations.map((org) => org.legalName).join(", ")}
+                </dd>
+              </div>
+
+              <div className="md:col-span-2">
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Посади
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.positions.map((pos) => pos.name).join(", ")}
                 </dd>
               </div>
 
@@ -107,12 +162,49 @@ export default function AdminPeopleDetails() {
                     <img
                       src={data.photoUrl}
                       alt="Фото користувача"
-                      className="h-32 w-32 object-cover rounded"
+                      className="h-10 w-10 object-cover rounded"
                     />
                   </dd>
                 </div>
               )}
+
+              {/* Контакти */}
+              {data.contacts.map((contact, index) => (
+                <div key={`contact-${index}`} className="md:col-span-2 pt-4">
+                  <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                    Контакт {index + 1}
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                    <div>Тип: {contact.type}</div>
+                    <div>Значення: {contact.value}</div>
+                    {contact.note && <div>Примітка: {contact.note}</div>}
+                    <div>Основний: {contact.isPrimary ? "Так" : "Ні"}</div>
+                  </dd>
+                </div>
+              ))}
+
+              {/* Адреси */}
+              {data.addresses.map((addr, index) => (
+                <div
+                  key={`address-${index}`}
+                  className="md:col-span-2 border-t pt-4"
+                >
+                  <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                    Адреса {index + 1}
+                  </dt>
+                  <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                    <div>Вулиця: {addr.street}</div>
+                    <div>Місто: {addr.cityName}</div>
+                    <div>Країна: {addr.countryName}</div>
+                    <div>Поштовий код: {addr.postalCode}</div>
+                    <div>Тип: {addr.type}</div>
+                    {addr.note && <div>Примітка: {addr.note}</div>}
+                    <div>Основна: {addr.isPrimary ? "Так" : "Ні"}</div>
+                  </dd>
+                </div>
+              ))}
             </dl>
+
             <div className="flex justify-between items-center py-2">
               <Button
                 className="flex items-center justify-center gap-1 whitespace-nowrap bg-orange-500 hover:bg-orange-600"

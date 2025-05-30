@@ -1,102 +1,85 @@
-import type { Person } from "../types"
+import { addressTypes } from "../../address/types/address"
+import { employmentStatuses } from "../../employeeProfile/types/employmentStatus"
+import type { PersonDetailResponse } from "../types/response.dto"
 
-export const mockPeople: Person[] = [
-  {
-    id: "1bde3a55-cc23-470e-8a3b-51fdf86a3ee1",
-    firstName: "Ivan",
-    middleName: "Petrovich",
-    lastName: "Ivanov",
-    gender: "male",
-    birthDate: "1990-05-14",
-    photoUrl: "https://example.com/photos/ivanov.jpg",
-    email: "ivanov@example.com",
-    phoneNumber: "+380501234567",
-    createdAt: "2024-01-01T12:00:00Z",
-    updatedAt: "2024-01-10T12:00:00Z",
-  },
-  {
-    id: "2cfe7b22-40a4-4e13-b6ad-7bb3e87963dc",
-    firstName: "Maria",
-    lastName: "Petrova",
-    gender: "female",
-    birthDate: "1988-08-22",
-    createdAt: "2024-01-02T08:30:00Z",
-    updatedAt: "2024-01-11T08:30:00Z",
-  },
-  {
-    id: "3ddf4a22-11d4-498d-b9c1-d273aa77e231",
-    firstName: "Oleh",
-    lastName: "Shevchenko",
-    gender: "male",
-    email: "oleh@example.com",
-    phoneNumber: "+380931112233",
-    createdAt: "2024-01-03T15:45:00Z",
-    updatedAt: "2024-01-12T15:45:00Z",
-  },
-  {
-    id: "4abe05b0-4c7a-4200-9b6d-f34c20b6e300",
-    firstName: "Anna",
-    lastName: "Koval",
-    gender: "female",
-    photoUrl: "https://example.com/photos/anna.jpg",
-    createdAt: "2024-01-04T09:15:00Z",
-    updatedAt: "2024-01-13T09:15:00Z",
-  },
-  {
-    id: "5adcd378-7a8e-44fa-b18a-c8617051e787",
-    firstName: "Yuriy",
-    middleName: "Mikhailovich",
-    lastName: "Bondarenko",
-    gender: "male",
-    birthDate: "1979-11-11",
-    email: "yuriy@example.com",
-    createdAt: "2024-01-05T11:20:00Z",
-    updatedAt: "2024-01-14T11:20:00Z",
-  },
-  {
-    id: "6fa30e03-9d5d-4f95-8f9f-df6e1bdef014",
-    firstName: "Daryna",
-    lastName: "Marchenko",
-    gender: "female",
-    phoneNumber: "+380671234567",
-    createdAt: "2024-01-06T10:00:00Z",
-    updatedAt: "2024-01-15T10:00:00Z",
-  },
-  {
-    id: "7bd5b86a-e228-4047-a70a-57ccf2a264fd",
-    firstName: "Serhii",
-    lastName: "Tkachenko",
-    gender: "male",
-    birthDate: "1995-03-09",
-    email: "serhii@example.com",
-    createdAt: "2024-01-07T14:10:00Z",
-    updatedAt: "2024-01-16T14:10:00Z",
-  },
-  {
-    id: "8c25ad6c-3f13-4ec9-a3df-e0987dbde654",
-    firstName: "Olena",
-    middleName: "Viktorivna",
-    lastName: "Dudko",
-    gender: "female",
-    createdAt: "2024-01-08T13:00:00Z",
-    updatedAt: "2024-01-17T13:00:00Z",
-  },
-  {
-    id: "9aa7a90e-56fd-482d-8122-6720f842c64a",
-    firstName: "Maksym",
-    lastName: "Horobets",
-    gender: "male",
-    phoneNumber: "+380631234567",
-    createdAt: "2024-01-09T16:25:00Z",
-    updatedAt: "2024-01-18T16:25:00Z",
-  },
-  {
-    id: "10e13549-fc0f-4c52-80db-ffbf3732bb9d",
-    firstName: "Sofia",
-    lastName: "Zhuk",
-    gender: "female",
-    email: "sofia@example.com",
-    createdAt: "2024-01-10T17:00:00Z",
-    updatedAt: "2024-01-19T17:00:00Z",
-  },
-]
+export const mockPeople: PersonDetailResponse[] = Array.from(
+  { length: 10 },
+  (_, i) => {
+    const timestamp = new Date().toISOString()
+
+    return {
+      id: `${i + 1}2a7a8bcf-5123-4466-a0f6-8bdbd21f8a91`,
+      isUser: i % 2 === 0,
+      firstName: `Ім'я${i}`,
+      middleName: `По батькові${i}`,
+      lastName: `Прізвище${i}`,
+      gender: i % 2 === 0 ? "male" : "female",
+      birthDate: `199${i}-01-01`,
+      photoUrl: `https://example.com/photos/person${i}.jpg`,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+
+      employeeProfile: {
+        personId: `${i + 1}9b5a1bcf-5123-4466-a0f6-8bdbd21f8a91`,
+        employeeNumber: `EMP${1000 + i}`,
+        hiredAt: `2020-0${(i % 9) + 1}-15`,
+        employmentStatus: employmentStatuses[i % employmentStatuses.length],
+        createdAt: timestamp,
+        updatedAt: timestamp,
+      },
+
+      contacts: [
+        {
+          id: `${i + 1}9b5a1bcf-5123-4466-a0f6-8bdbd21f8a91`,
+          isPrimary: true,
+          type: "email",
+          value: `user${i}@example.com`,
+          note: "Робочий email",
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        },
+        {
+          id: `${i + 1}9b5a1bcf-5123-4466-a0f6-8bdbd21f8a91`,
+          isPrimary: false,
+          type: "phone",
+          value: `+0123456789${i}`,
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        },
+      ],
+
+      addresses: [
+        {
+          id: `${i + 1}9b5a1bcf-5123-4466-a0f6-8bdbd21f8a91`,
+          street: `Вулиця ${i}`,
+          cityName: `Місто ${i}`,
+          countryName: `Країна ${i}`,
+          postalCode: `1000${i}`,
+          isPrimary: true,
+          type: addressTypes[0],
+          note: "Основна адреса",
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        },
+      ],
+
+      organizations: [
+        {
+          id: `${i + 1}2a7a8bcf-5123-4466-a0f6-8bdbd21f8a91`,
+          legalName: `Company ${i + 1} LLC`,
+          registrationNumber: `REG${i}00`,
+          taxId: `TIN${i}00`,
+          countryName: `Страна ${i}`,
+        },
+      ],
+
+      positions: [
+        {
+          id: `${i + 1}9b5a1bcf-5123-4466-a0f6-8bdbd21f8a91`,
+          name: `Посада ${i}`,
+          description: `Опис посади ${i}`,
+        },
+      ],
+    }
+  }
+)

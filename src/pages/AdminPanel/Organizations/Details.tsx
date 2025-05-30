@@ -43,75 +43,97 @@ export default function AdminOrganizationsDetails() {
 
             <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
               <div>
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  ID
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.id}
-                </dd>
+                <dt>ID</dt>
+                <dd>{data.id}</dd>
               </div>
 
               <div>
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Назва
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.legalName}
-                </dd>
+                <dt>Назва</dt>
+                <dd>{data.legalName}</dd>
               </div>
 
               <div>
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Реєстраційний номер
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.registrationNumber}
-                </dd>
+                <dt>Реєстраційний номер</dt>
+                <dd>{data.registrationNumber}</dd>
               </div>
 
               <div>
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Податковий номер
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.taxId}
-                </dd>
+                <dt>Податковий номер</dt>
+                <dd>{data.taxId}</dd>
               </div>
 
               <div>
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Країна
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.country.name}
-                </dd>
+                <dt>Країна (код)</dt>
+                <dd>{data.country.code}</dd>
               </div>
 
               <div>
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Email
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                <dt>Країна (назва)</dt>
+                <dd>{data.country.name}</dd>
+              </div>
+
+              <div>
+                <dt>Країна (локалізовано)</dt>
+                <dd>{data.country.nameLocal}</dd>
+              </div>
+
+              <div>
+                <dt>Email</dt>
+                <dd>
                   {data.contacts.find((c) => c.type === "email" && c.isPrimary)
                     ?.value || "—"}
                 </dd>
               </div>
 
               <div>
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Створено
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {new Date(data.createdAt).toLocaleString()}
+                <dt>Телефон</dt>
+                <dd>
+                  {data.contacts.find((c) => c.type === "phone" && c.isPrimary)
+                    ?.value || "—"}
                 </dd>
               </div>
 
               <div>
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Оновлено
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {new Date(data.updatedAt).toLocaleString()}
+                <dt>Інші контакти</dt>
+                <dd>
+                  {data.contacts.find(
+                    (c) =>
+                      c.type !== "phone" && c.type !== "email" && c.isPrimary
+                  )?.value || "—"}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Створено</dt>
+                <dd>{new Date(data.createdAt).toLocaleString()}</dd>
+              </div>
+
+              <div>
+                <dt>Оновлено</dt>
+                <dd>{new Date(data.updatedAt).toLocaleString()}</dd>
+              </div>
+
+              <div>
+                <dt>Основна адреса</dt>
+                <dd>
+                  {(() => {
+                    const addr = data.addresses.find((a) => a.isPrimary)
+                    return addr
+                      ? `${addr.street}, ${addr.cityName}, ${addr.countryName}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
+                      : "—"
+                  })()}
+                </dd>
+              </div>
+
+              <div>
+                <dt>Додаткова адреса</dt>
+                <dd>
+                  {(() => {
+                    const addr = data.addresses.find((a) => !a.isPrimary)
+                    return addr
+                      ? `${addr.street}, ${addr.cityName}, ${addr.countryName}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
+                      : "—"
+                  })()}
                 </dd>
               </div>
             </dl>

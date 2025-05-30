@@ -1,14 +1,21 @@
 import type { PageParams } from "../../../../types/pagination"
 import { mockPermissions } from "../mocks/mock"
-import type { Permission, PermissionsListResponse } from "../types"
+import type {
+  PermissionDetailResponse,
+  PermissionListResponse,
+} from "../types/response.dto"
 
 const mockData = mockPermissions
 
 export const permissionsService = {
-  async getList(params?: PageParams): Promise<PermissionsListResponse> {
+  async getList(params?: PageParams): Promise<PermissionListResponse> {
     console.log(params)
+    const newData = mockData.map((item) => ({
+      ...item,
+      departmentName: item.department.name,
+    }))
     const responeData = {
-      permissions: mockData,
+      data: newData,
       page: 1,
       totalPages: 1,
       totalItems: mockData.length,
@@ -16,8 +23,8 @@ export const permissionsService = {
     return responeData
   },
 
-  async getById(id: string): Promise<Permission> {
-    const data = mockData.find((obj) => obj.id === id)
+  async getById(id: string): Promise<PermissionDetailResponse> {
+    const data = mockData.find((obj) => obj.id === Number(id))
 
     if (!data) throw new Error(`Object with id ${id} not found`)
 

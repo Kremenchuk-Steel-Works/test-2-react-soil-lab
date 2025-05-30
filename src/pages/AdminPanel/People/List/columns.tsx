@@ -7,7 +7,6 @@ export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
     accessorKey: "id",
     header: "ID",
     enableSorting: true,
-    sortDescFirst: false,
     enableColumnFilter: true,
     filterFn: "includesString",
     cell: (row) => (
@@ -17,22 +16,8 @@ export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
     ),
   },
   {
-    accessorKey: "firstName",
-    header: "First Name",
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "middleName",
-    header: "Middle Name",
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "lastName",
-    header: "Last Name",
+    accessorKey: "fullName",
+    header: "Full Name",
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
@@ -45,57 +30,61 @@ export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
     filterFn: "includesString",
   },
   {
-    accessorKey: "birthDate",
-    header: "Birth Date",
-    enableSorting: true,
-    enableColumnFilter: true,
+    accessorKey: "photoUrl",
+    header: "Photo",
     cell: ({ getValue }) =>
-      getValue() ? new Date(getValue()).toLocaleDateString() : "",
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleDateString()
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
+      getValue() ? (
+        <img
+          src={getValue()}
+          alt="Photo"
+          className="w-10 h-10 rounded-full object-cover"
+        />
+      ) : (
+        "—"
+      ),
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "isUser",
+    header: "User",
+    cell: ({ getValue }) => (getValue() ? "Yes" : "No"),
     enableSorting: true,
+  },
+  {
+    accessorKey: "isEmployee",
+    header: "Employee",
+    cell: ({ getValue }) => (getValue() ? "Yes" : "No"),
+    enableSorting: true,
+  },
+  {
+    accessorKey: "contactsCount",
+    header: "Contacts",
+    enableSorting: true,
+    cell: ({ getValue }) => getValue() ?? 0,
+  },
+  {
+    accessorKey: "addressesCount",
+    header: "Addresses",
+    enableSorting: true,
+    cell: ({ getValue }) => getValue() ?? 0,
+  },
+  {
+    accessorKey: "organizationNames",
+    header: "Organizations",
+    cell: ({ getValue }) => {
+      const value = getValue<string[]>()
+      return Array.isArray(value) ? value.join(", ") : ""
+    },
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
-    accessorKey: "phoneNumber",
-    header: "Phone",
-    enableSorting: true,
+    accessorKey: "positionNames",
+    header: "Positions",
+    cell: ({ getValue }) => {
+      const value = getValue<string[]>()
+      return Array.isArray(value) ? value.join(", ") : ""
+    },
     enableColumnFilter: true,
     filterFn: "includesString",
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Created",
-    enableSorting: true,
-    enableColumnFilter: true,
-    cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleString()
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
-  },
-  {
-    accessorKey: "updatedAt",
-    header: "Updated",
-    enableSorting: true,
-    enableColumnFilter: true,
-    cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleString()
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
   },
 ]

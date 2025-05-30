@@ -3,9 +3,9 @@ import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
-import type { PermissionsListResponse } from "../../../../features/admin/permissions/types"
 import { permissionsService } from "../../../../features/admin/permissions/services/service"
 import { adminPermissionsColumns } from "./columns"
+import type { PermissionListResponse } from "../../../../features/admin/permissions/types/response.dto"
 
 export default function AdminPermissionsList() {
   // Состояние из URL
@@ -22,7 +22,7 @@ export default function AdminPermissionsList() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<PermissionsListResponse, Error>({
+  } = useQuery<PermissionListResponse, Error>({
     queryKey: ["adminPermissionsData", pageFromUrl, perPageFromUrl],
     queryFn: () => {
       return permissionsService.getList({
@@ -56,7 +56,7 @@ export default function AdminPermissionsList() {
 
       {!isLoading && !isError && data && (
         <DataTable
-          data={data?.permissions ?? []}
+          data={data?.data ?? []}
           columns={adminPermissionsColumns}
           setSearchParams={setSearchParams}
           page={pageFromUrl}

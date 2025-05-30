@@ -2,10 +2,10 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Position } from "../../../features/admin/positions/types"
 import { positionsService } from "../../../features/admin/positions/services/service"
 import type { PositionsFormFields } from "../../../features/admin/positions/forms/schema"
 import PositionsForm from "../../../features/admin/positions/forms/form"
+import type { PositionDetailResponse } from "../../../features/admin/positions/types/response.dto"
 
 export default function AdminPositionsUpdate() {
   const navigate = useNavigate()
@@ -16,7 +16,7 @@ export default function AdminPositionsUpdate() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<Position, Error>({
+  } = useQuery<PositionDetailResponse, Error>({
     queryKey: ["admiPositionData", id],
     queryFn: () => positionsService.getById(id!),
     enabled: !!id,

@@ -1,8 +1,11 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
-import type { Permission } from "../../../../features/admin/permissions/types"
+import type { PermissionListItemResponse } from "../../../../features/admin/permissions/types/response.dto"
 
-export const adminPermissionsColumns: ColumnDef<Permission, string>[] = [
+export const adminPermissionsColumns: ColumnDef<
+  PermissionListItemResponse,
+  string
+>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -24,15 +27,8 @@ export const adminPermissionsColumns: ColumnDef<Permission, string>[] = [
     filterFn: "includesString",
   },
   {
-    accessorKey: "description",
-    header: "Description",
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "departmentId",
-    header: "Department ID",
+    accessorKey: "departmentName",
+    header: "Department Name",
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",

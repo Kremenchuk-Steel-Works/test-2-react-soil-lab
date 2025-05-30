@@ -3,9 +3,9 @@ import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
-import type { RolesListResponse } from "../../../../features/admin/roles/types"
 import { rolesService } from "../../../../features/admin/roles/services/service"
 import { adminRolesColumns } from "./columns"
+import type { RoleListResponse } from "../../../../features/admin/roles/types/response.dto"
 
 export default function AdminRolesList() {
   // Состояние из URL
@@ -22,7 +22,7 @@ export default function AdminRolesList() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<RolesListResponse, Error>({
+  } = useQuery<RoleListResponse, Error>({
     queryKey: ["adminRolesData", pageFromUrl, perPageFromUrl],
     queryFn: () => {
       return rolesService.getList({
@@ -56,7 +56,7 @@ export default function AdminRolesList() {
 
       {!isLoading && !isError && data && (
         <DataTable
-          data={data?.roles ?? []}
+          data={data?.data ?? []}
           columns={adminRolesColumns}
           setSearchParams={setSearchParams}
           page={pageFromUrl}

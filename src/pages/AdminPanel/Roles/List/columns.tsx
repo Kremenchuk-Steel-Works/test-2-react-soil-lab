@@ -1,8 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
-import type { Role } from "../../../../features/admin/roles/types"
+import type { RoleShortResponse } from "../../../../features/admin/roles/types/response.dto"
 
-export const adminRolesColumns: ColumnDef<Role, string>[] = [
+export const adminRolesColumns: ColumnDef<RoleShortResponse, string>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -31,29 +31,19 @@ export const adminRolesColumns: ColumnDef<Role, string>[] = [
     filterFn: "includesString",
   },
   {
-    accessorKey: "createdAt",
-    header: "Created",
-    enableSorting: true,
-    enableColumnFilter: true,
-    cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleString()
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
-  },
-  {
-    accessorKey: "updatedAt",
-    header: "Updated",
-    enableSorting: true,
-    enableColumnFilter: true,
-    cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleString()
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
+    accessorKey: "permissions",
+    header: "Permissions",
+    enableSorting: false,
+    enableColumnFilter: false,
+    cell: (row) => {
+      const permissions = row.row.original.permissions
+      return (
+        <div className="text-sm text-gray-800 dark:text-slate-200">
+          {permissions.length > 0
+            ? permissions.map((perm) => perm.name).join(", ")
+            : "—"}
+        </div>
+      )
     },
   },
 ]

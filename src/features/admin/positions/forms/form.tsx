@@ -6,6 +6,7 @@ import {
 } from "../../../../components/WithError/fieldsWithError"
 import { positionsSchema, type PositionsFormFields } from "./schema"
 import { logger } from "../../../../utils/logger"
+import { formTransformers } from "../../../../utils/formTransformers"
 
 type FormFields = PositionsFormFields
 const schema = positionsSchema
@@ -49,13 +50,13 @@ export default function PositionsForm({
       <InputFieldWithError
         label="Назва"
         errorMessage={errors.name?.message}
-        {...register("name")}
+        {...register("name", formTransformers.string)}
       />
 
       <InputFieldWithError
         label="Опис"
-        errorMessage={errors.desciption?.message}
-        {...register("desciption")}
+        errorMessage={errors.description?.message}
+        {...register("description", formTransformers.string)}
       />
 
       <ButtonWithError

@@ -3,9 +3,9 @@ import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
-import type { UsersListResponse } from "../../../../features/admin/users/types"
 import { usersService } from "../../../../features/admin/users/services/service"
 import { adminUsersColumns } from "./columns"
+import type { UserListResponse } from "../../../../features/admin/users/types/response.dto"
 
 export default function AdminUsersList() {
   // Состояние из URL
@@ -22,7 +22,7 @@ export default function AdminUsersList() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<UsersListResponse, Error>({
+  } = useQuery<UserListResponse, Error>({
     queryKey: ["adminUsersData", pageFromUrl, perPageFromUrl],
     queryFn: () => {
       return usersService.getList({
@@ -56,7 +56,7 @@ export default function AdminUsersList() {
 
       {!isLoading && !isError && data && (
         <DataTable
-          data={data?.users ?? []}
+          data={data?.data ?? []}
           columns={adminUsersColumns}
           setSearchParams={setSearchParams}
           page={pageFromUrl}

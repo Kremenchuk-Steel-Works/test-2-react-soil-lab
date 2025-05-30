@@ -7,6 +7,7 @@ import {
 } from "../../../../components/WithError/fieldsWithError"
 import { userSchema, type UserFormFields } from "./schema"
 import { logger } from "../../../../utils/logger"
+import { formTransformers } from "../../../../utils/formTransformers"
 
 type FormFields = UserFormFields
 const schema = userSchema
@@ -48,32 +49,32 @@ export default function UsersForm({
       <InputFieldWithError
         label="Людина ID"
         errorMessage={errors.personId?.message}
-        {...register("personId")}
+        {...register("personId", formTransformers.string)}
       />
 
       <InputFieldWithError
         label="Email"
         type="email"
         errorMessage={errors.email?.message}
-        {...register("email")}
+        {...register("email", formTransformers.string)}
       />
 
       <InputFieldWithError
         label="Пароль"
         type="password"
         errorMessage={errors.rawPassword?.message}
-        {...register("rawPassword")}
+        {...register("rawPassword", formTransformers.string)}
       />
 
       <CheckboxWithError
         label="Активний"
-        {...register("isActive")}
+        {...register("isActive", formTransformers.string)}
         errorMessage={errors.isActive?.message}
       />
 
       <CheckboxWithError
         label="Адміністратор"
-        {...register("isSuperuser")}
+        {...register("isSuperuser", formTransformers.string)}
         errorMessage={errors.isSuperuser?.message}
       />
 
@@ -82,8 +83,8 @@ export default function UsersForm({
 
         <InputFieldWithError
           label="Роль ID"
-          errorMessage={errors.roles?.roleId?.message}
-          {...register("roles.roleId")}
+          errorMessage={errors.rolesIds?.message}
+          {...register("rolesIds", formTransformers.string)}
         />
       </div>
 
@@ -92,8 +93,8 @@ export default function UsersForm({
 
         <InputFieldWithError
           label="Права доступу ID"
-          errorMessage={errors.permissions?.permissionId?.message}
-          {...register("permissions.permissionId")}
+          errorMessage={errors.permissionsIds?.message}
+          {...register("permissionsIds", formTransformers.string)}
         />
       </div>
 

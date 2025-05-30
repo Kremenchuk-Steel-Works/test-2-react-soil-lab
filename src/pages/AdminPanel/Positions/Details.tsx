@@ -2,8 +2,8 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Position } from "../../../features/admin/positions/types"
 import { positionsService } from "../../../features/admin/positions/services/service"
+import type { PositionDetailResponse } from "../../../features/admin/positions/types/response.dto"
 
 export default function AdminPositionsDetails() {
   const navigate = useNavigate()
@@ -14,7 +14,7 @@ export default function AdminPositionsDetails() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<Position, Error>({
+  } = useQuery<PositionDetailResponse, Error>({
     queryKey: ["adminPositionData", id],
     queryFn: () => positionsService.getById(id!),
     enabled: !!id,

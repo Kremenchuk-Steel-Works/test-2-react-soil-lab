@@ -2,10 +2,10 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Role } from "../../../features/admin/roles/types"
 import { rolesService } from "../../../features/admin/roles/services/service"
 import type { RolesFormFields } from "../../../features/admin/roles/forms/schema"
 import RolesForm from "../../../features/admin/roles/forms/form"
+import type { RoleDetailResponse } from "../../../features/admin/roles/types/response.dto"
 
 export default function AdminRolesUpdate() {
   const navigate = useNavigate()
@@ -16,7 +16,7 @@ export default function AdminRolesUpdate() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<Role, Error>({
+  } = useQuery<RoleDetailResponse, Error>({
     queryKey: ["adminRoleData", id],
     queryFn: () => rolesService.getById(id!),
     enabled: !!id,

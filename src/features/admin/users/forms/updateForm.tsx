@@ -1,12 +1,13 @@
-import { Controller, useForm, type SubmitHandler } from "react-hook-form"
+import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-  SelectWithError,
+  CheckboxWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { updateUserSchema, type UpdateUserFormFields } from "./schema"
 import { logger } from "../../../../utils/logger"
+import { formTransformers } from "../../../../utils/formTransformers"
 
 type FormFields = UpdateUserFormFields
 const schema = updateUserSchema
@@ -25,7 +26,6 @@ export default function UpdateUsersForm({
   const {
     register,
     handleSubmit,
-    control,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
@@ -47,44 +47,43 @@ export default function UpdateUsersForm({
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
-        label="Людина ID"
-        errorMessage={errors.personId?.message}
-        {...register("personId")}
-      />
-
-      <InputFieldWithError
         label="Email"
         type="email"
         errorMessage={errors.email?.message}
-        {...register("email")}
+        {...register("email", formTransformers.string)}
       />
 
-      <InputFieldWithError
-        label="Пароль"
-        type="password"
-        errorMessage={errors.rawPassword?.message}
-        {...register("rawPassword")}
+      <CheckboxWithError
+        label="Активний"
+        {...register("isActive", formTransformers.string)}
+        errorMessage={errors.isActive?.message}
       />
 
-      <Controller
-        name="isActive"
-        control={control}
-        render={({ field }) => (
-          <SelectWithError
-            className="w-full"
-            heightClass="py-3.5"
-            placeholder="Оберіть статус"
-            isClearable={true}
-            options={[
-              { value: true, label: "Активний" },
-              { value: false, label: "Неактивний" },
-            ]}
-            value={field.value}
-            onChange={field.onChange}
-            errorMessage={errors.isActive?.message}
-          />
-        )}
+      <CheckboxWithError
+        label="Адміністратор"
+        {...register("isSuperuser", formTransformers.string)}
+        errorMessage={errors.isSuperuser?.message}
       />
+
+      <div className="space-y-3">
+        <h4 className="layout-text">Роль</h4>
+
+        <InputFieldWithError
+          label="Роль ID"
+          errorMessage={errors.rolesIds?.message}
+          {...register("rolesIds", formTransformers.string)}
+        />
+      </div>
+
+      <div className="space-y-3">
+        <h4 className="layout-text">Права доступу</h4>
+
+        <InputFieldWithError
+          label="Права доступу ID"
+          errorMessage={errors.permissionsIds?.message}
+          {...register("permissionsIds", formTransformers.string)}
+        />
+      </div>
 
       <ButtonWithError
         className="w-full"

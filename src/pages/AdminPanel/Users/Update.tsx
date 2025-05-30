@@ -2,10 +2,10 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { User } from "../../../features/admin/users/types"
-import { usersService } from "../../../features/admin/users/services/service"
 import type { UpdateUserFormFields } from "../../../features/admin/users/forms/schema"
 import UpdateUsersForm from "../../../features/admin/users/forms/updateForm"
+import type { UserDetailResponse } from "../../../features/admin/users/types/response.dto"
+import { usersService } from "../../../features/admin/users/services/service"
 
 export default function AdminUsersUpdate() {
   const navigate = useNavigate()
@@ -16,7 +16,7 @@ export default function AdminUsersUpdate() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<User, Error>({
+  } = useQuery<UserDetailResponse, Error>({
     queryKey: ["adminUserData", id],
     queryFn: () => usersService.getById(id!),
     enabled: !!id,

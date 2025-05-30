@@ -5,11 +5,17 @@ import {
   InputFieldWithError,
   ButtonWithError,
   ReactSelectWithError,
+  ReactSelectMultiWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { logger } from "../../../../utils/logger"
 import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
+import { formTransformers } from "../../../../utils/formTransformers"
+import { DynamicFieldArray } from "../../../../components/Forms/DynamicFieldArray"
+import { mockOrganizations } from "../../organizations/mocks/mock"
+import { mockPositions } from "../../positions/mocks/mock"
 import { EmployeeProfileForm } from "../../employeeProfile/forms/form"
+import { OptionalField } from "../../../../components/Forms/OptionalField"
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -26,9 +32,10 @@ export default function PeopleForm({
   submitBtnName,
 }: FormProps) {
   const {
-    register,
-    handleSubmit,
     control,
+    register,
+    resetField,
+    handleSubmit,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
@@ -65,24 +72,42 @@ export default function PeopleForm({
     })),
   ]
 
+  const organizationsData = mockOrganizations
+  const organizationsOptions = [
+    ...organizationsData.map((obj) => ({
+      value: obj.id,
+      label: obj.legalName,
+    })),
+  ]
+
+  const positionsData = mockPositions
+  const positionsOptions = [
+    ...positionsData.map((obj) => ({
+      value: obj.id,
+      label: obj.name,
+    })),
+  ]
+
+  console.log(errors)
+
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Ім'я"
         errorMessage={errors.firstName?.message}
-        {...register("firstName")}
+        {...register("firstName", formTransformers.string)}
       />
 
       <InputFieldWithError
         label="Прізвище"
         errorMessage={errors.lastName?.message}
-        {...register("lastName")}
+        {...register("lastName", formTransformers.string)}
       />
 
       <InputFieldWithError
         label="По батькові"
         errorMessage={errors.middleName?.message}
-        {...register("middleName")}
+        {...register("middleName", formTransformers.string)}
       />
 
       <Controller
@@ -104,52 +129,92 @@ export default function PeopleForm({
         label="Дата народження"
         type="date"
         errorMessage={errors.birthDate?.message}
-        {...register("birthDate")}
+        {...register("birthDate", formTransformers.string)}
       />
 
       <InputFieldWithError
         label="Посилання на фото"
         type="url"
         errorMessage={errors.photoUrl?.message}
-        {...register("photoUrl")}
+        {...register("photoUrl", formTransformers.string)}
       />
 
-      <ContactForm<PeopleFormFields>
+      {/* Contacts */}
+      <DynamicFieldArray
+        label="контакт"
+        name="contacts"
+        form={ContactForm<PeopleFormFields>}
+        defaultItem={{ value: "", type: undefined!, isPrimary: false }}
         control={control}
         register={register}
         errors={errors}
       />
 
-      <AddressForm<PeopleFormFields>
+      {/* Address */}
+      <DynamicFieldArray
+        label="адресу"
+        name="addresses"
+        form={AddressForm<PeopleFormFields>}
+        defaultItem={{
+          type: undefined!,
+          isPrimary: false,
+          street: "",
+          cityName: "",
+          countryName: "",
+        }}
         control={control}
         register={register}
         errors={errors}
       />
 
-      <div className="space-y-3">
-        <h4 className="layout-text">Організація</h4>
+      <Controller
+        name="organizationIds"
+        control={control}
+        render={({ field }) => (
+          <ReactSelectMultiWithError
+            placeholder="Оберіть організацію"
+            isMulti={true}
+            isClearable={true}
+            options={organizationsOptions}
+            value={organizationsOptions.filter((opt) =>
+              field.value?.includes(opt.value)
+            )}
+            onChange={(selectedOptions) =>
+              field.onChange(selectedOptions?.map((opt) => opt.value) || [])
+            }
+            errorMessage={errors.organizationIds?.message}
+          />
+        )}
+      />
 
-        <InputFieldWithError
-          label="Організація ID"
-          {...register(`organizations.${0}.organizationId`)}
-          errorMessage={errors.organizations?.[0]?.organizationId?.message}
-        />
-      </div>
+      <Controller
+        name="positionIds"
+        control={control}
+        render={({ field }) => (
+          <ReactSelectMultiWithError
+            placeholder="Оберіть посаду"
+            isMulti={true}
+            isClearable={true}
+            options={positionsOptions}
+            value={positionsOptions.filter((opt) =>
+              field.value?.includes(opt.value)
+            )}
+            onChange={(selectedOptions) =>
+              field.onChange(selectedOptions?.map((opt) => opt.value) || [])
+            }
+            errorMessage={errors.positionIds?.message}
+          />
+        )}
+      />
 
-      <div className="space-y-3">
-        <h4 className="layout-text">Посада</h4>
-
-        <InputFieldWithError
-          label="Посада ID"
-          {...register(`positions.${0}.positionId`)}
-          errorMessage={errors.positions?.[0]?.positionId?.message}
-        />
-      </div>
-
-      <EmployeeProfileForm<PeopleFormFields>
+      <OptionalField
+        label="профіль працівника"
+        name="employeeProfile"
+        form={EmployeeProfileForm<PeopleFormFields>}
         control={control}
         register={register}
         errors={errors}
+        resetField={resetField}
       />
 
       <ButtonWithError

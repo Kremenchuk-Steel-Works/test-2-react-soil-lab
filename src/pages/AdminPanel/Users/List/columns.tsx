@@ -1,8 +1,8 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
-import type { User } from "../../../../features/admin/users/types"
+import type { UserShortResponse } from "../../../../features/admin/users/types/response.dto"
 
-export const adminUsersColumns: ColumnDef<User, string>[] = [
+export const adminUsersColumns: ColumnDef<UserShortResponse, string>[] = [
   {
     accessorKey: "id",
     header: "ID",
@@ -15,13 +15,6 @@ export const adminUsersColumns: ColumnDef<User, string>[] = [
         {row.getValue()}
       </Link>
     ),
-  },
-  {
-    accessorKey: "personId",
-    header: "Person ID",
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
   },
   {
     accessorKey: "email",
@@ -42,29 +35,50 @@ export const adminUsersColumns: ColumnDef<User, string>[] = [
     },
   },
   {
-    accessorKey: "lastLoginAt",
-    header: "Last Login",
+    accessorKey: "isSuperuser",
+    header: "Superuser",
+    cell: ({ getValue }) => (getValue() ? "Yes" : "No"),
     enableSorting: true,
     enableColumnFilter: true,
-    cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
     filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleString()
+      const displayValue = row.getValue<boolean>(columnId) ? "Yes" : "No"
       return displayValue.toLowerCase().includes(filterValue.toLowerCase())
     },
   },
   {
-    accessorKey: "createdAt",
-    header: "Created",
+    accessorKey: "fullName",
+    header: "Full Name",
     enableSorting: true,
     enableColumnFilter: true,
-    cell: ({ getValue }) => new Date(getValue()).toLocaleString(),
+    filterFn: "includesString",
+  },
+  {
+    accessorKey: "lastLoginAt",
+    header: "Last Login",
+    enableSorting: true,
+    enableColumnFilter: true,
+    cell: ({ getValue }) =>
+      getValue() ? new Date(getValue()).toLocaleString() : "—",
     filterFn: (row, columnId, filterValue) => {
-      const displayValue = new Date(
-        row.getValue<string>(columnId)
-      ).toLocaleString()
+      const val = row.getValue<string | undefined>(columnId)
+      const displayValue = val ? new Date(val).toLocaleString() : ""
       return displayValue.toLowerCase().includes(filterValue.toLowerCase())
     },
+  },
+  {
+    accessorFn: (row) => row.roleNames.join(", "),
+    id: "roleNames",
+    header: "Roles",
+    enableSorting: false,
+    enableColumnFilter: true,
+    filterFn: "includesString",
+  },
+  {
+    accessorFn: (row) => row.permissionNames.join(", "),
+    id: "permissionNames",
+    header: "Permissions",
+    enableSorting: false,
+    enableColumnFilter: true,
+    filterFn: "includesString",
   },
 ]

@@ -2,8 +2,8 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { User } from "../../../features/admin/users/types"
 import { usersService } from "../../../features/admin/users/services/service"
+import type { UserDetailResponse } from "../../../features/admin/users/types/response.dto"
 
 export default function AdminUsersDetails() {
   const navigate = useNavigate()
@@ -14,7 +14,7 @@ export default function AdminUsersDetails() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<User, Error>({
+  } = useQuery<UserDetailResponse, Error>({
     queryKey: ["adminUserData", id],
     queryFn: () => usersService.getById(id!),
     enabled: !!id,
@@ -56,7 +56,16 @@ export default function AdminUsersDetails() {
                   Person ID
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.personId}
+                  {data.person.id}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Full Name
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.person.fullName}
                 </dd>
               </div>
 
@@ -73,10 +82,19 @@ export default function AdminUsersDetails() {
 
               <div>
                 <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Статус
+                  Status
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
                   {data.isActive ? "Активний" : "Неактивний"}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Superuser
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.isSuperuser ? "Так" : "Ні"}
                 </dd>
               </div>
 
@@ -106,6 +124,28 @@ export default function AdminUsersDetails() {
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
                   {new Date(data.updatedAt).toLocaleString()}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Ролі
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.roles.length > 0
+                    ? data.roles.map((r) => r.name).join(", ")
+                    : "—"}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Дозволи
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.permissions.length > 0
+                    ? data.permissions.map((p) => p.name).join(", ")
+                    : "—"}
                 </dd>
               </div>
             </dl>

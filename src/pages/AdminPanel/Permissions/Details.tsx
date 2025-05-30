@@ -2,8 +2,8 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { Permission } from "../../../features/admin/permissions/types"
 import { permissionsService } from "../../../features/admin/permissions/services/service"
+import type { PermissionDetailResponse } from "../../../features/admin/permissions/types/response.dto"
 
 export default function AdminPermissionsDetails() {
   const navigate = useNavigate()
@@ -14,7 +14,7 @@ export default function AdminPermissionsDetails() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<Permission, Error>({
+  } = useQuery<PermissionDetailResponse, Error>({
     queryKey: ["adminPermissionData", id],
     queryFn: () => permissionsService.getById(id!),
     enabled: !!id,
@@ -65,7 +65,7 @@ export default function AdminPermissionsDetails() {
                   Опис
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.description}
+                  {data.description || "—"}
                 </dd>
               </div>
 
@@ -74,7 +74,43 @@ export default function AdminPermissionsDetails() {
                   Відділ ID
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.departmentId}
+                  {data.department.id}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Відділ Назва
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.department.name}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Відділ Опис
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {data.department.description || "—"}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Дата створення
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {new Date(data.createdAt).toLocaleString()}
+                </dd>
+              </div>
+
+              <div>
+                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
+                  Дата оновлення
+                </dt>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+                  {new Date(data.updatedAt).toLocaleString()}
                 </dd>
               </div>
             </dl>

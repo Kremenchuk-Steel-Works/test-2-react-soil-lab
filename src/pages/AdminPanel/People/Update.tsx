@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 import { peopleService } from "../../../features/admin/people/services/service"
 import PeopleForm from "../../../features/admin/people/forms/form"
 import type { PeopleFormFields } from "../../../features/admin/people/forms/schema"
-import type { PersonResponse } from "../../../features/admin/people/types/response.dto"
+import type { PersonDetailResponse } from "../../../features/admin/people/types/response.dto"
 
 export default function AdminPeopleUpdate() {
   const navigate = useNavigate()
@@ -16,7 +16,7 @@ export default function AdminPeopleUpdate() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<PersonResponse, Error>({
+  } = useQuery<PersonDetailResponse, Error>({
     queryKey: ["adminPersonData", id],
     queryFn: () => peopleService.getById(id!),
     enabled: !!id,
@@ -27,6 +27,19 @@ export default function AdminPeopleUpdate() {
     navigate("..")
     return data
   }
+
+  // Адаптируем данные под форму
+  function mapPersonToFormDefaults(
+    person: PersonDetailResponse
+  ): Partial<PeopleFormFields> {
+    return {
+      ...person,
+      organizationIds: person.organizations?.map((org) => org.id) || [],
+      positionIds: person.positions?.map((pos) => pos.id) || [],
+    }
+  }
+  const modifiedData = data ? mapPersonToFormDefaults(data) : undefined
+  console.log("123", modifiedData)
 
   return (
     <>
@@ -47,7 +60,7 @@ export default function AdminPeopleUpdate() {
           <div className="w-full">
             <PeopleForm
               onSubmit={handleSubmit}
-              defaultValues={data}
+              defaultValues={modifiedData}
               submitBtnName="Оновити"
             />
           </div>

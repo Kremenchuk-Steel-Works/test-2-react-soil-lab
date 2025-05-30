@@ -13,7 +13,7 @@ const getColorStyles = (color: string) => {
     case "blue":
       return "bg-blue-600 hover:bg-blue-700"
     case "red":
-      return "bg-red-600 hover:bg-red-700"
+      return "bg-red-600 hover:bg-red-800"
     case "orange":
       return "bg-orange-600 hover:bg-orange-800"
     case "green":
