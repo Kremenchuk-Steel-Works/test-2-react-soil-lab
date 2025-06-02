@@ -1,8 +1,9 @@
-import { useForm, type SubmitHandler } from "react-hook-form"
+import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
+  ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { organizationsSchema, type OrganizationsFormFields } from "./schema"
 import { logger } from "../../../../utils/logger"
@@ -10,6 +11,7 @@ import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
 import { formTransformers } from "../../../../utils/formTransformers"
 import { DynamicFieldArray } from "../../../../components/Forms/DynamicFieldArray"
+import { mockCountries } from "../../country/mocks/mock"
 
 type FormFields = OrganizationsFormFields
 const schema = organizationsSchema
@@ -47,6 +49,14 @@ export default function OrganizationsForm({
     }
   }
 
+  const countriesData = mockCountries
+  const countriesOptions = [
+    ...countriesData.map((obj) => ({
+      value: obj.id,
+      label: obj.name,
+    })),
+  ]
+
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
@@ -67,11 +77,19 @@ export default function OrganizationsForm({
         {...register("taxId", formTransformers.string)}
       />
 
-      <InputFieldWithError
-        label="Країна ID"
-        type="number"
-        errorMessage={errors.countryId?.message}
-        {...register("countryId", formTransformers.number)}
+      <Controller
+        name={`countryId`}
+        control={control}
+        render={({ field }) => (
+          <ReactSelectWithError
+            placeholder="Оберіть країну"
+            isClearable={true}
+            options={countriesOptions}
+            value={countriesOptions.find((opt) => opt.value === field.value)}
+            onChange={(option) => field.onChange(option?.value)}
+            errorMessage={errors.countryId?.message}
+          />
+        )}
       />
 
       {/* Contacts */}
@@ -79,7 +97,7 @@ export default function OrganizationsForm({
         name="contacts"
         label="контакт"
         form={ContactForm<OrganizationsFormFields>}
-        defaultItem={{ value: "", type: undefined!, isPrimary: false }}
+        defaultItem={{ value: undefined!, type: undefined!, isPrimary: false }}
         control={control}
         register={register}
         errors={errors}
@@ -87,15 +105,15 @@ export default function OrganizationsForm({
 
       {/* Address */}
       <DynamicFieldArray
-        name="addresses"
         label="адресу"
+        name="addresses"
         form={AddressForm<OrganizationsFormFields>}
         defaultItem={{
           type: undefined!,
-          isPrimary: false,
-          street: "",
-          cityName: "",
-          countryName: "",
+          isPrimary: undefined!,
+          street: undefined!,
+          cityId: undefined!,
+          countryId: undefined!,
         }}
         control={control}
         register={register}

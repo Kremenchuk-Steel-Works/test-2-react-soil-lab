@@ -1,4 +1,4 @@
-import type { AddressType } from "./address"
+import type { Address } from "./address"
 
 export interface AddressBase {
   street: string
@@ -7,6 +7,6 @@ export interface AddressBase {
   postalCode?: string
 
   isPrimary: boolean
-  type: AddressType
+  type: Address
   note?: string
 }

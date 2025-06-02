@@ -24,10 +24,7 @@ export type User = {
   updatedAt: string
 }
 
-export type UserResponse = Omit<
-  User,
-  "permissions" | "created_at" | "updated_at"
->
+export type UserResponse = Omit<User, "permissions" | "createdAt" | "updatedAt">
 
 export type UsersData = {
   users: UserResponse[]

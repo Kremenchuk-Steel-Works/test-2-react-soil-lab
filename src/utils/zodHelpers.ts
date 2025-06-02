@@ -31,3 +31,8 @@ export function getFieldError(error: unknown): string | undefined {
 
 export const parseNumber = (v: unknown) =>
   v === "" || v === null || v === undefined ? undefined : Number(v)
+
+export const toZodEnumValues = <T extends readonly { value: string }[]>(
+  options: T
+) =>
+  options.map((o) => o.value) as [T[number]["value"], ...T[number]["value"][]]

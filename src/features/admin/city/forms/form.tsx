@@ -1,12 +1,14 @@
-import { useForm, type SubmitHandler } from "react-hook-form"
+import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
+  ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { logger } from "../../../../utils/logger"
 import { citySchema, type CityFormFields } from "./schema"
 import { formTransformers } from "../../../../utils/formTransformers"
+import { mockCountries } from "../../country/mocks/mock"
 
 type FormFields = CityFormFields
 const schema = citySchema
@@ -23,6 +25,7 @@ export default function CityForm({
   submitBtnName,
 }: FormProps) {
   const {
+    control,
     register,
     handleSubmit,
     setError,
@@ -31,6 +34,14 @@ export default function CityForm({
     resolver: zodResolver(schema),
     defaultValues,
   })
+
+  const countriesData = mockCountries
+  const countriesOptions = [
+    ...countriesData.map((obj) => ({
+      value: obj.id,
+      label: obj.name,
+    })),
+  ]
 
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
@@ -57,11 +68,19 @@ export default function CityForm({
         {...register("nameLocal", formTransformers.string)}
       />
 
-      <InputFieldWithError
-        label="Країна ID"
-        type="number"
-        errorMessage={errors.countryId?.message}
-        {...register("countryId", formTransformers.number)}
+      <Controller
+        name={`countryId`}
+        control={control}
+        render={({ field }) => (
+          <ReactSelectWithError
+            placeholder="Оберіть країну"
+            isClearable={true}
+            options={countriesOptions}
+            value={countriesOptions.find((opt) => opt.value === field.value)}
+            onChange={(option) => field.onChange(option?.value)}
+            errorMessage={errors.countryId?.message}
+          />
+        )}
       />
 
       <ButtonWithError

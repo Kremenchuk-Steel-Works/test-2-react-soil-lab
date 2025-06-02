@@ -48,7 +48,7 @@ export function OptionalField<T extends FieldValues>({
   return (
     <div className="space-y-3">
       {isVisible ? (
-        <div className="space-y-2">
+        <div className="space-y-3">
           <FormComponent
             control={control}
             register={register}

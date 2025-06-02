@@ -1,5 +1,5 @@
-import { addressTypes } from "../../address/types/address"
-import { employmentStatuses } from "../../employeeProfile/types/employmentStatus"
+import { addressOptions } from "../../address/types/address"
+import { employeeProfileOptions } from "../../employeeProfile/types/employmentStatus"
 import type { PersonDetailResponse } from "../types/response.dto"
 
 export const mockPeople: PersonDetailResponse[] = Array.from(
@@ -23,7 +23,8 @@ export const mockPeople: PersonDetailResponse[] = Array.from(
         personId: `${i + 1}9b5a1bcf-5123-4466-a0f6-8bdbd21f8a91`,
         employeeNumber: `EMP${1000 + i}`,
         hiredAt: `2020-0${(i % 9) + 1}-15`,
-        employmentStatus: employmentStatuses[i % employmentStatuses.length],
+        employmentStatus:
+          employeeProfileOptions[i % employeeProfileOptions.length].value,
         createdAt: timestamp,
         updatedAt: timestamp,
       },
@@ -56,7 +57,7 @@ export const mockPeople: PersonDetailResponse[] = Array.from(
           countryName: `Країна ${i}`,
           postalCode: `1000${i}`,
           isPrimary: true,
-          type: addressTypes[0],
+          type: addressOptions[0]["value"],
           note: "Основна адреса",
           createdAt: timestamp,
           updatedAt: timestamp,

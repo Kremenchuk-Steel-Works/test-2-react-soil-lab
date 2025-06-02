@@ -1,8 +1,8 @@
-import type { ContactType } from "./contact"
+import type { Contact } from "./contact"
 
 export interface ContactBase {
   isPrimary: boolean
-  type: ContactType
+  type: Contact
   value: string
   note?: string
 }

@@ -9,8 +9,9 @@ import {
   InputFieldWithError,
   ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
-import { employeeProfileSchema, type EmployeeProfileFormFields } from "./schema"
+import type { EmployeeProfileFormFields } from "./schema"
 import { formTransformers } from "../../../../utils/formTransformers"
+import { employeeProfileOptions } from "../types/employmentStatus"
 
 export type FormFields = {
   employeeProfile?: EmployeeProfileFormFields
@@ -28,33 +29,6 @@ export function EmployeeProfileForm<T extends FormFields>({
   errors,
 }: FormProps<T>) {
   const err = errors as FieldErrors<FormFields>
-  const employmentStatusOptions = [
-    ...employeeProfileSchema.shape.employmentStatus.options.map((value) => ({
-      value,
-      label: (() => {
-        switch (value) {
-          case "intern":
-            return "Стажер"
-          case "full-time":
-            return "Повна зайнятість"
-          case "part-time":
-            return "Неповна зайнятість"
-          case "contract":
-            return "Контракт"
-          case "on-leave":
-            return "У відпустці"
-          case "suspended":
-            return "Призупинено"
-          case "terminated":
-            return "Звільнений"
-          case "retired":
-            return "На пенсії"
-          default:
-            return "Невідомо"
-        }
-      })(),
-    })),
-  ]
 
   return (
     <div className="space-y-3">
@@ -87,8 +61,8 @@ export function EmployeeProfileForm<T extends FormFields>({
           <ReactSelectWithError
             placeholder="Оберіть статус працевлаштування"
             isClearable={true}
-            options={employmentStatusOptions}
-            value={employmentStatusOptions.find(
+            options={employeeProfileOptions}
+            value={employeeProfileOptions.find(
               (opt) => opt.value === field.value
             )}
             onChange={(option) => field.onChange(option?.value)}

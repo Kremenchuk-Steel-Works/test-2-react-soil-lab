@@ -1,13 +1,16 @@
-import { useForm, type SubmitHandler } from "react-hook-form"
+import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
   CheckboxWithError,
+  ReactSelectMultiWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { updateUserSchema, type UpdateUserFormFields } from "./schema"
 import { logger } from "../../../../utils/logger"
 import { formTransformers } from "../../../../utils/formTransformers"
+import { mockRoles } from "../../roles/mocks/mock"
+import { mockPermissions } from "../../permissions/mocks/mock"
 
 type FormFields = UpdateUserFormFields
 const schema = updateUserSchema
@@ -24,6 +27,7 @@ export default function UpdateUsersForm({
   submitBtnName,
 }: FormProps) {
   const {
+    control,
     register,
     handleSubmit,
     setError,
@@ -43,6 +47,22 @@ export default function UpdateUsersForm({
       logger.error(err)
     }
   }
+
+  const rolesData = mockRoles
+  const rolesOptions = [
+    ...rolesData.map((obj) => ({
+      value: obj.id,
+      label: obj.name,
+    })),
+  ]
+
+  const permissionsData = mockPermissions
+  const permissionsOptions = [
+    ...permissionsData.map((obj) => ({
+      value: obj.id,
+      label: obj.name,
+    })),
+  ]
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
@@ -65,25 +85,45 @@ export default function UpdateUsersForm({
         errorMessage={errors.isSuperuser?.message}
       />
 
-      <div className="space-y-3">
-        <h4 className="layout-text">Роль</h4>
+      <Controller
+        name="rolesIds"
+        control={control}
+        render={({ field }) => (
+          <ReactSelectMultiWithError
+            placeholder="Оберіть ролі"
+            isMulti={true}
+            isClearable={true}
+            options={rolesOptions}
+            value={rolesOptions.filter((opt) =>
+              field.value?.includes(opt.value)
+            )}
+            onChange={(selectedOptions) =>
+              field.onChange(selectedOptions?.map((opt) => opt.value) || [])
+            }
+            errorMessage={errors.rolesIds?.message}
+          />
+        )}
+      />
 
-        <InputFieldWithError
-          label="Роль ID"
-          errorMessage={errors.rolesIds?.message}
-          {...register("rolesIds", formTransformers.string)}
-        />
-      </div>
-
-      <div className="space-y-3">
-        <h4 className="layout-text">Права доступу</h4>
-
-        <InputFieldWithError
-          label="Права доступу ID"
-          errorMessage={errors.permissionsIds?.message}
-          {...register("permissionsIds", formTransformers.string)}
-        />
-      </div>
+      <Controller
+        name="permissionsIds"
+        control={control}
+        render={({ field }) => (
+          <ReactSelectMultiWithError
+            placeholder="Оберіть права доступу"
+            isMulti={true}
+            isClearable={true}
+            options={permissionsOptions}
+            value={permissionsOptions.filter((opt) =>
+              field.value?.includes(opt.value)
+            )}
+            onChange={(selectedOptions) =>
+              field.onChange(selectedOptions?.map((opt) => opt.value) || [])
+            }
+            errorMessage={errors.permissionsIds?.message}
+          />
+        )}
+      />
 
       <ButtonWithError
         className="w-full"

@@ -10,9 +10,10 @@ import {
   ReactSelectWithError,
   CheckboxWithError,
 } from "../../../../components/WithError/fieldsWithError"
-import { contactSchema, type ContactFormFields } from "./schema"
 import { getFieldError } from "../../../../utils/zodHelpers"
 import { formTransformers } from "../../../../utils/formTransformers"
+import { contactOptions } from "../types/contact"
+import type { ContactFormFields } from "./schema"
 
 export type FormFields = {
   contacts: ContactFormFields[]
@@ -32,27 +33,6 @@ export function ContactForm<T extends FormFields>({
   errors,
 }: FormProps<T>) {
   const err = errors as FieldErrors<FormFields>
-  const contactOptions = [
-    ...contactSchema.shape.type.options.map((value) => ({
-      value,
-      label: (() => {
-        switch (value) {
-          case "email":
-            return "Email"
-          case "phone":
-            return "Телефон"
-          case "telegram":
-            return "Телеграм"
-          case "linkedin":
-            return "Linkedin"
-          case "website":
-            return "Сайт"
-          default:
-            return "Невідомо"
-        }
-      })(),
-    })),
-  ]
   return (
     <div className="space-y-3">
       <h4 className="layout-text">Контакт {index + 1}</h4>

@@ -53,7 +53,7 @@ export function DynamicFieldArray<
   return (
     <div className="space-y-3">
       {fields.map((field, index) => (
-        <div key={field.id} className="space-y-2">
+        <div key={field.id} className="space-y-3">
           <FormComponent
             index={index}
             control={control}

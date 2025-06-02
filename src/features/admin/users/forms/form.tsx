@@ -1,13 +1,18 @@
-import { useForm, type SubmitHandler } from "react-hook-form"
+import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
   CheckboxWithError,
+  ReactSelectWithError,
+  ReactSelectMultiWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { userSchema, type UserFormFields } from "./schema"
 import { logger } from "../../../../utils/logger"
 import { formTransformers } from "../../../../utils/formTransformers"
+import { mockPeople } from "../../people/mocks/mock"
+import { mockRoles } from "../../roles/mocks/mock"
+import { mockPermissions } from "../../permissions/mocks/mock"
 
 type FormFields = UserFormFields
 const schema = userSchema
@@ -24,6 +29,7 @@ export default function UsersForm({
   submitBtnName,
 }: FormProps) {
   const {
+    control,
     register,
     handleSubmit,
     setError,
@@ -44,12 +50,45 @@ export default function UsersForm({
     }
   }
 
+  const peopleData = mockPeople
+  const peopleOptions = [
+    ...peopleData.map((obj) => ({
+      value: obj.id,
+      label: `${obj.lastName} ${obj.firstName} ${obj.middleName}`,
+    })),
+  ]
+
+  const rolesData = mockRoles
+  const rolesOptions = [
+    ...rolesData.map((obj) => ({
+      value: obj.id,
+      label: obj.name,
+    })),
+  ]
+
+  const permissionsData = mockPermissions
+  const permissionsOptions = [
+    ...permissionsData.map((obj) => ({
+      value: obj.id,
+      label: obj.name,
+    })),
+  ]
+
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
-      <InputFieldWithError
-        label="Людина ID"
-        errorMessage={errors.personId?.message}
-        {...register("personId", formTransformers.string)}
+      <Controller
+        name={`personId`}
+        control={control}
+        render={({ field }) => (
+          <ReactSelectWithError
+            placeholder="Оберіть людину"
+            isClearable={true}
+            options={peopleOptions}
+            value={peopleOptions.find((opt) => opt.value === field.value)}
+            onChange={(option) => field.onChange(option?.value)}
+            errorMessage={errors.personId?.message}
+          />
+        )}
       />
 
       <InputFieldWithError
@@ -78,25 +117,45 @@ export default function UsersForm({
         errorMessage={errors.isSuperuser?.message}
       />
 
-      <div className="space-y-3">
-        <h4 className="layout-text">Роль</h4>
+      <Controller
+        name="rolesIds"
+        control={control}
+        render={({ field }) => (
+          <ReactSelectMultiWithError
+            placeholder="Оберіть ролі"
+            isMulti={true}
+            isClearable={true}
+            options={rolesOptions}
+            value={rolesOptions.filter((opt) =>
+              field.value?.includes(opt.value)
+            )}
+            onChange={(selectedOptions) =>
+              field.onChange(selectedOptions?.map((opt) => opt.value) || [])
+            }
+            errorMessage={errors.rolesIds?.message}
+          />
+        )}
+      />
 
-        <InputFieldWithError
-          label="Роль ID"
-          errorMessage={errors.rolesIds?.message}
-          {...register("rolesIds", formTransformers.string)}
-        />
-      </div>
-
-      <div className="space-y-3">
-        <h4 className="layout-text">Права доступу</h4>
-
-        <InputFieldWithError
-          label="Права доступу ID"
-          errorMessage={errors.permissionsIds?.message}
-          {...register("permissionsIds", formTransformers.string)}
-        />
-      </div>
+      <Controller
+        name="permissionsIds"
+        control={control}
+        render={({ field }) => (
+          <ReactSelectMultiWithError
+            placeholder="Оберіть права доступу"
+            isMulti={true}
+            isClearable={true}
+            options={permissionsOptions}
+            value={permissionsOptions.filter((opt) =>
+              field.value?.includes(opt.value)
+            )}
+            onChange={(selectedOptions) =>
+              field.onChange(selectedOptions?.map((opt) => opt.value) || [])
+            }
+            errorMessage={errors.permissionsIds?.message}
+          />
+        )}
+      />
 
       <ButtonWithError
         className="w-full"

@@ -39,7 +39,6 @@ export default function AdminPeopleUpdate() {
     }
   }
   const modifiedData = data ? mapPersonToFormDefaults(data) : undefined
-  console.log("123", modifiedData)
 
   return (
     <>

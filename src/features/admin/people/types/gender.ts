@@ -1,3 +1,7 @@
-export const genderTypes = ["male", "female", "other"] as const
+export const genderOptions = [
+  { value: "male", label: "Чоловіча" },
+  { value: "female", label: "Жіноча" },
+  { value: "other", label: "Інша" },
+] as const
 
-export type Gender = (typeof genderTypes)[number]
+export type Gender = (typeof genderOptions)[number]["value"]

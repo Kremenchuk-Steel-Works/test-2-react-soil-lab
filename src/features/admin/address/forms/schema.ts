@@ -1,13 +1,14 @@
 import { z } from "zod"
-import { addressTypes } from "../types/address"
+import { toZodEnumValues } from "../../../../utils/zodHelpers"
+import { addressOptions } from "../types/address"
 
 export const addressSchema = z.object({
   street: z.string().nonempty(),
-  cityName: z.string().nonempty(),
-  countryName: z.string().nonempty(),
+  cityId: z.number(),
+  countryId: z.number(),
   postalCode: z.string().optional(),
   isPrimary: z.boolean(),
-  type: z.enum(addressTypes),
+  type: z.enum(toZodEnumValues(addressOptions)),
   note: z.string().optional(),
 })
 

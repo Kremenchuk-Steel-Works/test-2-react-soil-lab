@@ -64,6 +64,12 @@ export function DataTable<T>({
   const table = useReactTable({
     data,
     columns,
+    enableColumnResizing: true,
+    columnResizeMode: "onChange",
+    defaultColumn: {
+      size: 75,
+      minSize: 75,
+    },
     state: { sorting, columnFilters, pagination },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -210,7 +216,7 @@ export function DataTable<T>({
               setPagination((old) => ({
                 ...old,
                 pageSize: Number(newSize),
-                pageIndex: 0, // скидання на першу сторінку
+                pageIndex: 0, // сброс на первую  страницу
               }))
             }}
           />
@@ -223,43 +229,68 @@ export function DataTable<T>({
           <thead className="bg-gray-200 dark:bg-gray-700">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    onClick={header.column.getToggleSortingHandler()}
-                    className="
-                            px-4 py-2 
-                            select-none hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer
-                            overflow-hidden whitespace-nowrap"
-                  >
-                    {!header.isPlaceholder && (
-                      <div className="flex items-center gap-1">
-                        <span className="truncate">
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                        </span>
-                        <ChevronUp
-                          className={`transform transition-all duration-300 ease-in-out origin-center ${
-                            header.column.getIsSorted() === "asc"
-                              ? "opacity-100 w-5 h-5 rotate-0 text-blue-500"
-                              : header.column.getIsSorted() === "desc"
-                              ? "opacity-100 w-5 h-5 rotate-180 text-blue-500"
-                              : "opacity-0 w-0 h-0"
+                {headerGroup.headers.map((header) => {
+                  const canSort = header.column.getCanSort()
+                  const canResize = header.column.getCanResize()
+                  return (
+                    <th
+                      key={header.id}
+                      style={{ width: `${header.getSize()}px` }}
+                      className="relative px-4 py-2 select-none hover:bg-gray-300 dark:hover:bg-gray-600 overflow-hidden whitespace-nowrap"
+                    >
+                      {!header.isPlaceholder && (
+                        <div
+                          className={`flex items-center gap-1 ${
+                            canSort ? "cursor-pointer" : ""
                           }`}
+                          onClick={
+                            canSort
+                              ? header.column.getToggleSortingHandler()
+                              : undefined
+                          }
+                        >
+                          <span className="truncate">
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                          </span>
+                          {/* Иконки сортировки */}
+                          <ChevronUp
+                            className={`shrink-0 transform transition-all duration-300 ease-in-out origin-center ${
+                              header.column.getIsSorted() === "asc"
+                                ? "opacity-100 w-5 h-5 rotate-0 text-blue-500"
+                                : header.column.getIsSorted() === "desc"
+                                ? "opacity-100 w-5 h-5 rotate-180 text-blue-500"
+                                : "opacity-0 w-0 h-0"
+                            }`}
+                          />
+                          <ChevronsUpDown
+                            className={`shrink-0 transform transition-all duration-300 ease-in-out origin-center text-gray-400 ${
+                              header.column.getIsSorted()
+                                ? "opacity-0 w-0 h-0"
+                                : "opacity-100 w-5 h-5"
+                            }`}
+                          />
+                        </div>
+                      )}
+                      {/* Элемент управления для изменения размера */}
+                      {canResize && (
+                        <div
+                          onMouseDown={(e) => {
+                            e.stopPropagation() // Предотвращение конфликта с сортировкой
+                            header.getResizeHandler()(e)
+                          }}
+                          onTouchStart={(e) => {
+                            e.stopPropagation() // Предотвращение конфликта с сортировкой
+                            header.getResizeHandler()(e)
+                          }}
+                          className="absolute right-0 top-0 h-full w-1 cursor-col-resize select-none touch-none"
                         />
-                        <ChevronsUpDown
-                          className={`transform transition-all duration-300 ease-in-out origin-center text-gray-400 ${
-                            header.column.getIsSorted()
-                              ? "opacity-0 w-0 h-0"
-                              : "opacity-100 w-5 h-5"
-                          }`}
-                        />
-                      </div>
-                    )}
-                  </th>
-                ))}
+                      )}
+                    </th>
+                  )
+                })}
               </tr>
             ))}
           </thead>
@@ -272,6 +303,7 @@ export function DataTable<T>({
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
+                    style={{ width: cell.column.getSize() }}
                     className="
                             px-4 py-2 
                             /* whitespace-nowrap + truncate внутри */

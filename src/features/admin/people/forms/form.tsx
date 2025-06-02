@@ -16,6 +16,7 @@ import { mockOrganizations } from "../../organizations/mocks/mock"
 import { mockPositions } from "../../positions/mocks/mock"
 import { EmployeeProfileForm } from "../../employeeProfile/forms/form"
 import { OptionalField } from "../../../../components/Forms/OptionalField"
+import { genderOptions } from "../types/gender"
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -54,24 +55,6 @@ export default function PeopleForm({
     }
   }
 
-  const genderOptions = [
-    ...peopleSchema.shape.gender.options.map((value) => ({
-      value,
-      label: (() => {
-        switch (value) {
-          case "male":
-            return "Чоловіча"
-          case "female":
-            return "Жіноча"
-          case "other":
-            return "Інша"
-          default:
-            return "Невідомо"
-        }
-      })(),
-    })),
-  ]
-
   const organizationsData = mockOrganizations
   const organizationsOptions = [
     ...organizationsData.map((obj) => ({
@@ -87,8 +70,6 @@ export default function PeopleForm({
       label: obj.name,
     })),
   ]
-
-  console.log(errors)
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
@@ -144,7 +125,11 @@ export default function PeopleForm({
         label="контакт"
         name="contacts"
         form={ContactForm<PeopleFormFields>}
-        defaultItem={{ value: "", type: undefined!, isPrimary: false }}
+        defaultItem={{
+          value: undefined!,
+          type: undefined!,
+          isPrimary: undefined!,
+        }}
         control={control}
         register={register}
         errors={errors}
@@ -157,10 +142,10 @@ export default function PeopleForm({
         form={AddressForm<PeopleFormFields>}
         defaultItem={{
           type: undefined!,
-          isPrimary: false,
-          street: "",
-          cityName: "",
-          countryName: "",
+          isPrimary: undefined!,
+          street: undefined!,
+          cityId: undefined!,
+          countryId: undefined!,
         }}
         control={control}
         register={register}

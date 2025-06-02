@@ -1,12 +1,12 @@
-export const employmentStatuses = [
-  "intern",
-  "full-time",
-  "part-time",
-  "contract",
-  "on-leave",
-  "suspended",
-  "terminated",
-  "retired",
+export const employeeProfileOptions = [
+  { value: "intern", label: "Стажер" },
+  { value: "full-time", label: "Повна зайнятість" },
+  { value: "part-time", label: "Неповна зайнятість" },
+  { value: "contract", label: "Контракт" },
+  { value: "on-leave", label: "У відпустці" },
+  { value: "suspended", label: "Призупинено" },
+  { value: "terminated", label: "Звільнений" },
+  { value: "retired", label: "На пенсії" },
 ] as const
 
-export type EmploymentStatus = (typeof employmentStatuses)[number]
+export type EmploymentStatus = (typeof employeeProfileOptions)[number]["value"]

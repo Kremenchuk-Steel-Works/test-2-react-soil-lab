@@ -11,8 +11,11 @@ import {
   CheckboxWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { getFieldError } from "../../../../utils/zodHelpers"
-import { addressSchema, type AddressFormFields } from "./schema"
+import type { AddressFormFields } from "./schema"
 import { formTransformers } from "../../../../utils/formTransformers"
+import { addressOptions } from "../types/address"
+import { mockCountries } from "../../country/mocks/mock"
+import { mockCities } from "../../city/mocks/mock"
 
 export type FormFields = {
   addresses: AddressFormFields[]
@@ -32,27 +35,20 @@ export function AddressForm<T extends FormFields>({
   errors,
 }: FormProps<T>) {
   const err = errors as FieldErrors<FormFields>
-  const addressOptions = [
-    ...addressSchema.shape.type.options.map((value) => ({
-      value,
-      label: (() => {
-        switch (value) {
-          case "billing":
-            return "Виставлення рахунків"
-          case "shipping":
-            return "Доставка"
-          case "warehouse":
-            return "Склад"
-          case "plant":
-            return "Завод"
-          case "office":
-            return "Офіс"
-          case "home":
-            return "Домашня адреса"
-          default:
-            return "Невідомо"
-        }
-      })(),
+
+  const countriesData = mockCountries
+  const countriesOptions = [
+    ...countriesData.map((obj) => ({
+      value: obj.id,
+      label: obj.name,
+    })),
+  ]
+
+  const citiesData = mockCities
+  const citiesOptions = [
+    ...citiesData.map((obj) => ({
+      value: obj.id,
+      label: obj.name,
     })),
   ]
 
@@ -69,6 +65,36 @@ export function AddressForm<T extends FormFields>({
         errorMessage={err.addresses?.[index]?.isPrimary?.message}
       />
 
+      <Controller
+        name={`addresses.${index}.countryId` as Path<T>}
+        control={control}
+        render={({ field }) => (
+          <ReactSelectWithError
+            placeholder="Оберіть країну"
+            isClearable={true}
+            options={countriesOptions}
+            value={countriesOptions.find((opt) => opt.value === field.value)}
+            onChange={(option) => field.onChange(option?.value)}
+            errorMessage={err.addresses?.[index]?.countryId?.message}
+          />
+        )}
+      />
+
+      <Controller
+        name={`addresses.${index}.cityId` as Path<T>}
+        control={control}
+        render={({ field }) => (
+          <ReactSelectWithError
+            placeholder="Оберіть місто"
+            isClearable={true}
+            options={citiesOptions}
+            value={citiesOptions.find((opt) => opt.value === field.value)}
+            onChange={(option) => field.onChange(option?.value)}
+            errorMessage={err.addresses?.[index]?.cityId?.message}
+          />
+        )}
+      />
+
       <InputFieldWithError
         label="Вулиця"
         {...register(
@@ -76,24 +102,6 @@ export function AddressForm<T extends FormFields>({
           formTransformers.string
         )}
         errorMessage={err.addresses?.[index]?.street?.message}
-      />
-
-      <InputFieldWithError
-        label="Місто"
-        {...register(
-          `addresses.${index}.cityName` as Path<T>,
-          formTransformers.string
-        )}
-        errorMessage={err.addresses?.[index]?.cityName?.message}
-      />
-
-      <InputFieldWithError
-        label="Країна"
-        {...register(
-          `addresses.${index}.countryName` as Path<T>,
-          formTransformers.string
-        )}
-        errorMessage={err.addresses?.[index]?.countryName?.message}
       />
 
       <InputFieldWithError

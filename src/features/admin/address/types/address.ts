@@ -1,10 +1,10 @@
-export const addressTypes = [
-  "billing",
-  "shipping",
-  "warehouse",
-  "plant",
-  "office",
-  "home",
+export const addressOptions = [
+  { value: "billing", label: "Виставлення рахунків" },
+  { value: "shipping", label: "Доставка" },
+  { value: "warehouse", label: "Склад" },
+  { value: "plant", label: "Завод" },
+  { value: "office", label: "Офіс" },
+  { value: "home", label: "Домашня адреса" },
 ] as const
 
-export type AddressType = (typeof addressTypes)[number]
+export type Address = (typeof addressOptions)[number]["value"]

@@ -54,6 +54,7 @@ function ReactSelect<
   return (
     <Select<OptionType, IsMulti, Group>
       {...props}
+      noOptionsMessage={() => "Нічого не знайдено"}
       unstyled
       components={{
         IndicatorSeparator: () => (

@@ -1,12 +1,4 @@
-import { z } from "zod"
-
-export const usersRolesSchema = z.object({
-  roleId: z.string().nonempty(),
-})
-
-export const usersPermissionsSchema = z.object({
-  permissionId: z.string().nonempty(),
-})
+import { number, z } from "zod"
 
 export const userSchema = z.object({
   personId: z.string().nonempty(),
@@ -14,8 +6,8 @@ export const userSchema = z.object({
   rawPassword: z.string().nonempty(),
   isActive: z.boolean(),
   isSuperuser: z.boolean(),
-  rolesIds: z.array(usersRolesSchema),
-  permissionsIds: z.array(usersPermissionsSchema),
+  rolesIds: z.array(number()),
+  permissionsIds: z.array(number()),
 })
 
 export const updateUserSchema = z.object({
@@ -24,8 +16,8 @@ export const updateUserSchema = z.object({
   rawPassword: z.string().optional(),
   isActive: z.boolean(),
   isSuperuser: z.boolean(),
-  rolesIds: z.array(usersRolesSchema),
-  permissionsIds: z.array(usersPermissionsSchema),
+  rolesIds: z.array(number()),
+  permissionsIds: z.array(number()),
 })
 
 export type UserFormFields = z.infer<typeof userSchema>
