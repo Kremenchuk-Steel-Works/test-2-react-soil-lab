@@ -13,10 +13,10 @@ import type {
 import type { PersonBase } from "./base.model"
 
 export interface PersonCreateRequest extends PersonBase {
+  employeeProfile?: EmployeeProfileCreateRequest
+
   contacts?: ContactCreateRequest[]
   addresses?: AddressCreateRequest[]
-
-  employeeProfile?: EmployeeProfileCreateRequest
 
   organizationIds: string[]
   positionIds: string[]
@@ -27,8 +27,8 @@ export interface PersonUpdateRequest extends Partial<PersonBase> {
   employeeProfileData?:
     | EmployeeProfileCreateRequest
     | EmployeeProfileUpdateRequest
-  contactOperations: ContactOperationRequest[]
-  addressOperations: AddressOperationRequest[]
+  contactOperations?: ContactOperationRequest[]
+  addressOperations?: AddressOperationRequest[]
   organizationIds?: string[]
   positionIds?: string[]
 }

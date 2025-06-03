@@ -13,8 +13,8 @@ export interface CountryDetailResponse extends CountryResponse, Timestamps {
 export interface CountryShortResponse {
   id: number
   code: string
-  name?: string
-  nameLocal?: string
+  name: string
+  nameLocal: string
 }
 
 export type CountryListResponse = PaginatedListResponse<CountryShortResponse>

@@ -1,5 +1,6 @@
 import type { Timestamps } from "../../../../types/common"
 import type { PaginatedListResponse } from "../../../../types/pagination"
+import type { CountryShortResponse } from "../../country/types/response.dto"
 import type { CityBase } from "./base.model"
 
 export interface CityResponse extends CityBase {
@@ -7,7 +8,10 @@ export interface CityResponse extends CityBase {
   countryId: number
 }
 
-export interface CityDetailResponse extends CityResponse, Timestamps {}
+export interface CityDetailResponse extends CityBase, Timestamps {
+  id: number
+  country: CountryShortResponse
+}
 
 export interface CityShortResponse extends CityBase {
   id: number

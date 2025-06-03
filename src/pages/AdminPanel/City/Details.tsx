@@ -53,10 +53,10 @@ export default function AdminCityDetails() {
 
               <div>
                 <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  ID країни
+                  Країна
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.countryId}
+                  {data.country.nameLocal} ({data.country.name})
                 </dd>
               </div>
 

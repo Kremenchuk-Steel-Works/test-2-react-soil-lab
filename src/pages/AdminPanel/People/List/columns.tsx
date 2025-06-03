@@ -18,6 +18,7 @@ export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
   {
     accessorKey: "fullName",
     header: "Full Name",
+    size: 140,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
@@ -25,6 +26,7 @@ export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
   {
     accessorKey: "gender",
     header: "Gender",
+    size: 120,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
@@ -32,6 +34,7 @@ export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
   {
     accessorKey: "photoUrl",
     header: "Photo",
+    size: 110,
     cell: ({ getValue }) =>
       getValue() ? (
         <img
@@ -52,24 +55,28 @@ export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
   {
     accessorKey: "isEmployee",
     header: "Employee",
+    size: 135,
     cell: ({ getValue }) => (getValue() ? "Yes" : "No"),
     enableSorting: true,
   },
   {
     accessorKey: "contactsCount",
     header: "Contacts",
+    size: 130,
     enableSorting: true,
     cell: ({ getValue }) => getValue() ?? 0,
   },
   {
     accessorKey: "addressesCount",
     header: "Addresses",
+    size: 140,
     enableSorting: true,
     cell: ({ getValue }) => getValue() ?? 0,
   },
   {
     accessorKey: "organizationNames",
     header: "Organizations",
+    size: 165,
     cell: ({ getValue }) => {
       const value = getValue<string[]>()
       return Array.isArray(value) ? value.join(", ") : ""
@@ -80,6 +87,7 @@ export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
   {
     accessorKey: "positionNames",
     header: "Positions",
+    size: 130,
     cell: ({ getValue }) => {
       const value = getValue<string[]>()
       return Array.isArray(value) ? value.join(", ") : ""

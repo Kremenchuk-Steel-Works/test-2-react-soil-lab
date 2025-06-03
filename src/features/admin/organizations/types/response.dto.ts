@@ -19,7 +19,7 @@ export interface OrganizationResponse extends OrganizationBase {
 }
 
 export interface OrganizationDetailResponse
-  extends OrganizationResponse,
+  extends Omit<OrganizationResponse, "contacts" | "addresses">,
     Timestamps {
   contacts: ContactDetailResponse[]
   addresses: AddressDetailResponse[]

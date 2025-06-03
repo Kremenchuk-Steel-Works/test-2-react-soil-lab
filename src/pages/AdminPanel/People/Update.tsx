@@ -29,16 +29,21 @@ export default function AdminPeopleUpdate() {
   }
 
   // Адаптируем данные под форму
-  function mapPersonToFormDefaults(
+  function mapToFormDefaults(
     person: PersonDetailResponse
   ): Partial<PeopleFormFields> {
     return {
       ...person,
       organizationIds: person.organizations?.map((org) => org.id) || [],
       positionIds: person.positions?.map((pos) => pos.id) || [],
+      addresses:
+        person.addresses?.map((addr) => ({
+          ...addr,
+          cityId: addr.cityId,
+        })) || [],
     }
   }
-  const modifiedData = data ? mapPersonToFormDefaults(data) : undefined
+  const modifiedData = data ? mapToFormDefaults(data) : undefined
 
   return (
     <>

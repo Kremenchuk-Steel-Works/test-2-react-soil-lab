@@ -17,6 +17,13 @@ export const adminCityColumns: ColumnDef<CityShortResponse, string>[] = [
     ),
   },
   {
+    accessorKey: "countryId",
+    header: "Country ID",
+    enableSorting: true,
+    enableColumnFilter: true,
+    filterFn: "includesString",
+  },
+  {
     accessorKey: "name",
     header: "Name",
     enableSorting: true,

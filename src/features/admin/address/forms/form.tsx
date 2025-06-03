@@ -14,7 +14,6 @@ import { getFieldError } from "../../../../utils/zodHelpers"
 import type { AddressFormFields } from "./schema"
 import { formTransformers } from "../../../../utils/formTransformers"
 import { addressOptions } from "../types/address"
-import { mockCountries } from "../../country/mocks/mock"
 import { mockCities } from "../../city/mocks/mock"
 
 export type FormFields = {
@@ -36,14 +35,6 @@ export function AddressForm<T extends FormFields>({
 }: FormProps<T>) {
   const err = errors as FieldErrors<FormFields>
 
-  const countriesData = mockCountries
-  const countriesOptions = [
-    ...countriesData.map((obj) => ({
-      value: obj.id,
-      label: obj.name,
-    })),
-  ]
-
   const citiesData = mockCities
   const citiesOptions = [
     ...citiesData.map((obj) => ({
@@ -63,21 +54,6 @@ export function AddressForm<T extends FormFields>({
           formTransformers.string
         )}
         errorMessage={err.addresses?.[index]?.isPrimary?.message}
-      />
-
-      <Controller
-        name={`addresses.${index}.countryId` as Path<T>}
-        control={control}
-        render={({ field }) => (
-          <ReactSelectWithError
-            placeholder="Оберіть країну"
-            isClearable={true}
-            options={countriesOptions}
-            value={countriesOptions.find((opt) => opt.value === field.value)}
-            onChange={(option) => field.onChange(option?.value)}
-            errorMessage={err.addresses?.[index]?.countryId?.message}
-          />
-        )}
       />
 
       <Controller

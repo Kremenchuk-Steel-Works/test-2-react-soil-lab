@@ -2,11 +2,8 @@ import type { Address } from "./address"
 
 export interface AddressBase {
   street: string
-  cityName: string
-  countryName: string
   postalCode?: string
-
-  isPrimary: boolean
   type: Address
+  isPrimary: boolean
   note?: string
 }

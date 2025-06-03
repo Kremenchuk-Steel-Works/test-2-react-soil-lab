@@ -5,6 +5,4 @@ export interface EmployeeProfileResponse extends EmployeeProfileBase {}
 
 export interface EmployeeProfileDetailResponse
   extends EmployeeProfileResponse,
-    Timestamps {
-  personId: string
-}
+    Timestamps {}

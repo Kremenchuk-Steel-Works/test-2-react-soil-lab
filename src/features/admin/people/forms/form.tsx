@@ -145,7 +145,6 @@ export default function PeopleForm({
           isPrimary: undefined!,
           street: undefined!,
           cityId: undefined!,
-          countryId: undefined!,
         }}
         control={control}
         register={register}

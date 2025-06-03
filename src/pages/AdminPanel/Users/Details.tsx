@@ -51,24 +51,6 @@ export default function AdminUsersDetails() {
                 </dd>
               </div>
 
-              <div>
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Person ID
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.person.id}
-                </dd>
-              </div>
-
-              <div>
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Full Name
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.person.fullName}
-                </dd>
-              </div>
-
               {data.email && (
                 <div>
                   <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">

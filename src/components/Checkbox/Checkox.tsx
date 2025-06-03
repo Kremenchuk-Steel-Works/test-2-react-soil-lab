@@ -34,8 +34,9 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
       <div
         className={twMerge(`
-      group relative h-5 w-5 rounded-md border-0 dark:border-gray-600bg-white dark:bg-gray-700 transition-color duration-300 peer-checked:bg-blue-600
-    `)}
+    group relative h-5 w-5 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700
+    transition-colors duration-300 peer-checked:bg-blue-600 peer-checked:border-blue-600
+  `)}
       >
         <Check
           className={twMerge(`

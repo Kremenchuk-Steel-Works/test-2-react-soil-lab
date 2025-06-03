@@ -1,8 +1,6 @@
 import type { ContactBase } from "./base.model"
 
-export interface ContactCreateRequest extends ContactBase {
-  associationId: string
-}
+export interface ContactCreateRequest extends ContactBase {}
 
 export interface ContactUpdateRequest extends Partial<ContactBase> {}
 

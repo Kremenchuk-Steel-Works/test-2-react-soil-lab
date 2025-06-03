@@ -12,7 +12,9 @@ export interface PermissionDetailResponse
   extends PermissionResponse,
     Timestamps {}
 
-export interface PermissionShortResponse extends PermissionBase {}
+export interface PermissionShortResponse extends PermissionBase {
+  id: number
+}
 
 export interface PermissionListItemResponse {
   id: number

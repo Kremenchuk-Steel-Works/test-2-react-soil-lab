@@ -12,9 +12,9 @@ export const peopleSchema = z.object({
   gender: z.enum(toZodEnumValues(genderOptions)),
   birthDate: z.string().optional(),
   photoUrl: z.string().url().optional(),
+  employeeProfile: employeeProfileSchema.optional(),
   contacts: z.array(contactSchema),
   addresses: z.array(addressSchema),
-  employeeProfile: employeeProfileSchema.optional(),
   organizationIds: z.array(z.string()),
   positionIds: z.array(z.string()),
 })

@@ -56,6 +56,26 @@
     -moz-appearance: textfield;
   }
 
+  /* Ширина полосы прокрутки */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  /* Фон трека полосы прокрутки */
+  ::-webkit-scrollbar-track {
+    @apply bg-black/5;
+  }
+
+  /* Ползунок полосы прокрутки */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-500 rounded-xl;
+  }
+
+  /* Ползунок при наведении */
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400/70 dark:bg-gray-400;
+  }
+
   html {
     /* Перенос строк */
     overflow-wrap: anywhere;

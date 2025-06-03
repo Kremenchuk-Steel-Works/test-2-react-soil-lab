@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query"
 import { organizationsService } from "../../../features/admin/organizations/services/service"
 import type { OrganizationsFormFields } from "../../../features/admin/organizations/forms/schema"
 import OrganizationsForm from "../../../features/admin/organizations/forms/form"
-import type { OrganizationResponse } from "../../../features/admin/organizations/types/response.dto"
+import type { OrganizationDetailResponse } from "../../../features/admin/organizations/types/response.dto"
 
 export default function AdminOrganizationsUpdate() {
   const navigate = useNavigate()
@@ -16,7 +16,7 @@ export default function AdminOrganizationsUpdate() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<OrganizationResponse, Error>({
+  } = useQuery<OrganizationDetailResponse, Error>({
     queryKey: ["adminOrganizationData", id],
     queryFn: () => organizationsService.getById(id!),
     enabled: !!id,
@@ -27,6 +27,21 @@ export default function AdminOrganizationsUpdate() {
     navigate("..")
     return data
   }
+
+  // Адаптируем данные под форму
+  function mapToFormDefaults(
+    organization: OrganizationDetailResponse
+  ): Partial<OrganizationsFormFields> {
+    return {
+      ...organization,
+      addresses:
+        organization.addresses?.map((addr) => ({
+          ...addr,
+          cityId: addr.cityId,
+        })) || [],
+    }
+  }
+  const modifiedData = data ? mapToFormDefaults(data) : undefined
 
   return (
     <>
@@ -47,7 +62,7 @@ export default function AdminOrganizationsUpdate() {
           <div className="w-full">
             <OrganizationsForm
               onSubmit={handleSubmit}
-              defaultValues={data}
+              defaultValues={modifiedData}
               submitBtnName="Оновити"
             />
           </div>

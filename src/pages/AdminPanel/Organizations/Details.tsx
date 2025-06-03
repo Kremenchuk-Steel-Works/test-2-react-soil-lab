@@ -119,7 +119,7 @@ export default function AdminOrganizationsDetails() {
                   {(() => {
                     const addr = data.addresses.find((a) => a.isPrimary)
                     return addr
-                      ? `${addr.street}, ${addr.cityName}, ${addr.countryName}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
+                      ? `${addr.street}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
                       : "—"
                   })()}
                 </dd>
@@ -131,7 +131,7 @@ export default function AdminOrganizationsDetails() {
                   {(() => {
                     const addr = data.addresses.find((a) => !a.isPrimary)
                     return addr
-                      ? `${addr.street}, ${addr.cityName}, ${addr.countryName}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
+                      ? `${addr.street}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
                       : "—"
                   })()}
                 </dd>

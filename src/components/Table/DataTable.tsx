@@ -24,7 +24,10 @@ import {
 import InputFieldNoLabel from "../InputField/InputFieldNoLabel"
 import type { SetURLSearchParams } from "react-router-dom"
 import ReactSelect, { type Option } from "../Select/ReactSelect"
-import type { StylesConfig } from "react-select"
+import type { CSSObjectWithLabel } from "react-select"
+import CustomMultiSelect, {
+  type SelectOption,
+} from "../Select/ReactSelectCheckbox"
 
 type DataTableProps<T> = {
   data: T[]
@@ -34,6 +37,7 @@ type DataTableProps<T> = {
   setSearchParams: SetURLSearchParams
   enableSortingRemoval?: boolean
   totalPages?: number
+  initialSorting?: SortingState
 }
 
 export function DataTable<T>({
@@ -44,10 +48,14 @@ export function DataTable<T>({
   totalPages,
   setSearchParams,
   enableSortingRemoval = false,
+  initialSorting,
 }: DataTableProps<T>) {
   // Состояния таблицы
-  const [sorting, setSorting] = useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>(initialSorting ?? [])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<
+    Record<string, boolean>
+  >({})
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: page - 1,
     pageSize: perPage,
@@ -67,12 +75,13 @@ export function DataTable<T>({
     enableColumnResizing: true,
     columnResizeMode: "onChange",
     defaultColumn: {
-      size: 75,
-      minSize: 75,
+      size: 100,
+      minSize: 50,
     },
-    state: { sorting, columnFilters, pagination },
+    state: { sorting, columnFilters, columnVisibility, pagination },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
     onPaginationChange: setPagination,
     pageCount: totalPages ?? 0,
     getCoreRowModel: getCoreRowModel(),
@@ -82,39 +91,41 @@ export function DataTable<T>({
     enableSortingRemoval,
   })
 
-  const pageSizeStyles: StylesConfig<Option, false> = {
-    control: (base) => ({
+  const reactStyles = {
+    control: (base: CSSObjectWithLabel) => ({
       ...base,
       minHeight: "36px",
       padding: "0 8px",
     }),
-    valueContainer: (base) => ({
+    valueContainer: (base: CSSObjectWithLabel) => ({
       ...base,
       padding: "0 8px",
     }),
-    input: (base) => ({
+    input: (base: CSSObjectWithLabel) => ({
       ...base,
       margin: "0",
     }),
-    dropdownIndicator: (base) => ({
+    dropdownIndicator: (base: CSSObjectWithLabel) => ({
       ...base,
       paddingTop: "0",
       paddingBottom: "0",
     }),
-    clearIndicator: (base) => ({
+    clearIndicator: (base: CSSObjectWithLabel) => ({
       ...base,
       paddingTop: "0",
       paddingBottom: "0",
     }),
-  }
-
-  const pageSizeClassName = {
-    control: () => "border-0",
   }
 
   const pageSizeOptions = [1, 5, 10, 15, 20].map((size) => ({
     value: size,
     label: String(size),
+  }))
+
+  const columnOptions = table.getAllLeafColumns().map((column) => ({
+    label: String(column.columnDef.header),
+    value: column.id,
+    disabled: !column.getCanHide(),
   }))
 
   return (
@@ -198,13 +209,33 @@ export function DataTable<T>({
               <ListRestart className="w-5 h-5" /> <span>Скинути</span>
             </Button>
           )}
+
+          {/* Выбор колонок */}
+          <CustomMultiSelect
+            placeholder="Колонки"
+            customClassNames={{ control: () => "border-0 w-30" }}
+            customStyles={reactStyles}
+            options={columnOptions}
+            selectedOptions={columnOptions.filter((option) =>
+              table.getColumn(option.value)?.getIsVisible()
+            )}
+            onChange={(selected: SelectOption[]) => {
+              const newVisibility: Record<string, boolean> = {}
+              columnOptions.forEach((option) => {
+                newVisibility[option.value] = selected.some(
+                  (sel) => sel.value === option.value
+                )
+              })
+              setColumnVisibility(newVisibility)
+            }}
+          />
         </div>
         {/* Выбор числа строк */}
         <strong>
           <ReactSelect<Option>
             placeholder="Кількість"
-            customClassNames={pageSizeClassName}
-            customStyles={pageSizeStyles}
+            customClassNames={{ control: () => "border-0" }}
+            customStyles={reactStyles}
             isClearable={false}
             isSearchable={false}
             options={pageSizeOptions}
@@ -240,7 +271,7 @@ export function DataTable<T>({
                     >
                       {!header.isPlaceholder && (
                         <div
-                          className={`flex items-center gap-1 ${
+                          className={`flex items-center ${
                             canSort ? "cursor-pointer" : ""
                           }`}
                           onClick={
@@ -249,29 +280,31 @@ export function DataTable<T>({
                               : undefined
                           }
                         >
-                          <span className="truncate">
-                            {flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                          </span>
-                          {/* Иконки сортировки */}
-                          <ChevronUp
-                            className={`shrink-0 transform transition-all duration-300 ease-in-out origin-center ${
-                              header.column.getIsSorted() === "asc"
-                                ? "opacity-100 w-5 h-5 rotate-0 text-blue-500"
-                                : header.column.getIsSorted() === "desc"
-                                ? "opacity-100 w-5 h-5 rotate-180 text-blue-500"
-                                : "opacity-0 w-0 h-0"
-                            }`}
-                          />
-                          <ChevronsUpDown
-                            className={`shrink-0 transform transition-all duration-300 ease-in-out origin-center text-gray-400 ${
-                              header.column.getIsSorted()
-                                ? "opacity-0 w-0 h-0"
-                                : "opacity-100 w-5 h-5"
-                            }`}
-                          />
+                          <div className="flex items-center min-w-0">
+                            <span className="truncate text-left min-w-0 mr-1">
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                            </span>
+                            {/* Иконки сортировки */}
+                            <ChevronUp
+                              className={`shrink-0 transform transition-all duration-300 ease-in-out origin-center ${
+                                header.column.getIsSorted() === "asc"
+                                  ? "opacity-100 w-5 h-5 rotate-0 text-blue-500"
+                                  : header.column.getIsSorted() === "desc"
+                                  ? "opacity-100 w-5 h-5 rotate-180 text-blue-500"
+                                  : "opacity-0 w-0 h-0"
+                              }`}
+                            />
+                            <ChevronsUpDown
+                              className={`shrink-0 transform transition-all duration-300 ease-in-out origin-center text-gray-400 ${
+                                header.column.getIsSorted()
+                                  ? "opacity-0 w-0 h-0"
+                                  : "opacity-100 w-5 h-5"
+                              }`}
+                            />
+                          </div>
                         </div>
                       )}
                       {/* Элемент управления для изменения размера */}
@@ -304,10 +337,7 @@ export function DataTable<T>({
                   <td
                     key={cell.id}
                     style={{ width: cell.column.getSize() }}
-                    className="
-                            px-4 py-2 
-                            /* whitespace-nowrap + truncate внутри */
-                          "
+                    className="px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap"
                   >
                     <div className="truncate min-w-0">
                       {flexRender(

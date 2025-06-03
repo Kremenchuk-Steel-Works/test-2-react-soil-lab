@@ -17,12 +17,12 @@ export type Option = {
   label: string
 }
 
-type ClassNameFunctionParams = {
+export type ClassNameFunctionParams = {
   isFocused?: boolean
   isSelected?: boolean
 }
 
-type ClassNamesConfig = Partial<{
+export type ClassNamesConfig = Partial<{
   control: (params: ClassNameFunctionParams) => string
   input: () => string
   placeholder: () => string
@@ -55,8 +55,10 @@ function ReactSelect<
     <Select<OptionType, IsMulti, Group>
       {...props}
       noOptionsMessage={() => "Нічого не знайдено"}
+      styles={customStyles}
       unstyled
       components={{
+        ...props.components,
         IndicatorSeparator: () => (
           <span className="w-px h-5 bg-gray-300 dark:bg-gray-600 mx-1.5" />
         ),
@@ -141,10 +143,10 @@ const baseClassNames: ClassNamesConfig = {
     "mt-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 shadow-lg",
   multiValue: () =>
     twMerge(
-      "bg-gray-200 dark:bg-gray-600 rounded pl-2 mx-0.5 flex items-center",
+      "bg-gray-200 dark:bg-gray-600 rounded pl-2 mx-0.5 my-0.5 py-1 flex items-center",
       "text-gray-700 dark:text-gray-300"
     ),
-  multiValueLabel: () => "font-medium",
+  multiValueLabel: () => "",
   multiValueRemove: () =>
     twMerge(
       "ml-1 p-1 px-1 cursor-pointer rounded-md",
