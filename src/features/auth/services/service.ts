@@ -36,16 +36,13 @@ export const authService = {
       }
     }
   },
+
   async refresh({ refreshToken }: TokenRefreshRequest) {
     try {
       const response = await api.post<TokenRefreshResponse>(
         `/auth/refresh`,
         { refreshToken: refreshToken },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { addAccessToken: false }
       )
       return response.data
     } catch (err) {

@@ -1,17 +1,11 @@
 import { type JSX } from "react"
 import { type OptionProps, type StylesConfig } from "react-select"
-import ReactSelect, { type ClassNamesConfig } from "./ReactSelect"
+import ReactSelect, { type ClassNamesConfig, type Option } from "./ReactSelect"
 import { type GroupBase, type Props as SelectProps } from "react-select"
 import Checkbox from "../Checkbox/Checkox"
 
-export interface SelectOption {
-  label: string
-  value: string | number | boolean
-  disabled?: boolean
-}
-
 interface CustomMultiSelectProps<
-  OptionType extends SelectOption,
+  OptionType extends Option,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>
 > extends Omit<
     SelectProps<OptionType, true, Group>,
@@ -24,51 +18,50 @@ interface CustomMultiSelectProps<
 }
 
 const CustomMultiSelect = <
-  OptionType extends SelectOption,
+  OptionType extends Option,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>
 >({
   options,
   selectedOptions,
   onChange,
-  customClassNames = {},
-  customStyles = {},
+  customClassNames,
+  customStyles,
   ...props
 }: CustomMultiSelectProps<OptionType, Group>): JSX.Element => {
-  const OptionComponent = (
-    optionProps: OptionProps<OptionType, true, Group>
-  ): JSX.Element => {
-    const { isSelected, label, innerRef, innerProps } = optionProps
-
-    return (
-      <div
-        ref={innerRef}
-        {...innerProps}
-        className="flex items-center px-2 py-2 cursor-pointer gap-2"
-      >
-        <Checkbox
-          label={label}
-          checked={isSelected}
-          readOnly
-          onClick={(e) => e.stopPropagation()}
-        />
-      </div>
-    )
-  }
+  const OptionComponent = ({
+    isSelected,
+    label,
+    innerRef,
+    innerProps,
+  }: OptionProps<OptionType, true, Group>) => (
+    <div
+      ref={innerRef}
+      {...innerProps}
+      className="flex items-center px-2 py-2 cursor-pointer gap-2"
+    >
+      <Checkbox
+        label={label}
+        checked={isSelected}
+        readOnly
+        onClick={(e) => e.stopPropagation()}
+      />
+    </div>
+  )
 
   return (
-    <ReactSelect<OptionType, true, Group>
+    <ReactSelect
       {...props}
-      options={options}
-      customStyles={customStyles}
-      customClassNames={customClassNames}
       isMulti
+      options={options}
+      value={selectedOptions}
+      onChange={(value) => onChange(value as OptionType[])}
+      customClassNames={customClassNames}
+      customStyles={customStyles}
       controlShouldRenderValue={false}
       isClearable={false}
       closeMenuOnSelect={false}
       hideSelectedOptions={false}
       components={{ Option: OptionComponent }}
-      onChange={(newValue) => onChange(newValue as OptionType[])}
-      value={selectedOptions}
     />
   )
 }

@@ -113,7 +113,6 @@ export default function OrganizationsForm({
           isPrimary: undefined!,
           street: undefined!,
           cityId: undefined!,
-          countryId: undefined!,
         }}
         control={control}
         register={register}

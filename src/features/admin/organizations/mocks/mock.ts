@@ -46,6 +46,7 @@ export const mockOrganizations: OrganizationDetailResponse[] = Array.from(
         {
           id: `addr-${i}-1`,
           street: `Main St. ${i + 1}`,
+          cityId: i + 1000,
           cityName: `City ${i + 1}`,
           countryName: `Country ${i + 1}`,
           postalCode: `1000${i}`,
@@ -58,6 +59,7 @@ export const mockOrganizations: OrganizationDetailResponse[] = Array.from(
         {
           id: `addr-${i}-2`,
           street: `Branch Ave. ${i + 1}`,
+          cityId: i + 2000,
           cityName: `Subcity ${i + 1}`,
           countryName: `Country ${i + 1}`,
           isPrimary: false,

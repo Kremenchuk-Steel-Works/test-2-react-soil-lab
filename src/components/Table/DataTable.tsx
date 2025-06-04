@@ -19,15 +19,15 @@ import {
   ChevronRight,
   ChevronsUpDown,
   ChevronUp,
+  ListFilter,
   ListRestart,
 } from "lucide-react"
 import InputFieldNoLabel from "../InputField/InputFieldNoLabel"
 import type { SetURLSearchParams } from "react-router-dom"
 import ReactSelect, { type Option } from "../Select/ReactSelect"
 import type { CSSObjectWithLabel } from "react-select"
-import CustomMultiSelect, {
-  type SelectOption,
-} from "../Select/ReactSelectCheckbox"
+import CustomMultiSelect from "../Select/ReactSelectCheckbox"
+import BottomSheetButton from "../ui/FilterButton/BottomSheetButton"
 
 type DataTableProps<T> = {
   data: T[]
@@ -130,25 +130,6 @@ export function DataTable<T>({
 
   return (
     <>
-      {/* ===== Строка фильтров ===== */}
-      <div className="flex flex-wrap gap-2 mb-2">
-        {table.getHeaderGroups().map((headerGroup) =>
-          headerGroup.headers.map((header) => {
-            if (!header.column.getCanFilter()) return null
-            const filterValue = (header.column.getFilterValue() ?? "") as string
-            return (
-              <div key={header.id} className="flex flex-col">
-                <InputField
-                  label={`Фильтр ${String(header.column.columnDef.header)}`}
-                  value={filterValue}
-                  onChange={(e) => header.column.setFilterValue(e.target.value)}
-                />
-              </div>
-            )
-          })
-        )}
-      </div>
-
       {/* Навигация по страницам */}
       <div className="flex items-center justify-between mb-1 whitespace-nowrap">
         {/* Кнопки назад/вперёд */}
@@ -219,7 +200,7 @@ export function DataTable<T>({
             selectedOptions={columnOptions.filter((option) =>
               table.getColumn(option.value)?.getIsVisible()
             )}
-            onChange={(selected: SelectOption[]) => {
+            onChange={(selected: Option[]) => {
               const newVisibility: Record<string, boolean> = {}
               columnOptions.forEach((option) => {
                 newVisibility[option.value] = selected.some(
@@ -230,28 +211,63 @@ export function DataTable<T>({
             }}
           />
         </div>
-        {/* Выбор числа строк */}
-        <strong>
-          <ReactSelect<Option>
-            placeholder="Кількість"
-            customClassNames={{ control: () => "border-0" }}
-            customStyles={reactStyles}
-            isClearable={false}
-            isSearchable={false}
-            options={pageSizeOptions}
-            value={pageSizeOptions.find(
-              (opt) => opt.value === table.getState().pagination.pageSize
-            )}
-            onChange={(selectedOption) => {
-              const newSize = selectedOption?.value
-              setPagination((old) => ({
-                ...old,
-                pageSize: Number(newSize),
-                pageIndex: 0, // сброс на первую  страницу
-              }))
+        <div className="flex gap-1">
+          {" "}
+          <BottomSheetButton
+            label={<ListFilter className="w-5 h-5" />}
+            buttonProps={{
+              className:
+                "bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600",
             }}
-          />
-        </strong>
+            sheetProps={{
+              label: <h2 className="text-lg font-semibold">Фільтри</h2>,
+            }}
+          >
+            {/* ===== Строка фильтров ===== */}
+            <div className="flex flex-wrap justify-center gap-2 px-2">
+              {table.getHeaderGroups().map((headerGroup) =>
+                headerGroup.headers.map((header) => {
+                  if (!header.column.getCanFilter()) return null
+                  const filterValue = (header.column.getFilterValue() ??
+                    "") as string
+                  return (
+                    <div key={header.id} className="w-full">
+                      <InputField
+                        label={`${String(header.column.columnDef.header)}`}
+                        value={filterValue}
+                        onChange={(e) =>
+                          header.column.setFilterValue(e.target.value)
+                        }
+                      />
+                    </div>
+                  )
+                })
+              )}
+            </div>
+          </BottomSheetButton>
+          {/* Выбор числа строк */}
+          <strong>
+            <ReactSelect<Option>
+              placeholder="Кількість"
+              customClassNames={{ control: () => "border-0" }}
+              customStyles={reactStyles}
+              isClearable={false}
+              isSearchable={false}
+              options={pageSizeOptions}
+              value={pageSizeOptions.find(
+                (opt) => opt.value === table.getState().pagination.pageSize
+              )}
+              onChange={(selectedOption) => {
+                const newSize = selectedOption?.value
+                setPagination((old) => ({
+                  ...old,
+                  pageSize: Number(newSize),
+                  pageIndex: 0, // сброс на первую  страницу
+                }))
+              }}
+            />
+          </strong>
+        </div>
       </div>
 
       {/* ===== Таблица ===== */}

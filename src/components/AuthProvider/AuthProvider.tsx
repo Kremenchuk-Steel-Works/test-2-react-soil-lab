@@ -59,16 +59,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const authInterceptor = api.interceptors.request.use((config) => {
       const cfg = config as typeof config & { _retry?: boolean }
 
-      // ЛОГ: метод, URL, заголовки
+      // Логирование метода, URL и заголовков до изменения
       logger.debug(`${cfg.method?.toUpperCase()} → ${cfg.url}`, {
         headersBefore: { ...cfg.headers },
       })
 
-      cfg.headers.Authorization =
-        !cfg._retry && accessToken
-          ? `Bearer ${accessToken}`
-          : cfg.headers.Authorization
-      logger.debug(`Добавлен токен → ${cfg.headers.Authorization}`)
+      // Условное добавление токена в заголовки
+      if (!cfg._retry && cfg.addAccessToken !== false && accessToken) {
+        cfg.headers.Authorization = `Bearer ${accessToken}`
+        logger.debug(`Добавлен токен → ${cfg.headers.Authorization}`)
+      }
+
       return cfg
     })
 

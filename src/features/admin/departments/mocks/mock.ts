@@ -8,8 +8,13 @@ export const mockDepartments: DepartmentDetailResponse[] = [
     createdAt: "2023-01-01T09:00:00Z",
     updatedAt: "2024-01-01T09:00:00Z",
     permissions: [
-      { name: "view_employees", description: "Перегляд списку співробітників" },
       {
+        id: 1,
+        name: "view_employees",
+        description: "Перегляд списку співробітників",
+      },
+      {
+        id: 2,
         name: "edit_employees",
         description: "Редагування даних співробітників",
       },
@@ -22,8 +27,8 @@ export const mockDepartments: DepartmentDetailResponse[] = [
     createdAt: "2023-02-01T10:00:00Z",
     updatedAt: "2024-02-01T10:00:00Z",
     permissions: [
-      { name: "manage_systems", description: "Керування ІТ-системами" },
-      { name: "access_logs", description: "Доступ до логів" },
+      { id: 3, name: "manage_systems", description: "Керування ІТ-системами" },
+      { id: 4, name: "access_logs", description: "Доступ до логів" },
     ],
   },
   {
@@ -33,8 +38,8 @@ export const mockDepartments: DepartmentDetailResponse[] = [
     createdAt: "2023-03-01T11:00:00Z",
     updatedAt: "2024-03-01T11:00:00Z",
     permissions: [
-      { name: "view_budget", description: "Перегляд бюджету" },
-      { name: "approve_expenses", description: "Затвердження витрат" },
+      { id: 5, name: "view_budget", description: "Перегляд бюджету" },
+      { id: 6, name: "approve_expenses", description: "Затвердження витрат" },
     ],
   },
   {
@@ -44,8 +49,8 @@ export const mockDepartments: DepartmentDetailResponse[] = [
     createdAt: "2023-04-01T12:00:00Z",
     updatedAt: "2024-04-01T12:00:00Z",
     permissions: [
-      { name: "review_contracts", description: "Розгляд контрактів" },
-      { name: "manage_risks", description: "Управління ризиками" },
+      { id: 7, name: "review_contracts", description: "Розгляд контрактів" },
+      { id: 8, name: "manage_risks", description: "Управління ризиками" },
     ],
   },
   {
@@ -55,8 +60,8 @@ export const mockDepartments: DepartmentDetailResponse[] = [
     createdAt: "2023-05-01T13:00:00Z",
     updatedAt: "2024-05-01T13:00:00Z",
     permissions: [
-      { name: "create_campaigns", description: "Створення кампаній" },
-      { name: "view_analytics", description: "Перегляд аналітики" },
+      { id: 9, name: "create_campaigns", description: "Створення кампаній" },
+      { id: 10, name: "view_analytics", description: "Перегляд аналітики" },
     ],
   },
   {
@@ -66,8 +71,8 @@ export const mockDepartments: DepartmentDetailResponse[] = [
     createdAt: "2023-06-01T14:00:00Z",
     updatedAt: "2024-06-01T14:00:00Z",
     permissions: [
-      { name: "access_clients", description: "Доступ до клієнтів" },
-      { name: "manage_deals", description: "Управління угодами" },
+      { id: 11, name: "access_clients", description: "Доступ до клієнтів" },
+      { id: 12, name: "manage_deals", description: "Управління угодами" },
     ],
   },
   {
@@ -77,8 +82,8 @@ export const mockDepartments: DepartmentDetailResponse[] = [
     createdAt: "2023-07-01T15:00:00Z",
     updatedAt: "2024-07-01T15:00:00Z",
     permissions: [
-      { name: "handle_tickets", description: "Обробка заявок" },
-      { name: "respond_customers", description: "Відповіді клієнтам" },
+      { id: 13, name: "handle_tickets", description: "Обробка заявок" },
+      { id: 14, name: "respond_customers", description: "Відповіді клієнтам" },
     ],
   },
   {
@@ -88,8 +93,8 @@ export const mockDepartments: DepartmentDetailResponse[] = [
     createdAt: "2023-08-01T16:00:00Z",
     updatedAt: "2024-08-01T16:00:00Z",
     permissions: [
-      { name: "monitor_processes", description: "Моніторинг процесів" },
-      { name: "optimize_flows", description: "Оптимізація потоків" },
+      { id: 15, name: "monitor_processes", description: "Моніторинг процесів" },
+      { id: 16, name: "optimize_flows", description: "Оптимізація потоків" },
     ],
   },
   {
@@ -99,8 +104,12 @@ export const mockDepartments: DepartmentDetailResponse[] = [
     createdAt: "2023-09-01T17:00:00Z",
     updatedAt: "2024-09-01T17:00:00Z",
     permissions: [
-      { name: "conduct_research", description: "Проведення досліджень" },
-      { name: "file_patents", description: "Оформлення патентів" },
+      {
+        id: 17,
+        name: "conduct_research",
+        description: "Проведення досліджень",
+      },
+      { id: 18, name: "file_patents", description: "Оформлення патентів" },
     ],
   },
   {
@@ -110,8 +119,16 @@ export const mockDepartments: DepartmentDetailResponse[] = [
     createdAt: "2023-10-01T18:00:00Z",
     updatedAt: "2024-10-01T18:00:00Z",
     permissions: [
-      { name: "monitor_surveillance", description: "Моніторинг спостереження" },
-      { name: "respond_incidents", description: "Реакція на інциденти" },
+      {
+        id: 19,
+        name: "monitor_surveillance",
+        description: "Моніторинг спостереження",
+      },
+      {
+        id: 20,
+        name: "respond_incidents",
+        description: "Реакція на інциденти",
+      },
     ],
   },
 ]
