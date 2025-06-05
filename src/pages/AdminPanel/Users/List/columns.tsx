@@ -19,42 +19,47 @@ export const adminUsersColumns: ColumnDef<UserShortResponse, string>[] = [
   {
     accessorKey: "email",
     header: "Email",
+    size: 100,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
     accessorKey: "isActive",
-    header: "Active",
-    cell: ({ getValue }) => (getValue() ? "Yes" : "No"),
+    header: "Активний?",
+    size: 140,
+    cell: ({ getValue }) => (getValue() ? "Так" : "Ні"),
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: (row, columnId, filterValue) => {
-      const displayValue = row.getValue<boolean>(columnId) ? "Yes" : "No"
+      const displayValue = row.getValue<boolean>(columnId) ? "Так" : "Ні"
       return displayValue.toLowerCase().includes(filterValue.toLowerCase())
     },
   },
   {
     accessorKey: "isSuperuser",
-    header: "Superuser",
-    cell: ({ getValue }) => (getValue() ? "Yes" : "No"),
+    header: "Адмін?",
+    size: 115,
+    cell: ({ getValue }) => (getValue() ? "Так" : "Ні"),
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: (row, columnId, filterValue) => {
-      const displayValue = row.getValue<boolean>(columnId) ? "Yes" : "No"
+      const displayValue = row.getValue<boolean>(columnId) ? "Так" : "Ні"
       return displayValue.toLowerCase().includes(filterValue.toLowerCase())
     },
   },
   {
     accessorKey: "fullName",
-    header: "Full Name",
+    header: "Повне ім'я",
+    size: 145,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
     accessorKey: "lastLoginAt",
-    header: "Last Login",
+    header: "Останній вхід",
+    size: 165,
     enableSorting: true,
     enableColumnFilter: true,
     cell: ({ getValue }) =>
@@ -68,7 +73,8 @@ export const adminUsersColumns: ColumnDef<UserShortResponse, string>[] = [
   {
     accessorFn: (row) => row.roleNames.join(", "),
     id: "roleNames",
-    header: "Roles",
+    header: "Роль",
+    size: 95,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
@@ -76,7 +82,8 @@ export const adminUsersColumns: ColumnDef<UserShortResponse, string>[] = [
   {
     accessorFn: (row) => row.permissionNames.join(", "),
     id: "permissionNames",
-    header: "Permissions",
+    header: "Права доступу",
+    size: 175,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",

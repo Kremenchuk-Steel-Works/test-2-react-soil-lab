@@ -21,14 +21,16 @@ export const adminPermissionsColumns: ColumnDef<
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Назва",
+    size: 100,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
     accessorKey: "departmentName",
-    header: "Department Name",
+    header: "Назва відділу",
+    size: 100,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",

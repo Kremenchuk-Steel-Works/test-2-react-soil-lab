@@ -37,7 +37,7 @@ export const SubMenu: React.FC<SubMenuProps> = ({
       <button
         ref={btnRef}
         onClick={() => toggleSubMenu(elementId, isMainMenu)}
-        className="w-full flex items-center justify-between px-4.5 py-4 cursor-pointer hover:bg-blue-200 dark:hover:bg-blue-700"
+        className="w-full flex items-center justify-between px-4.5 py-4 cursor-pointer hover:bg-gray-200 dark:hover:bg-blue-700"
       >
         <div
           className={`flex items-center gap-2 min-w-0`}
@@ -87,7 +87,7 @@ export const SubMenu: React.FC<SubMenuProps> = ({
       {/* Открытие Submenu с анимацией */}
       {(!collapsed || !isMainMenu) && (
         <CollapseFM isOpen={isExpandedOpen} key={elementId}>
-          <div className="bg-blue-50 dark:bg-[#0e1523] [&_a]:pl-8 [&_button]:pl-8">
+          <div className="bg-gray-100 dark:bg-[#0e1523] [&_a]:pl-8 [&_button]:pl-8">
             {children}
           </div>
         </CollapseFM>

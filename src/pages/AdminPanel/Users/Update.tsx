@@ -2,10 +2,13 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { UpdateUserFormFields } from "../../../features/admin/users/forms/schema"
-import UpdateUsersForm from "../../../features/admin/users/forms/updateForm"
+import {
+  userUpdateSchema,
+  type UserUpdateFormFields,
+} from "../../../features/admin/users/forms/schema"
 import type { UserDetailResponse } from "../../../features/admin/users/types/response.dto"
 import { usersService } from "../../../features/admin/users/services/service"
+import UsersForm from "../../../features/admin/users/forms/form"
 
 export default function AdminUsersUpdate() {
   const navigate = useNavigate()
@@ -22,7 +25,7 @@ export default function AdminUsersUpdate() {
     enabled: !!id,
   })
 
-  const handleSubmit = async (data: UpdateUserFormFields) => {
+  const handleSubmit = async (data: UserUpdateFormFields) => {
     // await apiPeopleAdd()
     navigate("..")
     return data
@@ -45,7 +48,8 @@ export default function AdminUsersUpdate() {
       {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
-            <UpdateUsersForm
+            <UsersForm
+              schema={userUpdateSchema}
               onSubmit={handleSubmit}
               defaultValues={data}
               submitBtnName="Оновити"

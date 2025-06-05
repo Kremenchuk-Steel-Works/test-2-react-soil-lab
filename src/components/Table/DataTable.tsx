@@ -51,7 +51,9 @@ export function DataTable<T>({
   initialSorting,
 }: DataTableProps<T>) {
   // Состояния таблицы
-  const [sorting, setSorting] = useState<SortingState>(initialSorting ?? [])
+  const [sorting, setSorting] = useState<SortingState>(
+    initialSorting ?? [{ id: "id", desc: false }]
+  )
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<
     Record<string, boolean>
@@ -95,6 +97,8 @@ export function DataTable<T>({
     control: (base: CSSObjectWithLabel) => ({
       ...base,
       minHeight: "36px",
+      height: "36px",
+      minWidth: "85px",
       padding: "0 8px",
     }),
     valueContainer: (base: CSSObjectWithLabel) => ({
@@ -132,69 +136,13 @@ export function DataTable<T>({
     <>
       {/* Навигация по страницам */}
       <div className="flex items-center justify-between mb-1 whitespace-nowrap">
-        {/* Кнопки назад/вперёд */}
-        <div className="flex gap-1 items-center">
-          <Button
-            className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
-            disabled={!table.getCanPreviousPage()}
-            onClick={() => table.firstPage()}
-          >
-            <ChevronFirst className="w-5 h-5" />
-          </Button>
-          <Button
-            className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
-            disabled={!table.getCanPreviousPage()}
-            onClick={() => table.previousPage()}
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </Button>
-          <strong className="flex items-center">
-            <InputFieldNoLabel
-              className="w-13"
-              inputClassName="h-9 border-0 focus:ring-0 px-0 text-center dark:bg-gray-800 bg-gray-100"
-              type="number"
-              value={table.getState().pagination.pageIndex + 1}
-              onChange={(e) => {
-                table.setPageIndex(Number(e.target.value) - 1)
-              }}
-            />
-            <span className="select-none">/</span>
-            <InputFieldNoLabel
-              className="w-13"
-              inputClassName="h-9 border-0 focus:ring-0 px-0 text-center dark:bg-gray-800 bg-gray-100"
-              type="number"
-              readOnly
-              value={table.getPageCount()}
-            />
-          </strong>
-          <Button
-            className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
-            disabled={!table.getCanNextPage()}
-            onClick={() => table.nextPage()}
-          >
-            <ChevronRight className="w-5 h-5" />
-          </Button>
-          <Button
-            className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
-            disabled={!table.getCanNextPage()}
-            onClick={() => table.lastPage()}
-          >
-            <ChevronLast className="w-5 h-5" />
-          </Button>
-          {/* Кнопка сброса фильтров */}
-          {table.getState().columnFilters.some((f) => f.value !== "") && (
-            <Button
-              className="flex items-center justify-center gap-50. py-1.5 whitespace-nowrap text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
-              onClick={() => table.resetColumnFilters()}
-            >
-              <ListRestart className="w-5 h-5" /> <span>Скинути</span>
-            </Button>
-          )}
-
+        <div className="flex items-center gap-1">
           {/* Выбор колонок */}
           <CustomMultiSelect
-            placeholder="Колонки"
-            customClassNames={{ control: () => "border-0 w-30" }}
+            placeholder="Вибір колонок"
+            customClassNames={{
+              control: () => "border-0 bg-gray-200 dark:bg-gray-700",
+            }}
             customStyles={reactStyles}
             options={columnOptions}
             selectedOptions={columnOptions.filter((option) =>
@@ -210,21 +158,21 @@ export function DataTable<T>({
               setColumnVisibility(newVisibility)
             }}
           />
-        </div>
-        <div className="flex gap-1">
-          {" "}
+          {/* Кнопка фильтров */}
           <BottomSheetButton
-            label={<ListFilter className="w-5 h-5" />}
+            label={
+              <ListFilter className="w-5 h-5 text-slate-700 dark:text-slate-300" />
+            }
             buttonProps={{
               className:
                 "bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600",
             }}
             sheetProps={{
-              label: <h2 className="text-lg font-semibold">Фільтри</h2>,
+              label: <p className="text-lg font-semibold">Фільтри</p>,
             }}
           >
             {/* ===== Строка фильтров ===== */}
-            <div className="flex flex-wrap justify-center gap-2 px-2">
+            <div className="flex flex-wrap justify-center gap-2 px-2 py-2">
               {table.getHeaderGroups().map((headerGroup) =>
                 headerGroup.headers.map((header) => {
                   if (!header.column.getCanFilter()) return null
@@ -245,11 +193,24 @@ export function DataTable<T>({
               )}
             </div>
           </BottomSheetButton>
+          {/* Кнопка сброса фильтров */}
+          {table.getState().columnFilters.some((f) => f.value !== "") && (
+            <Button
+              className="flex items-center justify-center gap-50. py-1.5 whitespace-nowrap text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+              onClick={() => table.resetColumnFilters()}
+            >
+              <ListRestart className="w-5 h-6" />
+            </Button>
+          )}
+        </div>
+        <div className="flex items-center gap-1">
           {/* Выбор числа строк */}
-          <strong>
+          <strong className="flex items-center">
             <ReactSelect<Option>
               placeholder="Кількість"
-              customClassNames={{ control: () => "border-0" }}
+              customClassNames={{
+                control: () => "border-0 bg-gray-200 dark:bg-gray-700",
+              }}
               customStyles={reactStyles}
               isClearable={false}
               isSearchable={false}
@@ -367,6 +328,56 @@ export function DataTable<T>({
             ))}
           </tbody>
         </table>
+      </div>
+      {/* Кнопки назад/вперёд */}
+      <div className="flex gap-1 items-center">
+        <Button
+          className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          disabled={!table.getCanPreviousPage()}
+          onClick={() => table.firstPage()}
+        >
+          <ChevronFirst className="w-5 h-5" />
+        </Button>
+        <Button
+          className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          disabled={!table.getCanPreviousPage()}
+          onClick={() => table.previousPage()}
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </Button>
+        <strong className="flex items-center">
+          <InputFieldNoLabel
+            className="w-13"
+            inputClassName="h-9 border-0 focus:ring-0 px-0 text-center dark:bg-gray-800 bg-gray-100"
+            type="number"
+            value={table.getState().pagination.pageIndex + 1}
+            onChange={(e) => {
+              table.setPageIndex(Number(e.target.value) - 1)
+            }}
+          />
+          <span className="select-none">/</span>
+          <InputFieldNoLabel
+            className="w-13"
+            inputClassName="h-9 border-0 focus:ring-0 px-0 text-center dark:bg-gray-800 bg-gray-100"
+            type="number"
+            readOnly
+            value={table.getPageCount()}
+          />
+        </strong>
+        <Button
+          className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          disabled={!table.getCanNextPage()}
+          onClick={() => table.nextPage()}
+        >
+          <ChevronRight className="w-5 h-5" />
+        </Button>
+        <Button
+          className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          disabled={!table.getCanNextPage()}
+          onClick={() => table.lastPage()}
+        >
+          <ChevronLast className="w-5 h-5" />
+        </Button>
       </div>
     </>
   )

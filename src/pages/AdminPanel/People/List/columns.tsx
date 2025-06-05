@@ -17,24 +17,24 @@ export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
   },
   {
     accessorKey: "fullName",
-    header: "Full Name",
-    size: 140,
+    header: "Повне ім'я",
+    size: 145,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
     accessorKey: "gender",
-    header: "Gender",
-    size: 120,
+    header: "Стать",
+    size: 100,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
     accessorKey: "photoUrl",
-    header: "Photo",
-    size: 110,
+    header: "Фото",
+    size: 100,
     cell: ({ getValue }) =>
       getValue() ? (
         <img
@@ -48,35 +48,44 @@ export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
   },
   {
     accessorKey: "isUser",
-    header: "User",
-    cell: ({ getValue }) => (getValue() ? "Yes" : "No"),
+    header: "Користувач?",
+    size: 155,
+    cell: ({ getValue }) => (getValue() ? "Так" : "Н"),
     enableSorting: true,
+    filterFn: (row, columnId, filterValue) => {
+      const displayValue = row.getValue<boolean>(columnId) ? "Так" : "Ні"
+      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
+    },
   },
   {
     accessorKey: "isEmployee",
-    header: "Employee",
+    header: "Робітник?",
     size: 135,
-    cell: ({ getValue }) => (getValue() ? "Yes" : "No"),
+    cell: ({ getValue }) => (getValue() ? "Так" : "Ні"),
     enableSorting: true,
+    filterFn: (row, columnId, filterValue) => {
+      const displayValue = row.getValue<boolean>(columnId) ? "Так" : "Ні"
+      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
+    },
   },
   {
     accessorKey: "contactsCount",
-    header: "Contacts",
-    size: 130,
+    header: "К-сть контактів",
+    size: 180,
     enableSorting: true,
     cell: ({ getValue }) => getValue() ?? 0,
   },
   {
     accessorKey: "addressesCount",
-    header: "Addresses",
-    size: 140,
+    header: "К-сть адрес",
+    size: 150,
     enableSorting: true,
     cell: ({ getValue }) => getValue() ?? 0,
   },
   {
     accessorKey: "organizationNames",
-    header: "Organizations",
-    size: 165,
+    header: "Організація",
+    size: 150,
     cell: ({ getValue }) => {
       const value = getValue<string[]>()
       return Array.isArray(value) ? value.join(", ") : ""
@@ -86,8 +95,8 @@ export const adminPeopleColumns: ColumnDef<PersonListItemResponse, string>[] = [
   },
   {
     accessorKey: "positionNames",
-    header: "Positions",
-    size: 130,
+    header: "Посада",
+    size: 115,
     cell: ({ getValue }) => {
       const value = getValue<string[]>()
       return Array.isArray(value) ? value.join(", ") : ""

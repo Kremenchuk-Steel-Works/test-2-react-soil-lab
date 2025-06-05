@@ -35,7 +35,7 @@ const Sidebar: React.FC = () => {
         }
       >
         {/* Обёртка для скролла */}
-        <div className="flex-1 overflow-y-auto scrollbar-hide">
+        <div className="flex-1 overflow-y-auto">
           <nav onClick={(e) => e.stopPropagation()}>
             {visibleRoutes
               .filter((route) => route.inSidebar !== false)

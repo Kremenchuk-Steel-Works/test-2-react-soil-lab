@@ -27,7 +27,7 @@ export default function MenuItem({ label, Icon, to }: MenuItemProps) {
     <Link
       to={to}
       onClick={handleClick}
-      className="flex items-center gap-2 px-4.5 py-4 hover:bg-blue-200 dark:hover:bg-blue-700"
+      className="flex items-center gap-2 px-4.5 py-4 hover:bg-gray-200 dark:hover:bg-blue-700"
       {...(isTruncated || collapsed ? { title: label } : {})}
     >
       {Icon && <Icon className="w-5 h-5 flex-shrink-0" />}

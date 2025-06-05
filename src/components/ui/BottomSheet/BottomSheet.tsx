@@ -1,6 +1,8 @@
 import ReactDOM from "react-dom"
+import { twMerge } from "tailwind-merge"
 
 export interface BottomSheetProps {
+  className?: string
   isOpen: boolean
   onClose: () => void
   children: React.ReactNode
@@ -10,6 +12,7 @@ export interface BottomSheetProps {
 }
 
 const BottomSheet: React.FC<BottomSheetProps> = ({
+  className,
   isOpen,
   onClose,
   children,
@@ -26,9 +29,12 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
       <div className="absolute inset-0 bg-black/25" onClick={onClose} />
       {/* Плашка */}
       <div
-        className={`flex flex-col relative w-6/7 max-h-3/4 max-w-200 bg-gray-50 dark:bg-gray-800 text-slate-700 dark:text-slate-300 rounded-lg shadow-lg transform transition-transform duration-300 ${
-          isOpen ? "scale-100" : "scale-0"
-        }`}
+        className={twMerge(
+          `flex flex-col relative w-6/7 max-h-full max-w-200 bg-gray-50 dark:bg-gray-800 text-slate-700 dark:text-slate-300 rounded-lg shadow-lg transform transition-transform duration-300 ${
+            isOpen ? "scale-100" : "scale-0"
+          }`,
+          className
+        )}
       >
         {label && (
           <div className="p-2 shrink-0 flex items-center justify-center">
@@ -36,7 +42,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
           </div>
         )}
         {/* Прокручиваемая область */}
-        <div className="flex-1 overflow-y-auto p-4">{children}</div>
+        <div className="flex-1 overflow-y-auto px-4 pb-4">{children}</div>
         {footer && <div className="p-2 shrink-0">{footer}</div>}
       </div>
     </div>,

@@ -1,4 +1,10 @@
-import { Controller, useForm, type SubmitHandler } from "react-hook-form"
+import {
+  Controller,
+  useForm,
+  type DefaultValues,
+  type Path,
+  type SubmitHandler,
+} from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
@@ -7,39 +13,46 @@ import {
   ReactSelectWithError,
   ReactSelectMultiWithError,
 } from "../../../../components/WithError/fieldsWithError"
-import { userSchema, type UserFormFields } from "./schema"
 import { logger } from "../../../../utils/logger"
 import { formTransformers } from "../../../../utils/formTransformers"
 import { mockPeople } from "../../people/mocks/mock"
 import { mockRoles } from "../../roles/mocks/mock"
 import { mockPermissions } from "../../permissions/mocks/mock"
+import { ZodObject, type z, type ZodType } from "zod"
+import { getFieldError } from "../../../../utils/zodHelpers"
+import { forwardRef, useImperativeHandle } from "react"
 
-type FormFields = UserFormFields
-const schema = userSchema
-
-interface FormProps {
-  defaultValues?: Partial<FormFields>
-  onSubmit: SubmitHandler<FormFields>
+interface FormProps<T extends ZodType<any, any>> {
+  schema: T
+  defaultValues?: DefaultValues<z.infer<T>>
+  onSubmit: SubmitHandler<z.infer<T>>
   submitBtnName: string
 }
 
-export default function UsersForm({
-  defaultValues,
-  onSubmit,
-  submitBtnName,
-}: FormProps) {
+function UsersForm<T extends ZodType<any, any>>(
+  { schema, defaultValues, onSubmit, submitBtnName }: FormProps<T>,
+  ref: React.Ref<{ reset: () => void }>
+) {
   const {
     control,
     register,
+    reset,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<FormFields>({
+  } = useForm<z.infer<T>>({
     resolver: zodResolver(schema),
     defaultValues,
   })
+  useImperativeHandle(ref, () => ({
+    reset: () => reset(),
+  }))
 
-  const submitHandler: SubmitHandler<FormFields> = async (data) => {
+  const schemaKeys =
+    schema instanceof ZodObject
+      ? (Object.keys(schema.shape) as (keyof z.infer<T>)[])
+      : []
+  const submitHandler: SubmitHandler<z.infer<T>> = async (data) => {
     try {
       const response = await onSubmit(data)
       logger.debug("Форма успешно выполнена", response)
@@ -76,86 +89,100 @@ export default function UsersForm({
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
-      <Controller
-        name={`personId`}
-        control={control}
-        render={({ field }) => (
-          <ReactSelectWithError
-            placeholder="Оберіть людину"
-            isClearable={true}
-            options={peopleOptions}
-            value={peopleOptions.find((opt) => opt.value === field.value)}
-            onChange={(option) => field.onChange(option?.value)}
-            errorMessage={errors.personId?.message}
-          />
-        )}
-      />
+      {schemaKeys.includes("personId") && (
+        <Controller
+          name={`personId` as Path<T>}
+          control={control}
+          render={({ field }) => (
+            <ReactSelectWithError
+              placeholder="Оберіть людину"
+              isClearable={true}
+              options={peopleOptions}
+              value={peopleOptions.find((opt) => opt.value === field.value)}
+              onChange={(option) => field.onChange(option?.value)}
+              errorMessage={getFieldError(errors.personId)}
+            />
+          )}
+        />
+      )}
 
-      <InputFieldWithError
-        label="Email"
-        type="email"
-        errorMessage={errors.email?.message}
-        {...register("email", formTransformers.string)}
-      />
+      {schemaKeys.includes("email") && (
+        <InputFieldWithError
+          label="Email"
+          type="email"
+          {...register("email" as Path<T>, formTransformers.string)}
+          errorMessage={getFieldError(errors.email)}
+        />
+      )}
 
-      <InputFieldWithError
-        label="Пароль"
-        type="password"
-        errorMessage={errors.rawPassword?.message}
-        {...register("rawPassword", formTransformers.string)}
-      />
+      {schemaKeys.includes("rawPassword") && (
+        <InputFieldWithError
+          label="Пароль"
+          type="password"
+          {...register("rawPassword" as Path<T>, formTransformers.string)}
+          errorMessage={getFieldError(errors.rawPassword)}
+        />
+      )}
 
-      <CheckboxWithError
-        label="Активний"
-        {...register("isActive", formTransformers.string)}
-        errorMessage={errors.isActive?.message}
-      />
+      {schemaKeys.includes("isActive") && (
+        <CheckboxWithError
+          label="Активний"
+          {...register("isActive" as Path<T>, formTransformers.string)}
+          errorMessage={getFieldError(errors.isActive)}
+        />
+      )}
 
-      <CheckboxWithError
-        label="Адміністратор"
-        {...register("isSuperuser", formTransformers.string)}
-        errorMessage={errors.isSuperuser?.message}
-      />
+      {schemaKeys.includes("isSuperuser") && (
+        <CheckboxWithError
+          label="Адміністратор"
+          {...register("isSuperuser" as Path<T>, formTransformers.string)}
+          errorMessage={getFieldError(errors.isSuperuser)}
+        />
+      )}
 
-      <Controller
-        name="rolesIds"
-        control={control}
-        render={({ field }) => (
-          <ReactSelectMultiWithError
-            placeholder="Оберіть ролі"
-            isMulti={true}
-            isClearable={true}
-            options={rolesOptions}
-            value={rolesOptions.filter((opt) =>
-              field.value?.includes(opt.value)
-            )}
-            onChange={(selectedOptions) =>
-              field.onChange(selectedOptions?.map((opt) => opt.value) || [])
-            }
-            errorMessage={errors.rolesIds?.message}
-          />
-        )}
-      />
+      {schemaKeys.includes("rolesIds") && (
+        <Controller
+          name={"rolesIds" as Path<T>}
+          control={control}
+          render={({ field }) => (
+            <ReactSelectMultiWithError
+              placeholder="Оберіть ролі"
+              isMulti={true}
+              isClearable={true}
+              options={rolesOptions}
+              value={rolesOptions.filter((opt) =>
+                field.value?.includes(opt.value)
+              )}
+              onChange={(selectedOptions) =>
+                field.onChange(selectedOptions?.map((opt) => opt.value) || [])
+              }
+              errorMessage={getFieldError(errors.rolesIds)}
+            />
+          )}
+        />
+      )}
 
-      <Controller
-        name="permissionsIds"
-        control={control}
-        render={({ field }) => (
-          <ReactSelectMultiWithError
-            placeholder="Оберіть права доступу"
-            isMulti={true}
-            isClearable={true}
-            options={permissionsOptions}
-            value={permissionsOptions.filter((opt) =>
-              field.value?.includes(opt.value)
-            )}
-            onChange={(selectedOptions) =>
-              field.onChange(selectedOptions?.map((opt) => opt.value) || [])
-            }
-            errorMessage={errors.permissionsIds?.message}
-          />
-        )}
-      />
+      {schemaKeys.includes("permissionsIds") && (
+        <Controller
+          name={"permissionsIds" as Path<T>}
+          control={control}
+          render={({ field }) => (
+            <ReactSelectMultiWithError
+              placeholder="Оберіть права доступу"
+              isMulti={true}
+              isClearable={true}
+              options={permissionsOptions}
+              value={permissionsOptions.filter((opt) =>
+                field.value?.includes(opt.value)
+              )}
+              onChange={(selectedOptions) =>
+                field.onChange(selectedOptions?.map((opt) => opt.value) || [])
+              }
+              errorMessage={getFieldError(errors.permissionsIds)}
+            />
+          )}
+        />
+      )}
 
       <ButtonWithError
         className="w-full"
@@ -168,3 +195,5 @@ export default function UsersForm({
     </form>
   )
 }
+
+export default forwardRef(UsersForm)

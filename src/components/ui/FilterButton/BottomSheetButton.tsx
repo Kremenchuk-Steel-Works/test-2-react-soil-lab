@@ -9,7 +9,9 @@ interface BottomSheetButtonProps {
     React.ComponentProps<typeof BottomSheet>,
     "isOpen" | "onClose" | "children"
   >
-  children: React.ReactNode
+  children:
+    | React.ReactNode
+    | ((props: { onSuccess: () => void }) => React.ReactNode)
 }
 
 const BottomSheetButton: React.FC<BottomSheetButtonProps> = ({
@@ -23,13 +25,20 @@ const BottomSheetButton: React.FC<BottomSheetButtonProps> = ({
   const open = useCallback(() => setIsOpen(true), [])
   const close = useCallback(() => setIsOpen(false), [])
 
+  const renderChildren = () => {
+    if (typeof children === "function") {
+      return children({ onSuccess: close })
+    }
+    return children
+  }
+
   return (
     <>
       <Button onClick={open} {...buttonProps}>
         {label}
       </Button>
       <BottomSheet isOpen={isOpen} onClose={close} {...sheetProps}>
-        {children}
+        {renderChildren()}
       </BottomSheet>
     </>
   )

@@ -1,5 +1,5 @@
 import { ChevronDown, X } from "lucide-react"
-import type { JSX } from "react"
+import { type JSX } from "react"
 import Select, {
   type GroupBase,
   type Props as SelectProps,
@@ -11,6 +11,7 @@ import {
   type DropdownIndicatorProps,
 } from "react-select"
 import { twMerge } from "tailwind-merge"
+import AnimatedMenu from "./ReactSelectMenu"
 
 export type Option = {
   value: string | number | boolean | undefined
@@ -59,6 +60,7 @@ function ReactSelect<
       unstyled
       components={{
         ...props.components,
+        Menu: AnimatedMenu,
         IndicatorSeparator: () => (
           <span className="w-px h-5 bg-gray-300 dark:bg-gray-600 mx-1.5" />
         ),

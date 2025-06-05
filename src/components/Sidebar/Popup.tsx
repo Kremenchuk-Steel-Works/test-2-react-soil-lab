@@ -64,10 +64,10 @@ const Popup = ({
         className="
           w-70
           fixed
-          bg-blue-50 dark:bg-[#0e1523]
+          bg-gray-50 dark:bg-[#0e1523]
           shadow-lg z-50
-          max-h-[50vh]  /* ограничиваем % высоты экрана */
-          overflow-y-auto scrollbar-hide"
+          max-h-[50vh]
+          overflow-y-auto"
         style={style}
       >
         {children}

@@ -32,7 +32,6 @@ export default function AdminUsersList() {
     },
     placeholderData: keepPreviousData,
   })
-
   return (
     <>
       <div className="flex justify-between items-center">
@@ -53,6 +52,22 @@ export default function AdminUsersList() {
       {isError && (
         <p className="text-red-600">Помилка: {queryError?.message}</p>
       )}
+
+      {/* <BottomSheetButton
+        label={<Plus className="w-5 h-5 text-slate-700 dark:text-slate-300" />}
+        buttonProps={{
+          className:
+            "bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600",
+        }}
+        sheetProps={{
+          className: "h-full",
+          label: <p />,
+        }}
+      >
+        {({ onSuccess }) => (
+          <AdminUsersAdd2 key={formKey} onSuccess={onSuccess} />
+        )}
+      </BottomSheetButton> */}
 
       {!isLoading && !isError && data && (
         <DataTable

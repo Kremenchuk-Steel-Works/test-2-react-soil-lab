@@ -62,7 +62,6 @@ export default function AdminPeopleList() {
           page={pageFromUrl}
           perPage={perPageFromUrl}
           totalPages={data?.totalPages}
-          initialSorting={[{ id: "id", desc: false }]}
         />
       )}
     </>

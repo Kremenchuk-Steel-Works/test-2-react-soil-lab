@@ -18,21 +18,24 @@ export const adminRolesColumns: ColumnDef<RoleShortResponse, string>[] = [
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: "Назва",
+    size: 100,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
     accessorKey: "description",
-    header: "Description",
+    header: "Опис",
+    size: 100,
     enableSorting: true,
     enableColumnFilter: true,
     filterFn: "includesString",
   },
   {
     accessorKey: "permissions",
-    header: "Permissions",
+    header: "Права доступу",
+    size: 100,
     enableSorting: false,
     enableColumnFilter: false,
     cell: (row) => {
