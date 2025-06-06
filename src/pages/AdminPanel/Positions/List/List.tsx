@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
@@ -6,14 +6,11 @@ import { DataTable } from "../../../../components/Table/DataTable"
 import { adminPositionsColumns } from "./columns"
 import { positionsService } from "../../../../features/admin/positions/services/service"
 import type { PositionListResponse } from "../../../../features/admin/positions/types/response.dto"
+import { usePaginationParams } from "../../../../hooks/usePaginationParams"
 
 export default function AdminPositionsList() {
   // Состояние из URL
-  const [searchParams, setSearchParams] = useSearchParams()
-  const pageFromUrl = Number(searchParams.get("page")) || 1
-  const rawPerPageFromUrl = Number(searchParams.get("perPage")) || 10
-  const perPageFromUrl = rawPerPageFromUrl > 20 ? 20 : rawPerPageFromUrl
-
+  const { page, perPage, setSearchParams } = usePaginationParams()
   const navigate = useNavigate()
 
   // Получение данных, usersData
@@ -23,11 +20,11 @@ export default function AdminPositionsList() {
     isError,
     error: queryError,
   } = useQuery<PositionListResponse, Error>({
-    queryKey: ["adminPositionsData", pageFromUrl, perPageFromUrl],
+    queryKey: ["adminPositionsData", page, perPage],
     queryFn: () => {
       return positionsService.getList({
-        page: pageFromUrl,
-        perPage: perPageFromUrl,
+        page: page,
+        perPage: perPage,
       })
     },
     placeholderData: keepPreviousData,
@@ -59,8 +56,8 @@ export default function AdminPositionsList() {
           data={data?.data ?? []}
           columns={adminPositionsColumns}
           setSearchParams={setSearchParams}
-          page={pageFromUrl}
-          perPage={perPageFromUrl}
+          page={page}
+          perPage={perPage}
           totalPages={data?.totalPages}
         />
       )}

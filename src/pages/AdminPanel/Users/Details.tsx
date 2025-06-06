@@ -4,6 +4,8 @@ import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 import { usersService } from "../../../features/admin/users/services/service"
 import type { UserDetailResponse } from "../../../features/admin/users/types/response.dto"
+// import BottomSheetButton from "../../../components/ui/FilterButton/BottomSheetButton"
+// import AdminUsersUpdate2 from "./Update copy"
 
 export default function AdminUsersDetails() {
   const navigate = useNavigate()
@@ -139,6 +141,25 @@ export default function AdminUsersDetails() {
               >
                 <Pen className="w-5 h-5" /> <span>Редагувати</span>
               </Button>
+
+              {/* <BottomSheetButton
+                label={
+                  <>
+                    <Pen className="w-5 h-5" /> <span>Редагувати</span>
+                  </>
+                }
+                buttonProps={{
+                  customColor: "orange",
+                  className:
+                    "flex items-center justify-center gap-1 whitespace-nowrap",
+                }}
+                sheetProps={{
+                  className: "h-full",
+                  label: <p className="text-lg font-semibold">Користувач</p>,
+                }}
+              >
+                {({ onSuccess }) => <AdminUsersUpdate2 onSuccess={onSuccess} />}
+              </BottomSheetButton> */}
             </div>
           </div>
         )}

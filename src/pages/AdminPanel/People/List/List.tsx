@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
@@ -6,15 +6,14 @@ import { DataTable } from "../../../../components/Table/DataTable"
 import { adminPeopleColumns } from "./columns"
 import { peopleService } from "../../../../features/admin/people/services/service"
 import type { PersonListResponse } from "../../../../features/admin/people/types/response.dto"
+import { usePaginationParams } from "../../../../hooks/usePaginationParams"
+// import { useModal } from "../../../../components/ui/Modal/ModalContext"
 
 export default function AdminPeopleList() {
   // Состояние из URL
-  const [searchParams, setSearchParams] = useSearchParams()
-  const pageFromUrl = Number(searchParams.get("page")) || 1
-  const rawPerPageFromUrl = Number(searchParams.get("perPage")) || 10
-  const perPageFromUrl = rawPerPageFromUrl > 20 ? 20 : rawPerPageFromUrl
-
+  const { page, perPage, setSearchParams } = usePaginationParams()
   const navigate = useNavigate()
+  // const { openModal } = useModal()
 
   // Получение данных, usersData
   const {
@@ -23,11 +22,11 @@ export default function AdminPeopleList() {
     isError,
     error: queryError,
   } = useQuery<PersonListResponse, Error>({
-    queryKey: ["adminPeopleData", pageFromUrl, perPageFromUrl],
+    queryKey: ["adminPeopleData", page, perPage],
     queryFn: () => {
       return peopleService.getList({
-        page: pageFromUrl,
-        perPage: perPageFromUrl,
+        page: page,
+        perPage: perPage,
       })
     },
     placeholderData: keepPreviousData,
@@ -54,13 +53,25 @@ export default function AdminPeopleList() {
         <p className="text-red-600">Помилка: {queryError?.message}</p>
       )}
 
+      {/* <Button
+        className="flex items-center justify-center gap-1 whitespace-nowrap"
+        onClick={() =>
+          openModal({
+            label: <p className="text-lg font-semibold">Користувач</p>,
+            children: <AdminPeopleAdd />,
+          })
+        }
+      >
+        <Plus className="w-5 h-5" /> <span>Додати modal</span>
+      </Button> */}
+
       {!isLoading && !isError && data && (
         <DataTable
           data={data?.data ?? []}
           columns={adminPeopleColumns}
           setSearchParams={setSearchParams}
-          page={pageFromUrl}
-          perPage={perPageFromUrl}
+          page={page}
+          perPage={perPage}
           totalPages={data?.totalPages}
         />
       )}

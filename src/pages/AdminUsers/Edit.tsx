@@ -2,20 +2,20 @@
 // import { useNavigate, useParams } from "react-router-dom"
 // import { ArrowLeft } from "lucide-react"
 // import { apiUsersDetail, apiUsersEdit } from "../../services/user"
-// import { UserForm2, userSchema2 } from "../../components/Forms/UserForm"
 // import { useQuery } from "@tanstack/react-query"
 // import { z } from "zod"
 // import type { User } from "../../types/user"
+// import UserForm, { userSchemaOld } from "../../components/Forms/UserForm"
 
 // // Создание новой схемы без поля raw_password
-// export const userSchemaWithoutPassword = userSchema2.omit({
+// export const userSchemaWithoutPassword = userSchemaOld.omit({
 //   rawPassword: true,
 // })
 // export type UserFormFieldsWithoutPassword = z.infer<
 //   typeof userSchemaWithoutPassword
 // >
 
-// export default function AdminUsersEdit2() {
+// export default function AdminUsersEditOld() {
 //   const navigate = useNavigate()
 //   const { id } = useParams<{ id: string }>()
 
@@ -55,7 +55,8 @@
 //       {!isLoading && !isError && user && (
 //         <div className="flex flex-wrap gap-x-2 gap-y-2">
 //           <div className="w-full">
-//             <UserForm2<UserFormFieldsWithoutPassword>
+//             <UserForm<UserFormFieldsWithoutPassword>
+//               ref={null}
 //               defaultValues={user}
 //               onSubmit={handleSubmit}
 //               submitBtnName="Змінити"

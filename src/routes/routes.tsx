@@ -13,13 +13,10 @@ import {
   BriefcaseBusiness,
   Languages,
   Globe,
+  // UserCheck,
+  // UserPen,
 } from "lucide-react"
 import StreamlitPage from "../pages/StreamlitPage"
-// import AdminUsersLayout from "../pages/AdminUsers/Layout"
-// import AdminUsersList from "../pages/AdminUsers/AdminUsersList/List"
-// import AdminUsersisAdd from "../pages/AdminUsers/Add"
-// import AdminUsersDetails from "../pages/AdminUsers/Details"
-// import AdminUsersEdit from "../pages/AdminUsers/Edit"
 import AdminPeopleLayout from "../pages/AdminPanel/People/Layout"
 import AdminPeopleAdd from "../pages/AdminPanel/People/Add"
 import AdminPeopleDetails from "../pages/AdminPanel/People/Details"
@@ -67,6 +64,10 @@ import AdminCountryList from "../pages/AdminPanel/Country/List/List"
 import AdminCountryAdd from "../pages/AdminPanel/Country/Add"
 import AdminCountryDetails from "../pages/AdminPanel/Country/Details"
 import AdminCountryUpdate from "../pages/AdminPanel/Country/Update"
+// import AdminUsersLayoutOld from "../pages/AdminUsers/Layout"
+// import AdminUsersDetailsOld from "../pages/AdminUsers/Details"
+// import AdminUsersEditOld from "../pages/AdminUsers/Edit"
+// import AdminUsersListOld from "../pages/AdminUsers/AdminUsersList/List"
 
 export type Permission =
   | "admin"
@@ -92,7 +93,7 @@ export const APP_ROUTES: AppRoute[] = [
   //   path: "/admin-users",
   //   label: "Користувачі",
   //   icon: Users,
-  //   component: <AdminUsersLayout2 />,
+  //   component: <AdminUsersLayoutOld />,
   //   requiredPermissions: ["admin"],
   //   children: [
   //     {
@@ -100,21 +101,14 @@ export const APP_ROUTES: AppRoute[] = [
   //       path: "",
   //       label: "Список користувачів",
   //       icon: Users,
-  //       component: <AdminUsersList2 />,
-  //     },
-  //     {
-  //       key: "adminUsersAdd",
-  //       path: "add",
-  //       label: "Додати користувача",
-  //       icon: UserRoundSearch,
-  //       component: <AdminUsersAdd2 />,
+  //       component: <AdminUsersListOld />,
   //     },
   //     {
   //       key: "adminUsersDetail",
   //       path: ":id",
   //       label: "Деталі користувача",
   //       icon: UserCheck,
-  //       component: <AdminUsersDetails2 />,
+  //       component: <AdminUsersDetailsOld />,
   //       inSidebar: false,
   //     },
   //     {
@@ -122,7 +116,7 @@ export const APP_ROUTES: AppRoute[] = [
   //       path: ":id/edit",
   //       label: "Редагування користувача",
   //       icon: UserPen,
-  //       component: <AdminUsersEdit2 />,
+  //       component: <AdminUsersEditOld />,
   //       inSidebar: false,
   //     },
   //   ],

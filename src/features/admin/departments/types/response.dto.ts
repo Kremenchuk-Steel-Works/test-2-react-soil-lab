@@ -7,6 +7,11 @@ export interface DepartmentResponse extends DepartmentBase {
   id: string
 }
 
+export interface DepartmentLookupResponse {
+  id: string
+  name: string
+}
+
 export interface DepartmentDetailResponse
   extends DepartmentResponse,
     Timestamps {

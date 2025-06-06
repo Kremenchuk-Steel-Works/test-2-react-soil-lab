@@ -1,19 +1,18 @@
-// import { useNavigate, useSearchParams } from "react-router-dom"
+// import { useNavigate } from "react-router-dom"
 // import { ArrowLeft, Plus } from "lucide-react"
 // import { apiUsers } from "../../../services/user"
 // import { keepPreviousData, useQuery } from "@tanstack/react-query"
 // import Button from "../../../components/Button/Button"
-// import { adminUsersColumns2 } from "./columns"
+// import { adminUsersColumnsOld } from "./columns"
 // import { DataTable } from "../../../components/Table/DataTable"
 // import type { UsersData } from "../../../types/user"
+// import BottomSheetButton from "../../../components/ui/FilterButton/BottomSheetButton"
+// import AdminUsersAddOld from "../Add"
+// import { usePaginationParams } from "../../../hooks/usePaginationParams"
 
-// export default function AdminUsersList2() {
+// export default function AdminUsersListOld() {
 //   // Состояние из URL
-//   const [searchParams, setSearchParams] = useSearchParams()
-//   const pageFromUrl = Number(searchParams.get("page")) || 1
-//   const rawPerPageFromUrl = Number(searchParams.get("perPage")) || 10
-//   const perPageFromUrl = rawPerPageFromUrl > 20 ? 20 : rawPerPageFromUrl
-
+//   const { page, perPage, setSearchParams } = usePaginationParams()
 //   const navigate = useNavigate()
 
 //   // Получение данных, usersData
@@ -23,11 +22,11 @@
 //     isError,
 //     error: queryError,
 //   } = useQuery<UsersData, Error>({
-//     queryKey: ["usersData", pageFromUrl, perPageFromUrl],
+//     queryKey: ["usersData", page, perPage],
 //     queryFn: () => {
 //       return apiUsers({
-//         page: pageFromUrl,
-//         perPage: perPageFromUrl,
+//         page: page,
+//         perPage: perPage,
 //       })
 //     },
 //     placeholderData: keepPreviousData,
@@ -42,12 +41,23 @@
 //         >
 //           <ArrowLeft className="w-5 h-5" /> <span>Назад</span>
 //         </Button>
-//         <Button
-//           className="flex items-center justify-center gap-1 whitespace-nowrap"
-//           onClick={() => navigate("add")}
+//         <BottomSheetButton
+//           label={
+//             <>
+//               <Plus className="w-5 h-5" /> <span>Додати</span>
+//             </>
+//           }
+//           buttonProps={{
+//             className:
+//               "flex items-center justify-center gap-1 whitespace-nowrap",
+//           }}
+//           sheetProps={{
+//             className: "h-full",
+//             label: <p className="text-lg font-semibold">Користувач</p>,
+//           }}
 //         >
-//           <Plus className="w-5 h-5" /> <span>Додати</span>
-//         </Button>
+//           {({ onSuccess }) => <AdminUsersAddOld onSuccess={onSuccess} />}
+//         </BottomSheetButton>
 //       </div>
 
 //       {isError && (
@@ -57,10 +67,10 @@
 //       {!isLoading && !isError && usersData && (
 //         <DataTable
 //           data={usersData?.users ?? []}
-//           columns={adminUsersColumns2}
+//           columns={adminUsersColumnsOld}
 //           setSearchParams={setSearchParams}
-//           page={pageFromUrl}
-//           perPage={perPageFromUrl}
+//           page={page}
+//           perPage={perPage}
 //           totalPages={usersData?.totalPages}
 //         />
 //       )}

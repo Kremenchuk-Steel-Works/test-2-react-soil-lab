@@ -2,7 +2,7 @@
 // import { Link } from "react-router-dom"
 // import type { UserResponse } from "../../../types/user"
 
-// export const adminUsersColumns2: ColumnDef<UserResponse, string>[] = [
+// export const adminUsersColumnsOld: ColumnDef<UserResponse, string>[] = [
 //   {
 //     accessorKey: "id",
 //     header: "ID",

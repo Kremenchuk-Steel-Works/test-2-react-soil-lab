@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
@@ -6,14 +6,13 @@ import { DataTable } from "../../../../components/Table/DataTable"
 import { usersService } from "../../../../features/admin/users/services/service"
 import { adminUsersColumns } from "./columns"
 import type { UserListResponse } from "../../../../features/admin/users/types/response.dto"
+import { usePaginationParams } from "../../../../hooks/usePaginationParams"
+// import BottomSheetButton from "../../../../components/ui/FilterButton/BottomSheetButton"
+// import AdminUsersAdd2 from "../Add copy"
 
 export default function AdminUsersList() {
   // Состояние из URL
-  const [searchParams, setSearchParams] = useSearchParams()
-  const pageFromUrl = Number(searchParams.get("page")) || 1
-  const rawPerPageFromUrl = Number(searchParams.get("perPage")) || 10
-  const perPageFromUrl = rawPerPageFromUrl > 20 ? 20 : rawPerPageFromUrl
-
+  const { page, perPage, setSearchParams } = usePaginationParams()
   const navigate = useNavigate()
 
   // Получение данных
@@ -23,11 +22,11 @@ export default function AdminUsersList() {
     isError,
     error: queryError,
   } = useQuery<UserListResponse, Error>({
-    queryKey: ["adminUsersData", pageFromUrl, perPageFromUrl],
+    queryKey: ["adminUsersData", page, perPage],
     queryFn: () => {
       return usersService.getList({
-        page: pageFromUrl,
-        perPage: perPageFromUrl,
+        page: page,
+        perPage: perPage,
       })
     },
     placeholderData: keepPreviousData,
@@ -61,12 +60,10 @@ export default function AdminUsersList() {
         }}
         sheetProps={{
           className: "h-full",
-          label: <p />,
+          label: <p className="text-lg font-semibold">Користувач</p>,
         }}
       >
-        {({ onSuccess }) => (
-          <AdminUsersAdd2 key={formKey} onSuccess={onSuccess} />
-        )}
+        {({ onSuccess }) => <AdminUsersAdd2 onSuccess={onSuccess} />}
       </BottomSheetButton> */}
 
       {!isLoading && !isError && data && (
@@ -74,8 +71,8 @@ export default function AdminUsersList() {
           data={data?.data ?? []}
           columns={adminUsersColumns}
           setSearchParams={setSearchParams}
-          page={pageFromUrl}
-          perPage={perPageFromUrl}
+          page={page}
+          perPage={perPage}
           totalPages={data?.totalPages}
         />
       )}

@@ -11,6 +11,7 @@ interface PageProps {
 
 export default function AdminUsersAdd2({ onSuccess }: PageProps) {
   const formRef = useRef<{ reset: () => void }>(null)
+
   const handleSubmit = async (data: UserFormFields) => {
     // await apiPeopleAdd()
     onSuccess()
@@ -27,7 +28,10 @@ export default function AdminUsersAdd2({ onSuccess }: PageProps) {
             schema={userSchema}
             onSubmit={handleSubmit}
             submitBtnName="Додати"
-            defaultValues={{ personId: null }}
+            defaultValues={{
+              isActive: true,
+              isSuperuser: false,
+            }}
           />
         </div>
       </div>

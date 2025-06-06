@@ -8,6 +8,7 @@ import { router } from "./routes/AppRoutes.tsx"
 import { SidebarProvider } from "./components/Sidebar/SidebarProvider.tsx"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { ModalProvider } from "./components/ui/Modal/ModalContext.tsx"
 
 const queryClient = new QueryClient()
 initApp()
@@ -17,12 +18,14 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <SidebarProvider>
-          <RouterProvider router={router} />
-          <ReactQueryDevtools
-            initialIsOpen={false}
-            buttonPosition="bottom-right"
-            position="bottom"
-          />
+          <ModalProvider>
+            <RouterProvider router={router} />
+            <ReactQueryDevtools
+              initialIsOpen={false}
+              buttonPosition="bottom-right"
+              position="bottom"
+            />
+          </ModalProvider>
         </SidebarProvider>
       </AuthProvider>
     </QueryClientProvider>

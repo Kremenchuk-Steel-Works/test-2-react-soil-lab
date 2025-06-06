@@ -5,7 +5,7 @@
 // import { useQuery } from "@tanstack/react-query"
 // import type { User } from "../../types/user"
 
-// export default function AdminUsersDetails2() {
+// export default function AdminUsersDetailsOld() {
 //   const navigate = useNavigate()
 //   const { id } = useParams<{ id: string }>()
 

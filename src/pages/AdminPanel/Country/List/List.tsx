@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
@@ -6,14 +6,11 @@ import { DataTable } from "../../../../components/Table/DataTable"
 import type { CountryListResponse } from "../../../../features/admin/country/types/response.dto"
 import { countryService } from "../../../../features/admin/country/services/service"
 import { adminCountryColumns } from "./columns"
+import { usePaginationParams } from "../../../../hooks/usePaginationParams"
 
 export default function AdminCountryList() {
   // Состояние из URL
-  const [searchParams, setSearchParams] = useSearchParams()
-  const pageFromUrl = Number(searchParams.get("page")) || 1
-  const rawPerPageFromUrl = Number(searchParams.get("perPage")) || 10
-  const perPageFromUrl = rawPerPageFromUrl > 20 ? 20 : rawPerPageFromUrl
-
+  const { page, perPage, setSearchParams } = usePaginationParams()
   const navigate = useNavigate()
 
   // Получение данных
@@ -23,11 +20,11 @@ export default function AdminCountryList() {
     isError,
     error: queryError,
   } = useQuery<CountryListResponse, Error>({
-    queryKey: ["adminCountriesData", pageFromUrl, perPageFromUrl],
+    queryKey: ["adminCountriesData", page, perPage],
     queryFn: () => {
       return countryService.getList({
-        page: pageFromUrl,
-        perPage: perPageFromUrl,
+        page: page,
+        perPage: perPage,
       })
     },
     placeholderData: keepPreviousData,
@@ -59,8 +56,8 @@ export default function AdminCountryList() {
           data={data?.data ?? []}
           columns={adminCountryColumns}
           setSearchParams={setSearchParams}
-          page={pageFromUrl}
-          perPage={perPageFromUrl}
+          page={page}
+          perPage={perPage}
           totalPages={data?.totalPages}
         />
       )}

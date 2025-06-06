@@ -17,6 +17,7 @@ import { mockPositions } from "../../positions/mocks/mock"
 import { EmployeeProfileForm } from "../../employeeProfile/forms/form"
 import { OptionalField } from "../../../../components/Forms/OptionalField"
 import { genderOptions } from "../types/gender"
+import { forwardRef, useImperativeHandle } from "react"
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -27,14 +28,14 @@ interface FormProps {
   submitBtnName: string
 }
 
-export default function PeopleForm({
-  defaultValues,
-  onSubmit,
-  submitBtnName,
-}: FormProps) {
+function PeopleForm(
+  { defaultValues, onSubmit, submitBtnName }: FormProps,
+  ref: React.Ref<{ reset: () => void }>
+) {
   const {
     control,
     register,
+    reset,
     resetField,
     handleSubmit,
     setError,
@@ -43,6 +44,10 @@ export default function PeopleForm({
     resolver: zodResolver(schema),
     defaultValues,
   })
+
+  useImperativeHandle(ref, () => ({
+    reset: () => reset(),
+  }))
 
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
@@ -212,3 +217,5 @@ export default function PeopleForm({
     </form>
   )
 }
+
+export default forwardRef(PeopleForm)

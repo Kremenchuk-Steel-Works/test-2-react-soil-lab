@@ -53,7 +53,7 @@ export const mockPeople: PersonDetailResponse[] = Array.from(
         {
           id: `${i + 1}9b5a1bcf-5123-4466-a0f6-8bdbd21f8a91`,
           street: `Вулиця ${i}`,
-          cityName: `Місто ${i}`,
+          cityId: i,
           countryName: `Країна ${i}`,
           postalCode: `1000${i}`,
           isPrimary: true,

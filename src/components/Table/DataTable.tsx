@@ -27,9 +27,9 @@ import type { SetURLSearchParams } from "react-router-dom"
 import ReactSelect, { type Option } from "../Select/ReactSelect"
 import type { CSSObjectWithLabel } from "react-select"
 import CustomMultiSelect from "../Select/ReactSelectCheckbox"
-import BottomSheetButton from "../ui/FilterButton/BottomSheetButton"
+import ModalTrigger from "../ui/Modal/ModalTrigger"
 
-type DataTableProps<T> = {
+export type DataTableProps<T> = {
   data: T[]
   columns: ColumnDef<T, any>[]
   page: number
@@ -158,21 +158,21 @@ export function DataTable<T>({
               setColumnVisibility(newVisibility)
             }}
           />
-          {/* Кнопка фильтров */}
-          <BottomSheetButton
-            label={
-              <ListFilter className="w-5 h-5 text-slate-700 dark:text-slate-300" />
-            }
-            buttonProps={{
-              className:
-                "bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600",
-            }}
+
+          <ModalTrigger
+            trigger={(open) => (
+              <Button
+                className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+                onClick={open}
+              >
+                <ListFilter className="w-5 h-5 text-slate-700 dark:text-slate-300" />
+              </Button>
+            )}
             sheetProps={{
               label: <p className="text-lg font-semibold">Фільтри</p>,
             }}
           >
-            {/* ===== Строка фильтров ===== */}
-            <div className="flex flex-wrap justify-center gap-2 px-2 py-2">
+            <div className="flex flex-wrap justify-center gap-3">
               {table.getHeaderGroups().map((headerGroup) =>
                 headerGroup.headers.map((header) => {
                   if (!header.column.getCanFilter()) return null
@@ -192,7 +192,8 @@ export function DataTable<T>({
                 })
               )}
             </div>
-          </BottomSheetButton>
+          </ModalTrigger>
+
           {/* Кнопка сброса фильтров */}
           {table.getState().columnFilters.some((f) => f.value !== "") && (
             <Button
@@ -203,6 +204,7 @@ export function DataTable<T>({
             </Button>
           )}
         </div>
+
         <div className="flex items-center gap-1">
           {/* Выбор числа строк */}
           <strong className="flex items-center">

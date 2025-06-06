@@ -8,6 +8,12 @@ export interface PermissionResponse extends PermissionBase {
   department: DepartmentShortResponse
 }
 
+export interface PermissionLookupResponse {
+  id: number
+  name: string
+  departmentName: string
+}
+
 export interface PermissionDetailResponse
   extends PermissionResponse,
     Timestamps {}

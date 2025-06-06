@@ -7,6 +7,11 @@ export interface RoleResponse extends RoleBase {
   id: number
 }
 
+export interface RoleLookupResponse {
+  id: number
+  name: string
+}
+
 export interface RoleDetailResponse extends RoleResponse, Timestamps {
   permissions: PermissionListItemResponse[]
 }

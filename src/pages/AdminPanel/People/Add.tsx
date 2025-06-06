@@ -1,15 +1,14 @@
-import Button from "../../../components/Button/Button"
-import { useNavigate } from "react-router-dom"
-import { ArrowLeft } from "lucide-react"
 import { type PeopleFormFields } from "../../../features/admin/people/forms/schema"
 import PeopleForm from "../../../features/admin/people/forms/form"
+import { useNavigate } from "react-router-dom"
+import Button from "../../../components/Button/Button"
+import { ArrowLeft } from "lucide-react"
 
 export default function AdminPeopleAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: PeopleFormFields) => {
     // await apiPeopleAdd()
-    navigate("..")
     return data
   }
 

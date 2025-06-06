@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
@@ -6,14 +6,11 @@ import { DataTable } from "../../../../components/Table/DataTable"
 import { adminCityColumns } from "./columns"
 import type { CityListResponse } from "../../../../features/admin/city/types/response.dto"
 import { cityService } from "../../../../features/admin/city/services/service"
+import { usePaginationParams } from "../../../../hooks/usePaginationParams"
 
 export default function AdminCityList() {
   // Состояние из URL
-  const [searchParams, setSearchParams] = useSearchParams()
-  const pageFromUrl = Number(searchParams.get("page")) || 1
-  const rawPerPageFromUrl = Number(searchParams.get("perPage")) || 10
-  const perPageFromUrl = rawPerPageFromUrl > 20 ? 20 : rawPerPageFromUrl
-
+  const { page, perPage, setSearchParams } = usePaginationParams()
   const navigate = useNavigate()
 
   // Получение данных
@@ -23,11 +20,11 @@ export default function AdminCityList() {
     isError,
     error: queryError,
   } = useQuery<CityListResponse, Error>({
-    queryKey: ["adminCitiesData", pageFromUrl, perPageFromUrl],
+    queryKey: ["adminCitiesData", page, perPage],
     queryFn: () => {
       return cityService.getList({
-        page: pageFromUrl,
-        perPage: perPageFromUrl,
+        page: page,
+        perPage: perPage,
       })
     },
     placeholderData: keepPreviousData,
@@ -59,8 +56,8 @@ export default function AdminCityList() {
           data={data?.data ?? []}
           columns={adminCityColumns}
           setSearchParams={setSearchParams}
-          page={pageFromUrl}
-          perPage={perPageFromUrl}
+          page={page}
+          perPage={perPage}
           totalPages={data?.totalPages}
         />
       )}

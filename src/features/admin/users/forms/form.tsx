@@ -21,6 +21,9 @@ import { mockPermissions } from "../../permissions/mocks/mock"
 import { ZodObject, type z, type ZodType } from "zod"
 import { getFieldError } from "../../../../utils/zodHelpers"
 import { forwardRef, useImperativeHandle } from "react"
+import type { RoleLookupResponse } from "../../roles/types/response.dto"
+import { rolesService } from "../../roles/services/service"
+import { useQuery } from "@tanstack/react-query"
 
 interface FormProps<T extends ZodType<any, any>> {
   schema: T
@@ -44,6 +47,7 @@ function UsersForm<T extends ZodType<any, any>>(
     resolver: zodResolver(schema),
     defaultValues,
   })
+
   useImperativeHandle(ref, () => ({
     reset: () => reset(),
   }))
@@ -70,6 +74,16 @@ function UsersForm<T extends ZodType<any, any>>(
       label: `${obj.lastName} ${obj.firstName} ${obj.middleName}`,
     })),
   ]
+
+  // const {
+  //   data: roleLookupData,
+  //   isLoading,
+  //   isError,
+  //   error: queryError,
+  // } = useQuery<RoleLookupResponse[], Error>({
+  //   queryKey: ["adminRoleLookupData"],
+  //   queryFn: () => rolesService.getLookup(),
+  // })
 
   const rolesData = mockRoles
   const rolesOptions = [
@@ -98,7 +112,9 @@ function UsersForm<T extends ZodType<any, any>>(
               placeholder="Оберіть людину"
               isClearable={true}
               options={peopleOptions}
-              value={peopleOptions.find((opt) => opt.value === field.value)}
+              value={
+                peopleOptions.find((opt) => opt.value === field.value) ?? null
+              }
               onChange={(option) => field.onChange(option?.value)}
               errorMessage={getFieldError(errors.personId)}
             />

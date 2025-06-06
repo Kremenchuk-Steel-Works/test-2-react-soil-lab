@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
@@ -6,14 +6,11 @@ import { DataTable } from "../../../../components/Table/DataTable"
 import { adminDepartmentsColumns } from "./columns"
 import { departmentsService } from "../../../../features/admin/departments/services/service"
 import type { DepartmentListResponse } from "../../../../features/admin/departments/types/response.dto"
+import { usePaginationParams } from "../../../../hooks/usePaginationParams"
 
 export default function AdminDepartmentsList() {
   // Состояние из URL
-  const [searchParams, setSearchParams] = useSearchParams()
-  const pageFromUrl = Number(searchParams.get("page")) || 1
-  const rawPerPageFromUrl = Number(searchParams.get("perPage")) || 10
-  const perPageFromUrl = rawPerPageFromUrl > 20 ? 20 : rawPerPageFromUrl
-
+  const { page, perPage, setSearchParams } = usePaginationParams()
   const navigate = useNavigate()
 
   // Получение данных
@@ -23,11 +20,11 @@ export default function AdminDepartmentsList() {
     isError,
     error: queryError,
   } = useQuery<DepartmentListResponse, Error>({
-    queryKey: ["adminDepartmentsData", pageFromUrl, perPageFromUrl],
+    queryKey: ["adminDepartmentsData", page, perPage],
     queryFn: () => {
       return departmentsService.getList({
-        page: pageFromUrl,
-        perPage: perPageFromUrl,
+        page: page,
+        perPage: perPage,
       })
     },
     placeholderData: keepPreviousData,
@@ -59,8 +56,8 @@ export default function AdminDepartmentsList() {
           data={data?.data ?? []}
           columns={adminDepartmentsColumns}
           setSearchParams={setSearchParams}
-          page={pageFromUrl}
-          perPage={perPageFromUrl}
+          page={page}
+          perPage={perPage}
           totalPages={data?.totalPages}
         />
       )}

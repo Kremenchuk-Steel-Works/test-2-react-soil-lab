@@ -3,6 +3,7 @@ import { mockRoles } from "../mocks/mock"
 import type {
   RoleDetailResponse,
   RoleListResponse,
+  RoleLookupResponse,
 } from "../types/response.dto"
 
 const mockData = mockRoles
@@ -25,5 +26,9 @@ export const rolesService = {
     if (!data) throw new Error(`Object with id ${id} not found`)
 
     return data
+  },
+
+  async getLookup(): Promise<RoleLookupResponse[]> {
+    return mockData
   },
 }

@@ -1,4 +1,8 @@
-import { useForm, type SubmitHandler } from "react-hook-form"
+import {
+  useForm,
+  type DefaultValues,
+  type SubmitHandler,
+} from "react-hook-form"
 import { z, ZodSchema } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
@@ -6,8 +10,9 @@ import {
   InputFieldWithError,
 } from "../WithError/fieldsWithError"
 import { logger } from "../../utils/logger"
+import { forwardRef, useImperativeHandle } from "react"
 
-export const userSchema2 = z.object({
+export const userSchemaOld = z.object({
   email: z.string().email(),
   rawPassword: z.string().min(4),
   profile: z.object({
@@ -20,34 +25,42 @@ export const userSchema2 = z.object({
   }),
 })
 
-export type UserFormFields2 = z.infer<typeof userSchema2>
+export type UserFormFieldsOld = z.infer<typeof userSchemaOld>
 
 export interface UserFormProps<T> {
-  defaultValues?: Partial<UserFormFields2>
+  defaultValues?: DefaultValues<T>
   onSubmit: SubmitHandler<T>
   submitBtnName: string
   showPasswordField?: boolean
   schema: ZodSchema<T>
 }
 
-export function UserForm2<
-  T extends Partial<UserFormFields2> = UserFormFields2
->({
-  defaultValues,
-  onSubmit,
-  submitBtnName,
-  schema,
-  showPasswordField = true,
-}: UserFormProps<T>) {
+function UserFormOld<T extends UserFormFieldsOld = UserFormFieldsOld>(
+  {
+    defaultValues,
+    onSubmit,
+
+    submitBtnName,
+    schema,
+    showPasswordField = true,
+  }: UserFormProps<T>,
+  ref: React.Ref<{ reset: () => void }>
+) {
   const {
     register,
+    reset,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
   } = useForm<T>({
-    resolver: zodResolver(schema as any),
+    resolver: zodResolver(schema),
     defaultValues: defaultValues as any,
   })
+
+  // 👇 expose reset to parent via ref
+  useImperativeHandle(ref, () => ({
+    reset: () => reset(),
+  }))
 
   const submitHandler: SubmitHandler<T> = async (data) => {
     try {
@@ -121,3 +134,9 @@ export function UserForm2<
     </form>
   )
 }
+
+const UserForm = forwardRef(UserFormOld) as <T>(
+  props: UserFormProps<T> & { ref?: React.Ref<{ reset: () => void }> }
+) => ReturnType<typeof UserFormOld>
+
+export default UserForm
