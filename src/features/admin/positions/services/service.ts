@@ -1,13 +1,19 @@
+import { api } from "../../../../api/client"
 import type { PageParams } from "../../../../types/pagination"
+import { handleAxiosError } from "../../../../utils/handleAxiosError"
 import { mockPositions } from "../mocks/mock"
 import type {
   PositionDetailResponse,
   PositionListResponse,
+  PositionLookupResponse,
 } from "../types/response.dto"
 
 const mockData = mockPositions
 
 export const positionsService = {
+  // Request
+
+  // Response
   async getList(params?: PageParams): Promise<PositionListResponse> {
     console.log(params)
     const responeData = {
@@ -25,5 +31,14 @@ export const positionsService = {
     if (!data) throw new Error(`Object with id ${id} not found`)
 
     return data
+  },
+
+  async getLookup(): Promise<PositionLookupResponse[]> {
+    try {
+      const response = await api.get(`/lookups/positions`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 }

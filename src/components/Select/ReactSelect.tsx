@@ -14,7 +14,7 @@ import { twMerge } from "tailwind-merge"
 import AnimatedMenu from "./ReactSelectMenu"
 
 export type Option = {
-  value: string | number | boolean | undefined
+  value: string | number | boolean
   label: string
 }
 

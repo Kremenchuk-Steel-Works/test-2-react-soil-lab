@@ -1,10 +1,10 @@
 import { createContext, useContext } from "react"
-import type { User } from "../../types/user"
+import type { UserDetailResponse } from "../../features/admin/users/types/response.dto"
 
 // Определяем тип контекста
 export type AuthContextType = {
   accessToken: string | null | undefined
-  currentUser: User | null | undefined
+  currentUser: UserDetailResponse | null | undefined
   login: (args: {
     email: string
     password: string

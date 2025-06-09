@@ -30,5 +30,11 @@ export interface OrganizationShortResponse extends OrganizationBase {
   countryName: string
 }
 
+export interface OrganizationLookupResponse {
+  id: string
+  legalName: string
+  registrationNumber?: string
+}
+
 export type OrganizationListResponse =
   PaginatedListResponse<OrganizationShortResponse>

@@ -10,4 +10,9 @@ export interface PositionDetailResponse extends PositionResponse, Timestamps {}
 
 export interface PositionShortResponse extends PositionResponse {}
 
+export interface PositionLookupResponse {
+  id: string
+  name: string
+}
+
 export type PositionListResponse = PaginatedListResponse<PositionShortResponse>

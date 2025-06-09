@@ -18,8 +18,8 @@ export default function AdminDepartmentsAdd() {
           </h4>
           <LoginForm
             defaultValues={{
-              email: "admin@example.com",
-              password: "1111",
+              email: "admin@steel.pl.ua",
+              password: "admin4real",
               rememberMe: false,
             }}
             onSubmit={handleSubmit}

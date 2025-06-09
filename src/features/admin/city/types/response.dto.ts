@@ -13,6 +13,11 @@ export interface CityDetailResponse extends CityBase, Timestamps {
   country: CountryShortResponse
 }
 
+export interface CityLookupResponse extends CityBase {
+  id: number
+  countryId: number
+}
+
 export interface CityShortResponse extends CityBase {
   id: number
 }

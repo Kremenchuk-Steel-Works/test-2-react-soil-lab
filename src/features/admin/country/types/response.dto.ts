@@ -17,4 +17,11 @@ export interface CountryShortResponse {
   nameLocal: string
 }
 
+export interface CountryLookupResponse {
+  id: number
+  code: string
+  name: string
+  nameLocal: string
+}
+
 export type CountryListResponse = PaginatedListResponse<CountryShortResponse>

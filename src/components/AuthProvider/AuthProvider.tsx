@@ -6,7 +6,7 @@ import { apiUsersMe } from "../../services/user"
 import { logger } from "../../utils/logger"
 import { authService } from "../../features/auth/services/service"
 import type { LoginFormFields } from "../../features/auth/forms/schema"
-import type { User } from "../../types/user"
+import type { UserDetailResponse } from "../../features/admin/users/types/response.dto"
 
 // Функции для чтения данных из storage:
 const getStoredItem = (itemName: string): string | null => {
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [refreshToken, setRefreshToken] = useState<string | null>(() =>
     getStoredItem("refreshToken")
   )
-  const [currentUser, setCurrentUser] = useState<User | null>()
+  const [currentUser, setCurrentUser] = useState<UserDetailResponse | null>()
 
   // Функция входа
   const login = async ({ email, password, rememberMe }: LoginFormFields) => {

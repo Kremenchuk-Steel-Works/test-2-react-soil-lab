@@ -1,51 +1,115 @@
+import { api } from "../../../../api/client"
 import type { PageParams } from "../../../../types/pagination"
-import { mockPeople } from "../mocks/mock"
+import { handleAxiosError } from "../../../../utils/handleAxiosError"
+import { logger } from "../../../../utils/logger"
+import type {
+  PersonCreateRequest,
+  PersonUpdateRequest,
+} from "../types/request.dto"
 import type {
   PersonDetailResponse,
   PersonListResponse,
+  PersonLookupResponse,
 } from "../types/response.dto"
 
-const mockData = mockPeople
+function undefinedToNull<T>(obj: T): T {
+  if (obj === undefined) {
+    return null as any
+  }
+  if (obj === null || typeof obj !== "object") {
+    return obj
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(undefinedToNull) as any
+  }
+  // Обработка объектов
+  const result = {} as any
+  for (const key in obj) {
+    const value = (obj as any)[key]
+    result[key] = undefinedToNull(value)
+  }
+  return result as T
+}
+
+export function nullsToUndefined<T>(obj: T): T {
+  if (obj === null || obj === undefined) {
+    return undefined as any
+  }
+  if (obj instanceof Date) {
+    return obj as any
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(nullsToUndefined) as any
+  }
+  if (typeof obj === "object") {
+    const result: any = {}
+    for (const key in obj as any) {
+      result[key] = nullsToUndefined((obj as any)[key])
+    }
+    return result
+  }
+  return obj as any
+}
 
 export const peopleService = {
-  async getList(params?: PageParams): Promise<PersonListResponse> {
-    console.log(params)
-    const newData = mockData.map((item) => ({
-      ...item,
-      id: item.id,
-      firstName: item.firstName,
-      middleName: item.middleName,
-      lastName: item.lastName,
-      gender: item.gender,
-      birthDate: item.birthDate,
-      photoUrl: item.photoUrl,
-      isEmployee: !!item.employeeProfile,
-      contactsCount: item.contacts.length,
-      addressesCount: item.addresses.length,
-      organizationNames: item.organizations.map((org) => org.legalName),
-      positionNames: item.positions.map((pos) => pos.name),
-      employeeStatus: item.employeeProfile?.employmentStatus ?? null,
-      fullName: `${item.lastName} ${item.firstName}${
-        item.middleName ? " " + item.middleName : ""
-      }`,
-      createdAt: item.createdAt,
-      updatedAt: item.updatedAt,
-    }))
-    const responeData = {
-      data: newData,
-      page: 1,
-      totalPages: 1,
-      totalItems: mockData.length,
+  // Request
+  async create(params: PersonCreateRequest): Promise<PersonDetailResponse> {
+    try {
+      logger.debug(params)
+
+      // TEMPORARILY
+      params = undefinedToNull(params)
+
+      const response = await api.post(`/people/`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
     }
-    return responeData
+  },
+
+  async update(
+    id: string,
+    params: PersonUpdateRequest
+  ): Promise<PersonDetailResponse> {
+    try {
+      logger.debug(params)
+
+      // TEMPORARILY
+      params = undefinedToNull(params)
+
+      const response = await api.put(`/people/${id}`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
+  },
+
+  // Response
+  async getList(params?: PageParams): Promise<PersonListResponse> {
+    try {
+      const response = await api.get(`/people`, { params })
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 
   async getById(id: string): Promise<PersonDetailResponse> {
-    console.log(id)
-    const data = mockData.find((obj) => obj.id === id)
+    try {
+      console.log(id)
+      const response = await api.get(`/people/${id}`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
+  },
 
-    if (!data) throw new Error(`Object with id ${id} not found`)
-
-    return data
+  async getLookup(): Promise<PersonLookupResponse[]> {
+    try {
+      const response = await api.get(`/lookups/people`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 }

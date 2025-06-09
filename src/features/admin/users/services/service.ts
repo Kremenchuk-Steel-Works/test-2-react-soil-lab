@@ -12,7 +12,8 @@ export const usersService = {
     console.log(params)
     const newData = mockData.map((item) => ({
       ...item,
-      fullName: item.person.fullName,
+      // fullName: item.person.fullName,
+      fullName: "ПІБ",
       roleNames: item.roles.map((role) => role.name),
       permissionNames: item.permissions.map((permission) => permission.name),
     }))

@@ -15,15 +15,17 @@ import {
 } from "../../../../components/WithError/fieldsWithError"
 import { logger } from "../../../../utils/logger"
 import { formTransformers } from "../../../../utils/formTransformers"
-import { mockPeople } from "../../people/mocks/mock"
-import { mockRoles } from "../../roles/mocks/mock"
-import { mockPermissions } from "../../permissions/mocks/mock"
 import { ZodObject, type z, type ZodType } from "zod"
 import { getFieldError } from "../../../../utils/zodHelpers"
-import { forwardRef, useImperativeHandle } from "react"
-import type { RoleLookupResponse } from "../../roles/types/response.dto"
+import { useQueries, type UseQueryResult } from "@tanstack/react-query"
 import { rolesService } from "../../roles/services/service"
-import { useQuery } from "@tanstack/react-query"
+import { permissionsService } from "../../permissions/services/service"
+import { peopleService } from "../../people/services/service"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
+import type { PersonLookupResponse } from "../../people/types/response.dto"
+import type { RoleLookupResponse } from "../../roles/types/response.dto"
+import type { PermissionLookupResponse } from "../../permissions/types/response.dto"
+import type { Option } from "../../../../components/Select/ReactSelect"
 
 interface FormProps<T extends ZodType<any, any>> {
   schema: T
@@ -32,14 +34,15 @@ interface FormProps<T extends ZodType<any, any>> {
   submitBtnName: string
 }
 
-function UsersForm<T extends ZodType<any, any>>(
-  { schema, defaultValues, onSubmit, submitBtnName }: FormProps<T>,
-  ref: React.Ref<{ reset: () => void }>
-) {
+export default function UsersForm<T extends ZodType<any, any>>({
+  schema,
+  defaultValues,
+  onSubmit,
+  submitBtnName,
+}: FormProps<T>) {
   const {
     control,
     register,
-    reset,
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
@@ -48,14 +51,11 @@ function UsersForm<T extends ZodType<any, any>>(
     defaultValues,
   })
 
-  useImperativeHandle(ref, () => ({
-    reset: () => reset(),
-  }))
-
   const schemaKeys =
     schema instanceof ZodObject
       ? (Object.keys(schema.shape) as (keyof z.infer<T>)[])
       : []
+
   const submitHandler: SubmitHandler<z.infer<T>> = async (data) => {
     try {
       const response = await onSubmit(data)
@@ -67,39 +67,59 @@ function UsersForm<T extends ZodType<any, any>>(
     }
   }
 
-  const peopleData = mockPeople
-  const peopleOptions = [
-    ...peopleData.map((obj) => ({
-      value: obj.id,
-      label: `${obj.lastName} ${obj.firstName} ${obj.middleName}`,
-    })),
+  // Queries
+  const queries = useQueries({
+    queries: [
+      {
+        queryKey: ["personLookup"],
+        queryFn: () => peopleService.getLookup(),
+      },
+      {
+        queryKey: ["roleLookup"],
+        queryFn: () => rolesService.getLookup(),
+      },
+      {
+        queryKey: ["permissionLookup"],
+        queryFn: () => permissionsService.getLookup(),
+      },
+    ],
+  })
+
+  // Loading || Error
+  const isAnyLoading = queries.some((q) => q.isLoading)
+  const isAnyError = queries.some((q) => q.isError)
+  const firstError = queries.find((q) => q.error)?.error
+
+  if (isAnyLoading) return
+  if (isAnyError && firstError instanceof Error) {
+    return <AlertMessage type={AlertType.ERROR} message={firstError.message} />
+  }
+
+  // Queries data
+  const [peopleQ, rolesQ, permissionsQ] = queries as [
+    UseQueryResult<PersonLookupResponse[], Error>,
+    UseQueryResult<RoleLookupResponse[], Error>,
+    UseQueryResult<PermissionLookupResponse[], Error>
   ]
 
-  // const {
-  //   data: roleLookupData,
-  //   isLoading,
-  //   isError,
-  //   error: queryError,
-  // } = useQuery<RoleLookupResponse[], Error>({
-  //   queryKey: ["adminRoleLookupData"],
-  //   queryFn: () => rolesService.getLookup(),
-  // })
+  // Options
+  const peopleOptions: Option[] =
+    peopleQ.data?.map((c) => ({
+      value: c.id,
+      label: c.fullName,
+    })) || []
 
-  const rolesData = mockRoles
-  const rolesOptions = [
-    ...rolesData.map((obj) => ({
-      value: obj.id,
-      label: obj.name,
-    })),
-  ]
+  const rolesOptions: Option[] =
+    rolesQ.data?.map((c) => ({
+      value: c.id,
+      label: c.name,
+    })) || []
 
-  const permissionsData = mockPermissions
-  const permissionsOptions = [
-    ...permissionsData.map((obj) => ({
-      value: obj.id,
-      label: obj.name,
-    })),
-  ]
+  const permissionsOptions: Option[] =
+    permissionsQ.data?.map((c) => ({
+      value: c.id,
+      label: c.name,
+    })) || []
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
@@ -211,5 +231,3 @@ function UsersForm<T extends ZodType<any, any>>(
     </form>
   )
 }
-
-export default forwardRef(UsersForm)

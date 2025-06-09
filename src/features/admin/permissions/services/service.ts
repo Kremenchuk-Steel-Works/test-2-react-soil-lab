@@ -3,6 +3,7 @@ import { mockPermissions } from "../mocks/mock"
 import type {
   PermissionDetailResponse,
   PermissionListResponse,
+  PermissionLookupResponse,
 } from "../types/response.dto"
 
 const mockData = mockPermissions
@@ -29,5 +30,13 @@ export const permissionsService = {
     if (!data) throw new Error(`Object with id ${id} not found`)
 
     return data
+  },
+
+  async getLookup(): Promise<PermissionLookupResponse[]> {
+    const newData = mockData.map((item) => ({
+      ...item,
+      departmentName: item.department.name,
+    }))
+    return newData
   },
 }

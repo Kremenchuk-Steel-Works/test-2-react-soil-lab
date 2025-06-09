@@ -5,7 +5,6 @@ import type { AddressBase } from "./base.model"
 export interface AddressResponse {
   id: string
   cityId: number
-  fullAddress: string
   type: Address
   isPrimary: boolean
 }

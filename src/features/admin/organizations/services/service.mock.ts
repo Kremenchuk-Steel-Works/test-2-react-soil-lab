@@ -1,6 +1,4 @@
-import { api } from "../../../../api/client"
 import type { PageParams } from "../../../../types/pagination"
-import { handleAxiosError } from "../../../../utils/handleAxiosError"
 import { mockOrganizations } from "../mocks/mock"
 import type {
   OrganizationDetailResponse,
@@ -36,11 +34,9 @@ export const organizationsService = {
   },
 
   async getLookup(): Promise<OrganizationLookupResponse[]> {
-    try {
-      const response = await api.get(`/lookups/organizations`)
-      return response.data
-    } catch (err) {
-      handleAxiosError(err)
-    }
+    const newData = mockData.map((item) => ({
+      ...item,
+    }))
+    return newData
   },
 }

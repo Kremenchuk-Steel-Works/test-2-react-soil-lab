@@ -3,6 +3,7 @@ import { mockCities } from "../mocks/mock"
 import type {
   CityDetailResponse,
   CityListResponse,
+  CityLookupResponse,
 } from "../types/response.dto"
 
 const mockData = mockCities
@@ -25,5 +26,13 @@ export const cityService = {
     if (!data) throw new Error(`Object with id ${id} not found`)
 
     return data
+  },
+
+  async getLookup(): Promise<CityLookupResponse[]> {
+    const newData = mockData.map((item) => ({
+      ...item,
+      countryId: item.country.id,
+    }))
+    return newData
   },
 }

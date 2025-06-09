@@ -8,7 +8,11 @@ import {
 import { logger } from "../../../../utils/logger"
 import { citySchema, type CityFormFields } from "./schema"
 import { formTransformers } from "../../../../utils/formTransformers"
-import { mockCountries } from "../../country/mocks/mock"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
+import { useQuery } from "@tanstack/react-query"
+import type { CountryLookupResponse } from "../../country/types/response.dto"
+import { countryService } from "../../country/services/service"
+import type { Option } from "../../../../components/Select/ReactSelect"
 
 type FormFields = CityFormFields
 const schema = citySchema
@@ -35,14 +39,6 @@ export default function CityForm({
     defaultValues,
   })
 
-  const countriesData = mockCountries
-  const countriesOptions = [
-    ...countriesData.map((obj) => ({
-      value: obj.id,
-      label: obj.name,
-    })),
-  ]
-
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await onSubmit(data)
@@ -53,6 +49,30 @@ export default function CityForm({
       logger.error(err)
     }
   }
+
+  // Query
+  const {
+    data: countriesData,
+    isLoading,
+    isError,
+    error: queryError,
+  } = useQuery<CountryLookupResponse[], Error>({
+    queryKey: ["adminCountryLookupData"],
+    queryFn: () => countryService.getLookup(),
+  })
+
+  // Loading || Error
+  if (isLoading) return
+  if (isError) {
+    return <AlertMessage type={AlertType.ERROR} message={queryError.message} />
+  }
+
+  // Options
+  const countriesOptions: Option[] =
+    countriesData?.map((c) => ({
+      value: c.id,
+      label: c.name,
+    })) || []
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>

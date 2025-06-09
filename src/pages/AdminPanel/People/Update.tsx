@@ -2,7 +2,10 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { peopleService } from "../../../features/admin/people/services/service"
+import {
+  nullsToUndefined,
+  peopleService,
+} from "../../../features/admin/people/services/service"
 import PeopleForm from "../../../features/admin/people/forms/form"
 import type { PeopleFormFields } from "../../../features/admin/people/forms/schema"
 import type { PersonDetailResponse } from "../../../features/admin/people/types/response.dto"
@@ -23,7 +26,7 @@ export default function AdminPeopleUpdate() {
   })
 
   const handleSubmit = async (data: PeopleFormFields) => {
-    // await apiPeopleAdd()
+    await peopleService.update(id!, data)
     navigate("..")
     return data
   }
@@ -64,7 +67,7 @@ export default function AdminPeopleUpdate() {
           <div className="w-full">
             <PeopleForm
               onSubmit={handleSubmit}
-              defaultValues={modifiedData}
+              defaultValues={nullsToUndefined(modifiedData)}
               submitBtnName="Оновити"
             />
           </div>

@@ -3,7 +3,12 @@ import type { CityDetailResponse } from "../types/response.dto"
 export const mockCities: CityDetailResponse[] = [
   {
     id: 1,
-    countryId: 100,
+    country: {
+      id: 1,
+      code: "string",
+      name: "string",
+      nameLocal: "string",
+    },
     name: "New York",
     nameLocal: "New York",
     createdAt: "2023-01-15T08:30:00Z",
@@ -11,7 +16,12 @@ export const mockCities: CityDetailResponse[] = [
   },
   {
     id: 2,
-    countryId: 101,
+    country: {
+      id: 1,
+      code: "string",
+      name: "string",
+      nameLocal: "string",
+    },
     name: "Tokyo",
     nameLocal: "東京",
     createdAt: "2022-05-20T12:00:00Z",
@@ -19,7 +29,12 @@ export const mockCities: CityDetailResponse[] = [
   },
   {
     id: 3,
-    countryId: 102,
+    country: {
+      id: 1,
+      code: "string",
+      name: "string",
+      nameLocal: "string",
+    },
     name: "Paris",
     nameLocal: "Paris",
     createdAt: "2021-09-01T09:15:00Z",
@@ -27,7 +42,12 @@ export const mockCities: CityDetailResponse[] = [
   },
   {
     id: 4,
-    countryId: 103,
+    country: {
+      id: 1,
+      code: "string",
+      name: "string",
+      nameLocal: "string",
+    },
     name: "Beijing",
     nameLocal: "北京",
     createdAt: "2020-07-10T06:45:00Z",
@@ -35,7 +55,12 @@ export const mockCities: CityDetailResponse[] = [
   },
   {
     id: 5,
-    countryId: 104,
+    country: {
+      id: 1,
+      code: "string",
+      name: "string",
+      nameLocal: "string",
+    },
     name: "Berlin",
     nameLocal: "Berlin",
     createdAt: "2019-03-22T18:00:00Z",
@@ -43,7 +68,12 @@ export const mockCities: CityDetailResponse[] = [
   },
   {
     id: 6,
-    countryId: 105,
+    country: {
+      id: 1,
+      code: "string",
+      name: "string",
+      nameLocal: "string",
+    },
     name: "Kyiv",
     nameLocal: "Київ",
     createdAt: "2021-11-11T07:00:00Z",
@@ -51,7 +81,12 @@ export const mockCities: CityDetailResponse[] = [
   },
   {
     id: 7,
-    countryId: 106,
+    country: {
+      id: 1,
+      code: "string",
+      name: "string",
+      nameLocal: "string",
+    },
     name: "Sao Paulo",
     nameLocal: "São Paulo",
     createdAt: "2023-04-14T13:25:00Z",
@@ -59,7 +94,12 @@ export const mockCities: CityDetailResponse[] = [
   },
   {
     id: 8,
-    countryId: 107,
+    country: {
+      id: 1,
+      code: "string",
+      name: "string",
+      nameLocal: "string",
+    },
     name: "Istanbul",
     nameLocal: "İstanbul",
     createdAt: "2020-02-08T15:40:00Z",
@@ -67,7 +107,12 @@ export const mockCities: CityDetailResponse[] = [
   },
   {
     id: 9,
-    countryId: 108,
+    country: {
+      id: 1,
+      code: "string",
+      name: "string",
+      nameLocal: "string",
+    },
     name: "Cairo",
     nameLocal: "القاهرة",
     createdAt: "2018-08-19T11:05:00Z",
@@ -75,7 +120,12 @@ export const mockCities: CityDetailResponse[] = [
   },
   {
     id: 10,
-    countryId: 109,
+    country: {
+      id: 1,
+      code: "string",
+      name: "string",
+      nameLocal: "string",
+    },
     name: "Sydney",
     nameLocal: "Sydney",
     createdAt: "2022-06-30T10:10:00Z",

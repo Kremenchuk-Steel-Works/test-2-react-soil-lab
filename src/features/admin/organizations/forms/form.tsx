@@ -11,7 +11,11 @@ import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
 import { formTransformers } from "../../../../utils/formTransformers"
 import { DynamicFieldArray } from "../../../../components/Forms/DynamicFieldArray"
-import { mockCountries } from "../../country/mocks/mock"
+import type { Option } from "../../../../components/Select/ReactSelect"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
+import { countryService } from "../../country/services/service"
+import type { CountryLookupResponse } from "../../country/types/response.dto"
+import { useQuery } from "@tanstack/react-query"
 
 type FormFields = OrganizationsFormFields
 const schema = organizationsSchema
@@ -49,13 +53,29 @@ export default function OrganizationsForm({
     }
   }
 
-  const countriesData = mockCountries
-  const countriesOptions = [
-    ...countriesData.map((obj) => ({
-      value: obj.id,
-      label: obj.name,
-    })),
-  ]
+  // Query
+  const {
+    data: countriesData,
+    isLoading,
+    isError,
+    error: queryError,
+  } = useQuery<CountryLookupResponse[], Error>({
+    queryKey: ["adminCountryLookupData"],
+    queryFn: () => countryService.getLookup(),
+  })
+
+  // Loading || Error
+  if (isLoading) return
+  if (isError) {
+    return <AlertMessage type={AlertType.ERROR} message={queryError.message} />
+  }
+
+  // Options
+  const countriesOptions: Option[] =
+    countriesData?.map((c) => ({
+      value: c.id,
+      label: c.name,
+    })) || []
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>

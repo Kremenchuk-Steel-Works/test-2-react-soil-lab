@@ -12,12 +12,15 @@ import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
 import { formTransformers } from "../../../../utils/formTransformers"
 import { DynamicFieldArray } from "../../../../components/Forms/DynamicFieldArray"
-import { mockOrganizations } from "../../organizations/mocks/mock"
-import { mockPositions } from "../../positions/mocks/mock"
 import { EmployeeProfileForm } from "../../employeeProfile/forms/form"
 import { OptionalField } from "../../../../components/Forms/OptionalField"
 import { genderOptions } from "../types/gender"
-import { forwardRef, useImperativeHandle } from "react"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
+import { useQueries, type UseQueryResult } from "@tanstack/react-query"
+import { organizationsService } from "../../organizations/services/service"
+import { positionsService } from "../../positions/services/service"
+import type { OrganizationLookupResponse } from "../../organizations/types/response.dto"
+import type { PositionLookupResponse } from "../../positions/types/response.dto"
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -28,14 +31,14 @@ interface FormProps {
   submitBtnName: string
 }
 
-function PeopleForm(
-  { defaultValues, onSubmit, submitBtnName }: FormProps,
-  ref: React.Ref<{ reset: () => void }>
-) {
+export default function PeopleForm({
+  defaultValues,
+  onSubmit,
+  submitBtnName,
+}: FormProps) {
   const {
     control,
     register,
-    reset,
     resetField,
     handleSubmit,
     setError,
@@ -44,11 +47,6 @@ function PeopleForm(
     resolver: zodResolver(schema),
     defaultValues,
   })
-
-  useImperativeHandle(ref, () => ({
-    reset: () => reset(),
-  }))
-
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await onSubmit(data)
@@ -60,21 +58,48 @@ function PeopleForm(
     }
   }
 
-  const organizationsData = mockOrganizations
-  const organizationsOptions = [
-    ...organizationsData.map((obj) => ({
-      value: obj.id,
-      label: obj.legalName,
-    })),
+  // Queries
+  const queries = useQueries({
+    queries: [
+      {
+        queryKey: ["organizationLookup"],
+        queryFn: () => organizationsService.getLookup(),
+      },
+      {
+        queryKey: ["positionLookup"],
+        queryFn: () => positionsService.getLookup(),
+      },
+    ],
+  })
+
+  // Loading || Error
+  const isAnyLoading = queries.some((q) => q.isLoading)
+  const isAnyError = queries.some((q) => q.isError)
+  const firstError = queries.find((q) => q.error)?.error
+
+  if (isAnyLoading) return
+  if (isAnyError && firstError instanceof Error) {
+    return <AlertMessage type={AlertType.ERROR} message={firstError.message} />
+  }
+
+  // Queries data
+  const [organizationsQ, positionsQ] = queries as [
+    UseQueryResult<OrganizationLookupResponse[], Error>,
+    UseQueryResult<PositionLookupResponse[], Error>
   ]
 
-  const positionsData = mockPositions
-  const positionsOptions = [
-    ...positionsData.map((obj) => ({
-      value: obj.id,
-      label: obj.name,
-    })),
-  ]
+  // Options
+  const organizationsOptions =
+    organizationsQ.data?.map((c) => ({
+      value: c.id,
+      label: c.legalName,
+    })) || []
+
+  const positionsOptions =
+    positionsQ.data?.map((c) => ({
+      value: c.id,
+      label: c.name,
+    })) || []
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
@@ -217,5 +242,3 @@ function PeopleForm(
     </form>
   )
 }
-
-export default forwardRef(PeopleForm)

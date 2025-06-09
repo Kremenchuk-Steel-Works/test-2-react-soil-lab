@@ -24,6 +24,11 @@ export interface PersonShortResponse {
   photoUrl?: string
 }
 
+export interface PersonLookupResponse {
+  id: string
+  fullName: string
+}
+
 export interface PersonResponse extends PersonShortResponse {
   employeeProfile?: EmployeeProfileResponse
   contacts?: ContactResponse[]

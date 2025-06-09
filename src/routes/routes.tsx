@@ -13,8 +13,6 @@ import {
   BriefcaseBusiness,
   Languages,
   Globe,
-  // UserCheck,
-  // UserPen,
 } from "lucide-react"
 import StreamlitPage from "../pages/StreamlitPage"
 import AdminPeopleLayout from "../pages/AdminPanel/People/Layout"

@@ -14,9 +14,13 @@ export function useUserPermissionsSet(): Set<string> {
 
 // Есть ли доступ к определенному маршруту
 export function useUserPermissionsTo() {
+  const { currentUser } = useAuth()
   const visibleRoutes = useVisibleRoutes()
 
   const hasAccessToPath = (path: string): boolean => {
+    // isAdmin
+    if (currentUser?.isSuperuser) return true
+
     const checkAccess = (routes: AppRoute[], basePath = ""): boolean => {
       for (const route of routes) {
         const fullPath = `${basePath}/${route.path}`.replace(/\/+/g, "/")
@@ -44,10 +48,14 @@ export function useUserPermissionsTo() {
 // Рекурсивно фильтрует массив маршрутов, оставляя только те, у которых нет requiredPermissions или у пользователя есть все нужные права
 export function filterRoutes(
   routes: AppRoute[],
-  perms: Set<string>
+  perms: Set<string>,
+  isSuperuser = false
 ): AppRoute[] {
   return routes
     .filter((r) => {
+      // isAdmin
+      if (isSuperuser) return true
+
       const required = r.requiredPermissions ?? []
       if (!required || required.length === 0) return true
       return required.some((p) => perms.has(p))
@@ -67,6 +75,7 @@ export function filterRoutes(
 
 // Хук-обёртка, сразу отдаёт top-level видимые маршруты
 export function useVisibleRoutes(): AppRoute[] {
+  const { currentUser } = useAuth()
   const perms = useUserPermissionsSet()
-  return filterRoutes(APP_ROUTES, perms)
+  return filterRoutes(APP_ROUTES, perms, currentUser?.isSuperuser)
 }

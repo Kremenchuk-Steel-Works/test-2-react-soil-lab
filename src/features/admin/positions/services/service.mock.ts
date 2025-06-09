@@ -1,15 +1,15 @@
 import type { PageParams } from "../../../../types/pagination"
-import { mockCountries } from "../mocks/mock"
+import { mockPositions } from "../mocks/mock"
 import type {
-  CountryDetailResponse,
-  CountryListResponse,
-  CountryLookupResponse,
+  PositionDetailResponse,
+  PositionListResponse,
+  PositionLookupResponse,
 } from "../types/response.dto"
 
-const mockData = mockCountries
+const mockData = mockPositions
 
-export const countryService = {
-  async getList(params?: PageParams): Promise<CountryListResponse> {
+export const positionsService = {
+  async getList(params?: PageParams): Promise<PositionListResponse> {
     console.log(params)
     const responeData = {
       data: mockData,
@@ -20,15 +20,15 @@ export const countryService = {
     return responeData
   },
 
-  async getById(id: string): Promise<CountryDetailResponse> {
-    const data = mockData.find((obj) => obj.id === Number(id))
+  async getById(id: string): Promise<PositionDetailResponse> {
+    const data = mockData.find((obj) => obj.id === id)
 
     if (!data) throw new Error(`Object with id ${id} not found`)
 
     return data
   },
 
-  async getLookup(): Promise<CountryLookupResponse[]> {
+  async getLookup(): Promise<PositionLookupResponse[]> {
     const newData = mockData.map((item) => ({
       ...item,
     }))

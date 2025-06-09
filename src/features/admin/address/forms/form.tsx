@@ -14,7 +14,11 @@ import { getFieldError } from "../../../../utils/zodHelpers"
 import type { AddressFormFields } from "./schema"
 import { formTransformers } from "../../../../utils/formTransformers"
 import { addressOptions } from "../types/address"
-import { mockCities } from "../../city/mocks/mock"
+import type { CityLookupResponse } from "../../city/types/response.dto"
+import { useQuery } from "@tanstack/react-query"
+import { cityService } from "../../city/services/service"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
+import type { Option } from "../../../../components/Select/ReactSelect"
 
 export type FormFields = {
   addresses: AddressFormFields[]
@@ -35,13 +39,29 @@ export function AddressForm<T extends FormFields>({
 }: FormProps<T>) {
   const err = errors as FieldErrors<FormFields>
 
-  const citiesData = mockCities
-  const citiesOptions = [
-    ...citiesData.map((obj) => ({
-      value: obj.id,
-      label: obj.name,
-    })),
-  ]
+  // Query
+  const {
+    data: citiesData,
+    isLoading,
+    isError,
+    error: queryError,
+  } = useQuery<CityLookupResponse[], Error>({
+    queryKey: ["adminCityLookupData"],
+    queryFn: () => cityService.getLookup(),
+  })
+
+  // Loading || Error
+  if (isLoading) return
+  if (isError) {
+    return <AlertMessage type={AlertType.ERROR} message={queryError.message} />
+  }
+
+  // Options
+  const citiesOptions: Option[] =
+    citiesData?.map((c) => ({
+      value: c.id,
+      label: c.name,
+    })) || []
 
   return (
     <div className="space-y-3">
