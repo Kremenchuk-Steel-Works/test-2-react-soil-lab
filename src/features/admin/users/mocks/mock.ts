@@ -9,12 +9,12 @@ export const mockUsers: UserDetailResponse[] = [
     createdAt: "2025-01-01T10:00:00Z",
     updatedAt: "2025-05-01T10:00:00Z",
     lastLoginAt: "2025-05-20T12:00:00Z",
-    person: {
-      id: "p1",
-      fullName: "John Doe",
-      gender: "male",
-      photoUrl: "https://example.com/photos/john.jpg",
-    },
+    // person: {
+    //   id: "p1",
+    //   fullName: "John Doe",
+    //   gender: "male",
+    //   photoUrl: "https://example.com/photos/john.jpg",
+    // },
     roles: [{ id: 1, name: "User", description: "Regular user role" }],
     permissions: [
       {
@@ -32,11 +32,11 @@ export const mockUsers: UserDetailResponse[] = [
     isSuperuser: true,
     createdAt: "2024-12-01T09:00:00Z",
     updatedAt: "2025-04-15T11:00:00Z",
-    person: {
-      id: "p2",
-      fullName: "Jane Smith",
-      gender: "female",
-    },
+    // person: {
+    //   id: "p2",
+    //   fullName: "Jane Smith",
+    //   gender: "female",
+    // },
     roles: [{ id: 2, name: "Admin" }],
     permissions: [
       {
@@ -54,11 +54,11 @@ export const mockUsers: UserDetailResponse[] = [
     isSuperuser: false,
     createdAt: "2023-05-21T13:00:00Z",
     updatedAt: "2024-11-25T15:30:00Z",
-    person: {
-      id: "p3",
-      fullName: "Mark Jones",
-      gender: "male",
-    },
+    // person: {
+    //   id: "p3",
+    //   fullName: "Mark Jones",
+    //   gender: "male",
+    // },
     roles: [{ id: 3, name: "Viewer" }],
     permissions: [],
   },
@@ -69,12 +69,12 @@ export const mockUsers: UserDetailResponse[] = [
     isSuperuser: false,
     createdAt: "2024-08-18T16:40:00Z",
     updatedAt: "2025-02-22T14:20:00Z",
-    person: {
-      id: "p4",
-      fullName: "Lisa Brown",
-      gender: "female",
-      photoUrl: "https://example.com/photos/lisa.png",
-    },
+    // person: {
+    //   id: "p4",
+    //   fullName: "Lisa Brown",
+    //   gender: "female",
+    //   photoUrl: "https://example.com/photos/lisa.png",
+    // },
     roles: [{ id: 4, name: "Editor", description: "Content editor" }],
     permissions: [
       {
@@ -92,11 +92,11 @@ export const mockUsers: UserDetailResponse[] = [
     isSuperuser: true,
     createdAt: "2024-01-01T08:00:00Z",
     updatedAt: "2025-05-01T09:00:00Z",
-    person: {
-      id: "p5",
-      fullName: "Paul Adams",
-      gender: "male",
-    },
+    // person: {
+    //   id: "p5",
+    //   fullName: "Paul Adams",
+    //   gender: "male",
+    // },
     roles: [{ id: 5, name: "Manager" }],
     permissions: [
       {
@@ -114,11 +114,11 @@ export const mockUsers: UserDetailResponse[] = [
     isSuperuser: false,
     createdAt: "2023-03-01T10:10:00Z",
     updatedAt: "2025-01-01T12:00:00Z",
-    person: {
-      id: "p6",
-      fullName: "Emily Watson",
-      gender: "female",
-    },
+    // person: {
+    //   id: "p6",
+    //   fullName: "Emily Watson",
+    //   gender: "female",
+    // },
     roles: [],
     permissions: [],
   },
@@ -129,12 +129,12 @@ export const mockUsers: UserDetailResponse[] = [
     isSuperuser: false,
     createdAt: "2022-07-11T08:30:00Z",
     updatedAt: "2025-03-05T10:00:00Z",
-    person: {
-      id: "p7",
-      fullName: "Michael Green",
-      gender: "male",
-      photoUrl: "https://example.com/photos/michael.png",
-    },
+    // person: {
+    //   id: "p7",
+    //   fullName: "Michael Green",
+    //   gender: "male",
+    //   photoUrl: "https://example.com/photos/michael.png",
+    // },
     roles: [{ id: 6, name: "Support" }],
     permissions: [
       {
@@ -152,11 +152,11 @@ export const mockUsers: UserDetailResponse[] = [
     isSuperuser: false,
     createdAt: "2023-06-06T12:00:00Z",
     updatedAt: "2025-04-01T12:30:00Z",
-    person: {
-      id: "p8",
-      fullName: "Sara White",
-      gender: "female",
-    },
+    // person: {
+    //   id: "p8",
+    //   fullName: "Sara White",
+    //   gender: "female",
+    // },
     roles: [{ id: 7, name: "Contributor" }],
     permissions: [],
   },
@@ -167,11 +167,11 @@ export const mockUsers: UserDetailResponse[] = [
     isSuperuser: false,
     createdAt: "2024-09-10T14:00:00Z",
     updatedAt: "2025-05-10T14:30:00Z",
-    person: {
-      id: "p9",
-      fullName: "Alex Turner",
-      gender: "male",
-    },
+    // person: {
+    //   id: "p9",
+    //   fullName: "Alex Turner",
+    //   gender: "male",
+    // },
     roles: [{ id: 8, name: "Coordinator" }],
     permissions: [
       {
@@ -189,12 +189,12 @@ export const mockUsers: UserDetailResponse[] = [
     isSuperuser: true,
     createdAt: "2022-11-11T09:30:00Z",
     updatedAt: "2025-01-15T10:15:00Z",
-    person: {
-      id: "p10",
-      fullName: "Nina Thomas",
-      gender: "female",
-      photoUrl: "https://example.com/photos/nina.jpg",
-    },
+    // person: {
+    //   id: "p10",
+    //   fullName: "Nina Thomas",
+    //   gender: "female",
+    //   photoUrl: "https://example.com/photos/nina.jpg",
+    // },
     roles: [{ id: 9, name: "Director", description: "Executive director" }],
     permissions: [
       {
