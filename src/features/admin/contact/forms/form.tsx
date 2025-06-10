@@ -35,7 +35,7 @@ export function ContactForm<T extends FormFields>({
   const err = errors as FieldErrors<FormFields>
   return (
     <div className="space-y-3">
-      <h4 className="layout-text">Контакт {index + 1}</h4>
+      <h4 className="layout-text">Контактні дані {index + 1}</h4>
 
       <CheckboxWithError
         label="Основний"

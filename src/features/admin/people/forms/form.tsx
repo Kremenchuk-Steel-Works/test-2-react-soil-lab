@@ -152,7 +152,7 @@ export default function PeopleForm({
 
       {/* Contacts */}
       <DynamicFieldArray
-        label="контакт"
+        label="контактні дані"
         name="contacts"
         form={ContactForm<PeopleFormFields>}
         defaultItem={{
