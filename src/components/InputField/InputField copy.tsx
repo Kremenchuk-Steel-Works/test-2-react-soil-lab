@@ -1,5 +1,5 @@
-import { Calendar, Eye, EyeOff } from "lucide-react"
-import React, { forwardRef, useState } from "react"
+import { Calendar } from "lucide-react"
+import React, { forwardRef } from "react"
 import "react-datepicker/dist/react-datepicker.css"
 
 export type InputFieldProps = {
@@ -25,17 +25,11 @@ const filterInput = (
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
   ({ label, type, ...props }, ref) => {
-    const isPassword = type === "password"
-    const [visibleText, setVisibleText] = useState(false)
-    const currentType = isPassword ? (visibleText ? "text" : "password") : type
-
-    const toggleVisibility = () => setVisibleText((v) => !v)
-
     return (
       <div className="relative w-full">
         <input
           ref={ref}
-          type={currentType}
+          type={type}
           onWheel={(e) => e.currentTarget.blur()}
           onBeforeInput={(e) => filterInput(type, e)}
           {...props}
@@ -59,15 +53,6 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-blue-500 focus:outline-none pointer-events-none"
           >
             <Calendar size={20} />
-          </button>
-        )}
-        {isPassword && (
-          <button
-            type="button"
-            onClick={toggleVisibility}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 dark:text-gray-400 hover:text-blue-500 focus:outline-none"
-          >
-            {visibleText ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         )}
       </div>

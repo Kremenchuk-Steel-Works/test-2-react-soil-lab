@@ -4,8 +4,10 @@ import { loginSchema, type LoginFormFields } from "./schema"
 import { logger } from "../../../utils/logger"
 import {
   ButtonWithError,
+  CheckboxWithError,
   InputFieldWithError,
 } from "../../../components/WithError/fieldsWithError"
+import { formTransformers } from "../../../utils/formTransformers"
 
 type FormFields = LoginFormFields
 const schema = loginSchema
@@ -57,14 +59,11 @@ export default function LoginForm({
         {...register("password")}
       />
 
-      <label className="flex items-center space-x-2 cursor-pointer select-none text-sm">
-        <input
-          type="checkbox"
-          className="h-5 w-5 border rounded-md focus:ring-0 transition cursor-pointer"
-          {...register("rememberMe")}
-        />
-        <span>Запам'ятати мене</span>
-      </label>
+      <CheckboxWithError
+        label="Запам'ятати мене"
+        {...register(`rememberMe`, formTransformers.string)}
+        errorMessage={errors.rememberMe?.message}
+      />
 
       <ButtonWithError
         className="w-full"

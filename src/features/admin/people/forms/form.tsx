@@ -21,6 +21,7 @@ import { organizationsService } from "../../organizations/services/service"
 import { positionsService } from "../../positions/services/service"
 import type { OrganizationLookupResponse } from "../../organizations/types/response.dto"
 import type { PositionLookupResponse } from "../../positions/types/response.dto"
+import InputDateField from "../../../../components/InputField/InputDateField"
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -141,6 +142,23 @@ export default function PeopleForm({
         type="date"
         errorMessage={errors.birthDate?.message}
         {...register("birthDate", formTransformers.string)}
+      />
+
+      {/* <InputDateField label="Дата народження" {...register("birthDate")} /> */}
+
+      <Controller
+        name="birthDate"
+        control={control}
+        render={({ field }) => (
+          <InputDateField
+            label="Дата народження"
+            minDate={new Date("1900-01-01")}
+            value={field.value ? new Date(field.value) : undefined}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            ref={field.ref}
+          />
+        )}
       />
 
       <InputFieldWithError
