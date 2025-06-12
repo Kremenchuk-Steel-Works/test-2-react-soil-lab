@@ -6,9 +6,12 @@ import {
   ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { permissionsSchema, type PermissionsFormFields } from "./schema"
-import { logger } from "../../../../utils/logger"
-import { formTransformers } from "../../../../utils/formTransformers"
 import { mockDepartments } from "../../departments/mocks/mock"
+import { logger } from "../../../../lib/logger"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../../lib/react-hook-form"
 
 type FormFields = PermissionsFormFields
 const schema = permissionsSchema
@@ -58,14 +61,14 @@ export default function PermissionsForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Назва"
-        errorMessage={errors.name?.message}
         {...register("name", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "name")}
       />
 
       <InputFieldWithError
         label="Опис"
-        errorMessage={errors.description?.message}
         {...register("description", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "description")}
       />
 
       <Controller
@@ -80,7 +83,7 @@ export default function PermissionsForm({
             value={departmentsDataOptions.find(
               (opt) => opt.value === field.value
             )}
-            errorMessage={errors.departmentId?.message}
+            errorMessage={getNestedErrorMessage(errors, "departmentId")}
           />
         )}
       />

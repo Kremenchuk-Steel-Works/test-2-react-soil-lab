@@ -9,8 +9,8 @@ import {
   ButtonWithError,
   InputFieldWithError,
 } from "../WithError/fieldsWithError"
-import { logger } from "../../utils/logger"
 import { forwardRef, useImperativeHandle } from "react"
+import { logger } from "../../lib/logger"
 
 export const userSchemaOld = z.object({
   email: z.string().email(),

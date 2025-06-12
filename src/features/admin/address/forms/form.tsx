@@ -10,15 +10,17 @@ import {
   ReactSelectWithError,
   CheckboxWithError,
 } from "../../../../components/WithError/fieldsWithError"
-import { getFieldError } from "../../../../utils/zodHelpers"
 import type { AddressFormFields } from "./schema"
-import { formTransformers } from "../../../../utils/formTransformers"
 import { addressOptions } from "../types/address"
 import type { CityLookupResponse } from "../../city/types/response.dto"
 import { useQuery } from "@tanstack/react-query"
 import { cityService } from "../../city/services/service"
 import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 import type { Option } from "../../../../components/Select/ReactSelect"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../../lib/react-hook-form"
 
 export type FormFields = {
   addresses: AddressFormFields[]
@@ -37,8 +39,6 @@ export function AddressForm<T extends FormFields>({
   register,
   errors,
 }: FormProps<T>) {
-  const err = errors as FieldErrors<FormFields>
-
   // Query
   const {
     data: citiesData,
@@ -73,7 +73,10 @@ export function AddressForm<T extends FormFields>({
           `addresses.${index}.isPrimary` as Path<T>,
           formTransformers.string
         )}
-        errorMessage={err.addresses?.[index]?.isPrimary?.message}
+        errorMessage={getNestedErrorMessage(
+          errors,
+          `addresses.${index}.isPrimary` as Path<T>
+        )}
       />
 
       <Controller
@@ -86,7 +89,10 @@ export function AddressForm<T extends FormFields>({
             options={citiesOptions}
             value={citiesOptions.find((opt) => opt.value === field.value)}
             onChange={(option) => field.onChange(option?.value)}
-            errorMessage={err.addresses?.[index]?.cityId?.message}
+            errorMessage={getNestedErrorMessage(
+              errors,
+              `addresses.${index}.cityId` as Path<T>
+            )}
           />
         )}
       />
@@ -97,7 +103,10 @@ export function AddressForm<T extends FormFields>({
           `addresses.${index}.street` as Path<T>,
           formTransformers.string
         )}
-        errorMessage={err.addresses?.[index]?.street?.message}
+        errorMessage={getNestedErrorMessage(
+          errors,
+          `addresses.${index}.street` as Path<T>
+        )}
       />
 
       <InputFieldWithError
@@ -106,7 +115,10 @@ export function AddressForm<T extends FormFields>({
           `addresses.${index}.postalCode` as Path<T>,
           formTransformers.string
         )}
-        errorMessage={err.addresses?.[index]?.postalCode?.message}
+        errorMessage={getNestedErrorMessage(
+          errors,
+          `addresses.${index}.postalCode` as Path<T>
+        )}
       />
 
       <Controller
@@ -119,7 +131,10 @@ export function AddressForm<T extends FormFields>({
             options={addressOptions}
             value={addressOptions.find((opt) => opt.value === field.value)}
             onChange={(option) => field.onChange(option?.value)}
-            errorMessage={getFieldError(err.addresses?.[index]?.type)}
+            errorMessage={getNestedErrorMessage(
+              errors,
+              `addresses.${index}.type` as Path<T>
+            )}
           />
         )}
       />
@@ -130,7 +145,10 @@ export function AddressForm<T extends FormFields>({
           `addresses.${index}.note` as Path<T>,
           formTransformers.string
         )}
-        errorMessage={err.addresses?.[index]?.note?.message}
+        errorMessage={getNestedErrorMessage(
+          errors,
+          `addresses.${index}.note` as Path<T>
+        )}
       />
     </div>
   )

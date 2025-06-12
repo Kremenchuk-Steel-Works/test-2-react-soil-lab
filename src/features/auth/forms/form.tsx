@@ -1,13 +1,16 @@
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema, type LoginFormFields } from "./schema"
-import { logger } from "../../../utils/logger"
 import {
   ButtonWithError,
   CheckboxWithError,
   InputFieldWithError,
 } from "../../../components/WithError/fieldsWithError"
-import { formTransformers } from "../../../utils/formTransformers"
+import { logger } from "../../../lib/logger"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../lib/react-hook-form"
 
 type FormFields = LoginFormFields
 const schema = loginSchema
@@ -55,14 +58,14 @@ export default function LoginForm({
       <InputFieldWithError
         label="Пароль"
         type="password"
-        errorMessage={errors.password?.message}
         {...register("password")}
+        errorMessage={getNestedErrorMessage(errors, "password")}
       />
 
       <CheckboxWithError
         label="Запам'ятати мене"
         {...register(`rememberMe`, formTransformers.string)}
-        errorMessage={errors.rememberMe?.message}
+        errorMessage={getNestedErrorMessage(errors, "rememberMe")}
       />
 
       <ButtonWithError

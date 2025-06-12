@@ -10,10 +10,12 @@ import {
   ReactSelectWithError,
   CheckboxWithError,
 } from "../../../../components/WithError/fieldsWithError"
-import { getFieldError } from "../../../../utils/zodHelpers"
-import { formTransformers } from "../../../../utils/formTransformers"
 import { contactOptions } from "../types/contact"
 import type { ContactFormFields } from "./schema"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../../lib/react-hook-form"
 
 export type FormFields = {
   contacts: ContactFormFields[]
@@ -32,7 +34,6 @@ export function ContactForm<T extends FormFields>({
   register,
   errors,
 }: FormProps<T>) {
-  const err = errors as FieldErrors<FormFields>
   return (
     <div className="space-y-3">
       <h4 className="layout-text">Контактні дані {index + 1}</h4>
@@ -43,7 +44,10 @@ export function ContactForm<T extends FormFields>({
           `contacts.${index}.isPrimary` as Path<T>,
           formTransformers.string
         )}
-        errorMessage={err.contacts?.[index]?.isPrimary?.message}
+        errorMessage={getNestedErrorMessage(
+          errors,
+          `contacts.${index}.isPrimary` as Path<T>
+        )}
       />
 
       <Controller
@@ -56,7 +60,10 @@ export function ContactForm<T extends FormFields>({
             options={contactOptions}
             value={contactOptions.find((opt) => opt.value === field.value)}
             onChange={(option) => field.onChange(option?.value)}
-            errorMessage={getFieldError(err.contacts?.[index]?.type)}
+            errorMessage={getNestedErrorMessage(
+              errors,
+              `contacts.${index}.type` as Path<T>
+            )}
           />
         )}
       />
@@ -67,7 +74,10 @@ export function ContactForm<T extends FormFields>({
           `contacts.${index}.value` as Path<T>,
           formTransformers.string
         )}
-        errorMessage={err.contacts?.[index]?.value?.message}
+        errorMessage={getNestedErrorMessage(
+          errors,
+          `contacts.${index}.value` as Path<T>
+        )}
       />
 
       <InputFieldWithError
@@ -76,7 +86,10 @@ export function ContactForm<T extends FormFields>({
           `contacts.${index}.note` as Path<T>,
           formTransformers.string
         )}
-        errorMessage={err.contacts?.[index]?.note?.message}
+        errorMessage={getNestedErrorMessage(
+          errors,
+          `contacts.${index}.note` as Path<T>
+        )}
       />
     </div>
   )

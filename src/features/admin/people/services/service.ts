@@ -1,7 +1,7 @@
 import { api } from "../../../../api/client"
+import { handleAxiosError } from "../../../../lib/axios"
+import { logger } from "../../../../lib/logger"
 import type { PageParams } from "../../../../types/pagination"
-import { handleAxiosError } from "../../../../utils/handleAxiosError"
-import { logger } from "../../../../utils/logger"
 import type {
   PersonCreateRequest,
   PersonUpdateRequest,

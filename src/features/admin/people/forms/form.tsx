@@ -1,16 +1,14 @@
 import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { peopleSchema, type PeopleFormFields } from "./schema"
 import {
   InputFieldWithError,
   ButtonWithError,
   ReactSelectWithError,
   ReactSelectMultiWithError,
+  FileUploadWithError,
 } from "../../../../components/WithError/fieldsWithError"
-import { logger } from "../../../../utils/logger"
 import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
-import { formTransformers } from "../../../../utils/formTransformers"
 import { DynamicFieldArray } from "../../../../components/Forms/DynamicFieldArray"
 import { EmployeeProfileForm } from "../../employeeProfile/forms/form"
 import { OptionalField } from "../../../../components/Forms/OptionalField"
@@ -21,7 +19,13 @@ import { organizationsService } from "../../organizations/services/service"
 import { positionsService } from "../../positions/services/service"
 import type { OrganizationLookupResponse } from "../../organizations/types/response.dto"
 import type { PositionLookupResponse } from "../../positions/types/response.dto"
-import InputDateField from "../../../../components/InputField/InputDateField"
+import FormDateField from "../../../../components/Forms/FormDateField"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../../lib/react-hook-form"
+import { logger } from "../../../../lib/logger"
+import { peopleSchema, type PeopleFormFields } from "./schema"
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -106,20 +110,20 @@ export default function PeopleForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Ім'я"
-        errorMessage={errors.firstName?.message}
         {...register("firstName", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "firstName")}
       />
 
       <InputFieldWithError
         label="Прізвище"
-        errorMessage={errors.lastName?.message}
         {...register("lastName", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "lastName")}
       />
 
       <InputFieldWithError
         label="По батькові"
-        errorMessage={errors.middleName?.message}
         {...register("middleName", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "middleName")}
       />
 
       <Controller
@@ -132,31 +136,21 @@ export default function PeopleForm({
             options={genderOptions}
             value={genderOptions.find((opt) => opt.value === field.value)}
             onChange={(option) => field.onChange(option?.value)}
-            errorMessage={errors.gender?.message}
+            errorMessage={getNestedErrorMessage(errors, "gender")}
           />
         )}
       />
 
-      <InputFieldWithError
-        label="Дата народження"
-        type="date"
-        errorMessage={errors.birthDate?.message}
-        {...register("birthDate", formTransformers.string)}
-      />
-
-      {/* <InputDateField label="Дата народження" {...register("birthDate")} /> */}
-
       <Controller
         name="birthDate"
         control={control}
-        render={({ field }) => (
-          <InputDateField
+        render={({ field, fieldState }) => (
+          <FormDateField
+            field={field}
+            fieldState={fieldState}
+            minDate={new Date("1800-01-01")}
             label="Дата народження"
-            minDate={new Date("1900-01-01")}
-            value={field.value ? new Date(field.value) : undefined}
-            onChange={field.onChange}
-            onBlur={field.onBlur}
-            ref={field.ref}
+            errorMessage={getNestedErrorMessage(errors, "birthDate")}
           />
         )}
       />
@@ -164,8 +158,40 @@ export default function PeopleForm({
       <InputFieldWithError
         label="Посилання на фото"
         type="url"
-        errorMessage={errors.photoUrl?.message}
         {...register("photoUrl", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "photoUrl")}
+      />
+
+      <Controller
+        name="photoUrl"
+        control={control}
+        render={({ field }) => (
+          <>
+            {field.value && (
+              <div className="mb-2">
+                <img
+                  src={URL.createObjectURL(field.value)}
+                  alt="Preview"
+                  className="h-24 w-24 rounded-full object-cover"
+                />
+              </div>
+            )}
+            <FileUploadWithError
+              multiple={false}
+              onFilesAccepted={(files) => {
+                if (files.length > 0) {
+                  field.onChange(files[0])
+                }
+              }}
+              accept={{
+                "image/png": [".png"],
+                "image/jpeg": [".jpg", ".jpeg"],
+              }}
+              maxSize={5 * 1024 * 1024}
+              errorMessage={getNestedErrorMessage(errors, "photoUrl")}
+            />
+          </>
+        )}
       />
 
       {/* Contacts */}
@@ -214,7 +240,7 @@ export default function PeopleForm({
             onChange={(selectedOptions) =>
               field.onChange(selectedOptions?.map((opt) => opt.value) || [])
             }
-            errorMessage={errors.organizationIds?.message}
+            errorMessage={getNestedErrorMessage(errors, "organizationIds")}
           />
         )}
       />
@@ -234,7 +260,7 @@ export default function PeopleForm({
             onChange={(selectedOptions) =>
               field.onChange(selectedOptions?.map((opt) => opt.value) || [])
             }
-            errorMessage={errors.positionIds?.message}
+            errorMessage={getNestedErrorMessage(errors, "positionIds")}
           />
         )}
       />

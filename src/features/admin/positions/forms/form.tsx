@@ -5,8 +5,11 @@ import {
   ButtonWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { positionsSchema, type PositionsFormFields } from "./schema"
-import { logger } from "../../../../utils/logger"
-import { formTransformers } from "../../../../utils/formTransformers"
+import { logger } from "../../../../lib/logger"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../../lib/react-hook-form"
 
 type FormFields = PositionsFormFields
 const schema = positionsSchema
@@ -49,14 +52,14 @@ export default function PositionsForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Назва"
-        errorMessage={errors.name?.message}
         {...register("name", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "name")}
       />
 
       <InputFieldWithError
         label="Опис"
-        errorMessage={errors.description?.message}
         {...register("description", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "description")}
       />
 
       <ButtonWithError

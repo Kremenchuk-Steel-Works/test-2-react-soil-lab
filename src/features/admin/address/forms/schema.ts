@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { toZodEnumValues } from "../../../../utils/zodHelpers"
 import { addressOptions } from "../types/address"
+import { toZodEnumValues } from "../../../../lib/zod"
 
 export const addressSchema = z.object({
   street: z.string().nonempty(),

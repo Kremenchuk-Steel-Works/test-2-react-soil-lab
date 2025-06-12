@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { toZodEnumValues } from "../../../../utils/zodHelpers"
 import { contactOptions } from "../types/contact"
+import { toZodEnumValues } from "../../../../lib/zod"
 
 export const contactSchema = z.object({
   type: z.enum(toZodEnumValues(contactOptions)),

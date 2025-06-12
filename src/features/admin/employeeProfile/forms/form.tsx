@@ -10,8 +10,12 @@ import {
   ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import type { EmployeeProfileFormFields } from "./schema"
-import { formTransformers } from "../../../../utils/formTransformers"
 import { employeeProfileOptions } from "../types/employmentStatus"
+import FormDateField from "../../../../components/Forms/FormDateField"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../../lib/react-hook-form"
 
 export type FormFields = {
   employeeProfile?: EmployeeProfileFormFields
@@ -28,8 +32,6 @@ export function EmployeeProfileForm<T extends FormFields>({
   register,
   errors,
 }: FormProps<T>) {
-  const err = errors as FieldErrors<FormFields>
-
   return (
     <div className="space-y-3">
       <h4 className="layout-text">Профіль робітника</h4>
@@ -41,17 +43,27 @@ export function EmployeeProfileForm<T extends FormFields>({
           "employeeProfile.employeeNumber" as Path<T>,
           formTransformers.string
         )}
-        errorMessage={err.employeeProfile?.employeeNumber?.message}
+        errorMessage={getNestedErrorMessage(
+          errors,
+          "employeeProfile.employeeNumber" as Path<T>
+        )}
       />
 
-      <InputFieldWithError
-        label="Дата найму"
-        type="date"
-        {...register(
-          "employeeProfile.hiredAt" as Path<T>,
-          formTransformers.string
+      <Controller
+        name={"employeeProfile.hiredAt" as Path<T>}
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormDateField
+            field={field}
+            fieldState={fieldState}
+            minDate={new Date("1800-01-01")}
+            label="Дата найму"
+            errorMessage={getNestedErrorMessage(
+              errors,
+              "employeeProfile.hiredAt" as Path<T>
+            )}
+          />
         )}
-        errorMessage={err.employeeProfile?.hiredAt?.message}
       />
 
       <Controller
@@ -66,7 +78,10 @@ export function EmployeeProfileForm<T extends FormFields>({
               (opt) => opt.value === field.value
             )}
             onChange={(option) => field.onChange(option?.value)}
-            errorMessage={err.employeeProfile?.employmentStatus?.message}
+            errorMessage={getNestedErrorMessage(
+              errors,
+              "employeeProfile.employmentStatus" as Path<T>
+            )}
           />
         )}
       />

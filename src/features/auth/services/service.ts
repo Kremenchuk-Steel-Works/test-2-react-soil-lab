@@ -3,7 +3,7 @@ import type { TokenRefreshRequest } from "../types/token/request.dto"
 import { api } from "../../../api/client"
 import type { TokenRefreshResponse } from "../types/token/response.dto"
 import type { LoginResponse } from "../types/login/response.dto"
-import { handleAxiosError } from "../../../utils/handleAxiosError"
+import { handleAxiosError } from "../../../lib/axios"
 
 export const authService = {
   async login({ email, password }: LoginRequest) {

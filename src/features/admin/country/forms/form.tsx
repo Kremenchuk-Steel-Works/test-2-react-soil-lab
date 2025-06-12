@@ -4,9 +4,12 @@ import {
   InputFieldWithError,
   ButtonWithError,
 } from "../../../../components/WithError/fieldsWithError"
-import { logger } from "../../../../utils/logger"
 import { countrySchema, type CountryFormFields } from "./schema"
-import { formTransformers } from "../../../../utils/formTransformers"
+import { logger } from "../../../../lib/logger"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../../lib/react-hook-form"
 
 type FormFields = CountryFormFields
 const schema = countrySchema
@@ -47,32 +50,32 @@ export default function CountryForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Назва"
-        errorMessage={errors.name?.message}
         {...register("name", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "name")}
       />
 
       <InputFieldWithError
         label="Локальна назва"
-        errorMessage={errors.nameLocal?.message}
         {...register("nameLocal", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "nameLocal")}
       />
 
       <InputFieldWithError
         label="Код 2"
-        errorMessage={errors.code?.message}
         {...register("code", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "code")}
       />
 
       <InputFieldWithError
         label="Код 3"
-        errorMessage={errors.code3?.message}
         {...register("code3", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "code3")}
       />
 
       <InputFieldWithError
         label="Номер"
-        errorMessage={errors.numericCode?.message}
         {...register("numericCode", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "numericCode")}
       />
 
       <ButtonWithError

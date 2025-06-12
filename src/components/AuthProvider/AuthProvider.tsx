@@ -3,10 +3,10 @@ import { api } from "../../api/client"
 import type { AuthContextType } from "./AuthContext"
 import AuthContext from "./AuthContext"
 import { apiUsersMe } from "../../services/user"
-import { logger } from "../../utils/logger"
 import { authService } from "../../features/auth/services/service"
 import type { LoginFormFields } from "../../features/auth/forms/schema"
 import type { UserDetailResponse } from "../../features/admin/users/types/response.dto"
+import { logger } from "../../lib/logger"
 
 // Функции для чтения данных из storage:
 const getStoredItem = (itemName: string): string | null => {

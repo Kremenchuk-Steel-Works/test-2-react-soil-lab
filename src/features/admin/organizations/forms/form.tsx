@@ -6,16 +6,19 @@ import {
   ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { organizationsSchema, type OrganizationsFormFields } from "./schema"
-import { logger } from "../../../../utils/logger"
 import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
-import { formTransformers } from "../../../../utils/formTransformers"
 import { DynamicFieldArray } from "../../../../components/Forms/DynamicFieldArray"
 import type { Option } from "../../../../components/Select/ReactSelect"
 import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 import { countryService } from "../../country/services/service"
 import type { CountryLookupResponse } from "../../country/types/response.dto"
 import { useQuery } from "@tanstack/react-query"
+import { logger } from "../../../../lib/logger"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../../lib/react-hook-form"
 
 type FormFields = OrganizationsFormFields
 const schema = organizationsSchema
@@ -81,20 +84,20 @@ export default function OrganizationsForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Назва"
-        errorMessage={errors.legalName?.message}
         {...register("legalName", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "legalName")}
       />
 
       <InputFieldWithError
         label="Номер реєстрації"
-        errorMessage={errors.registrationNumber?.message}
         {...register("registrationNumber", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "registrationNumber")}
       />
 
       <InputFieldWithError
         label="ІПН"
-        errorMessage={errors.taxId?.message}
         {...register("taxId", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "taxId")}
       />
 
       <Controller
@@ -107,7 +110,7 @@ export default function OrganizationsForm({
             options={countriesOptions}
             value={countriesOptions.find((opt) => opt.value === field.value)}
             onChange={(option) => field.onChange(option?.value)}
-            errorMessage={errors.countryId?.message}
+            errorMessage={getNestedErrorMessage(errors, "countryId")}
           />
         )}
       />

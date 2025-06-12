@@ -1,6 +1,5 @@
 import { Controller, useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { logger } from "../../../../utils/logger"
 import {
   InputFieldWithError,
   ButtonWithError,
@@ -8,7 +7,11 @@ import {
 } from "../../../../components/WithError/fieldsWithError"
 import { rolesSchema, type RolesFormFields } from "./schema"
 import { mockPermissions } from "../../permissions/mocks/mock"
-import { formTransformers } from "../../../../utils/formTransformers"
+import { logger } from "../../../../lib/logger"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../../lib/react-hook-form"
 
 type FormFields = RolesFormFields
 const schema = rolesSchema
@@ -58,14 +61,14 @@ export default function RolesForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Назва"
-        errorMessage={errors.name?.message}
         {...register("name", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "name")}
       />
 
       <InputFieldWithError
         label="Опис"
-        errorMessage={errors.description?.message}
         {...register("description", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "description")}
       />
 
       <Controller
@@ -83,7 +86,7 @@ export default function RolesForm({
             onChange={(selectedOptions) =>
               field.onChange(selectedOptions?.map((opt) => opt.value) || [])
             }
-            errorMessage={errors.permissionIds?.message}
+            errorMessage={getNestedErrorMessage(errors, "permissionIds")}
           />
         )}
       />

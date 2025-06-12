@@ -13,10 +13,7 @@ import {
   ReactSelectWithError,
   ReactSelectMultiWithError,
 } from "../../../../components/WithError/fieldsWithError"
-import { logger } from "../../../../utils/logger"
-import { formTransformers } from "../../../../utils/formTransformers"
 import { ZodObject, type z, type ZodType } from "zod"
-import { getFieldError } from "../../../../utils/zodHelpers"
 import { useQueries, type UseQueryResult } from "@tanstack/react-query"
 import { rolesService } from "../../roles/services/service"
 import { permissionsService } from "../../permissions/services/service"
@@ -26,6 +23,11 @@ import type { PersonLookupResponse } from "../../people/types/response.dto"
 import type { RoleLookupResponse } from "../../roles/types/response.dto"
 import type { PermissionLookupResponse } from "../../permissions/types/response.dto"
 import type { Option } from "../../../../components/Select/ReactSelect"
+import { logger } from "../../../../lib/logger"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../../lib/react-hook-form"
 
 interface FormProps<T extends ZodType<any, any>> {
   schema: T
@@ -136,7 +138,10 @@ export default function UsersForm<T extends ZodType<any, any>>({
                 peopleOptions.find((opt) => opt.value === field.value) ?? null
               }
               onChange={(option) => field.onChange(option?.value)}
-              errorMessage={getFieldError(errors.personId)}
+              errorMessage={getNestedErrorMessage(
+                errors,
+                `personId` as Path<T>
+              )}
             />
           )}
         />
@@ -146,8 +151,8 @@ export default function UsersForm<T extends ZodType<any, any>>({
         <InputFieldWithError
           label="Email"
           type="email"
-          {...register("email" as Path<T>, formTransformers.string)}
-          errorMessage={getFieldError(errors.email)}
+          {...register(`email` as Path<T>, formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, `email` as Path<T>)}
         />
       )}
 
@@ -155,30 +160,30 @@ export default function UsersForm<T extends ZodType<any, any>>({
         <InputFieldWithError
           label="Пароль"
           type="password"
-          {...register("rawPassword" as Path<T>, formTransformers.string)}
-          errorMessage={getFieldError(errors.rawPassword)}
+          {...register(`rawPassword` as Path<T>, formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, `rawPassword` as Path<T>)}
         />
       )}
 
       {schemaKeys.includes("isActive") && (
         <CheckboxWithError
           label="Активний"
-          {...register("isActive" as Path<T>, formTransformers.string)}
-          errorMessage={getFieldError(errors.isActive)}
+          {...register(`isActive` as Path<T>, formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, `isActive` as Path<T>)}
         />
       )}
 
       {schemaKeys.includes("isSuperuser") && (
         <CheckboxWithError
           label="Адміністратор"
-          {...register("isSuperuser" as Path<T>, formTransformers.string)}
-          errorMessage={getFieldError(errors.isSuperuser)}
+          {...register(`isSuperuser` as Path<T>, formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, `isSuperuser` as Path<T>)}
         />
       )}
 
       {schemaKeys.includes("rolesIds") && (
         <Controller
-          name={"rolesIds" as Path<T>}
+          name={`rolesIds` as Path<T>}
           control={control}
           render={({ field }) => (
             <ReactSelectMultiWithError
@@ -192,7 +197,10 @@ export default function UsersForm<T extends ZodType<any, any>>({
               onChange={(selectedOptions) =>
                 field.onChange(selectedOptions?.map((opt) => opt.value) || [])
               }
-              errorMessage={getFieldError(errors.rolesIds)}
+              errorMessage={getNestedErrorMessage(
+                errors,
+                `rolesIds` as Path<T>
+              )}
             />
           )}
         />
@@ -200,7 +208,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
 
       {schemaKeys.includes("permissionsIds") && (
         <Controller
-          name={"permissionsIds" as Path<T>}
+          name={`permissionsIds` as Path<T>}
           control={control}
           render={({ field }) => (
             <ReactSelectMultiWithError
@@ -214,7 +222,10 @@ export default function UsersForm<T extends ZodType<any, any>>({
               onChange={(selectedOptions) =>
                 field.onChange(selectedOptions?.map((opt) => opt.value) || [])
               }
-              errorMessage={getFieldError(errors.permissionsIds)}
+              errorMessage={getNestedErrorMessage(
+                errors,
+                `permissionsIds` as Path<T>
+              )}
             />
           )}
         />

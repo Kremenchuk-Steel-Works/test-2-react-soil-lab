@@ -5,14 +5,17 @@ import {
   ButtonWithError,
   ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
-import { logger } from "../../../../utils/logger"
 import { citySchema, type CityFormFields } from "./schema"
-import { formTransformers } from "../../../../utils/formTransformers"
 import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 import { useQuery } from "@tanstack/react-query"
 import type { CountryLookupResponse } from "../../country/types/response.dto"
 import { countryService } from "../../country/services/service"
 import type { Option } from "../../../../components/Select/ReactSelect"
+import { logger } from "../../../../lib/logger"
+import {
+  formTransformers,
+  getNestedErrorMessage,
+} from "../../../../lib/react-hook-form"
 
 type FormFields = CityFormFields
 const schema = citySchema
@@ -78,14 +81,14 @@ export default function CityForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Назва"
-        errorMessage={errors.name?.message}
         {...register("name", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "name")}
       />
 
       <InputFieldWithError
         label="Локальна назва"
-        errorMessage={errors.nameLocal?.message}
         {...register("nameLocal", formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, "nameLocal")}
       />
 
       <Controller
@@ -98,7 +101,7 @@ export default function CityForm({
             options={countriesOptions}
             value={countriesOptions.find((opt) => opt.value === field.value)}
             onChange={(option) => field.onChange(option?.value)}
-            errorMessage={errors.countryId?.message}
+            errorMessage={getNestedErrorMessage(errors, "countryId")}
           />
         )}
       />

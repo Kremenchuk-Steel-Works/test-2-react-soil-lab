@@ -3,8 +3,8 @@ import type {
   UserDetailResponse,
   UserShortResponse,
 } from "../features/admin/users/types/response.dto"
+import { handleAxiosError } from "../lib/axios"
 import type { PageParams } from "../types/pagination"
-import { handleAxiosError } from "../utils/handleAxiosError"
 
 export async function apiUsersMe() {
   try {

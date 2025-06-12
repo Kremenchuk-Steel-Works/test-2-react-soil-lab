@@ -1,6 +1,6 @@
 import { z } from "zod"
-import { toZodEnumValues } from "../../../../utils/zodHelpers"
 import { employeeProfileOptions } from "../types/employmentStatus"
+import { toZodEnumValues } from "../../../../lib/zod"
 
 export const employeeProfileSchema = z.object({
   employeeNumber: z.string().optional(),

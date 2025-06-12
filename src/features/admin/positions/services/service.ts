@@ -1,6 +1,6 @@
 import { api } from "../../../../api/client"
+import { handleAxiosError } from "../../../../lib/axios"
 import type { PageParams } from "../../../../types/pagination"
-import { handleAxiosError } from "../../../../utils/handleAxiosError"
 import { mockPositions } from "../mocks/mock"
 import type {
   PositionDetailResponse,
