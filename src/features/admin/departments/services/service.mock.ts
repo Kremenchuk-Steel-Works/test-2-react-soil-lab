@@ -1,0 +1,29 @@
+import type { PageParams } from "../../../../types/pagination"
+import { mockDepartments } from "../mocks/mock"
+import type {
+  DepartmentDetailResponse,
+  DepartmentListResponse,
+} from "../types/response.dto"
+
+const mockData = mockDepartments
+
+export const departmentsService = {
+  async getList(params?: PageParams): Promise<DepartmentListResponse> {
+    console.log(params)
+    const responeData = {
+      data: mockData,
+      page: 1,
+      totalPages: 1,
+      totalItems: mockData.length,
+    }
+    return responeData
+  },
+
+  async getById(id: string): Promise<DepartmentDetailResponse> {
+    const data = mockData.find((obj) => obj.id === id)
+
+    if (!data) throw new Error(`Object with id ${id} not found`)
+
+    return data
+  },
+}

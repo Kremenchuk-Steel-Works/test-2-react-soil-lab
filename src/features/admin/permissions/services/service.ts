@@ -1,42 +1,67 @@
+import { api } from "../../../../api/client"
+import { handleAxiosError } from "../../../../lib/axios"
 import type { PageParams } from "../../../../types/pagination"
-import { mockPermissions } from "../mocks/mock"
+import type {
+  PermissionCreateRequest,
+  PermissionUpdateRequest,
+} from "../types/request.dto"
 import type {
   PermissionDetailResponse,
   PermissionListResponse,
   PermissionLookupResponse,
 } from "../types/response.dto"
 
-const mockData = mockPermissions
-
 export const permissionsService = {
-  async getList(params?: PageParams): Promise<PermissionListResponse> {
-    console.log(params)
-    const newData = mockData.map((item) => ({
-      ...item,
-      departmentName: item.department.name,
-    }))
-    const responeData = {
-      data: newData,
-      page: 1,
-      totalPages: 1,
-      totalItems: mockData.length,
+  // Request
+  async create(
+    params: PermissionCreateRequest
+  ): Promise<PermissionDetailResponse> {
+    try {
+      const response = await api.post(`/permissions/`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
     }
-    return responeData
+  },
+
+  async update(
+    id: string,
+    params: PermissionUpdateRequest
+  ): Promise<PermissionDetailResponse> {
+    try {
+      const response = await api.put(`/permissions/${id}`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
+  },
+
+  // Response
+  async getList(params?: PageParams): Promise<PermissionListResponse> {
+    try {
+      const response = await api.get(`/permissions`, { params })
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 
   async getById(id: string): Promise<PermissionDetailResponse> {
-    const data = mockData.find((obj) => obj.id === Number(id))
-
-    if (!data) throw new Error(`Object with id ${id} not found`)
-
-    return data
+    try {
+      console.log(id)
+      const response = await api.get(`/permissions/${id}`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 
   async getLookup(): Promise<PermissionLookupResponse[]> {
-    const newData = mockData.map((item) => ({
-      ...item,
-      departmentName: item.department.name,
-    }))
-    return newData
+    try {
+      const response = await api.get(`/lookups/permissions`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 }

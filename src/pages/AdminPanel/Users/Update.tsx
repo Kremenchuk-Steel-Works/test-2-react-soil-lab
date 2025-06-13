@@ -26,10 +26,22 @@ export default function AdminUsersUpdate() {
   })
 
   const handleSubmit = async (data: UserUpdateFormFields) => {
-    // await apiPeopleAdd()
+    await usersService.update(id!, data)
     navigate("..")
     return data
   }
+
+  // Адаптируем данные под форму
+  function mapToFormDefaults(
+    obj: UserDetailResponse
+  ): Partial<UserUpdateFormFields> {
+    return {
+      ...obj,
+      rolesIds: obj.roles?.map((rol) => rol.id) || [],
+      permissionsIds: obj.permissions?.map((perm) => perm.id) || [],
+    }
+  }
+  const modifiedData = data ? mapToFormDefaults(data) : undefined
 
   return (
     <>
@@ -51,7 +63,7 @@ export default function AdminUsersUpdate() {
             <UsersForm
               schema={userUpdateSchema}
               onSubmit={handleSubmit}
-              defaultValues={data}
+              defaultValues={modifiedData}
               submitBtnName="Оновити"
             />
           </div>

@@ -73,15 +73,15 @@ export default function UsersForm<T extends ZodType<any, any>>({
   const queries = useQueries({
     queries: [
       {
-        queryKey: ["personLookup"],
+        queryKey: ["adminPersonLookupData"],
         queryFn: () => peopleService.getLookup(),
       },
       {
-        queryKey: ["roleLookup"],
+        queryKey: ["adminRoleLookupData"],
         queryFn: () => rolesService.getLookup(),
       },
       {
-        queryKey: ["permissionLookup"],
+        queryKey: ["adminPermissionLookupData"],
         queryFn: () => permissionsService.getLookup(),
       },
     ],

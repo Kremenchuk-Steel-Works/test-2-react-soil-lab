@@ -1,38 +1,58 @@
 import { api } from "../../../../api/client"
 import { handleAxiosError } from "../../../../lib/axios"
 import type { PageParams } from "../../../../types/pagination"
-import { mockOrganizations } from "../mocks/mock"
+import type {
+  OrganizationCreateRequest,
+  OrganizationUpdateRequest,
+} from "../types/request.dto"
 import type {
   OrganizationDetailResponse,
   OrganizationListResponse,
   OrganizationLookupResponse,
 } from "../types/response.dto"
 
-const mockData = mockOrganizations
-
 export const organizationsService = {
-  async getList(params?: PageParams): Promise<OrganizationListResponse> {
-    console.log(params)
-    const newData = mockData.map((item) => ({
-      ...item,
-      countryName: item.country.name ?? item.country.nameLocal ?? "",
-    }))
-    const responeData = {
-      data: newData,
-      page: 1,
-      totalPages: 1,
-      totalItems: mockData.length,
+  // Request
+  async create(
+    params: OrganizationCreateRequest
+  ): Promise<OrganizationDetailResponse> {
+    try {
+      const response = await api.post(`/organizations/`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
     }
-    return responeData
+  },
+
+  async update(
+    id: string,
+    params: OrganizationUpdateRequest
+  ): Promise<OrganizationDetailResponse> {
+    try {
+      const response = await api.put(`/organizations/${id}`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
+  },
+
+  // Response
+  async getList(params?: PageParams): Promise<OrganizationListResponse> {
+    try {
+      const response = await api.get(`/organizations`, { params })
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 
   async getById(id: string): Promise<OrganizationDetailResponse> {
-    console.log(id)
-    const data = mockData.find((obj) => obj.id === id)
-
-    if (!data) throw new Error(`Object with id ${id} not found`)
-
-    return data
+    try {
+      const response = await api.get(`/organizations/${id}`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 
   async getLookup(): Promise<OrganizationLookupResponse[]> {

@@ -1,29 +1,66 @@
+import { api } from "../../../../api/client"
+import { handleAxiosError } from "../../../../lib/axios"
 import type { PageParams } from "../../../../types/pagination"
-import { mockDepartments } from "../mocks/mock"
+import type {
+  DepartmentCreateRequest,
+  DepartmentUpdateRequest,
+} from "../types/request.dto"
 import type {
   DepartmentDetailResponse,
   DepartmentListResponse,
+  DepartmentLookupResponse,
 } from "../types/response.dto"
 
-const mockData = mockDepartments
-
 export const departmentsService = {
-  async getList(params?: PageParams): Promise<DepartmentListResponse> {
-    console.log(params)
-    const responeData = {
-      data: mockData,
-      page: 1,
-      totalPages: 1,
-      totalItems: mockData.length,
+  // Request
+  async create(
+    params: DepartmentCreateRequest
+  ): Promise<DepartmentDetailResponse> {
+    try {
+      const response = await api.post(`/departments/`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
     }
-    return responeData
+  },
+
+  async update(
+    id: string,
+    params: DepartmentUpdateRequest
+  ): Promise<DepartmentDetailResponse> {
+    try {
+      const response = await api.put(`/departments/${id}`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
+  },
+
+  // Response
+  async getList(params?: PageParams): Promise<DepartmentListResponse> {
+    try {
+      const response = await api.get(`/departments`, { params })
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 
   async getById(id: string): Promise<DepartmentDetailResponse> {
-    const data = mockData.find((obj) => obj.id === id)
+    try {
+      const response = await api.get(`/departments/${id}`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
+  },
 
-    if (!data) throw new Error(`Object with id ${id} not found`)
-
-    return data
+  async getLookup(): Promise<DepartmentLookupResponse[]> {
+    try {
+      const response = await api.get(`/lookups/departments`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 }

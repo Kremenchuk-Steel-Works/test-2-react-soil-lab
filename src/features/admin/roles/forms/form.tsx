@@ -6,12 +6,16 @@ import {
   ReactSelectMultiWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { rolesSchema, type RolesFormFields } from "./schema"
-import { mockPermissions } from "../../permissions/mocks/mock"
 import { logger } from "../../../../lib/logger"
 import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../lib/react-hook-form"
+import { useQuery } from "@tanstack/react-query"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
+import type { Option } from "../../../../components/Select/ReactSelect"
+import type { PermissionLookupResponse } from "../../permissions/types/response.dto"
+import { permissionsService } from "../../permissions/services/service"
 
 type FormFields = RolesFormFields
 const schema = rolesSchema
@@ -49,13 +53,29 @@ export default function RolesForm({
     }
   }
 
-  const permissionsData = mockPermissions
-  const permissionsOptions = [
-    ...permissionsData.map((obj) => ({
-      value: obj.id,
-      label: obj.name,
-    })),
-  ]
+  // Query
+  const {
+    data: permissionsData,
+    isLoading,
+    isError,
+    error: queryError,
+  } = useQuery<PermissionLookupResponse[], Error>({
+    queryKey: ["adminPermissionLookupData"],
+    queryFn: () => permissionsService.getLookup(),
+  })
+
+  // Loading || Error
+  if (isLoading) return
+  if (isError) {
+    return <AlertMessage type={AlertType.ERROR} message={queryError.message} />
+  }
+
+  // Options
+  const permissionsOptions: Option<number>[] =
+    permissionsData?.map((c) => ({
+      value: c.id,
+      label: c.name,
+    })) || []
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>

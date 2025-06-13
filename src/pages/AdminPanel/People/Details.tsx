@@ -160,7 +160,7 @@ export default function AdminPeopleDetails() {
                   </dt>
                   <dd className="mt-1">
                     <img
-                      src={data.photoUrl}
+                      src={URL.createObjectURL(data.photoUrl)}
                       alt="Фото користувача"
                       className="h-10 w-10 object-cover rounded"
                     />

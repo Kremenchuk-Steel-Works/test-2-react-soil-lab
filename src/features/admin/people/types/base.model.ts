@@ -6,5 +6,5 @@ export interface PersonBase {
   lastName: string
   gender: Gender
   birthDate?: string
-  photoUrl?: string
+  photoUrl?: File
 }

@@ -1,34 +1,61 @@
+import { api } from "../../../../api/client"
+import { handleAxiosError } from "../../../../lib/axios"
 import type { PageParams } from "../../../../types/pagination"
-import { mockRoles } from "../mocks/mock"
+import type { RoleCreateRequest, RoleUpdateRequest } from "../types/request.dto"
 import type {
   RoleDetailResponse,
   RoleListResponse,
   RoleLookupResponse,
 } from "../types/response.dto"
 
-const mockData = mockRoles
-
 export const rolesService = {
-  async getList(params?: PageParams): Promise<RoleListResponse> {
-    console.log(params)
-    const responeData = {
-      data: mockData,
-      page: 1,
-      totalPages: 1,
-      totalItems: mockData.length,
+  // Request
+  async create(params: RoleCreateRequest): Promise<RoleDetailResponse> {
+    try {
+      const response = await api.post(`/roles/`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
     }
-    return responeData
+  },
+
+  async update(
+    id: string,
+    params: RoleUpdateRequest
+  ): Promise<RoleDetailResponse> {
+    try {
+      const response = await api.put(`/roles/${id}`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
+  },
+
+  // Response
+  async getList(params?: PageParams): Promise<RoleListResponse> {
+    try {
+      const response = await api.get(`/roles`, { params })
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 
   async getById(id: string): Promise<RoleDetailResponse> {
-    const data = mockData.find((obj) => obj.id === Number(id))
-
-    if (!data) throw new Error(`Object with id ${id} not found`)
-
-    return data
+    try {
+      const response = await api.get(`/roles/${id}`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 
   async getLookup(): Promise<RoleLookupResponse[]> {
-    return mockData
+    try {
+      const response = await api.get(`/lookups/roles`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 }

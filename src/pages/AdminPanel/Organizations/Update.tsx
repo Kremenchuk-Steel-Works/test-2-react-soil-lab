@@ -23,19 +23,20 @@ export default function AdminOrganizationsUpdate() {
   })
 
   const handleSubmit = async (data: OrganizationsFormFields) => {
-    // await apiPeopleAdd()
+    await organizationsService.update(id!, data)
     navigate("..")
     return data
   }
 
   // Адаптируем данные под форму
   function mapToFormDefaults(
-    organization: OrganizationDetailResponse
+    obj: OrganizationDetailResponse
   ): Partial<OrganizationsFormFields> {
     return {
-      ...organization,
+      ...obj,
+      countryId: obj.country?.id,
       addresses:
-        organization.addresses?.map((addr) => ({
+        obj.addresses?.map((addr) => ({
           ...addr,
           cityId: addr.cityId,
         })) || [],

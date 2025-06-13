@@ -1,38 +1,61 @@
+import { api } from "../../../../api/client"
+import { handleAxiosError } from "../../../../lib/axios"
 import type { PageParams } from "../../../../types/pagination"
-import { mockCities } from "../mocks/mock"
+import type { CityCreateRequest, CityUpdateRequest } from "../types/request.dto"
 import type {
   CityDetailResponse,
   CityListResponse,
   CityLookupResponse,
 } from "../types/response.dto"
 
-const mockData = mockCities
-
 export const cityService = {
-  async getList(params?: PageParams): Promise<CityListResponse> {
-    console.log(params)
-    const responeData = {
-      data: mockData,
-      page: 1,
-      totalPages: 1,
-      totalItems: mockData.length,
+  // Request
+  async create(params: CityCreateRequest): Promise<CityDetailResponse> {
+    try {
+      const response = await api.post(`/cities/`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
     }
-    return responeData
+  },
+
+  async update(
+    id: string,
+    params: CityUpdateRequest
+  ): Promise<CityDetailResponse> {
+    try {
+      const response = await api.put(`/cities/${id}`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
+  },
+
+  // Response
+  async getList(params?: PageParams): Promise<CityListResponse> {
+    try {
+      const response = await api.get(`/cities`, { params })
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 
   async getById(id: string): Promise<CityDetailResponse> {
-    const data = mockData.find((obj) => obj.id === Number(id))
-
-    if (!data) throw new Error(`Object with id ${id} not found`)
-
-    return data
+    try {
+      const response = await api.get(`/cities/${id}`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 
   async getLookup(): Promise<CityLookupResponse[]> {
-    const newData = mockData.map((item) => ({
-      ...item,
-      countryId: item.country.id,
-    }))
-    return newData
+    try {
+      const response = await api.get(`/lookups/cities`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 }

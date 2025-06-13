@@ -1,54 +1,37 @@
-import type { ColumnDef } from "@tanstack/react-table"
-import { Link } from "react-router-dom"
+import { createColumnHelper } from "@tanstack/react-table"
 import type { OrganizationShortResponse } from "../../../../features/admin/organizations/types/response.dto"
+import { idColumn } from "../../../../components/Table/idColumn"
+import { displayColumn } from "../../../../components/Table/displayColumn"
 
-export const adminOrganizationsColumns: ColumnDef<
-  OrganizationShortResponse,
-  string
->[] = [
-  {
-    accessorKey: "id",
+const columnHelper = createColumnHelper<OrganizationShortResponse>()
+
+export const adminOrganizationsColumns = [
+  columnHelper.accessor("id", {
     header: "ID",
-    enableSorting: true,
-    sortDescFirst: false,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-    cell: (row) => (
-      <Link className="text-blue-500" to={row.getValue().toString()}>
-        {row.getValue()}
-      </Link>
-    ),
-  },
-  {
-    accessorKey: "countryName",
+    ...idColumn(),
+  }),
+
+  columnHelper.accessor("countryName", {
     header: "Країна",
     size: 110,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "legalName",
+    ...displayColumn(),
+  }),
+
+  columnHelper.accessor("legalName", {
     header: "Назва",
     size: 105,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "registrationNumber",
+    ...displayColumn(),
+  }),
+
+  columnHelper.accessor("registrationNumber", {
     header: "Реєстраційний номер",
     size: 225,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "taxId",
+    ...displayColumn(),
+  }),
+
+  columnHelper.accessor("taxId", {
     header: "Налоговий номер",
     size: 200,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
+    ...displayColumn(),
+  }),
 ]

@@ -7,13 +7,11 @@ import { adminPeopleColumns } from "./columns"
 import { peopleService } from "../../../../features/admin/people/services/service"
 import type { PersonListResponse } from "../../../../features/admin/people/types/response.dto"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
-// import { useModal } from "../../../../components/ui/Modal/ModalContext"
 
 export default function AdminPeopleList() {
   // Состояние из URL
   const { page, perPage, setSearchParams } = usePaginationParams()
   const navigate = useNavigate()
-  // const { openModal } = useModal()
 
   // Получение данных, usersData
   const {
@@ -52,18 +50,6 @@ export default function AdminPeopleList() {
       {isError && (
         <p className="text-red-600">Помилка: {queryError?.message}</p>
       )}
-
-      {/* <Button
-        className="flex items-center justify-center gap-1 whitespace-nowrap"
-        onClick={() =>
-          openModal({
-            label: <p className="text-lg font-semibold">Користувач</p>,
-            children: <AdminPeopleAdd />,
-          })
-        }
-      >
-        <Plus className="w-5 h-5" /> <span>Додати modal</span>
-      </Button> */}
 
       {!isLoading && !isError && data && (
         <DataTable

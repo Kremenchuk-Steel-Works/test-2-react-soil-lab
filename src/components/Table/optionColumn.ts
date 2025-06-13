@@ -1,8 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table"
 
-/**
- * Определяет структуру объекта опции для маппинга значений.
- */
 export type Option<TValue> = {
   value: TValue
   label: string

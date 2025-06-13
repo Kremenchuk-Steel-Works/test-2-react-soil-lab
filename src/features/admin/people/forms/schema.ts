@@ -12,7 +12,7 @@ export const peopleSchema = z.object({
   gender: z.enum(toZodEnumValues(genderOptions)),
   birthDate: z.string().optional(),
   photoUrl: z.instanceof(File).optional(),
-  employeeProfile: employeeProfileSchema,
+  employeeProfile: employeeProfileSchema.optional(),
   contacts: z.array(contactSchema),
   addresses: z.array(addressSchema),
   organizationIds: z.array(z.string()),

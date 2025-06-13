@@ -5,7 +5,6 @@ import {
   ButtonWithError,
   ReactSelectWithError,
   ReactSelectMultiWithError,
-  FileUploadWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
@@ -26,6 +25,8 @@ import {
 } from "../../../../lib/react-hook-form"
 import { logger } from "../../../../lib/logger"
 import { peopleSchema, type PeopleFormFields } from "./schema"
+import FormFileUpload from "../../../../components/Forms/FormFileUpload"
+import type { Option } from "../../../../components/Select/ReactSelect"
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -94,13 +95,13 @@ export default function PeopleForm({
   ]
 
   // Options
-  const organizationsOptions =
+  const organizationsOptions: Option<string>[] =
     organizationsQ.data?.map((c) => ({
       value: c.id,
       label: c.legalName,
     })) || []
 
-  const positionsOptions =
+  const positionsOptions: Option<string>[] =
     positionsQ.data?.map((c) => ({
       value: c.id,
       label: c.name,
@@ -155,42 +156,17 @@ export default function PeopleForm({
         )}
       />
 
-      <InputFieldWithError
-        label="Посилання на фото"
-        type="url"
-        {...register("photoUrl", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "photoUrl")}
-      />
-
       <Controller
         name="photoUrl"
         control={control}
-        render={({ field }) => (
-          <>
-            {field.value && (
-              <div className="mb-2">
-                <img
-                  src={URL.createObjectURL(field.value)}
-                  alt="Preview"
-                  className="h-24 w-24 rounded-full object-cover"
-                />
-              </div>
-            )}
-            <FileUploadWithError
-              multiple={false}
-              onFilesAccepted={(files) => {
-                if (files.length > 0) {
-                  field.onChange(files[0])
-                }
-              }}
-              accept={{
-                "image/png": [".png"],
-                "image/jpeg": [".jpg", ".jpeg"],
-              }}
-              maxSize={5 * 1024 * 1024}
-              errorMessage={getNestedErrorMessage(errors, "photoUrl")}
-            />
-          </>
+        render={({ field, fieldState }) => (
+          <FormFileUpload
+            field={field}
+            fieldState={fieldState}
+            label="Фото профілю"
+            fileType="image"
+            errorMessage={getNestedErrorMessage(errors, "photoUrl")}
+          />
         )}
       />
 

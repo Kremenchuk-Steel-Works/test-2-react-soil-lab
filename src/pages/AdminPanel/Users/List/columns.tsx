@@ -1,91 +1,58 @@
-import type { ColumnDef } from "@tanstack/react-table"
-import { Link } from "react-router-dom"
+import { createColumnHelper } from "@tanstack/react-table"
 import type { UserShortResponse } from "../../../../features/admin/users/types/response.dto"
+import { booleanColumn } from "../../../../components/Table/booleanColumn"
+import { dateColumn } from "../../../../components/Table/dateColumn"
+import { idColumn } from "../../../../components/Table/idColumn"
+import { listColumn } from "../../../../components/Table/listColumn"
+import { displayColumn } from "../../../../components/Table/displayColumn"
 
-export const adminUsersColumns: ColumnDef<UserShortResponse, string>[] = [
-  {
-    accessorKey: "id",
+const columnHelper = createColumnHelper<UserShortResponse>()
+
+export const adminUsersColumns = [
+  columnHelper.accessor("id", {
     header: "ID",
-    enableSorting: true,
-    sortDescFirst: false,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-    cell: (row) => (
-      <Link className="text-blue-500" to={row.getValue().toString()}>
-        {row.getValue()}
-      </Link>
-    ),
-  },
-  {
-    accessorKey: "email",
+    ...idColumn(),
+  }),
+
+  columnHelper.accessor("email", {
     header: "Email",
     size: 100,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "isActive",
+    ...displayColumn(),
+  }),
+
+  columnHelper.accessor("isActive", {
     header: "Активний?",
     size: 140,
-    cell: ({ getValue }) => (getValue() ? "Так" : "Ні"),
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = row.getValue<boolean>(columnId) ? "Так" : "Ні"
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
-  },
-  {
-    accessorKey: "isSuperuser",
+    ...booleanColumn(),
+  }),
+
+  columnHelper.accessor("isSuperuser", {
     header: "Адмін?",
     size: 115,
-    cell: ({ getValue }) => (getValue() ? "Так" : "Ні"),
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: (row, columnId, filterValue) => {
-      const displayValue = row.getValue<boolean>(columnId) ? "Так" : "Ні"
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
-  },
-  {
-    accessorKey: "fullName",
+    ...booleanColumn(),
+  }),
+
+  columnHelper.accessor("fullName", {
     header: "Повне ім'я",
     size: 145,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "lastLoginAt",
+    ...displayColumn(),
+  }),
+
+  columnHelper.accessor("lastLoginAt", {
     header: "Останній вхід",
     size: 165,
-    enableSorting: true,
-    enableColumnFilter: true,
-    cell: ({ getValue }) =>
-      getValue() ? new Date(getValue()).toLocaleString() : "—",
-    filterFn: (row, columnId, filterValue) => {
-      const val = row.getValue<string | undefined>(columnId)
-      const displayValue = val ? new Date(val).toLocaleString() : ""
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
-    },
-  },
-  {
-    accessorFn: (row) => row.roleNames.join(", "),
-    id: "roleNames",
+    ...dateColumn(),
+  }),
+
+  columnHelper.accessor("roleNames", {
     header: "Роль",
     size: 95,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorFn: (row) => row.permissionNames.join(", "),
-    id: "permissionNames",
+    ...listColumn(),
+  }),
+
+  columnHelper.accessor("permissionNames", {
     header: "Права доступу",
     size: 175,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
+    ...listColumn(),
+  }),
 ]

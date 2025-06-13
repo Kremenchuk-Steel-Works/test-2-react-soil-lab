@@ -16,6 +16,6 @@ export interface OrganizationCreateRequest extends OrganizationBase {
 
 export interface OrganizationUpdateRequest extends Partial<OrganizationBase> {
   countryId?: number
-  contactOperations: ContactOperationRequest[]
-  addressOperations: AddressOperationRequest[]
+  contactOperations?: ContactOperationRequest[]
+  addressOperations?: AddressOperationRequest[]
 }

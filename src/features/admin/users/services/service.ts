@@ -1,37 +1,52 @@
+import { api } from "../../../../api/client"
+import { handleAxiosError } from "../../../../lib/axios"
 import type { PageParams } from "../../../../types/pagination"
-import { mockUsers } from "../mocks/mock"
+import type { UserCreateRequest, UserUpdateRequest } from "../types/request.dto"
 import type {
   UserDetailResponse,
   UserListResponse,
 } from "../types/response.dto"
 
-const mockData = mockUsers
-
 export const usersService = {
-  async getList(params?: PageParams): Promise<UserListResponse> {
-    console.log(params)
-    const newData = mockData.map((item) => ({
-      ...item,
-      // fullName: item.person.fullName,
-      fullName: "ПІБ",
-      roleNames: item.roles.map((role) => role.name),
-      permissionNames: item.permissions.map((permission) => permission.name),
-    }))
-    const responeData = {
-      data: newData,
-      page: 1,
-      totalPages: 1,
-      totalItems: mockData.length,
+  // Request
+  async create(params: UserCreateRequest): Promise<UserDetailResponse> {
+    try {
+      const response = await api.post(`/users/`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
     }
-    return responeData
+  },
+
+  async update(
+    id: string,
+    params: UserUpdateRequest
+  ): Promise<UserDetailResponse> {
+    try {
+      const response = await api.put(`/users/${id}`, params)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
+  },
+
+  // Response
+  async getList(params?: PageParams): Promise<UserListResponse> {
+    try {
+      const response = await api.get(`/users`, { params })
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 
   async getById(id: string): Promise<UserDetailResponse> {
-    console.log(id)
-    const data = mockData.find((obj) => obj.id === id)
-
-    if (!data) throw new Error(`Object with id ${id} not found`)
-
-    return data
+    try {
+      console.log(id)
+      const response = await api.get(`/users/${id}`)
+      return response.data
+    } catch (err) {
+      handleAxiosError(err)
+    }
   },
 }

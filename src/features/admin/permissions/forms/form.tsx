@@ -6,12 +6,16 @@ import {
   ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { permissionsSchema, type PermissionsFormFields } from "./schema"
-import { mockDepartments } from "../../departments/mocks/mock"
 import { logger } from "../../../../lib/logger"
 import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../lib/react-hook-form"
+import type { Option } from "../../../../components/Select/ReactSelect"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
+import { useQuery } from "@tanstack/react-query"
+import type { DepartmentLookupResponse } from "../../departments/types/response.dto"
+import { departmentsService } from "../../departments/services/service"
 
 type FormFields = PermissionsFormFields
 const schema = permissionsSchema
@@ -49,13 +53,29 @@ export default function PermissionsForm({
     }
   }
 
-  const departmentsData = mockDepartments
-  const departmentsDataOptions = [
-    ...departmentsData.map((obj) => ({
-      value: obj.id,
-      label: obj.name,
-    })),
-  ]
+  // Query
+  const {
+    data: departmentsData,
+    isLoading,
+    isError,
+    error: queryError,
+  } = useQuery<DepartmentLookupResponse[], Error>({
+    queryKey: ["adminDepartmentLookupData"],
+    queryFn: () => departmentsService.getLookup(),
+  })
+
+  // Loading || Error
+  if (isLoading) return
+  if (isError) {
+    return <AlertMessage type={AlertType.ERROR} message={queryError.message} />
+  }
+
+  // Options
+  const departmentsOptions: Option[] =
+    departmentsData?.map((c) => ({
+      value: c.id,
+      label: c.name,
+    })) || []
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
@@ -79,10 +99,8 @@ export default function PermissionsForm({
             placeholder="Оберіть відділ"
             isClearable={true}
             onChange={(option) => field.onChange(option?.value)}
-            options={departmentsDataOptions}
-            value={departmentsDataOptions.find(
-              (opt) => opt.value === field.value
-            )}
+            options={departmentsOptions}
+            value={departmentsOptions.find((opt) => opt.value === field.value)}
             errorMessage={getNestedErrorMessage(errors, "departmentId")}
           />
         )}

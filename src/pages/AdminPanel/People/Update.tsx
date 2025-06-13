@@ -2,10 +2,7 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import {
-  nullsToUndefined,
-  peopleService,
-} from "../../../features/admin/people/services/service"
+import { peopleService } from "../../../features/admin/people/services/service"
 import PeopleForm from "../../../features/admin/people/forms/form"
 import type { PeopleFormFields } from "../../../features/admin/people/forms/schema"
 import type { PersonDetailResponse } from "../../../features/admin/people/types/response.dto"
@@ -33,14 +30,14 @@ export default function AdminPeopleUpdate() {
 
   // Адаптируем данные под форму
   function mapToFormDefaults(
-    person: PersonDetailResponse
+    obj: PersonDetailResponse
   ): Partial<PeopleFormFields> {
     return {
-      ...person,
-      organizationIds: person.organizations?.map((org) => org.id) || [],
-      positionIds: person.positions?.map((pos) => pos.id) || [],
+      ...obj,
+      organizationIds: obj.organizations?.map((org) => org.id) || [],
+      positionIds: obj.positions?.map((pos) => pos.id) || [],
       addresses:
-        person.addresses?.map((addr) => ({
+        obj.addresses?.map((addr) => ({
           ...addr,
           cityId: addr.cityId,
         })) || [],
@@ -67,7 +64,7 @@ export default function AdminPeopleUpdate() {
           <div className="w-full">
             <PeopleForm
               onSubmit={handleSubmit}
-              defaultValues={nullsToUndefined(modifiedData)}
+              defaultValues={modifiedData}
               submitBtnName="Оновити"
             />
           </div>

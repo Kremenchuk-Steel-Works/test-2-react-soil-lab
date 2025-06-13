@@ -21,7 +21,7 @@ export interface PersonShortResponse {
   id: string
   fullName: string
   gender: Gender
-  photoUrl?: string
+  photoUrl?: File
 }
 
 export interface PersonLookupResponse {

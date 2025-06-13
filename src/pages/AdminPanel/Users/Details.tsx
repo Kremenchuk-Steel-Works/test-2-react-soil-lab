@@ -4,8 +4,6 @@ import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 import { usersService } from "../../../features/admin/users/services/service"
 import type { UserDetailResponse } from "../../../features/admin/users/types/response.dto"
-// import BottomSheetButton from "../../../components/ui/FilterButton/BottomSheetButton"
-// import AdminUsersUpdate2 from "./Update copy"
 
 export default function AdminUsersDetails() {
   const navigate = useNavigate()
