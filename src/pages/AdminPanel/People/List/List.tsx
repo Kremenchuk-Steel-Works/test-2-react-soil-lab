@@ -4,9 +4,10 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
 import { adminPeopleColumns } from "./columns"
-import { peopleService } from "../../../../features/admin/people/services/service"
+import { personService } from "../../../../features/admin/people/services/service"
 import type { PersonListResponse } from "../../../../features/admin/people/types/response.dto"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
+import { personQueryKeys } from "../../../../features/admin/people/services/keys"
 
 export default function AdminPeopleList() {
   // Состояние из URL
@@ -20,9 +21,9 @@ export default function AdminPeopleList() {
     isError,
     error: queryError,
   } = useQuery<PersonListResponse, Error>({
-    queryKey: ["adminPeopleData", page, perPage],
+    queryKey: personQueryKeys.list(page, perPage),
     queryFn: () => {
-      return peopleService.getList({
+      return personService.getList({
         page: page,
         perPage: perPage,
       })

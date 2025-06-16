@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-  ReactSelectMultiWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { rolesSchema, type RolesFormFields } from "./schema"
 import { logger } from "../../../../lib/logger"
@@ -15,7 +14,9 @@ import { useQuery } from "@tanstack/react-query"
 import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 import type { Option } from "../../../../components/Select/ReactSelect"
 import type { PermissionLookupResponse } from "../../permissions/types/response.dto"
-import { permissionsService } from "../../permissions/services/service"
+import { permissionService } from "../../permissions/services/service"
+import { permissionQueryKeys } from "../../permissions/services/keys"
+import FormSelectField from "../../../../components/Forms/FormReactSelect"
 
 type FormFields = RolesFormFields
 const schema = rolesSchema
@@ -60,8 +61,8 @@ export default function RolesForm({
     isError,
     error: queryError,
   } = useQuery<PermissionLookupResponse[], Error>({
-    queryKey: ["adminPermissionLookupData"],
-    queryFn: () => permissionsService.getLookup(),
+    queryKey: permissionQueryKeys.lookups(),
+    queryFn: () => permissionService.getLookup(),
   })
 
   // Loading || Error
@@ -94,18 +95,14 @@ export default function RolesForm({
       <Controller
         name="permissionIds"
         control={control}
-        render={({ field }) => (
-          <ReactSelectMultiWithError
-            placeholder="Оберіть права доступу"
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
+            fieldState={fieldState}
             isMulti={true}
             isClearable={true}
             options={permissionsOptions}
-            value={permissionsOptions.filter((opt) =>
-              field.value?.includes(opt.value)
-            )}
-            onChange={(selectedOptions) =>
-              field.onChange(selectedOptions?.map((opt) => opt.value) || [])
-            }
+            placeholder="Оберіть права доступу"
             errorMessage={getNestedErrorMessage(errors, "permissionIds")}
           />
         )}

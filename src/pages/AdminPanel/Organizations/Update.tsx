@@ -2,10 +2,12 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { organizationsService } from "../../../features/admin/organizations/services/service"
+import { organizationService } from "../../../features/admin/organizations/services/service"
 import type { OrganizationsFormFields } from "../../../features/admin/organizations/forms/schema"
 import OrganizationsForm from "../../../features/admin/organizations/forms/form"
 import type { OrganizationDetailResponse } from "../../../features/admin/organizations/types/response.dto"
+import AlertMessage, { AlertType } from "../../../components/AlertMessage"
+import { organizationQueryKeys } from "../../../features/admin/organizations/services/keys"
 
 export default function AdminOrganizationsUpdate() {
   const navigate = useNavigate()
@@ -17,13 +19,13 @@ export default function AdminOrganizationsUpdate() {
     isError,
     error: queryError,
   } = useQuery<OrganizationDetailResponse, Error>({
-    queryKey: ["adminOrganizationData", id],
-    queryFn: () => organizationsService.getById(id!),
+    queryKey: organizationQueryKeys.detail(id!),
+    queryFn: () => organizationService.getById(id!),
     enabled: !!id,
   })
 
   const handleSubmit = async (data: OrganizationsFormFields) => {
-    await organizationsService.update(id!, data)
+    await organizationService.update(id!, data)
     navigate("..")
     return data
   }
@@ -42,7 +44,6 @@ export default function AdminOrganizationsUpdate() {
         })) || [],
     }
   }
-  const modifiedData = data ? mapToFormDefaults(data) : undefined
 
   return (
     <>
@@ -56,14 +57,15 @@ export default function AdminOrganizationsUpdate() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
+
       {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
             <OrganizationsForm
               onSubmit={handleSubmit}
-              defaultValues={modifiedData}
+              defaultValues={mapToFormDefaults(data)}
               submitBtnName="Оновити"
             />
           </div>

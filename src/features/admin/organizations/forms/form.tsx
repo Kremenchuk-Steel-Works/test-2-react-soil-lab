@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-  ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { organizationsSchema, type OrganizationsFormFields } from "./schema"
 import { ContactForm } from "../../contact/forms/form"
@@ -19,6 +18,8 @@ import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../lib/react-hook-form"
+import FormSelectField from "../../../../components/Forms/FormReactSelect"
+import { countryQueryKeys } from "../../country/services/keys"
 
 type FormFields = OrganizationsFormFields
 const schema = organizationsSchema
@@ -63,7 +64,7 @@ export default function OrganizationsForm({
     isError,
     error: queryError,
   } = useQuery<CountryLookupResponse[], Error>({
-    queryKey: ["adminCountryLookupData"],
+    queryKey: countryQueryKeys.lookups(),
     queryFn: () => countryService.getLookup(),
   })
 
@@ -101,15 +102,15 @@ export default function OrganizationsForm({
       />
 
       <Controller
-        name={`countryId`}
+        name="countryId"
         control={control}
-        render={({ field }) => (
-          <ReactSelectWithError
-            placeholder="Оберіть країну"
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
             isClearable={true}
+            fieldState={fieldState}
             options={countriesOptions}
-            value={countriesOptions.find((opt) => opt.value === field.value)}
-            onChange={(option) => field.onChange(option?.value)}
+            placeholder="Оберіть країну"
             errorMessage={getNestedErrorMessage(errors, "countryId")}
           />
         )}
@@ -118,8 +119,8 @@ export default function OrganizationsForm({
       {/* Contacts */}
       <DynamicFieldArray
         name="contacts"
-        label="контакт"
-        form={ContactForm<OrganizationsFormFields>}
+        label="контактні дані"
+        form={ContactForm}
         defaultItem={{ value: undefined!, type: undefined!, isPrimary: false }}
         control={control}
         register={register}
@@ -130,7 +131,7 @@ export default function OrganizationsForm({
       <DynamicFieldArray
         label="адресу"
         name="addresses"
-        form={AddressForm<OrganizationsFormFields>}
+        form={AddressForm}
         defaultItem={{
           type: undefined!,
           isPrimary: undefined!,

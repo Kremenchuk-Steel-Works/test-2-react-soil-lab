@@ -11,7 +11,7 @@ import type {
   PermissionLookupResponse,
 } from "../types/response.dto"
 
-export const permissionsService = {
+export const permissionService = {
   // Request
   async create(
     params: PermissionCreateRequest

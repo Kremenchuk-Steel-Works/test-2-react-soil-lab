@@ -11,7 +11,7 @@ import type {
   OrganizationLookupResponse,
 } from "../types/response.dto"
 
-export const organizationsService = {
+export const organizationService = {
   // Request
   async create(
     params: OrganizationCreateRequest

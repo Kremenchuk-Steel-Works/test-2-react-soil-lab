@@ -16,6 +16,7 @@ import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../lib/react-hook-form"
+import { countryQueryKeys } from "../../country/services/keys"
 
 type FormFields = CityFormFields
 const schema = citySchema
@@ -60,7 +61,7 @@ export default function CityForm({
     isError,
     error: queryError,
   } = useQuery<CountryLookupResponse[], Error>({
-    queryKey: ["adminCountryLookupData"],
+    queryKey: countryQueryKeys.lookups(),
     queryFn: () => countryService.getLookup(),
   })
 

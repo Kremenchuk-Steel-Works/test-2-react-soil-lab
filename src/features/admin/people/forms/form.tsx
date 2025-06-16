@@ -3,8 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-  ReactSelectWithError,
-  ReactSelectMultiWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
@@ -14,8 +12,8 @@ import { OptionalField } from "../../../../components/Forms/OptionalField"
 import { genderOptions } from "../types/gender"
 import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 import { useQueries, type UseQueryResult } from "@tanstack/react-query"
-import { organizationsService } from "../../organizations/services/service"
-import { positionsService } from "../../positions/services/service"
+import { organizationService } from "../../organizations/services/service"
+import { positionService } from "../../positions/services/service"
 import type { OrganizationLookupResponse } from "../../organizations/types/response.dto"
 import type { PositionLookupResponse } from "../../positions/types/response.dto"
 import FormDateField from "../../../../components/Forms/FormDateField"
@@ -27,6 +25,9 @@ import { logger } from "../../../../lib/logger"
 import { peopleSchema, type PeopleFormFields } from "./schema"
 import FormFileUpload from "../../../../components/Forms/FormFileUpload"
 import type { Option } from "../../../../components/Select/ReactSelect"
+import FormSelectField from "../../../../components/Forms/FormReactSelect"
+import { organizationQueryKeys } from "../../organizations/services/keys"
+import { positionQueryKeys } from "../../positions/services/keys"
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -68,12 +69,12 @@ export default function PeopleForm({
   const queries = useQueries({
     queries: [
       {
-        queryKey: ["organizationLookup"],
-        queryFn: () => organizationsService.getLookup(),
+        queryKey: organizationQueryKeys.lookups(),
+        queryFn: () => organizationService.getLookup(),
       },
       {
-        queryKey: ["positionLookup"],
-        queryFn: () => positionsService.getLookup(),
+        queryKey: positionQueryKeys.lookups(),
+        queryFn: () => positionService.getLookup(),
       },
     ],
   })
@@ -130,13 +131,13 @@ export default function PeopleForm({
       <Controller
         name="gender"
         control={control}
-        render={({ field }) => (
-          <ReactSelectWithError
-            placeholder="Оберіть стать"
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
             isClearable={true}
+            fieldState={fieldState}
             options={genderOptions}
-            value={genderOptions.find((opt) => opt.value === field.value)}
-            onChange={(option) => field.onChange(option?.value)}
+            placeholder="Оберіть стать"
             errorMessage={getNestedErrorMessage(errors, "gender")}
           />
         )}
@@ -174,7 +175,7 @@ export default function PeopleForm({
       <DynamicFieldArray
         label="контактні дані"
         name="contacts"
-        form={ContactForm<PeopleFormFields>}
+        form={ContactForm}
         defaultItem={{
           value: undefined!,
           type: undefined!,
@@ -189,7 +190,7 @@ export default function PeopleForm({
       <DynamicFieldArray
         label="адресу"
         name="addresses"
-        form={AddressForm<PeopleFormFields>}
+        form={AddressForm}
         defaultItem={{
           type: undefined!,
           isPrimary: undefined!,
@@ -204,18 +205,14 @@ export default function PeopleForm({
       <Controller
         name="organizationIds"
         control={control}
-        render={({ field }) => (
-          <ReactSelectMultiWithError
-            placeholder="Оберіть організацію"
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
+            fieldState={fieldState}
             isMulti={true}
             isClearable={true}
             options={organizationsOptions}
-            value={organizationsOptions.filter((opt) =>
-              field.value?.includes(opt.value)
-            )}
-            onChange={(selectedOptions) =>
-              field.onChange(selectedOptions?.map((opt) => opt.value) || [])
-            }
+            placeholder="Оберіть організацію"
             errorMessage={getNestedErrorMessage(errors, "organizationIds")}
           />
         )}
@@ -224,18 +221,14 @@ export default function PeopleForm({
       <Controller
         name="positionIds"
         control={control}
-        render={({ field }) => (
-          <ReactSelectMultiWithError
-            placeholder="Оберіть посаду"
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
+            fieldState={fieldState}
             isMulti={true}
             isClearable={true}
             options={positionsOptions}
-            value={positionsOptions.filter((opt) =>
-              field.value?.includes(opt.value)
-            )}
-            onChange={(selectedOptions) =>
-              field.onChange(selectedOptions?.map((opt) => opt.value) || [])
-            }
+            placeholder="Оберіть посаду"
             errorMessage={getNestedErrorMessage(errors, "positionIds")}
           />
         )}

@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import type { PermissionsFormFields } from "../../../features/admin/permissions/forms/schema"
 import PermissionsForm from "../../../features/admin/permissions/forms/form"
+import { permissionService } from "../../../features/admin/permissions/services/service"
 
 export default function AdminPermissionsAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: PermissionsFormFields) => {
-    // await apiPeopleAdd()
+    await permissionService.create(data)
     navigate("..")
     return data
   }

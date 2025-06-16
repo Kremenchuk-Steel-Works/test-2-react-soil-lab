@@ -1,43 +1,28 @@
-import type { ColumnDef } from "@tanstack/react-table"
-import { Link } from "react-router-dom"
+import { createColumnHelper } from "@tanstack/react-table"
 import type { CountryShortResponse } from "../../../../features/admin/country/types/response.dto"
+import { idColumn } from "../../../../components/Table/idColumn"
+import { displayColumn } from "../../../../components/Table/displayColumn"
 
-export const adminCountryColumns: ColumnDef<CountryShortResponse, string>[] = [
-  {
-    accessorKey: "id",
+const columnHelper = createColumnHelper<CountryShortResponse>()
+
+export const adminCountryColumns = [
+  columnHelper.accessor("id", {
     header: "ID",
-    enableSorting: true,
-    sortDescFirst: false,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-    cell: (row) => (
-      <Link className="text-blue-500" to={row.getValue().toString()}>
-        {row.getValue()}
-      </Link>
-    ),
-  },
-  {
-    accessorKey: "name",
+    ...idColumn(),
+  }),
+  columnHelper.accessor("name", {
     header: "Назва",
     size: 100,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "nameLocal",
+    ...displayColumn(),
+  }),
+  columnHelper.accessor("nameLocal", {
     header: "Локальна назва",
     size: 110,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "code",
+    ...displayColumn(),
+  }),
+  columnHelper.accessor("code", {
     header: "Код-2",
     size: 100,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
+    ...displayColumn(),
+  }),
 ]

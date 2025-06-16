@@ -3,10 +3,11 @@ import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
-import { rolesService } from "../../../../features/admin/roles/services/service"
+import { roleService } from "../../../../features/admin/roles/services/service"
 import { adminRolesColumns } from "./columns"
 import type { RoleListResponse } from "../../../../features/admin/roles/types/response.dto"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
+import { roleQueryKeys } from "../../../../features/admin/roles/services/keys"
 
 export default function AdminRolesList() {
   // Состояние из URL
@@ -20,9 +21,9 @@ export default function AdminRolesList() {
     isError,
     error: queryError,
   } = useQuery<RoleListResponse, Error>({
-    queryKey: ["adminRolesData", page, perPage],
+    queryKey: roleQueryKeys.list(page, perPage),
     queryFn: () => {
-      return rolesService.getList({
+      return roleService.getList({
         page: page,
         perPage: perPage,
       })

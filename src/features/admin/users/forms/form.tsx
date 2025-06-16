@@ -10,14 +10,12 @@ import {
   InputFieldWithError,
   ButtonWithError,
   CheckboxWithError,
-  ReactSelectWithError,
-  ReactSelectMultiWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { ZodObject, type z, type ZodType } from "zod"
 import { useQueries, type UseQueryResult } from "@tanstack/react-query"
-import { rolesService } from "../../roles/services/service"
-import { permissionsService } from "../../permissions/services/service"
-import { peopleService } from "../../people/services/service"
+import { roleService } from "../../roles/services/service"
+import { permissionService } from "../../permissions/services/service"
+import { personService } from "../../people/services/service"
 import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 import type { PersonLookupResponse } from "../../people/types/response.dto"
 import type { RoleLookupResponse } from "../../roles/types/response.dto"
@@ -28,6 +26,10 @@ import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../lib/react-hook-form"
+import FormSelectField from "../../../../components/Forms/FormReactSelect"
+import { personQueryKeys } from "../../people/services/keys"
+import { roleQueryKeys } from "../../roles/services/keys"
+import { permissionQueryKeys } from "../../permissions/services/keys"
 
 interface FormProps<T extends ZodType<any, any>> {
   schema: T
@@ -73,16 +75,16 @@ export default function UsersForm<T extends ZodType<any, any>>({
   const queries = useQueries({
     queries: [
       {
-        queryKey: ["adminPersonLookupData"],
-        queryFn: () => peopleService.getLookup(),
+        queryKey: personQueryKeys.lookups(),
+        queryFn: () => personService.getLookup(),
       },
       {
-        queryKey: ["adminRoleLookupData"],
-        queryFn: () => rolesService.getLookup(),
+        queryKey: roleQueryKeys.lookups(),
+        queryFn: () => roleService.getLookup(),
       },
       {
-        queryKey: ["adminPermissionLookupData"],
-        queryFn: () => permissionsService.getLookup(),
+        queryKey: permissionQueryKeys.lookups(),
+        queryFn: () => permissionService.getLookup(),
       },
     ],
   })
@@ -129,15 +131,13 @@ export default function UsersForm<T extends ZodType<any, any>>({
         <Controller
           name={`personId` as Path<T>}
           control={control}
-          render={({ field }) => (
-            <ReactSelectWithError
-              placeholder="Оберіть людину"
+          render={({ field, fieldState }) => (
+            <FormSelectField
+              field={field}
               isClearable={true}
+              fieldState={fieldState}
               options={peopleOptions}
-              value={
-                peopleOptions.find((opt) => opt.value === field.value) ?? null
-              }
-              onChange={(option) => field.onChange(option?.value)}
+              placeholder="Оберіть людину"
               errorMessage={getNestedErrorMessage(
                 errors,
                 `personId` as Path<T>
@@ -185,18 +185,14 @@ export default function UsersForm<T extends ZodType<any, any>>({
         <Controller
           name={`rolesIds` as Path<T>}
           control={control}
-          render={({ field }) => (
-            <ReactSelectMultiWithError
-              placeholder="Оберіть ролі"
+          render={({ field, fieldState }) => (
+            <FormSelectField
+              field={field}
+              fieldState={fieldState}
               isMulti={true}
               isClearable={true}
               options={rolesOptions}
-              value={rolesOptions.filter((opt) =>
-                field.value?.includes(opt.value)
-              )}
-              onChange={(selectedOptions) =>
-                field.onChange(selectedOptions?.map((opt) => opt.value) || [])
-              }
+              placeholder="Оберіть ролі"
               errorMessage={getNestedErrorMessage(
                 errors,
                 `rolesIds` as Path<T>
@@ -210,18 +206,14 @@ export default function UsersForm<T extends ZodType<any, any>>({
         <Controller
           name={`permissionsIds` as Path<T>}
           control={control}
-          render={({ field }) => (
-            <ReactSelectMultiWithError
-              placeholder="Оберіть права доступу"
+          render={({ field, fieldState }) => (
+            <FormSelectField
+              field={field}
+              fieldState={fieldState}
               isMulti={true}
               isClearable={true}
               options={permissionsOptions}
-              value={permissionsOptions.filter((opt) =>
-                field.value?.includes(opt.value)
-              )}
-              onChange={(selectedOptions) =>
-                field.onChange(selectedOptions?.map((opt) => opt.value) || [])
-              }
+              placeholder="Оберіть права доступу"
               errorMessage={getNestedErrorMessage(
                 errors,
                 `permissionsIds` as Path<T>

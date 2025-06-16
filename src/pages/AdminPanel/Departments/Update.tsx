@@ -2,10 +2,12 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { departmentsService } from "../../../features/admin/departments/services/service"
+import { departmentService } from "../../../features/admin/departments/services/service"
 import type { DepartmentsFormFields } from "../../../features/admin/departments/forms/schema"
 import DepartmentsForm from "../../../features/admin/departments/forms/form"
 import type { DepartmentDetailResponse } from "../../../features/admin/departments/types/response.dto"
+import { departmentQueryKeys } from "../../../features/admin/departments/services/keys"
+import AlertMessage, { AlertType } from "../../../components/AlertMessage"
 
 export default function AdminDepartmentsUpdate() {
   const navigate = useNavigate()
@@ -17,13 +19,13 @@ export default function AdminDepartmentsUpdate() {
     isError,
     error: queryError,
   } = useQuery<DepartmentDetailResponse, Error>({
-    queryKey: ["adminDepartmentData", id],
-    queryFn: () => departmentsService.getById(id!),
+    queryKey: departmentQueryKeys.detail(id!),
+    queryFn: () => departmentService.getById(id!),
     enabled: !!id,
   })
 
   const handleSubmit = async (data: DepartmentsFormFields) => {
-    // await apiPeopleAdd()
+    await departmentService.update(id!, data)
     navigate("..")
     return data
   }
@@ -40,8 +42,9 @@ export default function AdminDepartmentsUpdate() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
+
       {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">

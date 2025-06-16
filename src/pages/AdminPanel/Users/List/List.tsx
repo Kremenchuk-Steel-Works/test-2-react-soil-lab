@@ -3,10 +3,11 @@ import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
-import { usersService } from "../../../../features/admin/users/services/service"
+import { userService } from "../../../../features/admin/users/services/service"
 import { adminUsersColumns } from "./columns"
 import type { UserListResponse } from "../../../../features/admin/users/types/response.dto"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
+import { userQueryKeys } from "../../../../features/admin/users/services/keys"
 
 export default function AdminUsersList() {
   // Состояние из URL
@@ -20,9 +21,9 @@ export default function AdminUsersList() {
     isError,
     error: queryError,
   } = useQuery<UserListResponse, Error>({
-    queryKey: ["adminUsersData", page, perPage],
+    queryKey: userQueryKeys.list(page, perPage),
     queryFn: () => {
-      return usersService.getList({
+      return userService.getList({
         page: page,
         perPage: perPage,
       })

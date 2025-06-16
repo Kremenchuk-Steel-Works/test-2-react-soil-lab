@@ -1,4 +1,6 @@
-export const addressOptions = [
+import type { Option } from "../../../../components/Select/ReactSelect"
+
+export const addressOptions: Option<string>[] = [
   { value: "billing", label: "Виставлення рахунків" },
   { value: "shipping", label: "Доставка" },
   { value: "warehouse", label: "Склад" },

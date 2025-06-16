@@ -15,7 +15,7 @@ export const countryService = {
   // Request
   async create(params: CountryCreateRequest): Promise<CountryDetailResponse> {
     try {
-      const response = await api.post(`/countries/`, params)
+      const response = await api.post(`/counties/`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -27,7 +27,7 @@ export const countryService = {
     params: CountryUpdateRequest
   ): Promise<CountryDetailResponse> {
     try {
-      const response = await api.put(`/countries/${id}`, params)
+      const response = await api.put(`/counties/${id}`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -37,7 +37,7 @@ export const countryService = {
   // Response
   async getList(params?: PageParams): Promise<CountryListResponse> {
     try {
-      const response = await api.get(`/countries`, { params })
+      const response = await api.get(`/counties`, { params })
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -46,7 +46,7 @@ export const countryService = {
 
   async getById(id: string): Promise<CountryDetailResponse> {
     try {
-      const response = await api.get(`/countries/${id}`)
+      const response = await api.get(`/counties/${id}`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

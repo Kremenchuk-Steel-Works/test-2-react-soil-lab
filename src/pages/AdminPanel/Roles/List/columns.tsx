@@ -1,52 +1,27 @@
-import type { ColumnDef } from "@tanstack/react-table"
-import { Link } from "react-router-dom"
+import { createColumnHelper } from "@tanstack/react-table"
 import type { RoleShortResponse } from "../../../../features/admin/roles/types/response.dto"
+import { idColumn } from "../../../../components/Table/idColumn"
+import { displayColumn } from "../../../../components/Table/displayColumn"
+import { listColumn } from "../../../../components/Table/listColumn"
+import type { PermissionListItemResponse } from "../../../../features/admin/permissions/types/response.dto"
 
-export const adminRolesColumns: ColumnDef<RoleShortResponse, string>[] = [
-  {
-    accessorKey: "id",
+const columnHelper = createColumnHelper<RoleShortResponse>()
+
+export const adminRolesColumns = [
+  columnHelper.accessor("id", {
     header: "ID",
-    enableSorting: true,
-    sortDescFirst: false,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-    cell: (row) => (
-      <Link className="text-blue-500" to={row.getValue().toString()}>
-        {row.getValue()}
-      </Link>
-    ),
-  },
-  {
-    accessorKey: "name",
+    ...idColumn(),
+  }),
+  columnHelper.accessor("name", {
     header: "Назва",
     size: 100,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "description",
-    header: "Опис",
-    size: 100,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "permissions",
+    ...displayColumn(),
+  }),
+  columnHelper.accessor("permissions", {
     header: "Права доступу",
     size: 100,
-    enableSorting: false,
-    enableColumnFilter: false,
-    cell: (row) => {
-      const permissions = row.row.original.permissions
-      return (
-        <div className="text-sm text-gray-800 dark:text-slate-200">
-          {permissions.length > 0
-            ? permissions.map((perm) => perm.name).join(", ")
-            : "—"}
-        </div>
-      )
-    },
-  },
+    ...listColumn<RoleShortResponse, PermissionListItemResponse>({
+      formatter: (role) => role.name,
+    }),
+  }),
 ]

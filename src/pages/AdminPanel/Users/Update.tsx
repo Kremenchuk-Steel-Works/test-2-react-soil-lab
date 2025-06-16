@@ -7,8 +7,10 @@ import {
   type UserUpdateFormFields,
 } from "../../../features/admin/users/forms/schema"
 import type { UserDetailResponse } from "../../../features/admin/users/types/response.dto"
-import { usersService } from "../../../features/admin/users/services/service"
+import { userService } from "../../../features/admin/users/services/service"
 import UsersForm from "../../../features/admin/users/forms/form"
+import AlertMessage, { AlertType } from "../../../components/AlertMessage"
+import { userQueryKeys } from "../../../features/admin/users/services/keys"
 
 export default function AdminUsersUpdate() {
   const navigate = useNavigate()
@@ -20,13 +22,13 @@ export default function AdminUsersUpdate() {
     isError,
     error: queryError,
   } = useQuery<UserDetailResponse, Error>({
-    queryKey: ["adminUserData", id],
-    queryFn: () => usersService.getById(id!),
+    queryKey: userQueryKeys.detail(id!),
+    queryFn: () => userService.getById(id!),
     enabled: !!id,
   })
 
   const handleSubmit = async (data: UserUpdateFormFields) => {
-    await usersService.update(id!, data)
+    await userService.update(id!, data)
     navigate("..")
     return data
   }
@@ -41,7 +43,6 @@ export default function AdminUsersUpdate() {
       permissionsIds: obj.permissions?.map((perm) => perm.id) || [],
     }
   }
-  const modifiedData = data ? mapToFormDefaults(data) : undefined
 
   return (
     <>
@@ -55,15 +56,16 @@ export default function AdminUsersUpdate() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
+
       {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
             <UsersForm
               schema={userUpdateSchema}
               onSubmit={handleSubmit}
-              defaultValues={modifiedData}
+              defaultValues={mapToFormDefaults(data)}
               submitBtnName="Оновити"
             />
           </div>

@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import type { DepartmentsFormFields } from "../../../features/admin/departments/forms/schema"
 import DepartmentsForm from "../../../features/admin/departments/forms/form"
+import { departmentService } from "../../../features/admin/departments/services/service"
 
 export default function AdminDepartmentsAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: DepartmentsFormFields) => {
-    // await apiPeopleAdd()
+    await departmentService.create(data)
     navigate("..")
     return data
   }

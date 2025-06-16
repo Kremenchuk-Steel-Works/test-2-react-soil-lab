@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-  ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { permissionsSchema, type PermissionsFormFields } from "./schema"
 import { logger } from "../../../../lib/logger"
@@ -15,7 +14,9 @@ import type { Option } from "../../../../components/Select/ReactSelect"
 import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 import { useQuery } from "@tanstack/react-query"
 import type { DepartmentLookupResponse } from "../../departments/types/response.dto"
-import { departmentsService } from "../../departments/services/service"
+import { departmentService } from "../../departments/services/service"
+import { departmentQueryKeys } from "../../departments/services/keys"
+import FormSelectField from "../../../../components/Forms/FormReactSelect"
 
 type FormFields = PermissionsFormFields
 const schema = permissionsSchema
@@ -53,29 +54,26 @@ export default function PermissionsForm({
     }
   }
 
-  // Query
   const {
     data: departmentsData,
     isLoading,
     isError,
     error: queryError,
   } = useQuery<DepartmentLookupResponse[], Error>({
-    queryKey: ["adminDepartmentLookupData"],
-    queryFn: () => departmentsService.getLookup(),
+    queryKey: departmentQueryKeys.lookups(),
+    queryFn: () => departmentService.getLookup(),
   })
 
-  // Loading || Error
-  if (isLoading) return
-  if (isError) {
-    return <AlertMessage type={AlertType.ERROR} message={queryError.message} />
-  }
-
-  // Options
   const departmentsOptions: Option[] =
     departmentsData?.map((c) => ({
       value: c.id,
       label: c.name,
     })) || []
+
+  if (isLoading) return
+  if (isError) {
+    return <AlertMessage type={AlertType.ERROR} message={queryError.message} />
+  }
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
@@ -94,13 +92,13 @@ export default function PermissionsForm({
       <Controller
         name="departmentId"
         control={control}
-        render={({ field }) => (
-          <ReactSelectWithError
-            placeholder="Оберіть відділ"
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
             isClearable={true}
-            onChange={(option) => field.onChange(option?.value)}
+            fieldState={fieldState}
             options={departmentsOptions}
-            value={departmentsOptions.find((opt) => opt.value === field.value)}
+            placeholder="Оберіть відділ"
             errorMessage={getNestedErrorMessage(errors, "departmentId")}
           />
         )}

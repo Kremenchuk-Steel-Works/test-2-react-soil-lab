@@ -2,8 +2,9 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { organizationsService } from "../../../features/admin/organizations/services/service"
+import { organizationService } from "../../../features/admin/organizations/services/service"
 import type { OrganizationDetailResponse } from "../../../features/admin/organizations/types/response.dto"
+import { organizationQueryKeys } from "../../../features/admin/organizations/services/keys"
 
 export default function AdminOrganizationsDetails() {
   const navigate = useNavigate()
@@ -15,8 +16,8 @@ export default function AdminOrganizationsDetails() {
     isError,
     error: queryError,
   } = useQuery<OrganizationDetailResponse, Error>({
-    queryKey: ["adminOrganizationData", id],
-    queryFn: () => organizationsService.getById(id!),
+    queryKey: organizationQueryKeys.detail(id!),
+    queryFn: () => organizationService.getById(id!),
     enabled: !!id,
   })
 

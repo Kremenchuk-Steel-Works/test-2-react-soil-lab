@@ -4,6 +4,8 @@ import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 import type { CountryDetailResponse } from "../../../features/admin/country/types/response.dto"
 import { countryService } from "../../../features/admin/country/services/service"
+import { countryQueryKeys } from "../../../features/admin/country/services/keys"
+import AlertMessage, { AlertType } from "../../../components/AlertMessage"
 
 export default function AdminCountryDetails() {
   const navigate = useNavigate()
@@ -15,7 +17,7 @@ export default function AdminCountryDetails() {
     isError,
     error: queryError,
   } = useQuery<CountryDetailResponse, Error>({
-    queryKey: ["adminCountryData", id],
+    queryKey: countryQueryKeys.detail(id!),
     queryFn: () => countryService.getById(id!),
     enabled: !!id,
   })
@@ -33,7 +35,7 @@ export default function AdminCountryDetails() {
 
       <div>
         {isError && (
-          <p className="text-red-600">Помилка: {queryError?.message}</p>
+          <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
         )}
         {!isLoading && !isError && data && (
           <div className="bg-white dark:bg-gray-800 p-6">

@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import type { RolesFormFields } from "../../../features/admin/roles/forms/schema"
 import RolesForm from "../../../features/admin/roles/forms/form"
+import { roleService } from "../../../features/admin/roles/services/service"
 
 export default function AdminRolesAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: RolesFormFields) => {
-    // await apiPeopleAdd()
+    await roleService.create(data)
     navigate("..")
     return data
   }

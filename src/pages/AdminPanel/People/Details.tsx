@@ -3,8 +3,9 @@ import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 
-import { peopleService } from "../../../features/admin/people/services/service"
+import { personService } from "../../../features/admin/people/services/service"
 import type { PersonDetailResponse } from "../../../features/admin/people/types/response.dto"
+import { personQueryKeys } from "../../../features/admin/people/services/keys"
 
 export default function AdminPeopleDetails() {
   const navigate = useNavigate()
@@ -16,8 +17,8 @@ export default function AdminPeopleDetails() {
     isError,
     error: queryError,
   } = useQuery<PersonDetailResponse, Error>({
-    queryKey: ["adminPersonData", id],
-    queryFn: () => peopleService.getById(id!),
+    queryKey: personQueryKeys.detail(id!),
+    queryFn: () => personService.getById(id!),
     enabled: !!id,
   })
 

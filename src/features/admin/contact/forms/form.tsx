@@ -7,7 +7,6 @@ import {
 } from "react-hook-form"
 import {
   InputFieldWithError,
-  ReactSelectWithError,
   CheckboxWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { contactOptions } from "../types/contact"
@@ -16,6 +15,7 @@ import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../lib/react-hook-form"
+import FormSelectField from "../../../../components/Forms/FormReactSelect"
 
 export type FormFields = {
   contacts: ContactFormFields[]
@@ -53,13 +53,13 @@ export function ContactForm<T extends FormFields>({
       <Controller
         name={`contacts.${index}.type` as Path<T>}
         control={control}
-        render={({ field }) => (
-          <ReactSelectWithError
-            placeholder="Оберіть тип"
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
             isClearable={true}
+            fieldState={fieldState}
             options={contactOptions}
-            value={contactOptions.find((opt) => opt.value === field.value)}
-            onChange={(option) => field.onChange(option?.value)}
+            placeholder="Оберіть тип"
             errorMessage={getNestedErrorMessage(
               errors,
               `contacts.${index}.type` as Path<T>

@@ -7,7 +7,6 @@ import {
 } from "react-hook-form"
 import {
   InputFieldWithError,
-  ReactSelectWithError,
   CheckboxWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import type { AddressFormFields } from "./schema"
@@ -21,6 +20,8 @@ import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../lib/react-hook-form"
+import FormSelectField from "../../../../components/Forms/FormReactSelect"
+import { cityQueryKeys } from "../../city/services/keys"
 
 export type FormFields = {
   addresses: AddressFormFields[]
@@ -46,7 +47,7 @@ export function AddressForm<T extends FormFields>({
     isError,
     error: queryError,
   } = useQuery<CityLookupResponse[], Error>({
-    queryKey: ["adminCityLookupData"],
+    queryKey: cityQueryKeys.lookups(),
     queryFn: () => cityService.getLookup(),
   })
 
@@ -82,13 +83,13 @@ export function AddressForm<T extends FormFields>({
       <Controller
         name={`addresses.${index}.cityId` as Path<T>}
         control={control}
-        render={({ field }) => (
-          <ReactSelectWithError
-            placeholder="Оберіть місто"
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
             isClearable={true}
+            fieldState={fieldState}
             options={citiesOptions}
-            value={citiesOptions.find((opt) => opt.value === field.value)}
-            onChange={(option) => field.onChange(option?.value)}
+            placeholder="Оберіть місто"
             errorMessage={getNestedErrorMessage(
               errors,
               `addresses.${index}.cityId` as Path<T>
@@ -124,13 +125,13 @@ export function AddressForm<T extends FormFields>({
       <Controller
         name={`addresses.${index}.type` as Path<T>}
         control={control}
-        render={({ field }) => (
-          <ReactSelectWithError
-            placeholder="Оберіть тип"
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
             isClearable={true}
+            fieldState={fieldState}
             options={addressOptions}
-            value={addressOptions.find((opt) => opt.value === field.value)}
-            onChange={(option) => field.onChange(option?.value)}
+            placeholder="Оберіть тип"
             errorMessage={getNestedErrorMessage(
               errors,
               `addresses.${index}.type` as Path<T>

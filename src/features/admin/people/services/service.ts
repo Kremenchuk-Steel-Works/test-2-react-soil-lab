@@ -11,7 +11,7 @@ import type {
   PersonLookupResponse,
 } from "../types/response.dto"
 
-export const peopleService = {
+export const personService = {
   // Request
   async create(params: PersonCreateRequest): Promise<PersonDetailResponse> {
     try {

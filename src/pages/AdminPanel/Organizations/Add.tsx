@@ -3,13 +3,13 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import type { OrganizationsFormFields } from "../../../features/admin/organizations/forms/schema"
 import OrganizationsForm from "../../../features/admin/organizations/forms/form"
-import { organizationsService } from "../../../features/admin/organizations/services/service"
+import { organizationService } from "../../../features/admin/organizations/services/service"
 
 export default function AdminOrganizationsAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: OrganizationsFormFields) => {
-    await organizationsService.create(data)
+    await organizationService.create(data)
     navigate("..")
     return data
   }

@@ -7,7 +7,7 @@ import type {
   UserListResponse,
 } from "../types/response.dto"
 
-export const usersService = {
+export const userService = {
   // Request
   async create(params: UserCreateRequest): Promise<UserDetailResponse> {
     try {

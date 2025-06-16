@@ -11,7 +11,7 @@ import type {
   DepartmentLookupResponse,
 } from "../types/response.dto"
 
-export const departmentsService = {
+export const departmentService = {
   // Request
   async create(
     params: DepartmentCreateRequest

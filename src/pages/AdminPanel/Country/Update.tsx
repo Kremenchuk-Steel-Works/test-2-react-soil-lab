@@ -6,6 +6,8 @@ import { countryService } from "../../../features/admin/country/services/service
 import type { CountryDetailResponse } from "../../../features/admin/country/types/response.dto"
 import type { CountryFormFields } from "../../../features/admin/country/forms/schema"
 import CountryForm from "../../../features/admin/country/forms/form"
+import { countryQueryKeys } from "../../../features/admin/country/services/keys"
+import AlertMessage, { AlertType } from "../../../components/AlertMessage"
 
 export default function AdminCountryUpdate() {
   const navigate = useNavigate()
@@ -17,13 +19,13 @@ export default function AdminCountryUpdate() {
     isError,
     error: queryError,
   } = useQuery<CountryDetailResponse, Error>({
-    queryKey: ["adminCountryData", id],
+    queryKey: countryQueryKeys.detail(id!),
     queryFn: () => countryService.getById(id!),
     enabled: !!id,
   })
 
   const handleSubmit = async (data: CountryFormFields) => {
-    // await apiPeopleAdd()
+    await countryService.update(id!, data)
     navigate("..")
     return data
   }
@@ -40,8 +42,9 @@ export default function AdminCountryUpdate() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
+
       {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">

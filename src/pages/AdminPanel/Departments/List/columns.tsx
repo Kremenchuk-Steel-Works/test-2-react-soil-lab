@@ -1,38 +1,23 @@
-import type { ColumnDef } from "@tanstack/react-table"
-import { Link } from "react-router-dom"
+import { createColumnHelper } from "@tanstack/react-table"
 import type { DepartmentShortResponse } from "../../../../features/admin/departments/types/response.dto"
+import { idColumn } from "../../../../components/Table/idColumn"
+import { displayColumn } from "../../../../components/Table/displayColumn"
 
-export const adminDepartmentsColumns: ColumnDef<
-  DepartmentShortResponse,
-  string
->[] = [
-  {
-    accessorKey: "id",
+const columnHelper = createColumnHelper<DepartmentShortResponse>()
+
+export const adminDepartmentsColumns = [
+  columnHelper.accessor("id", {
     header: "ID",
-    enableSorting: true,
-    sortDescFirst: false,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-    cell: (row) => (
-      <Link className="text-blue-500" to={row.getValue().toString()}>
-        {row.getValue()}
-      </Link>
-    ),
-  },
-  {
-    accessorKey: "name",
+    ...idColumn(),
+  }),
+  columnHelper.accessor("name", {
     header: "Назва",
     size: 100,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "description",
+    ...displayColumn(),
+  }),
+  columnHelper.accessor("description", {
     header: "Опис",
     size: 100,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
+    ...displayColumn(),
+  }),
 ]

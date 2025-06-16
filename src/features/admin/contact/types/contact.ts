@@ -1,4 +1,6 @@
-export const contactOptions = [
+import type { Option } from "../../../../components/Select/ReactSelect"
+
+export const contactOptions: Option<string>[] = [
   { value: "email", label: "Email" },
   { value: "phone", label: "Телефон" },
   { value: "telegram", label: "Телеграм" },

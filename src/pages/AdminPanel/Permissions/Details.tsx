@@ -2,8 +2,9 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { permissionsService } from "../../../features/admin/permissions/services/service"
+import { permissionService } from "../../../features/admin/permissions/services/service"
 import type { PermissionDetailResponse } from "../../../features/admin/permissions/types/response.dto"
+import { permissionQueryKeys } from "../../../features/admin/permissions/services/keys"
 
 export default function AdminPermissionsDetails() {
   const navigate = useNavigate()
@@ -15,8 +16,8 @@ export default function AdminPermissionsDetails() {
     isError,
     error: queryError,
   } = useQuery<PermissionDetailResponse, Error>({
-    queryKey: ["adminPermissionData", id],
-    queryFn: () => permissionsService.getById(id!),
+    queryKey: permissionQueryKeys.detail(id!),
+    queryFn: () => permissionService.getById(id!),
     enabled: !!id,
   })
 

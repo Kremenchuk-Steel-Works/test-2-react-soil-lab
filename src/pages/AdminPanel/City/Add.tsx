@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import type { CityFormFields } from "../../../features/admin/city/forms/schema"
 import CityForm from "../../../features/admin/city/forms/form"
+import { cityService } from "../../../features/admin/city/services/service"
 
 export default function AdminCityAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: CityFormFields) => {
-    // await apiPeopleAdd()
+    await cityService.create(data)
     navigate("..")
     return data
   }

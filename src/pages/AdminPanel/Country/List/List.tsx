@@ -7,6 +7,8 @@ import type { CountryListResponse } from "../../../../features/admin/country/typ
 import { countryService } from "../../../../features/admin/country/services/service"
 import { adminCountryColumns } from "./columns"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
+import { countryQueryKeys } from "../../../../features/admin/country/services/keys"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 
 export default function AdminCountryList() {
   // Состояние из URL
@@ -20,7 +22,7 @@ export default function AdminCountryList() {
     isError,
     error: queryError,
   } = useQuery<CountryListResponse, Error>({
-    queryKey: ["adminCountriesData", page, perPage],
+    queryKey: countryQueryKeys.list(page, perPage),
     queryFn: () => {
       return countryService.getList({
         page: page,
@@ -48,7 +50,7 @@ export default function AdminCountryList() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
 
       {!isLoading && !isError && data && (

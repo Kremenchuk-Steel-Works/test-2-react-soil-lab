@@ -1,38 +1,23 @@
-import type { ColumnDef } from "@tanstack/react-table"
-import { Link } from "react-router-dom"
+import { createColumnHelper } from "@tanstack/react-table"
 import type { PermissionListItemResponse } from "../../../../features/admin/permissions/types/response.dto"
+import { idColumn } from "../../../../components/Table/idColumn"
+import { displayColumn } from "../../../../components/Table/displayColumn"
 
-export const adminPermissionsColumns: ColumnDef<
-  PermissionListItemResponse,
-  string
->[] = [
-  {
-    accessorKey: "id",
+const columnHelper = createColumnHelper<PermissionListItemResponse>()
+
+export const adminPermissionsColumns = [
+  columnHelper.accessor("id", {
     header: "ID",
-    enableSorting: true,
-    sortDescFirst: false,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-    cell: (row) => (
-      <Link className="text-blue-500" to={row.getValue().toString()}>
-        {row.getValue()}
-      </Link>
-    ),
-  },
-  {
-    accessorKey: "name",
+    ...idColumn(),
+  }),
+  columnHelper.accessor("name", {
     header: "Назва",
     size: 100,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
-  {
-    accessorKey: "departmentName",
+    ...displayColumn(),
+  }),
+  columnHelper.accessor("departmentName", {
     header: "Назва відділу",
     size: 100,
-    enableSorting: true,
-    enableColumnFilter: true,
-    filterFn: "includesString",
-  },
+    ...displayColumn(),
+  }),
 ]

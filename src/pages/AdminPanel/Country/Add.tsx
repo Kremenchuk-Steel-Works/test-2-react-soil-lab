@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import type { CountryFormFields } from "../../../features/admin/country/forms/schema"
 import CountryForm from "../../../features/admin/country/forms/form"
+import { countryService } from "../../../features/admin/country/services/service"
 
 export default function AdminCountryAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: CountryFormFields) => {
-    // await apiPeopleAdd()
+    await countryService.create(data)
     navigate("..")
     return data
   }

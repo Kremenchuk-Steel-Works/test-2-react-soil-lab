@@ -7,6 +7,8 @@ import { adminCityColumns } from "./columns"
 import type { CityListResponse } from "../../../../features/admin/city/types/response.dto"
 import { cityService } from "../../../../features/admin/city/services/service"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
+import { cityQueryKeys } from "../../../../features/admin/city/services/keys"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 
 export default function AdminCityList() {
   // Состояние из URL
@@ -20,7 +22,7 @@ export default function AdminCityList() {
     isError,
     error: queryError,
   } = useQuery<CityListResponse, Error>({
-    queryKey: ["adminCitiesData", page, perPage],
+    queryKey: cityQueryKeys.list(page, perPage),
     queryFn: () => {
       return cityService.getList({
         page: page,
@@ -48,7 +50,7 @@ export default function AdminCityList() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
 
       {!isLoading && !isError && data && (

@@ -2,10 +2,12 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { peopleService } from "../../../features/admin/people/services/service"
+import { personService } from "../../../features/admin/people/services/service"
 import PeopleForm from "../../../features/admin/people/forms/form"
 import type { PeopleFormFields } from "../../../features/admin/people/forms/schema"
 import type { PersonDetailResponse } from "../../../features/admin/people/types/response.dto"
+import AlertMessage, { AlertType } from "../../../components/AlertMessage"
+import { personQueryKeys } from "../../../features/admin/people/services/keys"
 
 export default function AdminPeopleUpdate() {
   const navigate = useNavigate()
@@ -17,13 +19,13 @@ export default function AdminPeopleUpdate() {
     isError,
     error: queryError,
   } = useQuery<PersonDetailResponse, Error>({
-    queryKey: ["adminPersonData", id],
-    queryFn: () => peopleService.getById(id!),
+    queryKey: personQueryKeys.detail(id!),
+    queryFn: () => personService.getById(id!),
     enabled: !!id,
   })
 
   const handleSubmit = async (data: PeopleFormFields) => {
-    await peopleService.update(id!, data)
+    await personService.update(id!, data)
     navigate("..")
     return data
   }
@@ -43,7 +45,6 @@ export default function AdminPeopleUpdate() {
         })) || [],
     }
   }
-  const modifiedData = data ? mapToFormDefaults(data) : undefined
 
   return (
     <>
@@ -57,14 +58,15 @@ export default function AdminPeopleUpdate() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
+
       {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
             <PeopleForm
               onSubmit={handleSubmit}
-              defaultValues={modifiedData}
+              defaultValues={mapToFormDefaults(data)}
               submitBtnName="Оновити"
             />
           </div>

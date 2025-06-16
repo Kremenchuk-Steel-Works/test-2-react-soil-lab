@@ -1,4 +1,6 @@
-export const employeeProfileOptions = [
+import type { Option } from "../../../../components/Select/ReactSelect"
+
+export const employeeProfileOptions: Option<string>[] = [
   { value: "intern", label: "Стажер" },
   { value: "full-time", label: "Повна зайнятість" },
   { value: "part-time", label: "Неповна зайнятість" },

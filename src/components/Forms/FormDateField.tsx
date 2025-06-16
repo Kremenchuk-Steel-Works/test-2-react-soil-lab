@@ -28,7 +28,7 @@ const FormDateField = ({
       {...rest}
       value={field.value ? new Date(field.value) : undefined}
       onChange={(date: Date | null) => {
-        field.onChange(date ? format(date, stringFormat) : undefined)
+        field.onChange(date ? format(date, stringFormat) : null)
       }}
       onBlur={field.onBlur}
       ref={field.ref}

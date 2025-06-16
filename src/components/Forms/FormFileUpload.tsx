@@ -29,21 +29,20 @@ const FormFileUpload = ({
 }: FormFileUploadProps) => {
   const preset = fileType ? fileTypePresets[fileType] : undefined
 
+  let acceptedFiles: File[] = []
+  if (field.value) {
+    acceptedFiles = Array.isArray(field.value) ? field.value : [field.value]
+  }
+
   return (
     <FileUploadWithError
       {...rest}
       multiple={multiple}
       accept={rest.accept || preset?.accept}
       maxSize={rest.maxSize || preset?.maxSize}
-      acceptedFiles={
-        field.value
-          ? Array.isArray(field.value)
-            ? field.value
-            : [field.value]
-          : []
-      }
+      acceptedFiles={acceptedFiles}
       onFilesChange={(files: File[]) => {
-        field.onChange(multiple ? files : files[0] || undefined)
+        field.onChange(multiple ? files : files[0] || null)
       }}
       errorMessage={errorMessage || fieldState.error?.message}
     />

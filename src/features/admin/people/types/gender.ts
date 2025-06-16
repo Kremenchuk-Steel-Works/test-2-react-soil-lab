@@ -1,4 +1,6 @@
-export const genderOptions = [
+import type { Option } from "../../../../components/Select/ReactSelect"
+
+export const genderOptions: Option<string>[] = [
   { value: "male", label: "Чоловіча" },
   { value: "female", label: "Жіноча" },
   { value: "other", label: "Інша" },

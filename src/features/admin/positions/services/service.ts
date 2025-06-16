@@ -11,7 +11,7 @@ import type {
   PositionLookupResponse,
 } from "../types/response.dto"
 
-export const positionsService = {
+export const positionService = {
   // Request
   async create(params: PositionCreateRequest): Promise<PositionDetailResponse> {
     try {

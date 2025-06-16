@@ -6,6 +6,8 @@ import type { CityFormFields } from "../../../features/admin/city/forms/schema"
 import type { CityDetailResponse } from "../../../features/admin/city/types/response.dto"
 import { cityService } from "../../../features/admin/city/services/service"
 import CityForm from "../../../features/admin/city/forms/form"
+import { cityQueryKeys } from "../../../features/admin/city/services/keys"
+import AlertMessage, { AlertType } from "../../../components/AlertMessage"
 
 export default function AdminCityUpdate() {
   const navigate = useNavigate()
@@ -17,15 +19,23 @@ export default function AdminCityUpdate() {
     isError,
     error: queryError,
   } = useQuery<CityDetailResponse, Error>({
-    queryKey: ["adminCityData", id],
+    queryKey: cityQueryKeys.detail(id!),
     queryFn: () => cityService.getById(id!),
     enabled: !!id,
   })
 
   const handleSubmit = async (data: CityFormFields) => {
-    // await apiPeopleAdd()
+    await cityService.update(id!, data)
     navigate("..")
     return data
+  }
+
+  // Адаптируем данные под форму
+  function mapToFormDefaults(obj: CityDetailResponse): Partial<CityFormFields> {
+    return {
+      ...obj,
+      countryId: obj.country?.id,
+    }
   }
 
   return (
@@ -40,14 +50,15 @@ export default function AdminCityUpdate() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
+
       {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
             <CityForm
               onSubmit={handleSubmit}
-              defaultValues={data}
+              defaultValues={mapToFormDefaults(data)}
               submitBtnName="Оновити"
             />
           </div>

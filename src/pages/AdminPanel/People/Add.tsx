@@ -3,13 +3,13 @@ import PeopleForm from "../../../features/admin/people/forms/form"
 import { useNavigate } from "react-router-dom"
 import Button from "../../../components/Button/Button"
 import { ArrowLeft } from "lucide-react"
-import { peopleService } from "../../../features/admin/people/services/service"
+import { personService } from "../../../features/admin/people/services/service"
 
 export default function AdminPeopleAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: PeopleFormFields) => {
-    await peopleService.create(data)
+    await personService.create(data)
     navigate("..")
     return data
   }

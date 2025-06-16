@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import type { PositionsFormFields } from "../../../features/admin/positions/forms/schema"
 import PositionsForm from "../../../features/admin/positions/forms/form"
+import { positionService } from "../../../features/admin/positions/services/service"
 
 export default function AdminPositionsAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: PositionsFormFields) => {
-    // await apiPeopleAdd()
+    await positionService.create(data)
     navigate("..")
     return data
   }

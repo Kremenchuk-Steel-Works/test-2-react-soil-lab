@@ -4,9 +4,10 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
 import { adminOrganizationsColumns } from "./columns"
-import { organizationsService } from "../../../../features/admin/organizations/services/service"
+import { organizationService } from "../../../../features/admin/organizations/services/service"
 import type { OrganizationListResponse } from "../../../../features/admin/organizations/types/response.dto"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
+import { organizationQueryKeys } from "../../../../features/admin/organizations/services/keys"
 
 export default function AdminOrganizationsList() {
   // Состояние из URL
@@ -20,9 +21,9 @@ export default function AdminOrganizationsList() {
     isError,
     error: queryError,
   } = useQuery<OrganizationListResponse, Error>({
-    queryKey: ["adminOgranizationsData", page, perPage],
+    queryKey: organizationQueryKeys.list(page, perPage),
     queryFn: () => {
-      return organizationsService.getList({
+      return organizationService.getList({
         page: page,
         perPage: perPage,
       })

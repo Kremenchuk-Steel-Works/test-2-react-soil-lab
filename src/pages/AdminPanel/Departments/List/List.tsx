@@ -4,9 +4,10 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import Button from "../../../../components/Button/Button"
 import { DataTable } from "../../../../components/Table/DataTable"
 import { adminDepartmentsColumns } from "./columns"
-import { departmentsService } from "../../../../features/admin/departments/services/service"
+import { departmentService } from "../../../../features/admin/departments/services/service"
 import type { DepartmentListResponse } from "../../../../features/admin/departments/types/response.dto"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
+import { departmentQueryKeys } from "../../../../features/admin/departments/services/keys"
 
 export default function AdminDepartmentsList() {
   // Состояние из URL
@@ -20,9 +21,9 @@ export default function AdminDepartmentsList() {
     isError,
     error: queryError,
   } = useQuery<DepartmentListResponse, Error>({
-    queryKey: ["adminDepartmentsData", page, perPage],
+    queryKey: departmentQueryKeys.list(page, perPage),
     queryFn: () => {
-      return departmentsService.getList({
+      return departmentService.getList({
         page: page,
         perPage: perPage,
       })

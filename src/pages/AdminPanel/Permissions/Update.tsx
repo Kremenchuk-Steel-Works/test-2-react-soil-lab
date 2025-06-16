@@ -3,9 +3,11 @@ import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 import type { PermissionsFormFields } from "../../../features/admin/permissions/forms/schema"
-import { permissionsService } from "../../../features/admin/permissions/services/service"
+import { permissionService } from "../../../features/admin/permissions/services/service"
 import PermissionsForm from "../../../features/admin/permissions/forms/form"
 import type { PermissionDetailResponse } from "../../../features/admin/permissions/types/response.dto"
+import { permissionQueryKeys } from "../../../features/admin/permissions/services/keys"
+import AlertMessage, { AlertType } from "../../../components/AlertMessage"
 
 export default function AdminPermissionsUpdate() {
   const navigate = useNavigate()
@@ -17,15 +19,25 @@ export default function AdminPermissionsUpdate() {
     isError,
     error: queryError,
   } = useQuery<PermissionDetailResponse, Error>({
-    queryKey: ["adminPermissionData", id],
-    queryFn: () => permissionsService.getById(id!),
+    queryKey: permissionQueryKeys.detail(id!),
+    queryFn: () => permissionService.getById(id!),
     enabled: !!id,
   })
 
   const handleSubmit = async (data: PermissionsFormFields) => {
-    // await apiPeopleAdd()
+    await permissionService.update(id!, data)
     navigate("..")
     return data
+  }
+
+  // Адаптируем данные под форму
+  function mapToFormDefaults(
+    obj: PermissionDetailResponse
+  ): Partial<PermissionsFormFields> {
+    return {
+      ...obj,
+      departmentId: obj.department?.id,
+    }
   }
 
   return (
@@ -40,14 +52,15 @@ export default function AdminPermissionsUpdate() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
+
       {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
             <PermissionsForm
               onSubmit={handleSubmit}
-              defaultValues={data}
+              defaultValues={mapToFormDefaults(data)}
               submitBtnName="Оновити"
             />
           </div>

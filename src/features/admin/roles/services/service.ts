@@ -8,7 +8,7 @@ import type {
   RoleLookupResponse,
 } from "../types/response.dto"
 
-export const rolesService = {
+export const roleService = {
   // Request
   async create(params: RoleCreateRequest): Promise<RoleDetailResponse> {
     try {

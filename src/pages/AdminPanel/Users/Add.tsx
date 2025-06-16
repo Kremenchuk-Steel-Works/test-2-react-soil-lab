@@ -6,13 +6,13 @@ import {
   type UserFormFields,
 } from "../../../features/admin/users/forms/schema"
 import UsersForm from "../../../features/admin/users/forms/form"
-import { usersService } from "../../../features/admin/users/services/service"
+import { userService } from "../../../features/admin/users/services/service"
 
 export default function AdminUsersAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: UserFormFields) => {
-    await usersService.create(data)
+    await userService.create(data)
     navigate("..")
     return data
   }

@@ -2,10 +2,12 @@ import Button from "../../../components/Button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { positionsService } from "../../../features/admin/positions/services/service"
+import { positionService } from "../../../features/admin/positions/services/service"
 import type { PositionsFormFields } from "../../../features/admin/positions/forms/schema"
 import PositionsForm from "../../../features/admin/positions/forms/form"
 import type { PositionDetailResponse } from "../../../features/admin/positions/types/response.dto"
+import { positionQueryKeys } from "../../../features/admin/positions/services/keys"
+import AlertMessage, { AlertType } from "../../../components/AlertMessage"
 
 export default function AdminPositionsUpdate() {
   const navigate = useNavigate()
@@ -17,13 +19,13 @@ export default function AdminPositionsUpdate() {
     isError,
     error: queryError,
   } = useQuery<PositionDetailResponse, Error>({
-    queryKey: ["admiPositionData", id],
-    queryFn: () => positionsService.getById(id!),
+    queryKey: positionQueryKeys.detail(id!),
+    queryFn: () => positionService.getById(id!),
     enabled: !!id,
   })
 
   const handleSubmit = async (data: PositionsFormFields) => {
-    // await apiPeopleAdd()
+    await positionService.update(id!, data)
     navigate("..")
     return data
   }
@@ -40,8 +42,9 @@ export default function AdminPositionsUpdate() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
+
       {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">

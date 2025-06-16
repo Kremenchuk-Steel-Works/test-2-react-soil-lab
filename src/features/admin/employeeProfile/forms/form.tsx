@@ -5,10 +5,7 @@ import {
   type Path,
   type UseFormRegister,
 } from "react-hook-form"
-import {
-  InputFieldWithError,
-  ReactSelectWithError,
-} from "../../../../components/WithError/fieldsWithError"
+import { InputFieldWithError } from "../../../../components/WithError/fieldsWithError"
 import type { EmployeeProfileFormFields } from "./schema"
 import { employeeProfileOptions } from "../types/employmentStatus"
 import FormDateField from "../../../../components/Forms/FormDateField"
@@ -16,6 +13,7 @@ import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../lib/react-hook-form"
+import FormSelectField from "../../../../components/Forms/FormReactSelect"
 
 export type FormFields = {
   employeeProfile?: EmployeeProfileFormFields
@@ -67,20 +65,18 @@ export function EmployeeProfileForm<T extends FormFields>({
       />
 
       <Controller
-        name={"employeeProfile.employmentStatus" as Path<T>}
+        name={`employeeProfile.employmentStatus` as Path<T>}
         control={control}
-        render={({ field }) => (
-          <ReactSelectWithError
-            placeholder="Оберіть статус працевлаштування"
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
             isClearable={true}
+            fieldState={fieldState}
             options={employeeProfileOptions}
-            value={employeeProfileOptions.find(
-              (opt) => opt.value === field.value
-            )}
-            onChange={(option) => field.onChange(option?.value)}
+            placeholder="Оберіть статус працевлаштування"
             errorMessage={getNestedErrorMessage(
               errors,
-              "employeeProfile.employmentStatus" as Path<T>
+              `employeeProfile.employmentStatus` as Path<T>
             )}
           />
         )}
