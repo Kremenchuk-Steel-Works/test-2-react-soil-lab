@@ -8,6 +8,7 @@ import { adminRolesColumns } from "./columns"
 import type { RoleListResponse } from "../../../../features/admin/roles/types/response.dto"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
 import { roleQueryKeys } from "../../../../features/admin/roles/services/keys"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 
 export default function AdminRolesList() {
   // Состояние из URL
@@ -49,7 +50,7 @@ export default function AdminRolesList() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
 
       {!isLoading && !isError && data && (

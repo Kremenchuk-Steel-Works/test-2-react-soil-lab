@@ -8,6 +8,7 @@ import { adminUsersColumns } from "./columns"
 import type { UserListResponse } from "../../../../features/admin/users/types/response.dto"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
 import { userQueryKeys } from "../../../../features/admin/users/services/keys"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 
 export default function AdminUsersList() {
   // Состояние из URL
@@ -48,7 +49,7 @@ export default function AdminUsersList() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
 
       {!isLoading && !isError && data && (

@@ -121,7 +121,7 @@ export default function OrganizationsForm({
         name="contacts"
         label="контактні дані"
         form={ContactForm}
-        defaultItem={{ value: undefined!, type: undefined!, isPrimary: false }}
+        defaultItem={undefined!}
         control={control}
         register={register}
         errors={errors}
@@ -132,12 +132,7 @@ export default function OrganizationsForm({
         label="адресу"
         name="addresses"
         form={AddressForm}
-        defaultItem={{
-          type: undefined!,
-          isPrimary: undefined!,
-          street: undefined!,
-          cityId: undefined!,
-        }}
+        defaultItem={undefined!}
         control={control}
         register={register}
         errors={errors}

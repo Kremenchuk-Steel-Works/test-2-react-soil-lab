@@ -49,6 +49,7 @@ export default function PeopleForm({
     resetField,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormFields>({
     resolver: zodResolver(schema),
@@ -176,11 +177,7 @@ export default function PeopleForm({
         label="контактні дані"
         name="contacts"
         form={ContactForm}
-        defaultItem={{
-          value: undefined!,
-          type: undefined!,
-          isPrimary: undefined!,
-        }}
+        defaultItem={undefined!}
         control={control}
         register={register}
         errors={errors}
@@ -191,12 +188,7 @@ export default function PeopleForm({
         label="адресу"
         name="addresses"
         form={AddressForm}
-        defaultItem={{
-          type: undefined!,
-          isPrimary: undefined!,
-          street: undefined!,
-          cityId: undefined!,
-        }}
+        defaultItem={undefined!}
         control={control}
         register={register}
         errors={errors}
@@ -237,11 +229,13 @@ export default function PeopleForm({
       <OptionalField
         label="профіль працівника"
         name="employeeProfile"
-        form={EmployeeProfileForm<PeopleFormFields>}
+        form={EmployeeProfileForm}
         control={control}
         register={register}
         errors={errors}
         resetField={resetField}
+        setValue={setValue}
+        defaultItem={{}}
       />
 
       <ButtonWithError

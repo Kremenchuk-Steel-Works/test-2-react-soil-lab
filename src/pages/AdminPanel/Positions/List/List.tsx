@@ -8,6 +8,7 @@ import { positionService } from "../../../../features/admin/positions/services/s
 import type { PositionListResponse } from "../../../../features/admin/positions/types/response.dto"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
 import { positionQueryKeys } from "../../../../features/admin/positions/services/keys"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 
 export default function AdminPositionsList() {
   // Состояние из URL
@@ -49,7 +50,7 @@ export default function AdminPositionsList() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
 
       {!isLoading && !isError && data && (

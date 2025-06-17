@@ -1,8 +1,8 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import type { RoleShortResponse } from "../../../../features/admin/roles/types/response.dto"
-import { idColumn } from "../../../../components/Table/idColumn"
-import { displayColumn } from "../../../../components/Table/displayColumn"
-import { listColumn } from "../../../../components/Table/listColumn"
+import { idColumn } from "../../../../components/Table/columns/idColumn"
+import { displayColumn } from "../../../../components/Table/columns/displayColumn"
+import { listColumn } from "../../../../components/Table/columns/listColumn"
 import type { PermissionListItemResponse } from "../../../../features/admin/permissions/types/response.dto"
 
 const columnHelper = createColumnHelper<RoleShortResponse>()

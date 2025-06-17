@@ -1,48 +1,61 @@
-import { useState } from "react"
 import {
+  useWatch,
   type Control,
   type FieldErrors,
   type FieldValues,
   type Path,
+  type PathValue,
   type UseFormRegister,
+  type UseFormResetField,
+  type UseFormSetValue,
 } from "react-hook-form"
 import Button from "../Button/Button"
 import { Plus, X } from "lucide-react"
 
-interface OptionalFieldProps<T extends FieldValues> {
+interface OptionalFieldProps<
+  T extends FieldValues,
+  K extends Path<T> = Path<T>
+> {
   control: Control<T>
   register: UseFormRegister<T>
   errors: FieldErrors<T>
-  resetField: (name: Path<T>) => void
+  resetField: UseFormResetField<T>
+  setValue: UseFormSetValue<T>
   form: React.ComponentType<{
     control: Control<T>
     register: UseFormRegister<T>
     errors: FieldErrors<T>
   }>
+  name: K
+  defaultItem: Partial<PathValue<T, K>>
   label?: string
   addButton?: React.ReactNode
   removeButton?: (onRemove: () => void) => React.ReactNode
-  name: string
 }
 
-export function OptionalField<T extends FieldValues>({
+export function OptionalField<
+  T extends FieldValues,
+  K extends Path<T> = Path<T>
+>({
   control,
   register,
   errors,
-  resetField,
+  setValue,
   form: FormComponent,
   label,
-  addButton,
   removeButton,
   name,
-}: OptionalFieldProps<T>) {
-  const [isVisible, setIsVisible] = useState(false)
+  defaultItem,
+}: OptionalFieldProps<T, K>) {
+  const fieldValue = useWatch({ control, name })
+  const isVisible = fieldValue !== undefined && fieldValue !== null
 
-  const handleToggle = () => {
-    if (isVisible) {
-      resetField(name as Path<T>)
-    }
-    setIsVisible((prev) => !prev)
+  const handleAdd = () => {
+    setValue(name, defaultItem as PathValue<T, K>, { shouldValidate: false })
+  }
+
+  const handleRemove = () => {
+    setValue(name, undefined as PathValue<T, K>, { shouldDirty: true })
   }
 
   return (
@@ -55,23 +68,21 @@ export function OptionalField<T extends FieldValues>({
             errors={errors}
           />
           {removeButton ? (
-            removeButton(handleToggle)
+            removeButton(handleRemove)
           ) : (
             <Button
               customColor="red"
               className="flex items-center justify-center gap-1 whitespace-nowrap"
-              onClick={handleToggle}
+              onClick={handleRemove}
             >
               <X className="w-5 h-5" /> <span>Видалити {label}</span>
             </Button>
           )}
         </div>
-      ) : addButton ? (
-        <div>{addButton}</div>
       ) : (
         <Button
           className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={handleToggle}
+          onClick={handleAdd}
         >
           <Plus className="w-5 h-5" /> <span>Додати {label}</span>
         </Button>

@@ -37,6 +37,7 @@ export default function AdminCityDetails() {
         {isError && (
           <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
         )}
+
         {!isLoading && !isError && data && (
           <div className="bg-white dark:bg-gray-800 p-6">
             <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-slate-100">

@@ -8,6 +8,14 @@ import type { PeopleFormFields } from "../../../features/admin/people/forms/sche
 import type { PersonDetailResponse } from "../../../features/admin/people/types/response.dto"
 import AlertMessage, { AlertType } from "../../../components/AlertMessage"
 import { personQueryKeys } from "../../../features/admin/people/services/keys"
+import type { PersonUpdateRequest } from "../../../features/admin/people/types/request.dto"
+import {
+  createArrayOperations,
+  getLegacySingleObjectOperation,
+} from "../../../lib/form-utils"
+import type { ContactOperationRequest } from "../../../features/admin/contact/types/request.dto"
+import type { AddressOperationRequest } from "../../../features/admin/address/types/request.dto"
+import { logger } from "../../../lib/logger"
 
 export default function AdminPeopleUpdate() {
   const navigate = useNavigate()
@@ -24,10 +32,35 @@ export default function AdminPeopleUpdate() {
     enabled: !!id,
   })
 
-  const handleSubmit = async (data: PeopleFormFields) => {
-    await personService.update(id!, data)
+  const handleSubmit = async (formData: PeopleFormFields) => {
+    if (!data) {
+      return
+    }
+    const payload: PersonUpdateRequest = {
+      ...data,
+    }
+
+    ;[payload.employeeProfileAction, payload.employeeProfileData] =
+      getLegacySingleObjectOperation(
+        data.employeeProfile,
+        formData.employeeProfile
+      )
+
+    payload.contactOperations = createArrayOperations(
+      data.contacts,
+      formData.contacts
+    ) as ContactOperationRequest[]
+
+    payload.addressOperations = createArrayOperations(
+      data.addresses,
+      formData.addresses
+    ) as AddressOperationRequest[]
+
+    logger.debug(payload)
+
+    await personService.update(id!, payload)
     navigate("..")
-    return data
+    return payload
   }
 
   // Адаптируем данные под форму

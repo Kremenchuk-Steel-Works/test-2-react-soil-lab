@@ -68,7 +68,10 @@ export function DynamicFieldArray<
               className="flex items-center justify-center gap-1 whitespace-nowrap"
               onClick={() => remove(index)}
             >
-              <X className="w-5 h-5" /> <span>Видалити {label}</span>
+              <X className="w-5 h-5" />{" "}
+              <span>
+                Видалити {label} {index + 1}
+              </span>
             </Button>
           )}
         </div>

@@ -3,7 +3,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-  ReactSelectWithError,
 } from "../../../../components/WithError/fieldsWithError"
 import { citySchema, type CityFormFields } from "./schema"
 import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
@@ -17,6 +16,7 @@ import {
   getNestedErrorMessage,
 } from "../../../../lib/react-hook-form"
 import { countryQueryKeys } from "../../country/services/keys"
+import FormSelectField from "../../../../components/Forms/FormReactSelect"
 
 type FormFields = CityFormFields
 const schema = citySchema
@@ -93,15 +93,15 @@ export default function CityForm({
       />
 
       <Controller
-        name={`countryId`}
+        name="countryId"
         control={control}
-        render={({ field }) => (
-          <ReactSelectWithError
-            placeholder="Оберіть країну"
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
             isClearable={true}
+            fieldState={fieldState}
             options={countriesOptions}
-            value={countriesOptions.find((opt) => opt.value === field.value)}
-            onChange={(option) => field.onChange(option?.value)}
+            placeholder="Оберіть країну"
             errorMessage={getNestedErrorMessage(errors, "countryId")}
           />
         )}

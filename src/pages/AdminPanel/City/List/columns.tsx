@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import type { CityShortResponse } from "../../../../features/admin/city/types/response.dto"
-import { idColumn } from "../../../../components/Table/idColumn"
-import { displayColumn } from "../../../../components/Table/displayColumn"
+import { idColumn } from "../../../../components/Table/columns/idColumn"
+import { displayColumn } from "../../../../components/Table/columns/displayColumn"
 
 const columnHelper = createColumnHelper<CityShortResponse>()
 

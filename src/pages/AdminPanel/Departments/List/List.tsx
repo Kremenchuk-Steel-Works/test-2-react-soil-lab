@@ -8,6 +8,7 @@ import { departmentService } from "../../../../features/admin/departments/servic
 import type { DepartmentListResponse } from "../../../../features/admin/departments/types/response.dto"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
 import { departmentQueryKeys } from "../../../../features/admin/departments/services/keys"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 
 export default function AdminDepartmentsList() {
   // Состояние из URL
@@ -49,7 +50,7 @@ export default function AdminDepartmentsList() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
 
       {!isLoading && !isError && data && (

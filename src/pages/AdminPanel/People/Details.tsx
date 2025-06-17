@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query"
 import { personService } from "../../../features/admin/people/services/service"
 import type { PersonDetailResponse } from "../../../features/admin/people/types/response.dto"
 import { personQueryKeys } from "../../../features/admin/people/services/keys"
+import AlertMessage, { AlertType } from "../../../components/AlertMessage"
 
 export default function AdminPeopleDetails() {
   const navigate = useNavigate()
@@ -35,7 +36,7 @@ export default function AdminPeopleDetails() {
 
       <div>
         {isError && (
-          <p className="text-red-600">Помилка: {queryError?.message}</p>
+          <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
         )}
         {!isLoading && !isError && data && (
           <div className="bg-white dark:bg-gray-800 p-6">

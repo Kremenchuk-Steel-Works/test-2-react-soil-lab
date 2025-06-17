@@ -8,6 +8,7 @@ import { personService } from "../../../../features/admin/people/services/servic
 import type { PersonListResponse } from "../../../../features/admin/people/types/response.dto"
 import { usePaginationParams } from "../../../../hooks/usePaginationParams"
 import { personQueryKeys } from "../../../../features/admin/people/services/keys"
+import AlertMessage, { AlertType } from "../../../../components/AlertMessage"
 
 export default function AdminPeopleList() {
   // Состояние из URL
@@ -49,7 +50,7 @@ export default function AdminPeopleList() {
       </div>
 
       {isError && (
-        <p className="text-red-600">Помилка: {queryError?.message}</p>
+        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
       )}
 
       {!isLoading && !isError && data && (

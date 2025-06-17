@@ -3,6 +3,7 @@ import { contactOptions } from "../types/contact"
 import { toZodEnumValues } from "../../../../lib/zod"
 
 export const contactSchema = z.object({
+  id: z.string().optional(),
   type: z.enum(toZodEnumValues(contactOptions)),
   value: z.string().nonempty(),
   isPrimary: z.boolean(),

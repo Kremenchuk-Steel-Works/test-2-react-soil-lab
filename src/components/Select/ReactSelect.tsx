@@ -29,6 +29,7 @@ export type ClassNamesConfig = Partial<{
   placeholder: () => string
   option: (params: ClassNameFunctionParams) => string
   menu: () => string
+  valueContainer: () => string
   multiValue: () => string
   multiValueLabel: () => string
   multiValueRemove: () => string
@@ -56,13 +57,35 @@ function ReactSelect<
     <Select<OptionType, IsMulti, Group>
       {...props}
       noOptionsMessage={() => "Нічого не знайдено"}
-      styles={customStyles}
       unstyled
+      styles={{
+        ...customStyles,
+        control: (base, state) => {
+          const custom = customStyles.control
+            ? customStyles.control(base, state)
+            : {}
+          return {
+            ...base,
+            ...custom,
+            minHeight: custom.minHeight ?? "54px",
+          }
+        },
+        valueContainer: (base, state) => {
+          const custom = customStyles.valueContainer
+            ? customStyles.valueContainer(base, state)
+            : {}
+          return {
+            ...base,
+            ...custom,
+            height: custom.height ?? "100%",
+          }
+        },
+      }}
       components={{
         ...props.components,
         Menu: AnimatedMenu,
         IndicatorSeparator: () => (
-          <span className="w-px h-5 bg-gray-300 dark:bg-gray-600 mx-1.5" />
+          <span className="w-px h-5 bg-gray-300 dark:bg-gray-600 mx-[3px]" />
         ),
         ClearIndicator: (
           indicatorProps: ClearIndicatorProps<OptionType, IsMulti, Group>
@@ -104,6 +127,11 @@ function ReactSelect<
             customClassNames.option?.(props)
           ),
         menu: () => twMerge(baseClassNames.menu?.(), customClassNames.menu?.()),
+        valueContainer: () =>
+          twMerge(
+            baseClassNames.valueContainer?.(),
+            customClassNames.valueContainer?.()
+          ),
         multiValue: () =>
           twMerge(
             baseClassNames.multiValue?.(),
@@ -127,14 +155,18 @@ function ReactSelect<
 const baseClassNames: ClassNamesConfig = {
   control: ({ isFocused }) =>
     twMerge(
-      "border rounded-md px-4 py-3.5 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600",
+      "border rounded-md px-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600",
+      "py-1",
+      "flex items-center",
       isFocused && "ring-2 ring-blue-500"
     ),
+  valueContainer: () => "h-full",
+
   placeholder: () => "text-gray-400 dark:text-gray-400",
   input: () => "text-black dark:text-white",
   option: ({ isFocused, isSelected }) =>
     twMerge(
-      "px-3 py-2 cursor-pointer",
+      "px-3 py-3 cursor-pointer",
       isSelected && "bg-blue-500 text-white",
       !isSelected && isFocused && "bg-gray-200 dark:bg-gray-600",
       !isSelected &&
@@ -145,13 +177,13 @@ const baseClassNames: ClassNamesConfig = {
     "mt-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 shadow-lg",
   multiValue: () =>
     twMerge(
-      "bg-gray-200 dark:bg-gray-600 rounded pl-2 mx-0.5 my-0.5 py-1 flex items-center",
+      "bg-gray-200 dark:bg-gray-600 rounded pl-2 mx-0.5 my-0.5 flex items-center",
       "text-gray-700 dark:text-gray-300"
     ),
-  multiValueLabel: () => "",
+  multiValueLabel: () => "py-1",
   multiValueRemove: () =>
     twMerge(
-      "ml-1 p-1 px-1 cursor-pointer rounded-md",
+      "ml-1 p-[5px] cursor-pointer rounded-md",
       "text-gray-400 dark:text-gray-400",
       "hover:bg-red-200 dark:hover:bg-red-800",
       "hover:text-red-800 dark:hover:text-red-300",

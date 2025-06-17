@@ -3,6 +3,7 @@ import { addressOptions } from "../types/address"
 import { toZodEnumValues } from "../../../../lib/zod"
 
 export const addressSchema = z.object({
+  id: z.string().optional(),
   street: z.string().nonempty(),
   postalCode: z.string().optional(),
   type: z.enum(toZodEnumValues(addressOptions)),
