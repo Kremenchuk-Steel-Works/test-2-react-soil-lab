@@ -2,6 +2,8 @@ import { addressOptions } from "../../address/types/address"
 import { employeeProfileOptions } from "../../employeeProfile/types/employmentStatus"
 import type { PersonDetailResponse } from "../types/response.dto"
 
+const mockAvatar = new File(["avatar"], "avatar.png", { type: "image/png" })
+
 export const mockPeople: PersonDetailResponse[] = Array.from(
   { length: 10 },
   (_, i) => {
@@ -15,7 +17,7 @@ export const mockPeople: PersonDetailResponse[] = Array.from(
       lastName: `Прізвище${i}`,
       gender: i % 2 === 0 ? "male" : "female",
       birthDate: `199${i}-01-01`,
-      photoUrl: `https://example.com/photos/person${i}.jpg`,
+      photoUrl: mockAvatar,
       createdAt: timestamp,
       updatedAt: timestamp,
 
