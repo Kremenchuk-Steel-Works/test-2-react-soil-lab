@@ -10,7 +10,7 @@ export default defineConfig({
     postcss: {
       plugins: [
         postcssPresetEnv({
-          stage: 3,
+          stage: 0,
           features: {
             "custom-properties": {
               preserve: false,
