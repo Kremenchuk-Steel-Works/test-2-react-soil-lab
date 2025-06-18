@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @plugin "tailwind-scrollbar-hide";
-@import "./styles/datepicker-override.css";
+@import "./app/styles/datepicker-override.css";
 
 @layer base {
   h1.layout-text {

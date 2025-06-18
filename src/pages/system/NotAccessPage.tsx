@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, House, Lock } from "lucide-react"
-import Button from "../../components/Button/Button"
-import { PATHS } from "../../routes/AppRoutes"
+import Button from "../../shared/ui/Button/Button"
+import { PATHS } from "../../app/routes/AppRoutes"
 
 export default function NotAccessPage() {
   const navigate = useNavigate()

@@ -1,8 +1,8 @@
 import { ArrowLeft } from "lucide-react"
-import Button from "../components/Button/Button"
-import Layout from "../components/Template/Layout"
+import Button from "../shared/ui/Button/Button"
+import Layout from "../widgets/PageLayout/Layout"
 import { useNavigate } from "react-router-dom"
-import { PATHS } from "../routes/AppRoutes"
+import { PATHS } from "../app/routes/AppRoutes"
 
 export default function SteamlitPage() {
   const navigate = useNavigate()

@@ -1,6 +1,6 @@
-import LoginForm from "../features/auth/forms/form"
-import type { LoginFormFields } from "../features/auth/forms/schema"
-import { useAuth } from "../components/AuthProvider/AuthContext"
+import LoginForm from "../entities/auth/forms/form"
+import type { LoginFormFields } from "../entities/auth/forms/schema"
+import { useAuth } from "../app/providers/auth/model"
 
 export default function AdminDepartmentsAdd() {
   const { login } = useAuth()

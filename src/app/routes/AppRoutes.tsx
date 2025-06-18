@@ -1,0 +1,72 @@
+import {
+  createBrowserRouter,
+  Navigate,
+  type RouteObject,
+} from "react-router-dom"
+import { Suspense } from "react" // <-- Импортируем Suspense
+import ProtectedRoute from "./ProtectedRoute"
+import { UnAuthRoute } from "./UnAuthRoute"
+
+import LoginPage from "../../pages/LoginPage"
+import MainPage from "../../pages/MainPage"
+import { APP_ROUTES, type AppRoute } from "./routes.config"
+import LoadingPage from "../../pages/system/LoadingPage"
+
+export const PATHS = {
+  LOGIN: "/login",
+  MAIN: "/",
+}
+
+// Рекурсивная функция построения маршрутов
+const mapRoutes = (routes: AppRoute[]): RouteObject[] => {
+  return routes.map((route) => {
+    const { Component, children, path, requiredPermissions } = route
+    const isIndex = path === ""
+
+    // Создаем элемент с Suspense
+    const elementWithSuspense = (
+      <ProtectedRoute allowedPermissions={requiredPermissions}>
+        <Suspense fallback={<LoadingPage />}>
+          <Component />
+        </Suspense>
+      </ProtectedRoute>
+    )
+
+    if (isIndex) {
+      return {
+        index: true,
+        element: elementWithSuspense,
+      }
+    }
+
+    return {
+      path: path,
+      element: elementWithSuspense,
+      children: children ? mapRoutes(children) : undefined,
+    }
+  })
+}
+
+export const router = createBrowserRouter([
+  {
+    path: PATHS.LOGIN,
+    element: (
+      <UnAuthRoute>
+        <LoginPage />
+      </UnAuthRoute>
+    ),
+  },
+  {
+    path: PATHS.MAIN,
+    element: (
+      <ProtectedRoute>
+        <MainPage />
+      </ProtectedRoute>
+    ),
+  },
+  ...mapRoutes(APP_ROUTES),
+  {
+    path: "*",
+    element: <Navigate to={PATHS.MAIN} replace />,
+  },
+])

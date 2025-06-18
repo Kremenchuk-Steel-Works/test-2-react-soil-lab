@@ -3,12 +3,12 @@ import { createRoot } from "react-dom/client"
 import "./index.css"
 import { RouterProvider } from "react-router-dom"
 import { initApp } from "./init.ts"
-import { AuthProvider } from "./components/AuthProvider/AuthProvider.tsx"
-import { router } from "./routes/AppRoutes.tsx"
-import { SidebarProvider } from "./components/Sidebar/SidebarProvider.tsx"
+import { AuthProvider } from "./app/providers/auth/ui.tsx"
+import { router } from "./app/routes/AppRoutes.tsx"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import { ModalProvider } from "./components/ui/Modal/ModalContext.tsx"
+import { ModalProvider } from "./shared/ui/Modal/ModalContext.tsx"
+import { SidebarProvider } from "./widgets/Sidebar/SidebarProvider.tsx"
 
 const queryClient = new QueryClient()
 initApp()
