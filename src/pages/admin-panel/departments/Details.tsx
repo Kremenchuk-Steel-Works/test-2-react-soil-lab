@@ -1,4 +1,4 @@
-import Button from "../../../shared/ui/button123/Button"
+import Button from "../../../shared/ui/button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"

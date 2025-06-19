@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import Button from "../../../../shared/ui/button123/Button"
+import Button from "../../../../shared/ui/button/Button"
 import { DataTable } from "../../../../widgets/data-table/DataTable"
 import { adminPositionsColumns } from "./columns"
 import { positionService } from "../../../../entities/admin/positions/services/service"

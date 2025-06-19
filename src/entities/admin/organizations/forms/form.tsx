@@ -7,8 +7,8 @@ import {
 import { organizationsSchema, type OrganizationsFormFields } from "./schema"
 import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
-import { DynamicFieldArray } from "../../../../shared/ui/forms123/DynamicFieldArray"
-import type { Option } from "../../../../shared/ui/select123/ReactSelect"
+import { DynamicFieldArray } from "../../../../shared/ui/forms/DynamicFieldArray"
+import type { Option } from "../../../../shared/ui/select/ReactSelect"
 import AlertMessage, {
   AlertType,
 } from "../../../../shared/ui/alert-message/AlertMessage"
@@ -20,7 +20,7 @@ import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
-import FormSelectField from "../../../../shared/ui/forms123/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 import { countryQueryKeys } from "../../country/services/keys"
 
 type FormFields = OrganizationsFormFields

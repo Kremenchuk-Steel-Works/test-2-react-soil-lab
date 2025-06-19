@@ -10,7 +10,7 @@ import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
-import type { Option } from "../../../../shared/ui/select123/ReactSelect"
+import type { Option } from "../../../../shared/ui/select/ReactSelect"
 import AlertMessage, {
   AlertType,
 } from "../../../../shared/ui/alert-message/AlertMessage"
@@ -18,7 +18,7 @@ import { useQuery } from "@tanstack/react-query"
 import type { DepartmentLookupResponse } from "../../departments/types/response.dto"
 import { departmentService } from "../../departments/services/service"
 import { departmentQueryKeys } from "../../departments/services/keys"
-import FormSelectField from "../../../../shared/ui/forms123/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 
 type FormFields = PermissionsFormFields
 const schema = permissionsSchema

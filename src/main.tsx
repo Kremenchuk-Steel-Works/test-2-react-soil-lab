@@ -7,7 +7,7 @@ import { AuthProvider } from "./app/providers/auth/ui.tsx"
 import { router } from "./app/routes/AppRoutes.tsx"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
-import { ModalProvider } from "./shared/ui/modal123/ModalContext.tsx"
+import { ModalProvider } from "./shared/ui/modal/ModalContext.tsx"
 import { SidebarProvider } from "./widgets/sidebar/SidebarProvider.tsx"
 
 const queryClient = new QueryClient()

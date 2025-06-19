@@ -22,8 +22,8 @@ import {
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
 import { cityQueryKeys } from "../../city/services/keys"
-import type { Option } from "../../../../shared/ui/select123/ReactSelect"
-import FormSelectField from "../../../../shared/ui/forms123/FormReactSelect"
+import type { Option } from "../../../../shared/ui/select/ReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 
 export type FormFields = {
   addresses: AddressFormFields[]

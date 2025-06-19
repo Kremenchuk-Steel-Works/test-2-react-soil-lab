@@ -22,13 +22,13 @@ import AlertMessage, {
 import type { PersonLookupResponse } from "../../people/types/response.dto"
 import type { RoleLookupResponse } from "../../roles/types/response.dto"
 import type { PermissionLookupResponse } from "../../permissions/types/response.dto"
-import type { Option } from "../../../../shared/ui/select123/ReactSelect"
+import type { Option } from "../../../../shared/ui/select/ReactSelect"
 import { logger } from "../../../../shared/lib/logger"
 import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
-import FormSelectField from "../../../../shared/ui/forms123/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 import { personQueryKeys } from "../../people/services/keys"
 import { roleQueryKeys } from "../../roles/services/keys"
 import { permissionQueryKeys } from "../../permissions/services/keys"
