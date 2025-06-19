@@ -13,8 +13,8 @@ import {
   BriefcaseBusiness,
   Languages,
   Globe,
+  Calculator,
 } from "lucide-react"
-import StreamlitPage from "../../pages/StreamlitPage"
 import AdminPanelMain from "../../pages/admin-panel/Main"
 import AdminOrganizationsLayout from "../../pages/admin-panel/organizations/Layout"
 import AdminOrganizationsList from "../../pages/admin-panel/organizations/list/List"
@@ -58,12 +58,15 @@ import AdminCountryAdd from "../../pages/admin-panel/country/Add"
 import AdminCountryDetails from "../../pages/admin-panel/country/Details"
 import AdminCountryUpdate from "../../pages/admin-panel/country/Update"
 import { peopleRoutes } from "../../entities/admin/people/routes"
+import StreamlitDashboard from "../../pages/StreamlitDashboard"
+import StreamlitCalculator from "../../pages/StreamlitCalculator"
 
 export type Permission =
   | "admin"
   | "spectral_analysis_view"
   | "spectral_analysis_add"
   | "quality_dash_view"
+  | "calculator_view"
   | "library_edit"
 
 export interface AppRoute {
@@ -396,11 +399,19 @@ export const APP_ROUTES: AppRoute[] = [
     ],
   },
   {
-    key: "quality_dash",
-    path: "/quality_dash",
+    key: "streamlitDashboard",
+    path: "/streamlit-dashboard",
     label: "Quality Dash",
     icon: Database,
-    Component: StreamlitPage,
-    requiredPermissions: ["quality_dash_view", "admin"],
+    Component: StreamlitDashboard,
+    requiredPermissions: ["quality_dash_view"],
+  },
+  {
+    key: "streamliCalculator",
+    path: "/streamlit-calculator",
+    label: "Calculator",
+    icon: Calculator,
+    Component: StreamlitCalculator,
+    requiredPermissions: ["calculator_view"],
   },
 ]

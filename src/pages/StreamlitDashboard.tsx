@@ -4,7 +4,7 @@ import Layout from "../widgets/PageLayout/Layout"
 import { useNavigate } from "react-router-dom"
 import { PATHS } from "../app/routes/AppRoutes"
 
-export default function SteamlitPage() {
+export default function StreamlitDashboard() {
   const navigate = useNavigate()
   return (
     <Layout>
