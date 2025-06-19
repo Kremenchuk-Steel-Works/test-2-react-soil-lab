@@ -1,4 +1,4 @@
-import type { Option } from "../../../../shared/ui/select/ReactSelect"
+import type { Option } from "../../../../shared/ui/select123/ReactSelect"
 
 export const genderOptions: Option<string>[] = [
   { value: "male", label: "Чоловіча" },

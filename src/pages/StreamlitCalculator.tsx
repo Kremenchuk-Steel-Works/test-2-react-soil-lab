@@ -1,5 +1,5 @@
 import { ArrowLeft } from "lucide-react"
-import Button from "../shared/ui/button/Button"
+import Button from "../shared/ui/button123/Button"
 import Layout from "../widgets/page-layout/Layout"
 import { useNavigate } from "react-router-dom"
 import { PATHS } from "../app/routes/AppRoutes"

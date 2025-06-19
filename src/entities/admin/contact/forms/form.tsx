@@ -15,7 +15,7 @@ import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
-import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms123/FormReactSelect"
 
 export type FormFields = {
   contacts: ContactFormFields[]

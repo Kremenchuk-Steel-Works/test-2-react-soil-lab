@@ -6,9 +6,9 @@ import {
 } from "../../../../shared/ui/with-error/fieldsWithError"
 import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
-import { DynamicFieldArray } from "../../../../shared/ui/forms/DynamicFieldArray"
+import { DynamicFieldArray } from "../../../../shared/ui/forms123/DynamicFieldArray"
 import { EmployeeProfileForm } from "../../employeeProfile/forms/form"
-import { OptionalField } from "../../../../shared/ui/forms/OptionalField"
+import { OptionalField } from "../../../../shared/ui/forms123/OptionalField"
 import { genderOptions } from "../types/gender"
 import AlertMessage, {
   AlertType,
@@ -18,16 +18,16 @@ import { organizationService } from "../../organizations/services/service"
 import { positionService } from "../../positions/services/service"
 import type { OrganizationLookupResponse } from "../../organizations/types/response.dto"
 import type { PositionLookupResponse } from "../../positions/types/response.dto"
-import FormDateField from "../../../../shared/ui/forms/FormDateField"
+import FormDateField from "../../../../shared/ui/forms123/FormDateField"
 import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
 import { logger } from "../../../../shared/lib/logger"
 import { peopleSchema, type PeopleFormFields } from "./schema"
-import FormFileUpload from "../../../../shared/ui/forms/FormFileUpload"
-import type { Option } from "../../../../shared/ui/select/ReactSelect"
-import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
+import FormFileUpload from "../../../../shared/ui/forms123/FormFileUpload"
+import type { Option } from "../../../../shared/ui/select123/ReactSelect"
+import FormSelectField from "../../../../shared/ui/forms123/FormReactSelect"
 import { organizationQueryKeys } from "../../organizations/services/keys"
 import { positionQueryKeys } from "../../positions/services/keys"
 

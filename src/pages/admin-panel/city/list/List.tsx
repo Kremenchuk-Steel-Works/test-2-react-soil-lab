@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import Button from "../../../../shared/ui/button/Button"
+import Button from "../../../../shared/ui/button123/Button"
 import { DataTable } from "../../../../widgets/data-table/DataTable"
 import type { CityListResponse } from "../../../../entities/admin/city/types/response.dto"
 import { cityService } from "../../../../entities/admin/city/services/service"

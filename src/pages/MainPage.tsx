@@ -1,4 +1,4 @@
-import Button from "../shared/ui/button/Button"
+import Button from "../shared/ui/button123/Button"
 import Layout from "../widgets/page-layout/Layout"
 import { useNavigate } from "react-router-dom"
 import { useVisibleRoutes } from "../shared/hooks/usePermissions"

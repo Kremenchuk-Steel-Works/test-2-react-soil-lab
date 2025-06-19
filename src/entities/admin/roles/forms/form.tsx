@@ -14,11 +14,11 @@ import { useQuery } from "@tanstack/react-query"
 import AlertMessage, {
   AlertType,
 } from "../../../../shared/ui/alert-message/AlertMessage"
-import type { Option } from "../../../../shared/ui/select/ReactSelect"
+import type { Option } from "../../../../shared/ui/select123/ReactSelect"
 import type { PermissionLookupResponse } from "../../permissions/types/response.dto"
 import { permissionService } from "../../permissions/services/service"
 import { permissionQueryKeys } from "../../permissions/services/keys"
-import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms123/FormReactSelect"
 
 type FormFields = RolesFormFields
 const schema = rolesSchema

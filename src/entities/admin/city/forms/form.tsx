@@ -11,14 +11,14 @@ import AlertMessage, {
 import { useQuery } from "@tanstack/react-query"
 import type { CountryLookupResponse } from "../../country/types/response.dto"
 import { countryService } from "../../country/services/service"
-import type { Option } from "../../../../shared/ui/select/ReactSelect"
+import type { Option } from "../../../../shared/ui/select123/ReactSelect"
 import { logger } from "../../../../shared/lib/logger"
 import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
 import { countryQueryKeys } from "../../country/services/keys"
-import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms123/FormReactSelect"
 
 type FormFields = CityFormFields
 const schema = citySchema
