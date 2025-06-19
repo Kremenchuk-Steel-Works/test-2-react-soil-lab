@@ -17,13 +17,13 @@ import { cityService } from "../../city/services/service"
 import AlertMessage, {
   AlertType,
 } from "../../../../shared/ui/alert-message/AlertMessage"
-import type { Option } from "../../../../shared/ui/select/ReactSelect"
 import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
-import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 import { cityQueryKeys } from "../../city/services/keys"
+import type { Option } from "../../../../shared/ui/select/ReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 
 export type FormFields = {
   addresses: AddressFormFields[]

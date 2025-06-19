@@ -1,4 +1,3 @@
-// ModalContext.tsx
 import React, {
   createContext,
   useState,
