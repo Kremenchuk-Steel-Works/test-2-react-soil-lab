@@ -3,7 +3,7 @@ import {
   Navigate,
   type RouteObject,
 } from "react-router-dom"
-import { Suspense } from "react" // <-- Импортируем Suspense
+import { Suspense } from "react"
 import ProtectedRoute from "./ProtectedRoute"
 import { UnAuthRoute } from "./UnAuthRoute"
 

@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-} from "../../../../shared/ui/WithError/fieldsWithError"
+} from "../../../../shared/ui/with-error/fieldsWithError"
 import { countrySchema, type CountryFormFields } from "./schema"
 import { logger } from "../../../../shared/lib/logger"
 import {

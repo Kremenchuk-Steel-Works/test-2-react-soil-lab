@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import Button from "../../../../shared/ui/Button/Button"
-import { DataTable } from "../../../../widgets/DataTable/DataTable"
+import Button from "../../../../shared/ui/button/Button"
+import { DataTable } from "../../../../widgets/data-table/DataTable"
 import { userService } from "../../../../entities/admin/users/services/service"
 import { adminUsersColumns } from "./columns"
 import type { UserListResponse } from "../../../../entities/admin/users/types/response.dto"
@@ -10,7 +10,7 @@ import { usePaginationParams } from "../../../../shared/hooks/usePaginationParam
 import { userQueryKeys } from "../../../../entities/admin/users/services/keys"
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/AlertMessage/AlertMessage"
+} from "../../../../shared/ui/alert-message/AlertMessage"
 
 export default function AdminUsersList() {
   // Состояние из URL

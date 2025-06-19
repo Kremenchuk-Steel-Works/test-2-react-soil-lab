@@ -1,4 +1,4 @@
-import Layout from "../../widgets/PageLayout/Layout"
+import Layout from "../../widgets/page-layout/Layout"
 import { Outlet } from "react-router-dom"
 
 export default function AdminPanelLayout() {

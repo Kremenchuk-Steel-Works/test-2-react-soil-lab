@@ -1,4 +1,4 @@
-import Button from "../../../shared/ui/Button/Button"
+import Button from "../../../shared/ui/button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
@@ -8,7 +8,7 @@ import OrganizationsForm from "../../../entities/admin/organizations/forms/form"
 import type { OrganizationDetailResponse } from "../../../entities/admin/organizations/types/response.dto"
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/AlertMessage/AlertMessage"
+} from "../../../shared/ui/alert-message/AlertMessage"
 import { organizationQueryKeys } from "../../../entities/admin/organizations/services/keys"
 import type { OrganizationUpdateRequest } from "../../../entities/admin/organizations/types/request.dto"
 import { createArrayOperations } from "../../../shared/lib/form-utils"

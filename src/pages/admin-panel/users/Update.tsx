@@ -1,4 +1,4 @@
-import Button from "../../../shared/ui/Button/Button"
+import Button from "../../../shared/ui/button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
@@ -11,7 +11,7 @@ import { userService } from "../../../entities/admin/users/services/service"
 import UsersForm from "../../../entities/admin/users/forms/form"
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/AlertMessage/AlertMessage"
+} from "../../../shared/ui/alert-message/AlertMessage"
 import { userQueryKeys } from "../../../entities/admin/users/services/keys"
 
 export default function AdminUsersUpdate() {

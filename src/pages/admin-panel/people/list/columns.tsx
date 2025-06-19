@@ -1,11 +1,11 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import type { PersonListItemResponse } from "../../../../entities/admin/people/types/response.dto"
-import { booleanColumn } from "../../../../widgets/DataTable/columns/booleanColumn"
-import { optionColumn } from "../../../../widgets/DataTable/columns/optionColumn"
+import { booleanColumn } from "../../../../widgets/data-table/columns/booleanColumn"
+import { optionColumn } from "../../../../widgets/data-table/columns/optionColumn"
 import { genderOptions } from "../../../../entities/admin/people/types/gender"
-import { idColumn } from "../../../../widgets/DataTable/columns/idColumn"
-import { displayColumn } from "../../../../widgets/DataTable/columns/displayColumn"
-import { listColumn } from "../../../../widgets/DataTable/columns/listColumn"
+import { idColumn } from "../../../../widgets/data-table/columns/idColumn"
+import { displayColumn } from "../../../../widgets/data-table/columns/displayColumn"
+import { listColumn } from "../../../../widgets/data-table/columns/listColumn"
 
 const columnHelper = createColumnHelper<PersonListItemResponse>()
 

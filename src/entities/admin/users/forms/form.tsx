@@ -10,7 +10,7 @@ import {
   InputFieldWithError,
   ButtonWithError,
   CheckboxWithError,
-} from "../../../../shared/ui/WithError/fieldsWithError"
+} from "../../../../shared/ui/with-error/fieldsWithError"
 import { ZodObject, type z, type ZodType } from "zod"
 import { useQueries, type UseQueryResult } from "@tanstack/react-query"
 import { roleService } from "../../roles/services/service"
@@ -18,17 +18,17 @@ import { permissionService } from "../../permissions/services/service"
 import { personService } from "../../people/services/service"
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/AlertMessage/AlertMessage"
+} from "../../../../shared/ui/alert-message/AlertMessage"
 import type { PersonLookupResponse } from "../../people/types/response.dto"
 import type { RoleLookupResponse } from "../../roles/types/response.dto"
 import type { PermissionLookupResponse } from "../../permissions/types/response.dto"
-import type { Option } from "../../../../shared/ui/Select/ReactSelect"
+import type { Option } from "../../../../shared/ui/select/ReactSelect"
 import { logger } from "../../../../shared/lib/logger"
 import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
-import FormSelectField from "../../../../shared/ui/Forms/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 import { personQueryKeys } from "../../people/services/keys"
 import { roleQueryKeys } from "../../roles/services/keys"
 import { permissionQueryKeys } from "../../permissions/services/keys"

@@ -10,8 +10,8 @@ import {
   type PaginationState,
 } from "@tanstack/react-table"
 import { useEffect, useState } from "react"
-import InputField from "../../shared/ui/InputField/InputField"
-import Button from "../../shared/ui/Button/Button"
+import InputField from "../../shared/ui/input-field/InputField"
+import Button from "../../shared/ui/button/Button"
 import {
   ChevronFirst,
   ChevronLast,
@@ -22,12 +22,12 @@ import {
   ListFilter,
   ListRestart,
 } from "lucide-react"
-import InputFieldNoLabel from "../../shared/ui/InputField/InputFieldNoLabel"
+import InputFieldNoLabel from "../../shared/ui/input-field/InputFieldNoLabel"
 import type { SetURLSearchParams } from "react-router-dom"
-import ReactSelect, { type Option } from "../../shared/ui/Select/ReactSelect"
+import ReactSelect, { type Option } from "../../shared/ui/select/ReactSelect"
 import type { CSSObjectWithLabel } from "react-select"
-import CustomMultiSelect from "../../shared/ui/Select/ReactSelectCheckbox"
-import ModalTrigger from "../../shared/ui/Modal/ModalTrigger"
+import CustomMultiSelect from "../../shared/ui/select/ReactSelectCheckbox"
+import ModalTrigger from "../../shared/ui/modal/ModalTrigger"
 
 export type DataTableProps<T> = {
   data: T[]

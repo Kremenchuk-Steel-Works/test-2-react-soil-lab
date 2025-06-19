@@ -1,4 +1,4 @@
-import type { Option } from "../../../../shared/ui/Select/ReactSelect"
+import type { Option } from "../../../../shared/ui/select/ReactSelect"
 
 export const contactOptions: Option<string>[] = [
   { value: "email", label: "Email" },

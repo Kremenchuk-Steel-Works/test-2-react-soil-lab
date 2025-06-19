@@ -5,15 +5,15 @@ import {
   type Path,
   type UseFormRegister,
 } from "react-hook-form"
-import { InputFieldWithError } from "../../../../shared/ui/WithError/fieldsWithError"
+import { InputFieldWithError } from "../../../../shared/ui/with-error/fieldsWithError"
 import type { EmployeeProfileFormFields } from "./schema"
 import { employeeProfileOptions } from "../types/employmentStatus"
-import FormDateField from "../../../../shared/ui/Forms/FormDateField"
+import FormDateField from "../../../../shared/ui/forms/FormDateField"
 import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
-import FormSelectField from "../../../../shared/ui/Forms/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 
 export type FormFields = {
   employeeProfile?: EmployeeProfileFormFields

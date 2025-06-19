@@ -8,14 +8,14 @@ import {
 import {
   InputFieldWithError,
   CheckboxWithError,
-} from "../../../../shared/ui/WithError/fieldsWithError"
+} from "../../../../shared/ui/with-error/fieldsWithError"
 import { contactOptions } from "../types/contact"
 import type { ContactFormFields } from "./schema"
 import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
-import FormSelectField from "../../../../shared/ui/Forms/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 
 export type FormFields = {
   contacts: ContactFormFields[]

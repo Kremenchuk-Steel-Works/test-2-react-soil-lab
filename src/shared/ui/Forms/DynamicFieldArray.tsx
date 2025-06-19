@@ -8,7 +8,7 @@ import {
   type FieldValues,
   type UseFormRegister,
 } from "react-hook-form"
-import Button from "../Button/Button"
+import Button from "../button/Button"
 import { Plus, X } from "lucide-react"
 
 interface DynamicFieldArrayProps<

@@ -2,9 +2,12 @@ import type {
   ControllerFieldState,
   ControllerRenderProps,
 } from "react-hook-form"
-import { FileUploadWithError } from "../WithError/fieldsWithError"
-import type { FileUploadProps } from "../FileUpload/FileUpload"
-import { fileTypePresets, type FileTypePreset } from "../FileUpload/filePresets"
+import { FileUploadWithError } from "../with-error/fieldsWithError"
+import type { FileUploadProps } from "../file-upload/FileUpload"
+import {
+  fileTypePresets,
+  type FileTypePreset,
+} from "../file-upload/filePresets"
 
 type FormFileUploadProps = Omit<
   FileUploadProps,

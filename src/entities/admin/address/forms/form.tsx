@@ -8,7 +8,7 @@ import {
 import {
   InputFieldWithError,
   CheckboxWithError,
-} from "../../../../shared/ui/WithError/fieldsWithError"
+} from "../../../../shared/ui/with-error/fieldsWithError"
 import type { AddressFormFields } from "./schema"
 import { addressOptions } from "../types/address"
 import type { CityLookupResponse } from "../../city/types/response.dto"
@@ -16,13 +16,13 @@ import { useQuery } from "@tanstack/react-query"
 import { cityService } from "../../city/services/service"
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/AlertMessage/AlertMessage"
-import type { Option } from "../../../../shared/ui/Select/ReactSelect"
+} from "../../../../shared/ui/alert-message/AlertMessage"
+import type { Option } from "../../../../shared/ui/select/ReactSelect"
 import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
-import FormSelectField from "../../../../shared/ui/Forms/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 import { cityQueryKeys } from "../../city/services/keys"
 
 export type FormFields = {

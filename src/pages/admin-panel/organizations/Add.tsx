@@ -1,4 +1,4 @@
-import Button from "../../../shared/ui/Button/Button"
+import Button from "../../../shared/ui/button/Button"
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import type { OrganizationsFormFields } from "../../../entities/admin/organizations/forms/schema"

@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import Button from "../../../../shared/ui/Button/Button"
-import { DataTable } from "../../../../widgets/DataTable/DataTable"
+import Button from "../../../../shared/ui/button/Button"
+import { DataTable } from "../../../../widgets/data-table/DataTable"
 import type { CityListResponse } from "../../../../entities/admin/city/types/response.dto"
 import { cityService } from "../../../../entities/admin/city/services/service"
 import { usePaginationParams } from "../../../../shared/hooks/usePaginationParams"
 import { cityQueryKeys } from "../../../../entities/admin/city/services/keys"
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/AlertMessage/AlertMessage"
+} from "../../../../shared/ui/alert-message/AlertMessage"
 import { adminCityColumns } from "./columns"
 
 export default function AdminCityList() {

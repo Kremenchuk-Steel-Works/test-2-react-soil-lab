@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-} from "../../../../shared/ui/WithError/fieldsWithError"
+} from "../../../../shared/ui/with-error/fieldsWithError"
 import { rolesSchema, type RolesFormFields } from "./schema"
 import { logger } from "../../../../shared/lib/logger"
 import {
@@ -13,12 +13,12 @@ import {
 import { useQuery } from "@tanstack/react-query"
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/AlertMessage/AlertMessage"
-import type { Option } from "../../../../shared/ui/Select/ReactSelect"
+} from "../../../../shared/ui/alert-message/AlertMessage"
+import type { Option } from "../../../../shared/ui/select/ReactSelect"
 import type { PermissionLookupResponse } from "../../permissions/types/response.dto"
 import { permissionService } from "../../permissions/services/service"
 import { permissionQueryKeys } from "../../permissions/services/keys"
-import FormSelectField from "../../../../shared/ui/Forms/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 
 type FormFields = RolesFormFields
 const schema = rolesSchema

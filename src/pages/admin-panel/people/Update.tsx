@@ -1,4 +1,4 @@
-import Button from "../../../shared/ui/Button/Button"
+import Button from "../../../shared/ui/button/Button"
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
@@ -8,7 +8,7 @@ import type { PeopleFormFields } from "../../../entities/admin/people/forms/sche
 import type { PersonDetailResponse } from "../../../entities/admin/people/types/response.dto"
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/AlertMessage/AlertMessage"
+} from "../../../shared/ui/alert-message/AlertMessage"
 import { personQueryKeys } from "../../../entities/admin/people/services/keys"
 import type { PersonUpdateRequest } from "../../../entities/admin/people/types/request.dto"
 import {

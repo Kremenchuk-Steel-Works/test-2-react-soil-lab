@@ -9,7 +9,7 @@ import {
   ReactSelectMultiWithError,
   ReactSelectWithError,
   SelectVirtualizedWithError,
-} from "../WithError/fieldsWithError"
+} from "../with-error/fieldsWithError"
 
 export type Option<T = unknown> = {
   label: string

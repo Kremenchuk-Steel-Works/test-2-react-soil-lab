@@ -5,7 +5,7 @@ import {
   ButtonWithError,
   CheckboxWithError,
   InputFieldWithError,
-} from "../../../shared/ui/WithError/fieldsWithError"
+} from "../../../shared/ui/with-error/fieldsWithError"
 import { logger } from "../../../shared/lib/logger"
 import {
   formTransformers,

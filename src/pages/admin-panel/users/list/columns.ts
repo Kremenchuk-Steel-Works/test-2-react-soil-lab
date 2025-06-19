@@ -1,10 +1,10 @@
 import { createColumnHelper } from "@tanstack/react-table"
 import type { UserShortResponse } from "../../../../entities/admin/users/types/response.dto"
-import { booleanColumn } from "../../../../widgets/DataTable/columns/booleanColumn"
-import { dateColumn } from "../../../../widgets/DataTable/columns/dateColumn"
-import { idColumn } from "../../../../widgets/DataTable/columns/idColumn"
-import { listColumn } from "../../../../widgets/DataTable/columns/listColumn"
-import { displayColumn } from "../../../../widgets/DataTable/columns/displayColumn"
+import { booleanColumn } from "../../../../widgets/data-table/columns/booleanColumn"
+import { dateColumn } from "../../../../widgets/data-table/columns/dateColumn"
+import { idColumn } from "../../../../widgets/data-table/columns/idColumn"
+import { listColumn } from "../../../../widgets/data-table/columns/listColumn"
+import { displayColumn } from "../../../../widgets/data-table/columns/displayColumn"
 
 const columnHelper = createColumnHelper<UserShortResponse>()
 

@@ -3,15 +3,15 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-} from "../../../../shared/ui/WithError/fieldsWithError"
+} from "../../../../shared/ui/with-error/fieldsWithError"
 import { organizationsSchema, type OrganizationsFormFields } from "./schema"
 import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
-import { DynamicFieldArray } from "../../../../shared/ui/Forms/DynamicFieldArray"
-import type { Option } from "../../../../shared/ui/Select/ReactSelect"
+import { DynamicFieldArray } from "../../../../shared/ui/forms/DynamicFieldArray"
+import type { Option } from "../../../../shared/ui/select/ReactSelect"
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/AlertMessage/AlertMessage"
+} from "../../../../shared/ui/alert-message/AlertMessage"
 import { countryService } from "../../country/services/service"
 import type { CountryLookupResponse } from "../../country/types/response.dto"
 import { useQuery } from "@tanstack/react-query"
@@ -20,7 +20,7 @@ import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
-import FormSelectField from "../../../../shared/ui/Forms/FormReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 import { countryQueryKeys } from "../../country/services/keys"
 
 type FormFields = OrganizationsFormFields

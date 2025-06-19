@@ -3,31 +3,31 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-} from "../../../../shared/ui/WithError/fieldsWithError"
+} from "../../../../shared/ui/with-error/fieldsWithError"
 import { ContactForm } from "../../contact/forms/form"
 import { AddressForm } from "../../address/forms/form"
-import { DynamicFieldArray } from "../../../../shared/ui/Forms/DynamicFieldArray"
+import { DynamicFieldArray } from "../../../../shared/ui/forms/DynamicFieldArray"
 import { EmployeeProfileForm } from "../../employeeProfile/forms/form"
-import { OptionalField } from "../../../../shared/ui/Forms/OptionalField"
+import { OptionalField } from "../../../../shared/ui/forms/OptionalField"
 import { genderOptions } from "../types/gender"
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/AlertMessage/AlertMessage"
+} from "../../../../shared/ui/alert-message/AlertMessage"
 import { useQueries, type UseQueryResult } from "@tanstack/react-query"
 import { organizationService } from "../../organizations/services/service"
 import { positionService } from "../../positions/services/service"
 import type { OrganizationLookupResponse } from "../../organizations/types/response.dto"
 import type { PositionLookupResponse } from "../../positions/types/response.dto"
-import FormDateField from "../../../../shared/ui/Forms/FormDateField"
+import FormDateField from "../../../../shared/ui/forms/FormDateField"
 import {
   formTransformers,
   getNestedErrorMessage,
 } from "../../../../shared/lib/react-hook-form"
 import { logger } from "../../../../shared/lib/logger"
 import { peopleSchema, type PeopleFormFields } from "./schema"
-import FormFileUpload from "../../../../shared/ui/Forms/FormFileUpload"
-import type { Option } from "../../../../shared/ui/Select/ReactSelect"
-import FormSelectField from "../../../../shared/ui/Forms/FormReactSelect"
+import FormFileUpload from "../../../../shared/ui/forms/FormFileUpload"
+import type { Option } from "../../../../shared/ui/select/ReactSelect"
+import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
 import { organizationQueryKeys } from "../../organizations/services/keys"
 import { positionQueryKeys } from "../../positions/services/keys"
 
