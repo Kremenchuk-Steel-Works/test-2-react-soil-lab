@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from "react"
-import { useSidebar } from "./SidebarProvider"
 import { createPortal } from "react-dom"
+import { useSidebar } from "./SidebarProvider"
 
 const Popup = ({
   btnRef,
