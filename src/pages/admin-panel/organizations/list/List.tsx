@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import Button from "../../../../shared/ui/button/Button"
-import { DataTable } from "../../../../widgets/data-table/DataTable"
-import { adminOrganizationsColumns } from "./columns"
-import { organizationService } from "../../../../entities/admin/organizations/services/service"
-import type { OrganizationListResponse } from "../../../../entities/admin/organizations/types/response.dto"
-import { usePaginationParams } from "../../../../shared/hooks/usePaginationParams"
-import { organizationQueryKeys } from "../../../../entities/admin/organizations/services/keys"
+import Button from '@/shared/ui/button/Button'
+import { DataTable } from '@/widgets/data-table/DataTable'
+import { adminOrganizationsColumns } from '@/pages/admin-panel/organizations/list/columns'
+import { organizationService } from '@/entities/admin/organizations/services/service'
+import type { OrganizationListResponse } from '@/entities/admin/organizations/types/response.dto'
+import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
+import { organizationQueryKeys } from '@/entities/admin/organizations/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminOrganizationsList() {
   // Состояние из URL

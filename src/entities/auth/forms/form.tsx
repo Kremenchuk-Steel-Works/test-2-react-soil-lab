@@ -1,16 +1,16 @@
 import { useForm, type SubmitHandler } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { loginSchema, type LoginFormFields } from "./schema"
+import { loginSchema, type LoginFormFields } from '@/entities/auth/forms/schema'
 import {
   ButtonWithError,
   CheckboxWithError,
   InputFieldWithError,
-} from "../../../shared/ui/with-error/fieldsWithError"
-import { logger } from "../../../shared/lib/logger"
+} from '@/shared/ui/with-error/fieldsWithError'
+import { logger } from '@/shared/lib/logger'
 import {
   formTransformers,
   getNestedErrorMessage,
-} from "../../../shared/lib/react-hook-form"
+} from '@/shared/lib/react-hook-form'
 
 type FormFields = LoginFormFields
 const schema = loginSchema

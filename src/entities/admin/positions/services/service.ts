@@ -1,15 +1,15 @@
-import { api } from "../../../../shared/api/client"
-import { handleAxiosError } from "../../../../shared/lib/axios"
-import type { PageParams } from "../../../../types/pagination"
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 import type {
   PositionCreateRequest,
   PositionUpdateRequest,
-} from "../types/request.dto"
+} from '@/entities/admin/positions/types/request.dto'
 import type {
   PositionDetailResponse,
   PositionListResponse,
   PositionLookupResponse,
-} from "../types/response.dto"
+} from '@/entities/admin/positions/types/response.dto'
 
 export const positionService = {
   // Request

@@ -1,4 +1,4 @@
-import type { ContactBase } from "./base.model"
+import type { ContactBase } from '@/entities/admin/contact/types/base.model'
 
 export interface ContactCreateRequest extends ContactBase {}
 

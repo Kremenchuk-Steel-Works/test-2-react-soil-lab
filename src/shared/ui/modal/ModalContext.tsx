@@ -4,7 +4,7 @@ import React, {
   useContext,
   type ReactNode,
 } from "react"
-import Modal, { type ModalProps } from "./Modal"
+import Modal, { type ModalProps } from '@/shared/ui/modal/Modal'
 
 interface ModalContextType {
   openModal: (props: Omit<ModalProps, "isOpen" | "onClose">) => void

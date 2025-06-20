@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react"
-import Modal, { type ModalProps } from "./Modal"
+import Modal, { type ModalProps } from '@/shared/ui/modal/Modal'
 
 interface ModalTriggerProps {
   trigger: (open: () => void) => React.ReactNode

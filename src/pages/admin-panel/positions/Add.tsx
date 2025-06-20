@@ -1,9 +1,9 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import type { PositionsFormFields } from "../../../entities/admin/positions/forms/schema"
-import PositionsForm from "../../../entities/admin/positions/forms/form"
-import { positionService } from "../../../entities/admin/positions/services/service"
+import type { PositionsFormFields } from '@/entities/admin/positions/forms/schema'
+import PositionsForm from '@/entities/admin/positions/forms/form'
+import { positionService } from '@/entities/admin/positions/services/service'
 
 export default function AdminPositionsAdd() {
   const navigate = useNavigate()

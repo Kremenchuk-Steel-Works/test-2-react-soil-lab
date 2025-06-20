@@ -3,8 +3,8 @@ import type {
   ControllerFieldState,
   ControllerRenderProps,
 } from "react-hook-form"
-import type { InputDateFieldProps } from "../input-field/InputDateField"
-import { InputDateFieldWithError } from "../with-error/fieldsWithError"
+import type { InputDateFieldProps } from '@/shared/ui/input-field/InputDateField'
+import { InputDateFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormDateFieldProps = Omit<
   InputDateFieldProps,

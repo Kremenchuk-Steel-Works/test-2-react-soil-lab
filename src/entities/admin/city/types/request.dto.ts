@@ -1,4 +1,4 @@
-import type { CityBase } from "./base.model"
+import type { CityBase } from '@/entities/admin/city/types/base.model'
 
 export interface CityCreateRequest extends CityBase {
   countryId: number

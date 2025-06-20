@@ -1,14 +1,14 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 
-import { personService } from "../../../entities/admin/people/services/service"
-import type { PersonDetailResponse } from "../../../entities/admin/people/types/response.dto"
-import { personQueryKeys } from "../../../entities/admin/people/services/keys"
+import { personService } from '@/entities/admin/people/services/service'
+import type { PersonDetailResponse } from '@/entities/admin/people/types/response.dto'
+import { personQueryKeys } from '@/entities/admin/people/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminPeopleDetails() {
   const navigate = useNavigate()

@@ -1,6 +1,6 @@
-import { addressOptions } from "../../address/types/address"
-import { employeeProfileOptions } from "../../employeeProfile/types/employmentStatus"
-import type { PersonDetailResponse } from "../types/response.dto"
+import { addressOptions } from '@/entities/admin/address/types/address'
+import { employeeProfileOptions } from '@/entities/admin/employeeProfile/types/employmentStatus'
+import type { PersonDetailResponse } from '@/entities/admin/people/types/response.dto'
 
 const mockAvatar = new File(["avatar"], "avatar.png", { type: "image/png" })
 

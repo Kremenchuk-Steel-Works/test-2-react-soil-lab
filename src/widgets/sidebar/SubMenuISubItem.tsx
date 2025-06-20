@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { SubMenu } from "./SubMenu"
+import { SubMenu } from '@/widgets/sidebar/SubMenu'
 
 interface SubMenuProps {
   label: string

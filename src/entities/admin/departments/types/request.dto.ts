@@ -1,4 +1,4 @@
-import type { DepartmentBase } from "./base.model"
+import type { DepartmentBase } from '@/entities/admin/departments/types/base.model'
 
 export interface DepartmentCreateRequest extends DepartmentBase {}
 

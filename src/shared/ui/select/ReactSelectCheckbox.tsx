@@ -1,8 +1,8 @@
 import { type JSX } from "react"
 import { type OptionProps, type StylesConfig } from "react-select"
-import ReactSelect, { type ClassNamesConfig, type Option } from "./ReactSelect"
+import ReactSelect, { type ClassNamesConfig, type Option } from '@/shared/ui/select/ReactSelect'
 import { type GroupBase, type Props as SelectProps } from "react-select"
-import Checkbox from "../checkbox/Checkox"
+import Checkbox from '@/shared/ui/checkbox/Checkox'
 
 interface CustomMultiSelectProps<
   OptionType extends Option,

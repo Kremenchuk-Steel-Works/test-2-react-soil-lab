@@ -1,7 +1,7 @@
 import { useMemo, useState, type JSX } from "react"
 import { type GroupBase, type Props as SelectProps } from "react-select"
-import ReactSelect, { type Option } from "./ReactSelect"
-import { VirtualizedMenuList } from "./VirtualizedMenuList"
+import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
+import { VirtualizedMenuList } from '@/shared/ui/select/VirtualizedMenuList'
 
 interface VirtualizedSelectProps<
   OptionType extends Option<any>,

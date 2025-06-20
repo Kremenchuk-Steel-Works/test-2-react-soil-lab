@@ -1,9 +1,9 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import type { DepartmentsFormFields } from "../../../entities/admin/departments/forms/schema"
-import DepartmentsForm from "../../../entities/admin/departments/forms/form"
-import { departmentService } from "../../../entities/admin/departments/services/service"
+import type { DepartmentsFormFields } from '@/entities/admin/departments/forms/schema'
+import DepartmentsForm from '@/entities/admin/departments/forms/form'
+import { departmentService } from '@/entities/admin/departments/services/service'
 
 export default function AdminDepartmentsAdd() {
   const navigate = useNavigate()

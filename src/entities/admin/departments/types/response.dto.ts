@@ -1,7 +1,7 @@
-import type { Timestamps } from "../../../../types/common"
-import type { PaginatedListResponse } from "../../../../types/pagination"
-import type { PermissionShortResponse } from "../../permissions/types/response.dto"
-import type { DepartmentBase } from "./base.model"
+import type { Timestamps } from '@/types/common'
+import type { PaginatedListResponse } from '@/types/pagination'
+import type { PermissionShortResponse } from '@/entities/admin/permissions/types/response.dto'
+import type { DepartmentBase } from '@/entities/admin/departments/types/base.model'
 
 export interface DepartmentResponse extends DepartmentBase {
   id: string

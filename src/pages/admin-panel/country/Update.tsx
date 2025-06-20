@@ -1,15 +1,15 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { countryService } from "../../../entities/admin/country/services/service"
-import type { CountryDetailResponse } from "../../../entities/admin/country/types/response.dto"
-import type { CountryFormFields } from "../../../entities/admin/country/forms/schema"
-import CountryForm from "../../../entities/admin/country/forms/form"
-import { countryQueryKeys } from "../../../entities/admin/country/services/keys"
+import { countryService } from '@/entities/admin/country/services/service'
+import type { CountryDetailResponse } from '@/entities/admin/country/types/response.dto'
+import type { CountryFormFields } from '@/entities/admin/country/forms/schema'
+import CountryForm from '@/entities/admin/country/forms/form'
+import { countryQueryKeys } from '@/entities/admin/country/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminCountryUpdate() {
   const navigate = useNavigate()

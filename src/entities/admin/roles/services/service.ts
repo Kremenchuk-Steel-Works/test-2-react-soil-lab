@@ -1,12 +1,12 @@
-import { api } from "../../../../shared/api/client"
-import { handleAxiosError } from "../../../../shared/lib/axios"
-import type { PageParams } from "../../../../types/pagination"
-import type { RoleCreateRequest, RoleUpdateRequest } from "../types/request.dto"
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
+import type { RoleCreateRequest, RoleUpdateRequest } from '@/entities/admin/roles/types/request.dto'
 import type {
   RoleDetailResponse,
   RoleListResponse,
   RoleLookupResponse,
-} from "../types/response.dto"
+} from '@/entities/admin/roles/types/response.dto'
 
 export const roleService = {
   // Request

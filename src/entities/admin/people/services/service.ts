@@ -1,15 +1,15 @@
-import { api } from "../../../../shared/api/client"
-import { handleAxiosError } from "../../../../shared/lib/axios"
-import type { PageParams } from "../../../../types/pagination"
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 import type {
   PersonCreateRequest,
   PersonUpdateRequest,
-} from "../types/request.dto"
+} from '@/entities/admin/people/types/request.dto'
 import type {
   PersonDetailResponse,
   PersonListResponse,
   PersonLookupResponse,
-} from "../types/response.dto"
+} from '@/entities/admin/people/types/response.dto'
 
 export const personService = {
   // Request

@@ -1,9 +1,9 @@
 import { ChevronRight, type LucideIcon } from "lucide-react"
-import { CollapseFM } from "../../shared/ui/animation/CollapseFM"
-import { useIsTruncated } from "../../shared/hooks/useIsTruncated"
+import { CollapseFM } from '@/shared/ui/animation/CollapseFM'
+import { useIsTruncated } from '@/shared/hooks/useIsTruncated'
 import React, { useRef } from "react"
-import { useSidebar } from "./SidebarProvider"
-import Popup from "./Popup"
+import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
+import Popup from '@/widgets/sidebar/Popup'
 
 interface SubMenuProps {
   label: string

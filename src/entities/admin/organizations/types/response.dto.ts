@@ -1,15 +1,15 @@
-import type { Timestamps } from "../../../../types/common"
-import type { PaginatedListResponse } from "../../../../types/pagination"
+import type { Timestamps } from '@/types/common'
+import type { PaginatedListResponse } from '@/types/pagination'
 import type {
   AddressDetailResponse,
   AddressResponse,
-} from "../../address/types/response.dto"
+} from '@/entities/admin/address/types/response.dto'
 import type {
   ContactDetailResponse,
   ContactResponse,
-} from "../../contact/types/response.dto"
-import type { CountryShortResponse } from "../../country/types/response.dto"
-import type { OrganizationBase } from "./base.model"
+} from '@/entities/admin/contact/types/response.dto'
+import type { CountryShortResponse } from '@/entities/admin/country/types/response.dto'
+import type { OrganizationBase } from '@/entities/admin/organizations/types/base.model'
 
 export interface OrganizationResponse extends OrganizationBase {
   id: string

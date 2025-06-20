@@ -1,4 +1,4 @@
-import type { OrganizationDetailResponse } from "../types/response.dto"
+import type { OrganizationDetailResponse } from '@/entities/admin/organizations/types/response.dto'
 
 export const mockOrganizations: OrganizationDetailResponse[] = Array.from(
   { length: 10 },

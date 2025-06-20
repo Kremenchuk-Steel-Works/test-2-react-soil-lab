@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import Button from "../../../../shared/ui/button/Button"
-import { DataTable } from "../../../../widgets/data-table/DataTable"
-import type { CountryListResponse } from "../../../../entities/admin/country/types/response.dto"
-import { countryService } from "../../../../entities/admin/country/services/service"
-import { adminCountryColumns } from "./columns"
-import { usePaginationParams } from "../../../../shared/hooks/usePaginationParams"
-import { countryQueryKeys } from "../../../../entities/admin/country/services/keys"
+import Button from '@/shared/ui/button/Button'
+import { DataTable } from '@/widgets/data-table/DataTable'
+import type { CountryListResponse } from '@/entities/admin/country/types/response.dto'
+import { countryService } from '@/entities/admin/country/services/service'
+import { adminCountryColumns } from '@/pages/admin-panel/country/list/columns'
+import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
+import { countryQueryKeys } from '@/entities/admin/country/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminCountryList() {
   // Состояние из URL

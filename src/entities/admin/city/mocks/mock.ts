@@ -1,4 +1,4 @@
-import type { CityDetailResponse } from "../types/response.dto"
+import type { CityDetailResponse } from '@/entities/admin/city/types/response.dto'
 
 export const mockCities: CityDetailResponse[] = [
   {

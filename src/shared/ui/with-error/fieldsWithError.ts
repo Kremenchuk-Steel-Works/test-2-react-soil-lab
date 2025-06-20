@@ -1,13 +1,13 @@
-import Button from "../button/Button"
-import Checkbox from "../checkbox/Checkox"
-import InputField from "../input-field/InputField"
-import ReactSelect, { type Option } from "../select/ReactSelect"
-import Select from "../select/Select"
+import Button from '@/shared/ui/button/Button'
+import Checkbox from '@/shared/ui/checkbox/Checkox'
+import InputField from '@/shared/ui/input-field/InputField'
+import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
+import Select from '@/shared/ui/select/Select'
 import { type Props as SelectProps } from "react-select"
-import { withError } from "./WithError"
-import InputDateField from "../input-field/InputDateField"
-import { FileUpload } from "../file-upload/FileUpload"
-import { SelectVirtualized } from "../select/VirtualizedSelect"
+import { withError } from '@/shared/ui/with-error/WithError'
+import InputDateField from '@/shared/ui/input-field/InputDateField'
+import { FileUpload } from '@/shared/ui/file-upload/FileUpload'
+import { SelectVirtualized } from '@/shared/ui/select/VirtualizedSelect'
 
 export const InputFieldWithError = withError(InputField)
 export const InputDateFieldWithError = withError(InputDateField)

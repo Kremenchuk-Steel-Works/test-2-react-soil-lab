@@ -1,7 +1,7 @@
-import Button from "../shared/ui/button/Button"
-import Layout from "../widgets/page-layout/Layout"
+import Button from '@/shared/ui/button/Button'
+import Layout from '@/widgets/page-layout/Layout'
 import { useNavigate } from "react-router-dom"
-import { useVisibleRoutes } from "../shared/hooks/usePermissions"
+import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
 
 export default function MainPage() {
   const visibleRoutes = useVisibleRoutes()

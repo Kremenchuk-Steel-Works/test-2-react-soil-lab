@@ -1,5 +1,5 @@
 import log from "loglevel"
-import { DEBUG } from "../config/env"
+import { DEBUG } from '@/shared/config/env'
 
 log.setLevel(DEBUG ? "debug" : "warn")
 

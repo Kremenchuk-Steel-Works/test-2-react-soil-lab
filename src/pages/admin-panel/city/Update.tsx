@@ -1,15 +1,15 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { CityFormFields } from "../../../entities/admin/city/forms/schema"
-import type { CityDetailResponse } from "../../../entities/admin/city/types/response.dto"
-import { cityService } from "../../../entities/admin/city/services/service"
-import CityForm from "../../../entities/admin/city/forms/form"
-import { cityQueryKeys } from "../../../entities/admin/city/services/keys"
+import type { CityFormFields } from '@/entities/admin/city/forms/schema'
+import type { CityDetailResponse } from '@/entities/admin/city/types/response.dto'
+import { cityService } from '@/entities/admin/city/services/service'
+import CityForm from '@/entities/admin/city/forms/form'
+import { cityQueryKeys } from '@/entities/admin/city/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminCityUpdate() {
   const navigate = useNavigate()

@@ -1,12 +1,12 @@
-import { api } from "../../../../shared/api/client"
-import { handleAxiosError } from "../../../../shared/lib/axios"
-import type { PageParams } from "../../../../types/pagination"
-import type { CityCreateRequest, CityUpdateRequest } from "../types/request.dto"
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
+import type { CityCreateRequest, CityUpdateRequest } from '@/entities/admin/city/types/request.dto'
 import type {
   CityDetailResponse,
   CityListResponse,
   CityLookupResponse,
-} from "../types/response.dto"
+} from '@/entities/admin/city/types/response.dto'
 
 export const cityService = {
   // Request

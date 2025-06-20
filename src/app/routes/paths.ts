@@ -5,19 +5,19 @@ import {
   Shield,
   Calculator,
 } from "lucide-react"
-import AdminPanelMain from "../../pages/admin-panel/Main"
-import AdminPanelLayout from "../../pages/admin-panel/Layout"
-import { peopleRoutes } from "../../entities/admin/people/routes"
-import StreamlitDashboard from "../../pages/StreamlitDashboard"
-import StreamlitCalculator from "../../pages/StreamlitCalculator"
-import { usersRoutes } from "../../entities/admin/users/routes"
-import { organizationsRoutes } from "../../entities/admin/organizations/routes"
-import { positonsRoutes } from "../../entities/admin/positions/routes"
-import { departmentsRoutes } from "../../entities/admin/departments/routes"
-import { rolesRoutes } from "../../entities/admin/roles/routes"
-import { permissionsRoutes } from "../../entities/admin/permissions/routes"
-import { countryRoutes } from "../../entities/admin/country/routes"
-import { cityRoutes } from "../../entities/admin/city/routes"
+import AdminPanelMain from '@/pages/admin-panel/Main'
+import AdminPanelLayout from '@/pages/admin-panel/Layout'
+import { peopleRoutes } from '@/entities/admin/people/routes'
+import StreamlitDashboard from '@/pages/StreamlitDashboard'
+import StreamlitCalculator from '@/pages/StreamlitCalculator'
+import { usersRoutes } from '@/entities/admin/users/routes'
+import { organizationsRoutes } from '@/entities/admin/organizations/routes'
+import { positonsRoutes } from '@/entities/admin/positions/routes'
+import { departmentsRoutes } from '@/entities/admin/departments/routes'
+import { rolesRoutes } from '@/entities/admin/roles/routes'
+import { permissionsRoutes } from '@/entities/admin/permissions/routes'
+import { countryRoutes } from '@/entities/admin/country/routes'
+import { cityRoutes } from '@/entities/admin/city/routes'
 
 export type Permission =
   | "admin"

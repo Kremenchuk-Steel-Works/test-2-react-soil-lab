@@ -1,4 +1,4 @@
-import type { PermissionDetailResponse } from "../types/response.dto"
+import type { PermissionDetailResponse } from '@/entities/admin/permissions/types/response.dto'
 
 export const mockPermissions: PermissionDetailResponse[] = [
   {

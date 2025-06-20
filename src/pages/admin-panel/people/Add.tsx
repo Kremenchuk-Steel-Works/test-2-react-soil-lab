@@ -1,9 +1,9 @@
-import { type PeopleFormFields } from "../../../entities/admin/people/forms/schema"
-import PeopleForm from "../../../entities/admin/people/forms/form"
+import { type PeopleFormFields } from '@/entities/admin/people/forms/schema'
+import PeopleForm from '@/entities/admin/people/forms/form'
 import { useNavigate } from "react-router-dom"
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { ArrowLeft } from "lucide-react"
-import { personService } from "../../../entities/admin/people/services/service"
+import { personService } from '@/entities/admin/people/services/service'
 
 export default function AdminPeopleAdd() {
   const navigate = useNavigate()

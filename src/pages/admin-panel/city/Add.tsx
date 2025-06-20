@@ -1,9 +1,9 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import type { CityFormFields } from "../../../entities/admin/city/forms/schema"
-import CityForm from "../../../entities/admin/city/forms/form"
-import { cityService } from "../../../entities/admin/city/services/service"
+import type { CityFormFields } from '@/entities/admin/city/forms/schema'
+import CityForm from '@/entities/admin/city/forms/form'
+import { cityService } from '@/entities/admin/city/services/service'
 
 export default function AdminCityAdd() {
   const navigate = useNavigate()

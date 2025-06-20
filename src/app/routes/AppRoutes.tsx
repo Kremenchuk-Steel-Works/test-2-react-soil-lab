@@ -4,13 +4,13 @@ import {
   type RouteObject,
 } from "react-router-dom"
 import { Suspense } from "react"
-import ProtectedRoute from "./ProtectedRoute"
-import { UnAuthRoute } from "./UnAuthRoute"
+import ProtectedRoute from '@/app/routes/ProtectedRoute'
+import { UnAuthRoute } from '@/app/routes/UnAuthRoute'
 
-import LoginPage from "../../pages/LoginPage"
-import MainPage from "../../pages/MainPage"
-import { APP_ROUTES, type AppRoute } from "./paths"
-import LoadingPage from "../../pages/system/LoadingPage"
+import LoginPage from '@/pages/LoginPage'
+import MainPage from '@/pages/MainPage'
+import { APP_ROUTES, type AppRoute } from '@/app/routes/paths'
+import LoadingPage from '@/pages/system/LoadingPage'
 
 export const PATHS = {
   LOGIN: "/login",

@@ -1,15 +1,15 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { positionService } from "../../../entities/admin/positions/services/service"
-import type { PositionsFormFields } from "../../../entities/admin/positions/forms/schema"
-import PositionsForm from "../../../entities/admin/positions/forms/form"
-import type { PositionDetailResponse } from "../../../entities/admin/positions/types/response.dto"
-import { positionQueryKeys } from "../../../entities/admin/positions/services/keys"
+import { positionService } from '@/entities/admin/positions/services/service'
+import type { PositionsFormFields } from '@/entities/admin/positions/forms/schema'
+import PositionsForm from '@/entities/admin/positions/forms/form'
+import type { PositionDetailResponse } from '@/entities/admin/positions/types/response.dto'
+import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminPositionsUpdate() {
   const navigate = useNavigate()

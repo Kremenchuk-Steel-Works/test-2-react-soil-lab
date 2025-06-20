@@ -1,9 +1,9 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import type { RolesFormFields } from "../../../entities/admin/roles/forms/schema"
-import RolesForm from "../../../entities/admin/roles/forms/form"
-import { roleService } from "../../../entities/admin/roles/services/service"
+import type { RolesFormFields } from '@/entities/admin/roles/forms/schema'
+import RolesForm from '@/entities/admin/roles/forms/form'
+import { roleService } from '@/entities/admin/roles/services/service'
 
 export default function AdminRolesAdd() {
   const navigate = useNavigate()

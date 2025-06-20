@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import Button from "../../../../shared/ui/button/Button"
-import { DataTable } from "../../../../widgets/data-table/DataTable"
-import { permissionService } from "../../../../entities/admin/permissions/services/service"
-import { adminPermissionsColumns } from "./columns"
-import type { PermissionListResponse } from "../../../../entities/admin/permissions/types/response.dto"
-import { usePaginationParams } from "../../../../shared/hooks/usePaginationParams"
-import { permissionQueryKeys } from "../../../../entities/admin/permissions/services/keys"
+import Button from '@/shared/ui/button/Button'
+import { DataTable } from '@/widgets/data-table/DataTable'
+import { permissionService } from '@/entities/admin/permissions/services/service'
+import { adminPermissionsColumns } from '@/pages/admin-panel/permissions/list/columns'
+import type { PermissionListResponse } from '@/entities/admin/permissions/types/response.dto'
+import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
+import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminPermissionsList() {
   // Состояние из URL

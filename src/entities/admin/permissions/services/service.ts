@@ -1,15 +1,15 @@
-import { api } from "../../../../shared/api/client"
-import { handleAxiosError } from "../../../../shared/lib/axios"
-import type { PageParams } from "../../../../types/pagination"
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 import type {
   PermissionCreateRequest,
   PermissionUpdateRequest,
-} from "../types/request.dto"
+} from '@/entities/admin/permissions/types/request.dto'
 import type {
   PermissionDetailResponse,
   PermissionListResponse,
   PermissionLookupResponse,
-} from "../types/response.dto"
+} from '@/entities/admin/permissions/types/response.dto'
 
 export const permissionService = {
   // Request

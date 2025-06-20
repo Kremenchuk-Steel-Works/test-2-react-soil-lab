@@ -1,8 +1,8 @@
 import type { PropsWithChildren, ReactNode } from "react"
 import { Navigate } from "react-router-dom"
-import { PATHS } from "./AppRoutes"
-import { useAuth } from "../providers/auth/model"
-import { logger } from "../../shared/lib/logger"
+import { PATHS } from '@/app/routes/AppRoutes'
+import { useAuth } from '@/app/providers/auth/model'
+import { logger } from '@/shared/lib/logger'
 
 type UnAuthRouteProps = PropsWithChildren & {
   children: ReactNode

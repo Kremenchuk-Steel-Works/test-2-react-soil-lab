@@ -1,5 +1,5 @@
-import type { Timestamps } from "../../../../types/common"
-import type { ContactBase } from "./base.model"
+import type { Timestamps } from '@/types/common'
+import type { ContactBase } from '@/entities/admin/contact/types/base.model'
 
 export interface ContactResponse extends ContactBase {
   id: string

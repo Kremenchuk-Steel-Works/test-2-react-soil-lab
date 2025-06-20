@@ -1,4 +1,4 @@
-import type { Gender } from "./gender"
+import type { Gender } from '@/entities/admin/people/types/gender'
 
 export interface PersonBase {
   firstName: string

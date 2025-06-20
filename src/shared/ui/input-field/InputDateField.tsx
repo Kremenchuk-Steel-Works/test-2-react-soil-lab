@@ -4,7 +4,7 @@ import { Calendar, X } from "lucide-react"
 import "react-datepicker/dist/react-datepicker.css"
 import { uk } from "date-fns/locale"
 import { isValid, parse } from "date-fns"
-import InputFieldWithMask from "./InputFieldWithMask"
+import InputFieldWithMask from '@/shared/ui/input-field/InputFieldWithMask'
 
 registerLocale("uk", uk)
 

@@ -3,22 +3,22 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-} from "../../../../shared/ui/with-error/fieldsWithError"
-import { citySchema, type CityFormFields } from "./schema"
+} from '@/shared/ui/with-error/fieldsWithError'
+import { citySchema, type CityFormFields } from '@/entities/admin/city/forms/schema'
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 import { useQuery } from "@tanstack/react-query"
-import type { CountryLookupResponse } from "../../country/types/response.dto"
-import { countryService } from "../../country/services/service"
-import type { Option } from "../../../../shared/ui/select/ReactSelect"
-import { logger } from "../../../../shared/lib/logger"
+import type { CountryLookupResponse } from '@/entities/admin/country/types/response.dto'
+import { countryService } from '@/entities/admin/country/services/service'
+import type { Option } from '@/shared/ui/select/ReactSelect'
+import { logger } from '@/shared/lib/logger'
 import {
   formTransformers,
   getNestedErrorMessage,
-} from "../../../../shared/lib/react-hook-form"
-import { countryQueryKeys } from "../../country/services/keys"
-import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
+} from '@/shared/lib/react-hook-form'
+import { countryQueryKeys } from '@/entities/admin/country/services/keys'
+import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 
 type FormFields = CityFormFields
 const schema = citySchema

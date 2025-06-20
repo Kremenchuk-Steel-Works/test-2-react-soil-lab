@@ -1,12 +1,12 @@
 import { useEffect, useLayoutEffect, useState } from "react"
-import { api } from "../../../shared/api/client"
-import type { AuthContextType } from "./model"
-import { AuthContext } from "./model"
-import { authService } from "../../../entities/auth/services/service"
-import type { LoginFormFields } from "../../../entities/auth/forms/schema"
-import type { UserDetailResponse } from "../../../entities/admin/users/types/response.dto"
-import { logger } from "../../../shared/lib/logger"
-import { userService } from "../../../entities/admin/users/services/service"
+import { api } from '@/shared/api/client'
+import type { AuthContextType } from '@/app/providers/auth/model'
+import { AuthContext } from '@/app/providers/auth/model'
+import { authService } from '@/entities/auth/services/service'
+import type { LoginFormFields } from '@/entities/auth/forms/schema'
+import type { UserDetailResponse } from '@/entities/admin/users/types/response.dto'
+import { logger } from '@/shared/lib/logger'
+import { userService } from '@/entities/admin/users/services/service'
 
 // Функции для чтения данных из storage:
 const getStoredItem = (itemName: string): string | null => {

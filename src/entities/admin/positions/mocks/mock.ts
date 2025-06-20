@@ -1,4 +1,4 @@
-import type { PositionDetailResponse } from "../types/response.dto"
+import type { PositionDetailResponse } from '@/entities/admin/positions/types/response.dto'
 
 export const mockPositions: PositionDetailResponse[] = [
   {

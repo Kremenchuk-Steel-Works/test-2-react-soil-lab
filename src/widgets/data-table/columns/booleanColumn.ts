@@ -1,5 +1,5 @@
 import type { ColumnDef } from "@tanstack/react-table"
-import { optionColumn } from "./optionColumn"
+import { optionColumn } from '@/widgets/data-table/columns/optionColumn'
 
 /**
  * Создает конфигурацию колонки для отображения boolean значений.

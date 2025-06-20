@@ -1,7 +1,7 @@
 import axios from "axios"
-import { API_URL } from "../config/env"
+import { API_URL } from '@/shared/config/env'
 import axiosCaseConverter from "axios-case-converter"
-import { nullsToUndefined } from "./transformers"
+import { nullsToUndefined } from '@/shared/api/transformers'
 
 // Создаем базовый инстанс
 const baseApi = axios.create({

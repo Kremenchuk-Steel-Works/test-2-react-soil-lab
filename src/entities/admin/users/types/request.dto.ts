@@ -1,4 +1,4 @@
-import type { UserBase } from "./base.model"
+import type { UserBase } from '@/entities/admin/users/types/base.model'
 
 export interface UserCreateRequest extends UserBase {
   personId: string

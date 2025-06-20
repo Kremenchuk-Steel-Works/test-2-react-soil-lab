@@ -1,9 +1,9 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import type { CountryFormFields } from "../../../entities/admin/country/forms/schema"
-import CountryForm from "../../../entities/admin/country/forms/form"
-import { countryService } from "../../../entities/admin/country/services/service"
+import type { CountryFormFields } from '@/entities/admin/country/forms/schema'
+import CountryForm from '@/entities/admin/country/forms/form'
+import { countryService } from '@/entities/admin/country/services/service'
 
 export default function AdminCountryAdd() {
   const navigate = useNavigate()

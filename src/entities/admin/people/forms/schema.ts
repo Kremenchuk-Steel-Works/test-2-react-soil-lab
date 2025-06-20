@@ -1,9 +1,9 @@
 import { z } from "zod"
-import { employeeProfileSchema } from "../../employeeProfile/forms/schema"
-import { contactSchema } from "../../contact/forms/schema"
-import { addressSchema } from "../../address/forms/schema"
-import { genderOptions } from "../types/gender"
-import { toZodEnumValues } from "../../../../shared/lib/zod"
+import { employeeProfileSchema } from '@/entities/admin/employeeProfile/forms/schema'
+import { contactSchema } from '@/entities/admin/contact/forms/schema'
+import { addressSchema } from '@/entities/admin/address/forms/schema'
+import { genderOptions } from '@/entities/admin/people/types/gender'
+import { toZodEnumValues } from '@/shared/lib/zod'
 
 export const peopleSchema = z.object({
   firstName: z.string().nonempty(),

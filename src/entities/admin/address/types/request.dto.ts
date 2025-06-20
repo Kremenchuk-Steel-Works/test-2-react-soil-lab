@@ -1,4 +1,4 @@
-import type { AddressBase } from "./base.model"
+import type { AddressBase } from '@/entities/admin/address/types/base.model'
 
 export interface AddressCreateRequest extends AddressBase {
   cityId: number

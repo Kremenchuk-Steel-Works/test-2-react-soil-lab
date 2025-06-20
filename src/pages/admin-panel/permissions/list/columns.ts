@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table"
-import type { PermissionListItemResponse } from "../../../../entities/admin/permissions/types/response.dto"
-import { idColumn } from "../../../../widgets/data-table/columns/idColumn"
-import { displayColumn } from "../../../../widgets/data-table/columns/displayColumn"
+import type { PermissionListItemResponse } from '@/entities/admin/permissions/types/response.dto'
+import { idColumn } from '@/widgets/data-table/columns/idColumn'
+import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
 
 const columnHelper = createColumnHelper<PermissionListItemResponse>()
 

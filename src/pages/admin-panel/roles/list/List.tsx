@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import Button from "../../../../shared/ui/button/Button"
-import { DataTable } from "../../../../widgets/data-table/DataTable"
-import { roleService } from "../../../../entities/admin/roles/services/service"
-import { adminRolesColumns } from "./columns"
-import type { RoleListResponse } from "../../../../entities/admin/roles/types/response.dto"
-import { usePaginationParams } from "../../../../shared/hooks/usePaginationParams"
-import { roleQueryKeys } from "../../../../entities/admin/roles/services/keys"
+import Button from '@/shared/ui/button/Button'
+import { DataTable } from '@/widgets/data-table/DataTable'
+import { roleService } from '@/entities/admin/roles/services/service'
+import { adminRolesColumns } from '@/pages/admin-panel/roles/list/columns'
+import type { RoleListResponse } from '@/entities/admin/roles/types/response.dto'
+import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
+import { roleQueryKeys } from '@/entities/admin/roles/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminRolesList() {
   // Состояние из URL

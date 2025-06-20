@@ -3,22 +3,22 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-} from "../../../../shared/ui/with-error/fieldsWithError"
-import { rolesSchema, type RolesFormFields } from "./schema"
-import { logger } from "../../../../shared/lib/logger"
+} from '@/shared/ui/with-error/fieldsWithError'
+import { rolesSchema, type RolesFormFields } from '@/entities/admin/roles/forms/schema'
+import { logger } from '@/shared/lib/logger'
 import {
   formTransformers,
   getNestedErrorMessage,
-} from "../../../../shared/lib/react-hook-form"
+} from '@/shared/lib/react-hook-form'
 import { useQuery } from "@tanstack/react-query"
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/alert-message/AlertMessage"
-import type { Option } from "../../../../shared/ui/select/ReactSelect"
-import type { PermissionLookupResponse } from "../../permissions/types/response.dto"
-import { permissionService } from "../../permissions/services/service"
-import { permissionQueryKeys } from "../../permissions/services/keys"
-import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
+} from '@/shared/ui/alert-message/AlertMessage'
+import type { Option } from '@/shared/ui/select/ReactSelect'
+import type { PermissionLookupResponse } from '@/entities/admin/permissions/types/response.dto'
+import { permissionService } from '@/entities/admin/permissions/services/service'
+import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
+import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 
 type FormFields = RolesFormFields
 const schema = rolesSchema

@@ -1,18 +1,18 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 import {
   userUpdateSchema,
   type UserUpdateFormFields,
-} from "../../../entities/admin/users/forms/schema"
-import type { UserDetailResponse } from "../../../entities/admin/users/types/response.dto"
-import { userService } from "../../../entities/admin/users/services/service"
-import UsersForm from "../../../entities/admin/users/forms/form"
+} from '@/entities/admin/users/forms/schema'
+import type { UserDetailResponse } from '@/entities/admin/users/types/response.dto'
+import { userService } from '@/entities/admin/users/services/service'
+import UsersForm from '@/entities/admin/users/forms/form'
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/alert-message/AlertMessage"
-import { userQueryKeys } from "../../../entities/admin/users/services/keys"
+} from '@/shared/ui/alert-message/AlertMessage'
+import { userQueryKeys } from '@/entities/admin/users/services/keys'
 
 export default function AdminUsersUpdate() {
   const navigate = useNavigate()

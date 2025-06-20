@@ -1,7 +1,7 @@
 import { createColumnHelper } from "@tanstack/react-table"
-import type { PositionShortResponse } from "../../../../entities/admin/positions/types/response.dto"
-import { idColumn } from "../../../../widgets/data-table/columns/idColumn"
-import { displayColumn } from "../../../../widgets/data-table/columns/displayColumn"
+import type { PositionShortResponse } from '@/entities/admin/positions/types/response.dto'
+import { idColumn } from '@/widgets/data-table/columns/idColumn'
+import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
 
 const columnHelper = createColumnHelper<PositionShortResponse>()
 

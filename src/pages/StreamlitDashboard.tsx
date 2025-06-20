@@ -1,8 +1,8 @@
 import { ArrowLeft } from "lucide-react"
-import Button from "../shared/ui/button/Button"
-import Layout from "../widgets/page-layout/Layout"
+import Button from '@/shared/ui/button/Button'
+import Layout from '@/widgets/page-layout/Layout'
 import { useNavigate } from "react-router-dom"
-import { PATHS } from "../app/routes/AppRoutes"
+import { PATHS } from '@/app/routes/AppRoutes'
 
 export default function StreamlitDashboard() {
   const navigate = useNavigate()

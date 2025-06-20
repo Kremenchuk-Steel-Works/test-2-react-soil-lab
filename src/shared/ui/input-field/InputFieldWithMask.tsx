@@ -1,7 +1,7 @@
 import { useMask } from "@react-input/mask"
 import { forwardRef, useCallback } from "react"
-import type { InputFieldProps } from "./InputField"
-import InputField from "./InputField"
+import type { InputFieldProps } from '@/shared/ui/input-field/InputField'
+import InputField from '@/shared/ui/input-field/InputField'
 import { useMergeRefs } from "@floating-ui/react"
 
 /**

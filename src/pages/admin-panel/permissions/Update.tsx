@@ -1,15 +1,15 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { PermissionsFormFields } from "../../../entities/admin/permissions/forms/schema"
-import { permissionService } from "../../../entities/admin/permissions/services/service"
-import PermissionsForm from "../../../entities/admin/permissions/forms/form"
-import type { PermissionDetailResponse } from "../../../entities/admin/permissions/types/response.dto"
-import { permissionQueryKeys } from "../../../entities/admin/permissions/services/keys"
+import type { PermissionsFormFields } from '@/entities/admin/permissions/forms/schema'
+import { permissionService } from '@/entities/admin/permissions/services/service'
+import PermissionsForm from '@/entities/admin/permissions/forms/form'
+import type { PermissionDetailResponse } from '@/entities/admin/permissions/types/response.dto'
+import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminPermissionsUpdate() {
   const navigate = useNavigate()

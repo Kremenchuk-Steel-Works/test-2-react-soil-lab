@@ -1,4 +1,4 @@
-import type { EmploymentStatus } from "./employmentStatus"
+import type { EmploymentStatus } from '@/entities/admin/employeeProfile/types/employmentStatus'
 
 export interface EmployeeProfileBase {
   employeeNumber?: string

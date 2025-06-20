@@ -1,22 +1,22 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { personService } from "../../../entities/admin/people/services/service"
-import PeopleForm from "../../../entities/admin/people/forms/form"
-import type { PeopleFormFields } from "../../../entities/admin/people/forms/schema"
-import type { PersonDetailResponse } from "../../../entities/admin/people/types/response.dto"
+import { personService } from '@/entities/admin/people/services/service'
+import PeopleForm from '@/entities/admin/people/forms/form'
+import type { PeopleFormFields } from '@/entities/admin/people/forms/schema'
+import type { PersonDetailResponse } from '@/entities/admin/people/types/response.dto'
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/alert-message/AlertMessage"
-import { personQueryKeys } from "../../../entities/admin/people/services/keys"
-import type { PersonUpdateRequest } from "../../../entities/admin/people/types/request.dto"
+} from '@/shared/ui/alert-message/AlertMessage'
+import { personQueryKeys } from '@/entities/admin/people/services/keys'
+import type { PersonUpdateRequest } from '@/entities/admin/people/types/request.dto'
 import {
   createArrayOperations,
   getLegacySingleObjectOperation,
-} from "../../../shared/lib/form-utils"
-import type { ContactOperationRequest } from "../../../entities/admin/contact/types/request.dto"
-import type { AddressOperationRequest } from "../../../entities/admin/address/types/request.dto"
+} from '@/shared/lib/form-utils'
+import type { ContactOperationRequest } from '@/entities/admin/contact/types/request.dto'
+import type { AddressOperationRequest } from '@/entities/admin/address/types/request.dto'
 
 export default function AdminPeopleUpdate() {
   const navigate = useNavigate()

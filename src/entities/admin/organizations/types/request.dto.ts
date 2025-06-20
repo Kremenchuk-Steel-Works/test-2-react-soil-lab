@@ -1,12 +1,12 @@
 import type {
   AddressCreateRequest,
   AddressOperationRequest,
-} from "../../address/types/request.dto"
+} from '@/entities/admin/address/types/request.dto'
 import type {
   ContactCreateRequest,
   ContactOperationRequest,
-} from "../../contact/types/request.dto"
-import type { OrganizationBase } from "./base.model"
+} from '@/entities/admin/contact/types/request.dto'
+import type { OrganizationBase } from '@/entities/admin/organizations/types/base.model'
 
 export interface OrganizationCreateRequest extends OrganizationBase {
   countryId: number

@@ -1,15 +1,15 @@
-import { api } from "../../../../shared/api/client"
-import { handleAxiosError } from "../../../../shared/lib/axios"
-import type { PageParams } from "../../../../types/pagination"
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 import type {
   OrganizationCreateRequest,
   OrganizationUpdateRequest,
-} from "../types/request.dto"
+} from '@/entities/admin/organizations/types/request.dto'
 import type {
   OrganizationDetailResponse,
   OrganizationListResponse,
   OrganizationLookupResponse,
-} from "../types/response.dto"
+} from '@/entities/admin/organizations/types/response.dto'
 
 export const organizationService = {
   // Request

@@ -3,25 +3,25 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-} from "../../../../shared/ui/with-error/fieldsWithError"
-import { organizationsSchema, type OrganizationsFormFields } from "./schema"
-import { ContactForm } from "../../contact/forms/form"
-import { AddressForm } from "../../address/forms/form"
-import { DynamicFieldArray } from "../../../../shared/ui/forms/DynamicFieldArray"
-import type { Option } from "../../../../shared/ui/select/ReactSelect"
+} from '@/shared/ui/with-error/fieldsWithError'
+import { organizationsSchema, type OrganizationsFormFields } from '@/entities/admin/organizations/forms/schema'
+import { ContactForm } from '@/entities/admin/contact/forms/form'
+import { AddressForm } from '@/entities/admin/address/forms/form'
+import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
+import type { Option } from '@/shared/ui/select/ReactSelect'
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/alert-message/AlertMessage"
-import { countryService } from "../../country/services/service"
-import type { CountryLookupResponse } from "../../country/types/response.dto"
+} from '@/shared/ui/alert-message/AlertMessage'
+import { countryService } from '@/entities/admin/country/services/service'
+import type { CountryLookupResponse } from '@/entities/admin/country/types/response.dto'
 import { useQuery } from "@tanstack/react-query"
-import { logger } from "../../../../shared/lib/logger"
+import { logger } from '@/shared/lib/logger'
 import {
   formTransformers,
   getNestedErrorMessage,
-} from "../../../../shared/lib/react-hook-form"
-import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
-import { countryQueryKeys } from "../../country/services/keys"
+} from '@/shared/lib/react-hook-form'
+import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import { countryQueryKeys } from '@/entities/admin/country/services/keys'
 
 type FormFields = OrganizationsFormFields
 const schema = organizationsSchema

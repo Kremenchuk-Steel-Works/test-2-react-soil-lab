@@ -1,12 +1,12 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import {
   userSchema,
   type UserFormFields,
-} from "../../../entities/admin/users/forms/schema"
-import UsersForm from "../../../entities/admin/users/forms/form"
-import { userService } from "../../../entities/admin/users/services/service"
+} from '@/entities/admin/users/forms/schema'
+import UsersForm from '@/entities/admin/users/forms/form'
+import { userService } from '@/entities/admin/users/services/service'
 
 export default function AdminUsersAdd() {
   const navigate = useNavigate()

@@ -1,16 +1,16 @@
 import type {
   AddressCreateRequest,
   AddressOperationRequest,
-} from "../../address/types/request.dto"
+} from '@/entities/admin/address/types/request.dto'
 import type {
   ContactCreateRequest,
   ContactOperationRequest,
-} from "../../contact/types/request.dto"
+} from '@/entities/admin/contact/types/request.dto'
 import type {
   EmployeeProfileCreateRequest,
   EmployeeProfileUpdateRequest,
-} from "../../employeeProfile/types/request.dto"
-import type { PersonBase } from "./base.model"
+} from '@/entities/admin/employeeProfile/types/request.dto'
+import type { PersonBase } from '@/entities/admin/people/types/base.model'
 
 export interface PersonCreateRequest extends PersonBase {
   employeeProfile?: EmployeeProfileCreateRequest

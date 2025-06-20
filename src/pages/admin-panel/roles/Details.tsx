@@ -1,13 +1,13 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { roleService } from "../../../entities/admin/roles/services/service"
-import type { RoleDetailResponse } from "../../../entities/admin/roles/types/response.dto"
-import { roleQueryKeys } from "../../../entities/admin/roles/services/keys"
+import { roleService } from '@/entities/admin/roles/services/service'
+import type { RoleDetailResponse } from '@/entities/admin/roles/types/response.dto'
+import { roleQueryKeys } from '@/entities/admin/roles/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminRolesDetails() {
   const navigate = useNavigate()

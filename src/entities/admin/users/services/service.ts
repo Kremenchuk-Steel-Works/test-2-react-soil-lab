@@ -1,11 +1,11 @@
-import { api } from "../../../../shared/api/client"
-import { handleAxiosError } from "../../../../shared/lib/axios"
-import type { PageParams } from "../../../../types/pagination"
-import type { UserCreateRequest, UserUpdateRequest } from "../types/request.dto"
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
+import type { UserCreateRequest, UserUpdateRequest } from '@/entities/admin/users/types/request.dto'
 import type {
   UserDetailResponse,
   UserListResponse,
-} from "../types/response.dto"
+} from '@/entities/admin/users/types/response.dto'
 
 export const userService = {
   // Request

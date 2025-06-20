@@ -1,6 +1,6 @@
-import type { Timestamps } from "../../../../types/common"
-import type { PaginatedListResponse } from "../../../../types/pagination"
-import type { PositionBase } from "./base.model"
+import type { Timestamps } from '@/types/common'
+import type { PaginatedListResponse } from '@/types/pagination'
+import type { PositionBase } from '@/entities/admin/positions/types/base.model'
 
 export interface PositionResponse extends PositionBase {
   id: string

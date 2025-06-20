@@ -1,7 +1,7 @@
 import { lazy } from "react"
 import { Database, CirclePlus, Info, RefreshCcw, Languages } from "lucide-react"
-import type { AppRoute } from "../../../app/routes/paths"
-import AdminCityLayout from "../../../pages/admin-panel/city/Layout"
+import type { AppRoute } from '@/app/routes/paths'
+import AdminCityLayout from '@/pages/admin-panel/city/Layout'
 
 const AdminCityList = lazy(
   () => import("../../../pages/admin-panel/city/list/List")

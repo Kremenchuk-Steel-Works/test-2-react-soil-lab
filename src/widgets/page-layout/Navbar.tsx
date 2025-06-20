@@ -1,8 +1,8 @@
 import { User, Shield, LogOut, Menu } from "lucide-react"
 import { Link } from "react-router-dom"
-import { PATHS } from "../../app/routes/AppRoutes"
-import { useAuth } from "../../app/providers/auth/model"
-import { useSidebar } from "../sidebar/SidebarProvider"
+import { PATHS } from '@/app/routes/AppRoutes'
+import { useAuth } from '@/app/providers/auth/model'
+import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
 
 const Navbar: React.FC = () => {
   const { logout, currentUser } = useAuth()

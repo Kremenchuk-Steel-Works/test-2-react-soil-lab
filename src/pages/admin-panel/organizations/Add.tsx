@@ -1,9 +1,9 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import type { OrganizationsFormFields } from "../../../entities/admin/organizations/forms/schema"
-import OrganizationsForm from "../../../entities/admin/organizations/forms/form"
-import { organizationService } from "../../../entities/admin/organizations/services/service"
+import type { OrganizationsFormFields } from '@/entities/admin/organizations/forms/schema'
+import OrganizationsForm from '@/entities/admin/organizations/forms/form'
+import { organizationService } from '@/entities/admin/organizations/services/service'
 
 export default function AdminOrganizationsAdd() {
   const navigate = useNavigate()

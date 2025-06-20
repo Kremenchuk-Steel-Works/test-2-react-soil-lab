@@ -1,4 +1,4 @@
-import type { EmployeeProfileBase } from "./base.model"
+import type { EmployeeProfileBase } from '@/entities/admin/employeeProfile/types/base.model'
 
 export interface EmployeeProfileCreateRequest extends EmployeeProfileBase {}
 

@@ -1,9 +1,9 @@
-import type { LoginRequest } from "../types/login/request.dto"
-import type { TokenRefreshRequest } from "../types/token/request.dto"
-import { api } from "../../../shared/api/client"
-import type { TokenRefreshResponse } from "../types/token/response.dto"
-import type { LoginResponse } from "../types/login/response.dto"
-import { handleAxiosError } from "../../../shared/lib/axios"
+import type { LoginRequest } from '@/entities/auth/types/login/request.dto'
+import type { TokenRefreshRequest } from '@/entities/auth/types/token/request.dto'
+import { api } from '@/shared/api/client'
+import type { TokenRefreshResponse } from '@/entities/auth/types/token/response.dto'
+import type { LoginResponse } from '@/entities/auth/types/login/response.dto'
+import { handleAxiosError } from '@/shared/lib/axios'
 
 export const authService = {
   async login({ email, password }: LoginRequest) {

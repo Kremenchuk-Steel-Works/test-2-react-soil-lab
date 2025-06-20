@@ -1,6 +1,6 @@
-import type { Timestamps } from "../../../../types/common"
-import type { Address } from "./address"
-import type { AddressBase } from "./base.model"
+import type { Timestamps } from '@/types/common'
+import type { Address } from '@/entities/admin/address/types/address'
+import type { AddressBase } from '@/entities/admin/address/types/base.model'
 
 export interface AddressResponse {
   id: string

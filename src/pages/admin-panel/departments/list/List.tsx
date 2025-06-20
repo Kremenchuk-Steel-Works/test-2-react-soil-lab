@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft, Plus } from "lucide-react"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import Button from "../../../../shared/ui/button/Button"
-import { DataTable } from "../../../../widgets/data-table/DataTable"
-import { adminDepartmentsColumns } from "./columns"
-import { departmentService } from "../../../../entities/admin/departments/services/service"
-import type { DepartmentListResponse } from "../../../../entities/admin/departments/types/response.dto"
-import { usePaginationParams } from "../../../../shared/hooks/usePaginationParams"
-import { departmentQueryKeys } from "../../../../entities/admin/departments/services/keys"
+import Button from '@/shared/ui/button/Button'
+import { DataTable } from '@/widgets/data-table/DataTable'
+import { adminDepartmentsColumns } from '@/pages/admin-panel/departments/list/columns'
+import { departmentService } from '@/entities/admin/departments/services/service'
+import type { DepartmentListResponse } from '@/entities/admin/departments/types/response.dto'
+import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
+import { departmentQueryKeys } from '@/entities/admin/departments/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminDepartmentsList() {
   // Состояние из URL

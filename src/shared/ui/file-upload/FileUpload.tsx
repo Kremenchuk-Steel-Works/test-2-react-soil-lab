@@ -9,7 +9,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useDropzone, type Accept, type FileRejection } from "react-dropzone"
 import { twMerge } from "tailwind-merge"
-import { logger } from "../../lib/logger"
+import { logger } from '@/shared/lib/logger'
 
 // --- Props and Utils (без изменений) ---
 export interface FileUploadProps {

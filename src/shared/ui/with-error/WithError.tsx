@@ -1,5 +1,5 @@
 import React from "react"
-import AlertMessage, { AlertType } from "../alert-message/AlertMessage"
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export type WithErrorProps = {
   errorMessage?: string

@@ -1,19 +1,19 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import { organizationService } from "../../../entities/admin/organizations/services/service"
-import type { OrganizationsFormFields } from "../../../entities/admin/organizations/forms/schema"
-import OrganizationsForm from "../../../entities/admin/organizations/forms/form"
-import type { OrganizationDetailResponse } from "../../../entities/admin/organizations/types/response.dto"
+import { organizationService } from '@/entities/admin/organizations/services/service'
+import type { OrganizationsFormFields } from '@/entities/admin/organizations/forms/schema'
+import OrganizationsForm from '@/entities/admin/organizations/forms/form'
+import type { OrganizationDetailResponse } from '@/entities/admin/organizations/types/response.dto'
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/alert-message/AlertMessage"
-import { organizationQueryKeys } from "../../../entities/admin/organizations/services/keys"
-import type { OrganizationUpdateRequest } from "../../../entities/admin/organizations/types/request.dto"
-import { createArrayOperations } from "../../../shared/lib/form-utils"
-import type { ContactOperationRequest } from "../../../entities/admin/contact/types/request.dto"
-import type { AddressOperationRequest } from "../../../entities/admin/address/types/request.dto"
+} from '@/shared/ui/alert-message/AlertMessage'
+import { organizationQueryKeys } from '@/entities/admin/organizations/services/keys'
+import type { OrganizationUpdateRequest } from '@/entities/admin/organizations/types/request.dto'
+import { createArrayOperations } from '@/shared/lib/form-utils'
+import type { ContactOperationRequest } from '@/entities/admin/contact/types/request.dto'
+import type { AddressOperationRequest } from '@/entities/admin/address/types/request.dto'
 
 export default function AdminOrganizationsUpdate() {
   const navigate = useNavigate()

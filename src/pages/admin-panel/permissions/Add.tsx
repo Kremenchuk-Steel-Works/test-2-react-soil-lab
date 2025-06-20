@@ -1,9 +1,9 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate } from "react-router-dom"
 import { ArrowLeft } from "lucide-react"
-import type { PermissionsFormFields } from "../../../entities/admin/permissions/forms/schema"
-import PermissionsForm from "../../../entities/admin/permissions/forms/form"
-import { permissionService } from "../../../entities/admin/permissions/services/service"
+import type { PermissionsFormFields } from '@/entities/admin/permissions/forms/schema'
+import PermissionsForm from '@/entities/admin/permissions/forms/form'
+import { permissionService } from '@/entities/admin/permissions/services/service'
 
 export default function AdminPermissionsAdd() {
   const navigate = useNavigate()

@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react"
-import type { UserDetailResponse } from "../../../entities/admin/users/types/response.dto"
+import type { UserDetailResponse } from '@/entities/admin/users/types/response.dto'
 
 // Определяем тип контекста
 export type AuthContextType = {

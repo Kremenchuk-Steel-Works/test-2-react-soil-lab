@@ -1,13 +1,13 @@
-import Button from "../../../shared/ui/button/Button"
+import Button from '@/shared/ui/button/Button'
 import { useNavigate, useParams } from "react-router-dom"
 import { ArrowLeft, Pen } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
-import type { CountryDetailResponse } from "../../../entities/admin/country/types/response.dto"
-import { countryService } from "../../../entities/admin/country/services/service"
-import { countryQueryKeys } from "../../../entities/admin/country/services/keys"
+import type { CountryDetailResponse } from '@/entities/admin/country/types/response.dto'
+import { countryService } from '@/entities/admin/country/services/service'
+import { countryQueryKeys } from '@/entities/admin/country/services/keys'
 import AlertMessage, {
   AlertType,
-} from "../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminCountryDetails() {
   const navigate = useNavigate()

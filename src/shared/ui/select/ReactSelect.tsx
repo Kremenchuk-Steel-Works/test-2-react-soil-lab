@@ -11,7 +11,7 @@ import {
   type DropdownIndicatorProps,
 } from "react-select"
 import { twMerge } from "tailwind-merge"
-import AnimatedMenu from "./AnimatedMenu"
+import AnimatedMenu from '@/shared/ui/select/AnimatedMenu'
 
 export type Option<ValueType = string | number | boolean> = {
   value: ValueType

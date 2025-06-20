@@ -9,7 +9,7 @@ import {
   type UseFormResetField,
   type UseFormSetValue,
 } from "react-hook-form"
-import Button from "../button/Button"
+import Button from '@/shared/ui/button/Button'
 import { Plus, X } from "lucide-react"
 
 interface OptionalFieldProps<

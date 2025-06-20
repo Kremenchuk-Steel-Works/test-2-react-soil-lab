@@ -10,28 +10,28 @@ import {
   InputFieldWithError,
   ButtonWithError,
   CheckboxWithError,
-} from "../../../../shared/ui/with-error/fieldsWithError"
+} from '@/shared/ui/with-error/fieldsWithError'
 import { ZodObject, type z, type ZodType } from "zod"
 import { useQueries, type UseQueryResult } from "@tanstack/react-query"
-import { roleService } from "../../roles/services/service"
-import { permissionService } from "../../permissions/services/service"
-import { personService } from "../../people/services/service"
+import { roleService } from '@/entities/admin/roles/services/service'
+import { permissionService } from '@/entities/admin/permissions/services/service'
+import { personService } from '@/entities/admin/people/services/service'
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/alert-message/AlertMessage"
-import type { PersonLookupResponse } from "../../people/types/response.dto"
-import type { RoleLookupResponse } from "../../roles/types/response.dto"
-import type { PermissionLookupResponse } from "../../permissions/types/response.dto"
-import type { Option } from "../../../../shared/ui/select/ReactSelect"
-import { logger } from "../../../../shared/lib/logger"
+} from '@/shared/ui/alert-message/AlertMessage'
+import type { PersonLookupResponse } from '@/entities/admin/people/types/response.dto'
+import type { RoleLookupResponse } from '@/entities/admin/roles/types/response.dto'
+import type { PermissionLookupResponse } from '@/entities/admin/permissions/types/response.dto'
+import type { Option } from '@/shared/ui/select/ReactSelect'
+import { logger } from '@/shared/lib/logger'
 import {
   formTransformers,
   getNestedErrorMessage,
-} from "../../../../shared/lib/react-hook-form"
-import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
-import { personQueryKeys } from "../../people/services/keys"
-import { roleQueryKeys } from "../../roles/services/keys"
-import { permissionQueryKeys } from "../../permissions/services/keys"
+} from '@/shared/lib/react-hook-form'
+import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import { personQueryKeys } from '@/entities/admin/people/services/keys'
+import { roleQueryKeys } from '@/entities/admin/roles/services/keys'
+import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
 
 interface FormProps<T extends ZodType<any, any>> {
   schema: T

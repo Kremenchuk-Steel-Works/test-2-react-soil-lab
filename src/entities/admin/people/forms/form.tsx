@@ -3,33 +3,33 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-} from "../../../../shared/ui/with-error/fieldsWithError"
-import { ContactForm } from "../../contact/forms/form"
-import { AddressForm } from "../../address/forms/form"
-import { DynamicFieldArray } from "../../../../shared/ui/forms/DynamicFieldArray"
-import { EmployeeProfileForm } from "../../employeeProfile/forms/form"
-import { OptionalField } from "../../../../shared/ui/forms/OptionalField"
-import { genderOptions } from "../types/gender"
+} from '@/shared/ui/with-error/fieldsWithError'
+import { ContactForm } from '@/entities/admin/contact/forms/form'
+import { AddressForm } from '@/entities/admin/address/forms/form'
+import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
+import { EmployeeProfileForm } from '@/entities/admin/employeeProfile/forms/form'
+import { OptionalField } from '@/shared/ui/forms/OptionalField'
+import { genderOptions } from '@/entities/admin/people/types/gender'
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 import { useQueries, type UseQueryResult } from "@tanstack/react-query"
-import { organizationService } from "../../organizations/services/service"
-import { positionService } from "../../positions/services/service"
-import type { OrganizationLookupResponse } from "../../organizations/types/response.dto"
-import type { PositionLookupResponse } from "../../positions/types/response.dto"
-import FormDateField from "../../../../shared/ui/forms/FormDateField"
+import { organizationService } from '@/entities/admin/organizations/services/service'
+import { positionService } from '@/entities/admin/positions/services/service'
+import type { OrganizationLookupResponse } from '@/entities/admin/organizations/types/response.dto'
+import type { PositionLookupResponse } from '@/entities/admin/positions/types/response.dto'
+import FormDateField from '@/shared/ui/forms/FormDateField'
 import {
   formTransformers,
   getNestedErrorMessage,
-} from "../../../../shared/lib/react-hook-form"
-import { logger } from "../../../../shared/lib/logger"
-import { peopleSchema, type PeopleFormFields } from "./schema"
-import FormFileUpload from "../../../../shared/ui/forms/FormFileUpload"
-import type { Option } from "../../../../shared/ui/select/ReactSelect"
-import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
-import { organizationQueryKeys } from "../../organizations/services/keys"
-import { positionQueryKeys } from "../../positions/services/keys"
+} from '@/shared/lib/react-hook-form'
+import { logger } from '@/shared/lib/logger'
+import { peopleSchema, type PeopleFormFields } from '@/entities/admin/people/forms/schema'
+import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
+import type { Option } from '@/shared/ui/select/ReactSelect'
+import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import { organizationQueryKeys } from '@/entities/admin/organizations/services/keys'
+import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema

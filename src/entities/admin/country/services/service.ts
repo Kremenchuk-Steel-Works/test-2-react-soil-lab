@@ -1,15 +1,15 @@
-import { api } from "../../../../shared/api/client"
-import { handleAxiosError } from "../../../../shared/lib/axios"
-import type { PageParams } from "../../../../types/pagination"
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 import type {
   CountryCreateRequest,
   CountryUpdateRequest,
-} from "../types/request.dto"
+} from '@/entities/admin/country/types/request.dto'
 import type {
   CountryDetailResponse,
   CountryListResponse,
   CountryLookupResponse,
-} from "../types/response.dto"
+} from '@/entities/admin/country/types/response.dto'
 
 export const countryService = {
   // Request

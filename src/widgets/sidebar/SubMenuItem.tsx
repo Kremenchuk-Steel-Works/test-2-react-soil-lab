@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import MenuItem from "./MenuItem"
+import MenuItem from '@/widgets/sidebar/MenuItem'
 
 interface SubMenuItemProps {
   label: string

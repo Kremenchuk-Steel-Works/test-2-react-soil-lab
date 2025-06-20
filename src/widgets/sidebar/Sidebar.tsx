@@ -1,10 +1,10 @@
 import React from "react"
 
-import { useVisibleRoutes } from "../../shared/hooks/usePermissions"
-import { getFullPath } from "../../utils/path"
-import { useSidebar } from "./SidebarProvider"
-import MenuItem from "./MenuItem"
-import { SubMenu } from "./SubMenu"
+import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
+import { getFullPath } from '@/utils/path'
+import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
+import MenuItem from '@/widgets/sidebar/MenuItem'
+import { SubMenu } from '@/widgets/sidebar/SubMenu'
 
 const Sidebar: React.FC = () => {
   const { closeSidebar, closeSubMenu, expandedSubMenus, collapsed, broken } =

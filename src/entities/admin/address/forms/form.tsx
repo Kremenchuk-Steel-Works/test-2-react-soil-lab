@@ -8,22 +8,22 @@ import {
 import {
   InputFieldWithError,
   CheckboxWithError,
-} from "../../../../shared/ui/with-error/fieldsWithError"
-import type { AddressFormFields } from "./schema"
-import { addressOptions } from "../types/address"
-import type { CityLookupResponse } from "../../city/types/response.dto"
+} from '@/shared/ui/with-error/fieldsWithError'
+import type { AddressFormFields } from '@/entities/admin/address/forms/schema'
+import { addressOptions } from '@/entities/admin/address/types/address'
+import type { CityLookupResponse } from '@/entities/admin/city/types/response.dto'
 import { useQuery } from "@tanstack/react-query"
-import { cityService } from "../../city/services/service"
+import { cityService } from '@/entities/admin/city/services/service'
 import AlertMessage, {
   AlertType,
-} from "../../../../shared/ui/alert-message/AlertMessage"
+} from '@/shared/ui/alert-message/AlertMessage'
 import {
   formTransformers,
   getNestedErrorMessage,
-} from "../../../../shared/lib/react-hook-form"
-import { cityQueryKeys } from "../../city/services/keys"
-import type { Option } from "../../../../shared/ui/select/ReactSelect"
-import FormSelectField from "../../../../shared/ui/forms/FormReactSelect"
+} from '@/shared/lib/react-hook-form'
+import { cityQueryKeys } from '@/entities/admin/city/services/keys'
+import type { Option } from '@/shared/ui/select/ReactSelect'
+import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 
 export type FormFields = {
   addresses: AddressFormFields[]

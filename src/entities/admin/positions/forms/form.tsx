@@ -3,13 +3,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import {
   InputFieldWithError,
   ButtonWithError,
-} from "../../../../shared/ui/with-error/fieldsWithError"
-import { positionsSchema, type PositionsFormFields } from "./schema"
-import { logger } from "../../../../shared/lib/logger"
+} from '@/shared/ui/with-error/fieldsWithError'
+import { positionsSchema, type PositionsFormFields } from '@/entities/admin/positions/forms/schema'
+import { logger } from '@/shared/lib/logger'
 import {
   formTransformers,
   getNestedErrorMessage,
-} from "../../../../shared/lib/react-hook-form"
+} from '@/shared/lib/react-hook-form'
 
 type FormFields = PositionsFormFields
 const schema = positionsSchema

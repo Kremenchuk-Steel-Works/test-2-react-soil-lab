@@ -1,7 +1,7 @@
 import { lazy } from "react"
 import { Database, CirclePlus, Info, RefreshCcw, Lock } from "lucide-react"
-import type { AppRoute } from "../../../app/routes/paths"
-import AdminPermissionsLayout from "../../../pages/admin-panel/permissions/Layout"
+import type { AppRoute } from '@/app/routes/paths'
+import AdminPermissionsLayout from '@/pages/admin-panel/permissions/Layout'
 
 const AdminPermissionsList = lazy(
   () => import("../../../pages/admin-panel/permissions/list/List")
