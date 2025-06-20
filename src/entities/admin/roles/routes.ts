@@ -6,7 +6,7 @@ import {
   RefreshCcw,
   ShieldCheck,
 } from "lucide-react"
-import type { AppRoute } from "../../../app/routes/routes.config"
+import type { AppRoute } from "../../../app/routes/paths"
 import AdminRolesLayout from "../../../pages/admin-panel/roles/Layout"
 
 const AdminRolesList = lazy(

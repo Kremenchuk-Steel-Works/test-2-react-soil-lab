@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import Button from "../../shared/ui/button/Button"
-import { APP_ROUTES } from "../../app/routes/routes.config"
+import { APP_ROUTES } from "../../app/routes/paths"
 
 export default function AdminPanelMain() {
   const navigate = useNavigate()

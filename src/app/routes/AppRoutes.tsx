@@ -9,7 +9,7 @@ import { UnAuthRoute } from "./UnAuthRoute"
 
 import LoginPage from "../../pages/LoginPage"
 import MainPage from "../../pages/MainPage"
-import { APP_ROUTES, type AppRoute } from "./routes.config"
+import { APP_ROUTES, type AppRoute } from "./paths"
 import LoadingPage from "../../pages/system/LoadingPage"
 
 export const PATHS = {

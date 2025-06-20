@@ -1,6 +1,6 @@
 import { useAuth } from "../../app/providers/auth/model"
-import type { AppRoute } from "../../app/routes/routes.config"
-import { APP_ROUTES } from "../../app/routes/routes.config"
+import type { AppRoute } from "../../app/routes/paths"
+import { APP_ROUTES } from "../../app/routes/paths"
 import { match } from "path-to-regexp"
 
 export function useUserPermissionNames(): string[] {

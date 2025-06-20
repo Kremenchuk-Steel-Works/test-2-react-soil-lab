@@ -6,7 +6,7 @@ import {
   RefreshCcw,
   BriefcaseBusiness,
 } from "lucide-react"
-import type { AppRoute } from "../../../app/routes/routes.config"
+import type { AppRoute } from "../../../app/routes/paths"
 import AdminPositionsLayout from "../../../pages/admin-panel/positions/Layout"
 
 const AdminPositionsList = lazy(
