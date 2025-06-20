@@ -1,24 +1,16 @@
-import { Controller, useForm, type SubmitHandler } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  InputFieldWithError,
-  ButtonWithError,
-} from '@/shared/ui/with-error/fieldsWithError'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { citySchema, type CityFormFields } from '@/entities/admin/city/forms/schema'
-import AlertMessage, {
-  AlertType,
-} from '@/shared/ui/alert-message/AlertMessage'
-import { useQuery } from "@tanstack/react-query"
-import type { CountryLookupResponse } from '@/entities/admin/country/types/response.dto'
-import { countryService } from '@/entities/admin/country/services/service'
-import type { Option } from '@/shared/ui/select/ReactSelect'
-import { logger } from '@/shared/lib/logger'
-import {
-  formTransformers,
-  getNestedErrorMessage,
-} from '@/shared/lib/react-hook-form'
 import { countryQueryKeys } from '@/entities/admin/country/services/keys'
+import { countryService } from '@/entities/admin/country/services/service'
+import type { CountryLookupResponse } from '@/entities/admin/country/types/response.dto'
+import { logger } from '@/shared/lib/logger'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import type { Option } from '@/shared/ui/select/ReactSelect'
+import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormFields = CityFormFields
 const schema = citySchema
@@ -29,11 +21,7 @@ interface FormProps {
   submitBtnName: string
 }
 
-export default function CityForm({
-  defaultValues,
-  onSubmit,
-  submitBtnName,
-}: FormProps) {
+export default function CityForm({ defaultValues, onSubmit, submitBtnName }: FormProps) {
   const {
     control,
     register,
@@ -48,10 +36,10 @@ export default function CityForm({
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await onSubmit(data)
-      logger.debug("Форма успешно выполнена", response)
+      logger.debug('Форма успешно выполнена', response)
     } catch (err) {
       const error = err as Error
-      setError("root", { message: error.message })
+      setError('root', { message: error.message })
       logger.error(err)
     }
   }
@@ -84,14 +72,14 @@ export default function CityForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Назва"
-        {...register("name", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "name")}
+        {...register('name', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'name')}
       />
 
       <InputFieldWithError
         label="Локальна назва"
-        {...register("nameLocal", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "nameLocal")}
+        {...register('nameLocal', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'nameLocal')}
       />
 
       <Controller
@@ -105,7 +93,7 @@ export default function CityForm({
             isVirtualized
             isClearable
             placeholder="Оберіть країну"
-            errorMessage={getNestedErrorMessage(errors, "countryId")}
+            errorMessage={getNestedErrorMessage(errors, 'countryId')}
           />
         )}
       />

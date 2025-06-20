@@ -1,10 +1,10 @@
-import type { PageParams } from '@/types/pagination'
 import { mockOrganizations } from '@/entities/admin/organizations/mocks/mock'
 import type {
   OrganizationDetailResponse,
   OrganizationListResponse,
   OrganizationLookupResponse,
 } from '@/entities/admin/organizations/types/response.dto'
+import type { PageParams } from '@/types/pagination'
 
 const mockData = mockOrganizations
 
@@ -13,7 +13,7 @@ export const organizationsService = {
     console.log(params)
     const newData = mockData.map((item) => ({
       ...item,
-      countryName: item.country.name ?? item.country.nameLocal ?? "",
+      countryName: item.country.name ?? item.country.nameLocal ?? '',
     }))
     const responeData = {
       data: newData,

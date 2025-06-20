@@ -1,7 +1,7 @@
-import type { Timestamps } from '@/types/common'
-import type { PaginatedListResponse } from '@/types/pagination'
 import type { DepartmentShortResponse } from '@/entities/admin/departments/types/response.dto'
 import type { PermissionBase } from '@/entities/admin/permissions/types/base.model'
+import type { Timestamps } from '@/types/common'
+import type { PaginatedListResponse } from '@/types/pagination'
 
 export interface PermissionResponse extends PermissionBase {
   id: number
@@ -14,9 +14,7 @@ export interface PermissionLookupResponse {
   departmentName: string
 }
 
-export interface PermissionDetailResponse
-  extends PermissionResponse,
-    Timestamps {}
+export interface PermissionDetailResponse extends PermissionResponse, Timestamps {}
 
 export interface PermissionShortResponse extends PermissionBase {
   id: number
@@ -28,5 +26,4 @@ export interface PermissionListItemResponse {
   departmentName: string
 }
 
-export type PermissionListResponse =
-  PaginatedListResponse<PermissionListItemResponse>
+export type PermissionListResponse = PaginatedListResponse<PermissionListItemResponse>

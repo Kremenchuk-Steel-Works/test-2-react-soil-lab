@@ -9,7 +9,7 @@ export interface AddressUpdateRequest extends Partial<AddressBase> {
 }
 
 export interface AddressOperationRequest {
-  action: "create" | "update" | "delete"
+  action: 'create' | 'update' | 'delete'
   data?: AddressCreateRequest | AddressUpdateRequest
   id?: string
 }

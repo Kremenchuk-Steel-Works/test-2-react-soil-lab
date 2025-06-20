@@ -1,5 +1,3 @@
-import type { Timestamps } from '@/types/common'
-import type { PaginatedListResponse } from '@/types/pagination'
 import type {
   AddressDetailResponse,
   AddressResponse,
@@ -13,9 +11,11 @@ import type {
   EmployeeProfileResponse,
 } from '@/entities/admin/employeeProfile/types/response.dto'
 import type { OrganizationShortResponse } from '@/entities/admin/organizations/types/response.dto'
-import type { PositionShortResponse } from '@/entities/admin/positions/types/response.dto'
 import type { PersonBase } from '@/entities/admin/people/types/base.model'
 import type { Gender } from '@/entities/admin/people/types/gender'
+import type { PositionShortResponse } from '@/entities/admin/positions/types/response.dto'
+import type { Timestamps } from '@/types/common'
+import type { PaginatedListResponse } from '@/types/pagination'
 
 export interface PersonShortResponse {
   id: string

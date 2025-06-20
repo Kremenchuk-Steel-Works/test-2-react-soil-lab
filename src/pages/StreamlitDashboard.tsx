@@ -1,8 +1,8 @@
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { PATHS } from '@/app/routes/AppRoutes'
 import Button from '@/shared/ui/button/Button'
 import Layout from '@/widgets/page-layout/Layout'
-import { useNavigate } from "react-router-dom"
-import { PATHS } from '@/app/routes/AppRoutes'
 
 export default function StreamlitDashboard() {
   const navigate = useNavigate()
@@ -14,14 +14,10 @@ export default function StreamlitDashboard() {
           className="flex items-center justify-center gap-1 whitespace-nowrap"
           onClick={() => navigate(PATHS.MAIN)}
         >
-          <ArrowLeft className="w-5 h-5" /> <span>Назад</span>
+          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
         </Button>
-        <div className="w-full h-full block">
-          <iframe
-            src="http://195.189.63.125:8501"
-            width="100%"
-            height="900px"
-          />
+        <div className="block h-full w-full">
+          <iframe src="http://195.189.63.125:8501" width="100%" height="900px" />
         </div>
       </div>
     </Layout>

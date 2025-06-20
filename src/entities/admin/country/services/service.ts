@@ -1,6 +1,3 @@
-import { api } from '@/shared/api/client'
-import { handleAxiosError } from '@/shared/lib/axios'
-import type { PageParams } from '@/types/pagination'
 import type {
   CountryCreateRequest,
   CountryUpdateRequest,
@@ -10,6 +7,9 @@ import type {
   CountryListResponse,
   CountryLookupResponse,
 } from '@/entities/admin/country/types/response.dto'
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 
 export const countryService = {
   // Request
@@ -22,10 +22,7 @@ export const countryService = {
     }
   },
 
-  async update(
-    id: string,
-    params: CountryUpdateRequest
-  ): Promise<CountryDetailResponse> {
+  async update(id: string, params: CountryUpdateRequest): Promise<CountryDetailResponse> {
     try {
       const response = await api.put(`/counties/${id}`, params)
       return response.data

@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from "react"
-import { twMerge } from "tailwind-merge"
-import { ChevronUp, X } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import React, { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ChevronUp, X } from 'lucide-react'
+import { twMerge } from 'tailwind-merge'
 
 export type SelectOption = {
   value: string | number | boolean | undefined
@@ -24,10 +24,10 @@ const Select: React.FC<SelectProps> = ({
   options,
   value,
   onChange,
-  placeholder = "Select an option",
+  placeholder = 'Select an option',
   className,
   disabled,
-  heightClass = "py-2",
+  heightClass = 'py-2',
   isClearable = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -35,21 +35,17 @@ const Select: React.FC<SelectProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false)
       }
     }
-    document.addEventListener("mousedown", handleClickOutside)
+    document.addEventListener('mousedown', handleClickOutside)
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
 
-  const selectedLabel =
-    options.find((opt) => opt.value === value)?.label || placeholder
+  const selectedLabel = options.find((opt) => opt.value === value)?.label || placeholder
 
   const toggleOpen = () => {
     if (!disabled) setIsOpen((prev) => !prev)
@@ -72,28 +68,24 @@ const Select: React.FC<SelectProps> = ({
     <div
       ref={containerRef}
       className={twMerge(
-        "relative inline-block text-left",
-        disabled && "opacity-50 cursor-not-allowed",
-        className
+        'relative inline-block text-left',
+        disabled && 'cursor-not-allowed opacity-50',
+        className,
       )}
     >
       <div
         className={twMerge(
-          "w-full flex items-center justify-between px-4 border rounded-md",
+          'flex w-full items-center justify-between rounded-md border px-4',
           heightClass,
-          "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700",
-          "focus:outline-none focus:ring-2 focus:ring-blue-500",
-          disabled && "cursor-not-allowed",
-          disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+          'border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-700',
+          'focus:ring-2 focus:ring-blue-500 focus:outline-none',
+          disabled && 'cursor-not-allowed',
+          disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
         )}
         onClick={toggleOpen}
       >
         {/* Левая часть (label) */}
-        <span
-          className={twMerge(
-            value !== undefined && value !== null ? "" : "text-gray-400"
-          )}
-        >
+        <span className={twMerge(value !== undefined && value !== null ? '' : 'text-gray-400')}>
           {selectedLabel}
         </span>
 
@@ -104,19 +96,19 @@ const Select: React.FC<SelectProps> = ({
             <button
               type="button"
               onClick={handleClear}
-              className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded transition-colors"
+              className="rounded p-1 text-gray-500 transition-colors hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
             >
               <X size={16} />
             </button>
           )}
-          <span className="border-l border-gray-300 dark:border-gray-600 h-5 mx-1" />
+          <span className="mx-1 h-5 border-l border-gray-300 dark:border-gray-600" />
           {/* Стрелка */}
           <ChevronUp
             size={20}
             className={twMerge(
-              "transform transition-transform duration-300 ease-in-out",
-              "text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300",
-              isOpen ? "rotate-0" : "rotate-180"
+              'transform transition-transform duration-300 ease-in-out',
+              'text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300',
+              isOpen ? 'rotate-0' : 'rotate-180',
             )}
           />
         </div>
@@ -129,18 +121,18 @@ const Select: React.FC<SelectProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-10 mt-1 w-full bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-auto focus:outline-none"
+            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg focus:outline-none dark:border-gray-600 dark:bg-gray-700"
           >
             {options.map((opt) => (
               <li
                 key={String(opt.value)}
                 onClick={() => handleSelect(opt)}
                 className={twMerge(
-                  "cursor-pointer px-4 py-2",
+                  'cursor-pointer px-4 py-2',
                   opt.disabled
-                    ? "text-gray-400 cursor-not-allowed"
-                    : "text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-600",
-                  opt.value === value && "bg-blue-100 dark:bg-blue-800"
+                    ? 'cursor-not-allowed text-gray-400'
+                    : 'text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-gray-600',
+                  opt.value === value && 'bg-blue-100 dark:bg-blue-800',
                 )}
                 aria-disabled={opt.disabled}
               >

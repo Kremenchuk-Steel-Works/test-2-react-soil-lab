@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react"
+import type { LucideIcon } from 'lucide-react'
 import { SubMenu } from '@/widgets/sidebar/SubMenu'
 
 interface SubMenuProps {
@@ -9,12 +9,7 @@ interface SubMenuProps {
   isMainMenu?: boolean
 }
 
-export const SubMenuSubItem: React.FC<SubMenuProps> = ({
-  label,
-  Icon,
-  children,
-  id,
-}) => {
+export const SubMenuSubItem: React.FC<SubMenuProps> = ({ label, Icon, children, id }) => {
   return (
     <SubMenu label={label} Icon={Icon} id={id} isMainMenu={false}>
       <div className="bg-[#e2edfe] dark:bg-[#0c121f] [&_a]:pl-11.5 [&_button]:pl-11.5">

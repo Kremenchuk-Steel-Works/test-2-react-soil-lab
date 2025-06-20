@@ -1,10 +1,10 @@
-import type { PageParams } from '@/types/pagination'
 import { mockCities } from '@/entities/admin/city/mocks/mock'
 import type {
   CityDetailResponse,
   CityListResponse,
   CityLookupResponse,
 } from '@/entities/admin/city/types/response.dto'
+import type { PageParams } from '@/types/pagination'
 
 const mockData = mockCities
 
@@ -23,7 +23,7 @@ export const cityService = {
   async getById(id: string): Promise<CityDetailResponse> {
     const data = mockData.find((obj) => obj.id === Number(id))
 
-    if (!data) throw new Error(`Object with id ${id} not found`)
+    if (!data) throw new Error('Object with id ${id} not found')
 
     return data
   },

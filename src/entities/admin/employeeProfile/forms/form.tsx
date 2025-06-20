@@ -4,16 +4,13 @@ import {
   type FieldErrors,
   type Path,
   type UseFormRegister,
-} from "react-hook-form"
-import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
+} from 'react-hook-form'
 import type { EmployeeProfileFormFields } from '@/entities/admin/employeeProfile/forms/schema'
 import { employeeProfileOptions } from '@/entities/admin/employeeProfile/types/employmentStatus'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
 import FormDateField from '@/shared/ui/forms/FormDateField'
-import {
-  formTransformers,
-  getNestedErrorMessage,
-} from '@/shared/lib/react-hook-form'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 export type FormFields = {
   employeeProfile?: EmployeeProfileFormFields
@@ -37,29 +34,20 @@ export function EmployeeProfileForm<T extends FormFields>({
       <InputFieldWithError
         label="Номер робітника"
         type="number"
-        {...register(
-          "employeeProfile.employeeNumber" as Path<T>,
-          formTransformers.string
-        )}
-        errorMessage={getNestedErrorMessage(
-          errors,
-          "employeeProfile.employeeNumber" as Path<T>
-        )}
+        {...register('employeeProfile.employeeNumber' as Path<T>, formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'employeeProfile.employeeNumber' as Path<T>)}
       />
 
       <Controller
-        name={"employeeProfile.hiredAt" as Path<T>}
+        name={'employeeProfile.hiredAt' as Path<T>}
         control={control}
         render={({ field, fieldState }) => (
           <FormDateField
             field={field}
             fieldState={fieldState}
-            minDate={new Date("1800-01-01")}
+            minDate={new Date('1800-01-01')}
             label="Дата найму"
-            errorMessage={getNestedErrorMessage(
-              errors,
-              "employeeProfile.hiredAt" as Path<T>
-            )}
+            errorMessage={getNestedErrorMessage(errors, 'employeeProfile.hiredAt' as Path<T>)}
           />
         )}
       />
@@ -77,7 +65,7 @@ export function EmployeeProfileForm<T extends FormFields>({
             placeholder="Оберіть статус працевлаштування"
             errorMessage={getNestedErrorMessage(
               errors,
-              `employeeProfile.employmentStatus` as Path<T>
+              `employeeProfile.employmentStatus` as Path<T>,
             )}
           />
         )}

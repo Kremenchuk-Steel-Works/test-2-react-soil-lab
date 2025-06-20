@@ -1,35 +1,27 @@
-import { Controller, useForm, type SubmitHandler } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  InputFieldWithError,
-  ButtonWithError,
-} from '@/shared/ui/with-error/fieldsWithError'
-import { ContactForm } from '@/entities/admin/contact/forms/form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueries, type UseQueryResult } from '@tanstack/react-query'
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { AddressForm } from '@/entities/admin/address/forms/form'
-import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
+import { ContactForm } from '@/entities/admin/contact/forms/form'
 import { EmployeeProfileForm } from '@/entities/admin/employeeProfile/forms/form'
-import { OptionalField } from '@/shared/ui/forms/OptionalField'
-import { genderOptions } from '@/entities/admin/people/types/gender'
-import AlertMessage, {
-  AlertType,
-} from '@/shared/ui/alert-message/AlertMessage'
-import { useQueries, type UseQueryResult } from "@tanstack/react-query"
-import { organizationService } from '@/entities/admin/organizations/services/service'
-import { positionService } from '@/entities/admin/positions/services/service'
-import type { OrganizationLookupResponse } from '@/entities/admin/organizations/types/response.dto'
-import type { PositionLookupResponse } from '@/entities/admin/positions/types/response.dto'
-import FormDateField from '@/shared/ui/forms/FormDateField'
-import {
-  formTransformers,
-  getNestedErrorMessage,
-} from '@/shared/lib/react-hook-form'
-import { logger } from '@/shared/lib/logger'
-import { peopleSchema, type PeopleFormFields } from '@/entities/admin/people/forms/schema'
-import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
-import type { Option } from '@/shared/ui/select/ReactSelect'
-import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { organizationQueryKeys } from '@/entities/admin/organizations/services/keys'
+import { organizationService } from '@/entities/admin/organizations/services/service'
+import type { OrganizationLookupResponse } from '@/entities/admin/organizations/types/response.dto'
+import { peopleSchema, type PeopleFormFields } from '@/entities/admin/people/forms/schema'
+import { genderOptions } from '@/entities/admin/people/types/gender'
 import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
+import { positionService } from '@/entities/admin/positions/services/service'
+import type { PositionLookupResponse } from '@/entities/admin/positions/types/response.dto'
+import { logger } from '@/shared/lib/logger'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
+import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
+import FormDateField from '@/shared/ui/forms/FormDateField'
+import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
+import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import { OptionalField } from '@/shared/ui/forms/OptionalField'
+import type { Option } from '@/shared/ui/select/ReactSelect'
+import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -40,11 +32,7 @@ interface FormProps {
   submitBtnName: string
 }
 
-export default function PeopleForm({
-  defaultValues,
-  onSubmit,
-  submitBtnName,
-}: FormProps) {
+export default function PeopleForm({ defaultValues, onSubmit, submitBtnName }: FormProps) {
   const {
     control,
     register,
@@ -60,10 +48,10 @@ export default function PeopleForm({
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await onSubmit(data)
-      logger.debug("Форма успешно выполнена", response)
+      logger.debug('Форма успешно выполнена', response)
     } catch (err) {
       const error = err as Error
-      setError("root", { message: error.message })
+      setError('root', { message: error.message })
       logger.error(err)
     }
   }
@@ -95,7 +83,7 @@ export default function PeopleForm({
   // Queries data
   const [organizationsQ, positionsQ] = queries as [
     UseQueryResult<OrganizationLookupResponse[], Error>,
-    UseQueryResult<PositionLookupResponse[], Error>
+    UseQueryResult<PositionLookupResponse[], Error>,
   ]
 
   // Options
@@ -115,20 +103,20 @@ export default function PeopleForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Ім'я"
-        {...register("firstName", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "firstName")}
+        {...register('firstName', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'firstName')}
       />
 
       <InputFieldWithError
         label="Прізвище"
-        {...register("lastName", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "lastName")}
+        {...register('lastName', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'lastName')}
       />
 
       <InputFieldWithError
         label="По батькові"
-        {...register("middleName", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "middleName")}
+        {...register('middleName', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'middleName')}
       />
 
       <Controller
@@ -142,7 +130,7 @@ export default function PeopleForm({
             isVirtualized
             isClearable
             placeholder="Оберіть стать"
-            errorMessage={getNestedErrorMessage(errors, "gender")}
+            errorMessage={getNestedErrorMessage(errors, 'gender')}
           />
         )}
       />
@@ -154,9 +142,9 @@ export default function PeopleForm({
           <FormDateField
             field={field}
             fieldState={fieldState}
-            minDate={new Date("1800-01-01")}
+            minDate={new Date('1800-01-01')}
             label="Дата народження"
-            errorMessage={getNestedErrorMessage(errors, "birthDate")}
+            errorMessage={getNestedErrorMessage(errors, 'birthDate')}
           />
         )}
       />
@@ -170,7 +158,7 @@ export default function PeopleForm({
             fieldState={fieldState}
             label="Фото профілю"
             fileType="image"
-            errorMessage={getNestedErrorMessage(errors, "photoUrl")}
+            errorMessage={getNestedErrorMessage(errors, 'photoUrl')}
           />
         )}
       />
@@ -209,7 +197,7 @@ export default function PeopleForm({
             isMulti
             isClearable
             placeholder="Оберіть організацію"
-            errorMessage={getNestedErrorMessage(errors, "organizationIds")}
+            errorMessage={getNestedErrorMessage(errors, 'organizationIds')}
           />
         )}
       />
@@ -226,7 +214,7 @@ export default function PeopleForm({
             isMulti
             isClearable
             placeholder="Оберіть посаду"
-            errorMessage={getNestedErrorMessage(errors, "positionIds")}
+            errorMessage={getNestedErrorMessage(errors, 'positionIds')}
           />
         )}
       />

@@ -2,9 +2,7 @@
 -------------------------------------------------------------------------- */
 
 .react-datepicker.react-datepicker__calendar--themed {
-  @apply border-0 rounded-md bg-white dark:bg-gray-800
-         shadow-[0_8px_24px_rgba(0,0,0,0.4)]
-         dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)];
+  @apply rounded-md border-0 bg-white shadow-[0_8px_24px_rgba(0,0,0,0.4)] dark:bg-gray-800 dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)];
 }
 
 .react-datepicker-popper {
@@ -20,15 +18,12 @@
 
 /* Контейнер шапки */
 .react-datepicker__calendar--themed .react-datepicker__header {
-  @apply bg-gray-200 p-2 pb-1
-         dark:border-b dark:border-slate-700/50 dark:bg-gray-900;
+  @apply bg-gray-200 p-2 pb-1 dark:border-b dark:border-slate-700/50 dark:bg-gray-900;
 }
 
 /* Контейнер для кнопок месяца и года */
-.react-datepicker__calendar--themed
-  .react-datepicker__header
-  .react-datepicker__header__dropdown {
-  @apply flex justify-center p-2 gap-0;
+.react-datepicker__calendar--themed .react-datepicker__header .react-datepicker__header__dropdown {
+  @apply flex justify-center gap-0 p-2;
 }
 
 /* Кнопки навигации (стрелки "назад" / "вперед") */
@@ -39,15 +34,11 @@
 /* Выпадающие списки для выбора месяца и года */
 .react-datepicker__month-read-view--selected-month,
 .react-datepicker__year-read-view--selected-year {
-  @apply rounded-md p-2 text-base font-bold
-  bg-transparent text-gray-800 transition-colors hover:bg-gray-300/50
-  dark:bg-transparent dark:text-slate-200 dark:hover:bg-slate-800;
+  @apply rounded-md bg-transparent p-2 text-base font-bold text-gray-800 transition-colors hover:bg-gray-300/50 dark:bg-transparent dark:text-slate-200 dark:hover:bg-slate-800;
 }
 
 .react-datepicker__calendar--themed .react-datepicker__navigation-icon::before {
-  @apply h-2.5 w-2.5 
-  border-slate-600
-  dark:border-slate-400;
+  @apply h-2.5 w-2.5 border-slate-600 dark:border-slate-400;
 }
 
 .react-datepicker__month {
@@ -64,10 +55,8 @@
 }
 
 .react-datepicker__calendar--themed .react-datepicker__current-month,
-.react-datepicker__calendar--themed
-  .react-datepicker__month-read-view--down-arrow,
-.react-datepicker__calendar--themed
-  .react-datepicker__year-read-view--down-arrow {
+.react-datepicker__calendar--themed .react-datepicker__month-read-view--down-arrow,
+.react-datepicker__calendar--themed .react-datepicker__year-read-view--down-arrow {
   @apply hidden;
 }
 
@@ -76,35 +65,27 @@
 
 /* Названия дней недели (пн, вт, ср...) */
 .react-datepicker__calendar--themed .react-datepicker__day-name {
-  @apply m-0.5 h-7 w-9 text-center text-sm font-medium 
-  text-gray-600
-  dark:text-slate-400;
+  @apply m-0.5 h-7 w-9 text-center text-sm font-medium text-gray-600 dark:text-slate-400;
 }
 
 /* Базовый стиль для ячейки с днем */
 .react-datepicker__calendar--themed .react-datepicker__day {
-  @apply font-semibold m-0.5 h-9 w-9 rounded-md leading-9 transition-colors
-  text-gray-800
-  dark:text-slate-300;
+  @apply m-0.5 h-9 w-9 rounded-md leading-9 font-semibold text-gray-800 transition-colors dark:text-slate-300;
 }
 
 /* Стиль для наведения на обычный день */
 .react-datepicker__calendar--themed
   .react-datepicker__day:not(.react-datepicker__day--disabled):hover {
-  @apply bg-gray-200
-         dark:bg-slate-700;
+  @apply bg-gray-200 dark:bg-slate-700;
 }
 
 .react-datepicker__calendar--themed .react-datepicker__day--keyboard-selected {
-  @apply bg-transparent
-  dark:bg-transparent;
+  @apply bg-transparent dark:bg-transparent;
 }
 
 /* Стиль для ВЫБРАННОГО дня */
 .react-datepicker__calendar--themed .react-datepicker__day--selected {
-  @apply ring-0
-  bg-blue-600 text-white font-semibold
-  dark:bg-blue-500 dark:text-slate-100;
+  @apply bg-blue-600 font-semibold text-white ring-0 dark:bg-blue-500 dark:text-slate-100;
 }
 
 /* Базовый вид дня "сегодня" (без наведения) */
@@ -119,9 +100,7 @@
 
 /* Неактивные (disabled) дни */
 .react-datepicker__calendar--themed .react-datepicker__day--disabled {
-  @apply cursor-not-allowed
-  text-gray-300
-  dark:text-slate-700;
+  @apply cursor-not-allowed text-gray-300 dark:text-slate-700;
 }
 
 /* Убираем подсветку при наведении для неактивных дней */
@@ -135,9 +114,7 @@
 /* Общий контейнер для выпадающих списков */
 .react-datepicker__calendar--themed .react-datepicker__month-dropdown,
 .react-datepicker__calendar--themed .react-datepicker__year-dropdown {
-  @apply border-0 shadow-[0_8px_24px_rgba(0,0,0,0.4)]
-  bg-gray-100
-  dark:bg-gray-700;
+  @apply border-0 bg-gray-100 shadow-[0_8px_24px_rgba(0,0,0,0.4)] dark:bg-gray-700;
   @apply h-65 overflow-y-auto;
 }
 
@@ -148,27 +125,19 @@
 /* Общий стиль для каждого пункта (месяца или года) в списке */
 .react-datepicker__calendar--themed .react-datepicker__month-option,
 .react-datepicker__calendar--themed .react-datepicker__year-option {
-  @apply w-full p-2 text-sm text-left transition-colors cursor-pointer
-  text-gray-800
-  dark:text-slate-200;
+  @apply w-full cursor-pointer p-2 text-left text-sm text-gray-800 transition-colors dark:text-slate-200;
   @apply hover:bg-gray-300 dark:hover:bg-slate-600;
 }
 
 /* Стиль для ВЫБРАННОГО пункта в списке */
-.react-datepicker__calendar--themed
-  .react-datepicker__month-option--selected_month,
-.react-datepicker__calendar--themed
-  .react-datepicker__year-option--selected_year {
-  @apply flex items-center
-         bg-blue-600 text-white font-semibold
-         dark:bg-blue-500 dark:text-white;
+.react-datepicker__calendar--themed .react-datepicker__month-option--selected_month,
+.react-datepicker__calendar--themed .react-datepicker__year-option--selected_year {
+  @apply flex items-center bg-blue-600 font-semibold text-white dark:bg-blue-500 dark:text-white;
 }
 
 /* Убираем изменение цвета при наведении на уже выбранный пункт */
-.react-datepicker__calendar--themed
-  .react-datepicker__month-option--selected_month:hover,
-.react-datepicker__calendar--themed
-  .react-datepicker__year-option--selected_year:hover {
+.react-datepicker__calendar--themed .react-datepicker__month-option--selected_month:hover,
+.react-datepicker__calendar--themed .react-datepicker__year-option--selected_year:hover {
   @apply bg-blue-600 dark:bg-blue-500;
 }
 

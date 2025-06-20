@@ -1,12 +1,12 @@
-import React, { forwardRef, useState } from "react"
-import DatePicker, { registerLocale } from "react-datepicker"
-import { Calendar, X } from "lucide-react"
-import "react-datepicker/dist/react-datepicker.css"
-import { uk } from "date-fns/locale"
-import { isValid, parse } from "date-fns"
+import React, { forwardRef, useState } from 'react'
+import { Calendar, X } from 'lucide-react'
+import DatePicker, { registerLocale } from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import { isValid, parse } from 'date-fns'
+import { uk } from 'date-fns/locale'
 import InputFieldWithMask from '@/shared/ui/input-field/InputFieldWithMask'
 
-registerLocale("uk", uk)
+registerLocale('uk', uk)
 
 export type InputDateFieldProps = {
   label: string
@@ -39,9 +39,9 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
       className,
       allowFutureDates = false,
       showTodayButton = false,
-      locale = "uk",
+      locale = 'uk',
     },
-    ref
+    ref,
   ) => {
     // Определяем максимальную дату: если allowFutureDates true, используем переданный maxDate
     // (или не устанавливаем его, если не передан), иначе - текущая дата.
@@ -56,12 +56,10 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
     // Определяем, заполнено ли поле
     const hasValue = !!value // Преобразуем Date | null | undefined в boolean
 
-    function handleChangeRaw(
-      e?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>
-    ) {
+    function handleChangeRaw(e?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) {
       const input = (e?.target as HTMLInputElement)?.value
       if (!input) return
-      const parsed = parse(input, "dd.MM.yyyy", new Date(), { locale: uk })
+      const parsed = parse(input, 'dd.MM.yyyy', new Date(), { locale: uk })
       if (
         isValid(parsed) &&
         (effectiveMaxDate ? parsed <= effectiveMaxDate : true) &&
@@ -72,7 +70,7 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
     }
 
     return (
-      <div className={`relative w-full ${className || ""}`}>
+      <div className={`relative w-full ${className || ''}`}>
         <div className="relative">
           <DatePicker
             selected={value}
@@ -91,7 +89,7 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
             showMonthDropdown
             scrollableYearDropdown
             yearDropdownItemNumber={200}
-            todayButton={showTodayButton ? "Сьогодні" : undefined}
+            todayButton={showTodayButton ? 'Сьогодні' : undefined}
             locale={locale}
             customInput={<InputFieldWithMask ref={ref} label={label} />}
             wrapperClassName="react-datepicker__wrapper w-full"
@@ -101,23 +99,23 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
             <button
               type="button"
               onClick={() => onChange(null)}
-              className="absolute right-11 top-1/2 transform -translate-y-1/2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 focus:outline-none rounded transition-colors"
+              className="absolute top-1/2 right-11 -translate-y-1/2 transform rounded text-gray-600 transition-colors hover:text-gray-900 focus:outline-none dark:text-gray-400 dark:hover:text-gray-200"
             >
               <X size={16} />
             </button>
           )}
           <Calendar
-            className={`absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none ${
+            className={`pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 transform ${
               isFocused || hasValue
-                ? "text-gray-500 dark:text-gray-400"
-                : "text-gray-500/50 dark:text-gray-400/50"
+                ? 'text-gray-500 dark:text-gray-400'
+                : 'text-gray-500/50 dark:text-gray-400/50'
             }`}
             size={20}
           />
         </div>
       </div>
     )
-  }
+  },
 )
 
 export default InputDateField

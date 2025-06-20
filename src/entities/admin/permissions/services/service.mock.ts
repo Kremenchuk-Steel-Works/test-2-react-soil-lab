@@ -1,10 +1,10 @@
-import type { PageParams } from '@/types/pagination'
 import { mockPermissions } from '@/entities/admin/permissions/mocks/mock'
 import type {
   PermissionDetailResponse,
   PermissionListResponse,
   PermissionLookupResponse,
 } from '@/entities/admin/permissions/types/response.dto'
+import type { PageParams } from '@/types/pagination'
 
 const mockData = mockPermissions
 

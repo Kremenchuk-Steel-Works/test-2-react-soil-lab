@@ -1,7 +1,6 @@
+import { match } from 'path-to-regexp'
 import { useAuth } from '@/app/providers/auth/model'
-import type { AppRoute } from '@/app/routes/paths'
-import { APP_ROUTES } from '@/app/routes/paths'
-import { match } from "path-to-regexp"
+import { APP_ROUTES, type AppRoute } from '@/app/routes/paths'
 
 export function useUserPermissionNames(): string[] {
   const { currentUser } = useAuth()
@@ -21,9 +20,9 @@ export function useUserPermissionsTo() {
     // isAdmin
     if (currentUser?.isSuperuser) return true
 
-    const checkAccess = (routes: AppRoute[], basePath = ""): boolean => {
+    const checkAccess = (routes: AppRoute[], basePath = ''): boolean => {
       for (const route of routes) {
-        const fullPath = `${basePath}/${route.path}`.replace(/\/+/g, "/")
+        const fullPath = `${basePath}/${route.path}`.replace(/\/+/g, '/')
         const matcher = match(fullPath, { decode: decodeURIComponent })
 
         if (matcher(path)) {
@@ -49,7 +48,7 @@ export function useUserPermissionsTo() {
 export function filterRoutes(
   routes: AppRoute[],
   perms: Set<string>,
-  isSuperuser = false
+  isSuperuser = false,
 ): AppRoute[] {
   return routes
     .filter((r) => {

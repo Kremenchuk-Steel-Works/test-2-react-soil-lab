@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, type JSX } from "react"
-import { type GroupBase, type MenuListProps } from "react-select"
-import { FixedSizeList } from "react-window"
+import { useCallback, useEffect, useRef, type JSX } from 'react'
+import { type GroupBase, type MenuListProps } from 'react-select'
+import { FixedSizeList } from 'react-window'
 
 const OPTION_HEIGHT = 48
 const MENU_MAX_HEIGHT = 300
@@ -8,14 +8,9 @@ const MENU_MAX_HEIGHT = 300
 export function VirtualizedMenuList<
   OptionType extends { label: string; value: unknown },
   IsMulti extends boolean = false,
-  Group extends GroupBase<OptionType> = GroupBase<OptionType>
+  Group extends GroupBase<OptionType> = GroupBase<OptionType>,
 >(props: MenuListProps<OptionType, IsMulti, Group>): JSX.Element {
-  const {
-    options,
-    children,
-    maxHeight = MENU_MAX_HEIGHT,
-    focusedOption,
-  } = props
+  const { options, children, maxHeight = MENU_MAX_HEIGHT, focusedOption } = props
 
   const outerRef = useRef<HTMLDivElement | null>(null)
   const initialIndex = focusedOption ? options.indexOf(focusedOption) : -1
@@ -42,12 +37,12 @@ export function VirtualizedMenuList<
   useEffect(() => {
     const listElement = outerRef.current
     if (listElement) {
-      listElement.addEventListener("wheel", handleWheel)
+      listElement.addEventListener('wheel', handleWheel)
     }
 
     return () => {
       if (listElement) {
-        listElement.removeEventListener("wheel", handleWheel)
+        listElement.removeEventListener('wheel', handleWheel)
       }
     }
   }, [handleWheel])

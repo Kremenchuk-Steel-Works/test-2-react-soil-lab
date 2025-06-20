@@ -1,4 +1,4 @@
-import type { LucideIcon } from "lucide-react"
+import type { LucideIcon } from 'lucide-react'
 import MenuItem from '@/widgets/sidebar/MenuItem'
 
 interface SubMenuItemProps {
@@ -8,9 +8,5 @@ interface SubMenuItemProps {
 }
 
 export function SubMenuItem({ label, Icon, to }: SubMenuItemProps) {
-  return Icon ? (
-    <MenuItem label={label} to={to} Icon={Icon} />
-  ) : (
-    <MenuItem label={label} to={to} />
-  )
+  return Icon ? <MenuItem label={label} to={to} Icon={Icon} /> : <MenuItem label={label} to={to} />
 }

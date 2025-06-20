@@ -1,10 +1,6 @@
-import { useMemo } from "react"
-import type {
-  ControllerFieldState,
-  ControllerRenderProps,
-} from "react-hook-form"
-import type { OnChangeValue, Props as SelectProps } from "react-select"
-
+import { useMemo } from 'react'
+import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
+import type { OnChangeValue, Props as SelectProps } from 'react-select'
 import {
   ReactSelectMultiWithError,
   ReactSelectWithError,
@@ -18,13 +14,10 @@ export type Option<T = unknown> = {
 
 type BaseSelectProps<TValue, IsMulti extends boolean> = Omit<
   SelectProps<Option<TValue>, IsMulti>,
-  "value" | "onChange" | "onBlur" | "ref" | "name" | "options"
+  'value' | 'onChange' | 'onBlur' | 'ref' | 'name' | 'options'
 >
 
-type FormSelectFieldProps<TValue, IsMulti extends boolean> = BaseSelectProps<
-  TValue,
-  IsMulti
-> & {
+type FormSelectFieldProps<TValue, IsMulti extends boolean> = BaseSelectProps<TValue, IsMulti> & {
   field: ControllerRenderProps<any, any>
   fieldState: ControllerFieldState
   options: Option<TValue>[] // Это всегда будет полный список

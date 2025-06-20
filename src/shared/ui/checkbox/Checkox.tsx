@@ -1,12 +1,12 @@
-import { twMerge } from "tailwind-merge"
-import { Check } from "lucide-react"
+import { Check } from 'lucide-react'
+import { twMerge } from 'tailwind-merge'
 
 export type CheckboxProps = {
   label: string
   id?: string
   classNameInput?: string
   classNameLabel?: string
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type'>
 
 const Checkbox: React.FC<CheckboxProps> = ({
   label,
@@ -21,27 +21,26 @@ const Checkbox: React.FC<CheckboxProps> = ({
     <label
       htmlFor={checkboxId}
       className={twMerge(
-        "flex items-center gap-2 text-sm cursor-pointer select-none",
-        classNameLabel
+        'flex cursor-pointer items-center gap-2 text-sm select-none',
+        classNameLabel,
       )}
     >
       <input
         id={checkboxId}
         type="checkbox"
-        className={twMerge("peer hidden", classNameInput)}
+        className={twMerge('peer hidden', classNameInput)}
         {...inputProps}
       />
 
       <div
-        className={twMerge(`
-    group relative h-5 w-5 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700
-    transition-colors duration-300 peer-checked:bg-blue-600 peer-checked:border-blue-600 text-white
-  `)}
+        className={twMerge(
+          `group relative h-5 w-5 rounded-md border border-gray-300 bg-white text-white transition-colors duration-300 peer-checked:border-blue-600 peer-checked:bg-blue-600 dark:border-gray-600 dark:bg-gray-700`,
+        )}
       >
         <Check
-          className={twMerge(`
-        absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 transition-all duration-300 opacity-0 group-peer-checked:opacity-100
-      `)}
+          className={twMerge(
+            `absolute top-1/2 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-all duration-300 group-peer-checked:opacity-100`,
+          )}
           strokeWidth={3}
         />
       </div>

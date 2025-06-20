@@ -1,37 +1,32 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueries, type UseQueryResult } from '@tanstack/react-query'
 import {
   Controller,
   useForm,
   type DefaultValues,
   type Path,
   type SubmitHandler,
-} from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+} from 'react-hook-form'
+import { ZodObject, type z, type ZodType } from 'zod'
+import { personQueryKeys } from '@/entities/admin/people/services/keys'
+import { personService } from '@/entities/admin/people/services/service'
+import type { PersonLookupResponse } from '@/entities/admin/people/types/response.dto'
+import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
+import { permissionService } from '@/entities/admin/permissions/services/service'
+import type { PermissionLookupResponse } from '@/entities/admin/permissions/types/response.dto'
+import { roleQueryKeys } from '@/entities/admin/roles/services/keys'
+import { roleService } from '@/entities/admin/roles/services/service'
+import type { RoleLookupResponse } from '@/entities/admin/roles/types/response.dto'
+import { logger } from '@/shared/lib/logger'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
+import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import type { Option } from '@/shared/ui/select/ReactSelect'
 import {
-  InputFieldWithError,
   ButtonWithError,
   CheckboxWithError,
+  InputFieldWithError,
 } from '@/shared/ui/with-error/fieldsWithError'
-import { ZodObject, type z, type ZodType } from "zod"
-import { useQueries, type UseQueryResult } from "@tanstack/react-query"
-import { roleService } from '@/entities/admin/roles/services/service'
-import { permissionService } from '@/entities/admin/permissions/services/service'
-import { personService } from '@/entities/admin/people/services/service'
-import AlertMessage, {
-  AlertType,
-} from '@/shared/ui/alert-message/AlertMessage'
-import type { PersonLookupResponse } from '@/entities/admin/people/types/response.dto'
-import type { RoleLookupResponse } from '@/entities/admin/roles/types/response.dto'
-import type { PermissionLookupResponse } from '@/entities/admin/permissions/types/response.dto'
-import type { Option } from '@/shared/ui/select/ReactSelect'
-import { logger } from '@/shared/lib/logger'
-import {
-  formTransformers,
-  getNestedErrorMessage,
-} from '@/shared/lib/react-hook-form'
-import FormSelectField from '@/shared/ui/forms/FormReactSelect'
-import { personQueryKeys } from '@/entities/admin/people/services/keys'
-import { roleQueryKeys } from '@/entities/admin/roles/services/keys'
-import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
 
 interface FormProps<T extends ZodType<any, any>> {
   schema: T
@@ -58,17 +53,15 @@ export default function UsersForm<T extends ZodType<any, any>>({
   })
 
   const schemaKeys =
-    schema instanceof ZodObject
-      ? (Object.keys(schema.shape) as (keyof z.infer<T>)[])
-      : []
+    schema instanceof ZodObject ? (Object.keys(schema.shape) as (keyof z.infer<T>)[]) : []
 
   const submitHandler: SubmitHandler<z.infer<T>> = async (data) => {
     try {
       const response = await onSubmit(data)
-      logger.debug("Форма успешно выполнена", response)
+      logger.debug('Форма успешно выполнена', response)
     } catch (err) {
       const error = err as Error
-      setError("root", { message: error.message })
+      setError('root', { message: error.message })
       logger.error(err)
     }
   }
@@ -105,7 +98,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
   const [peopleQ, rolesQ, permissionsQ] = queries as [
     UseQueryResult<PersonLookupResponse[], Error>,
     UseQueryResult<RoleLookupResponse[], Error>,
-    UseQueryResult<PermissionLookupResponse[], Error>
+    UseQueryResult<PermissionLookupResponse[], Error>,
   ]
 
   // Options
@@ -129,7 +122,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
-      {schemaKeys.includes("personId") && (
+      {schemaKeys.includes('personId') && (
         <Controller
           name={`personId` as Path<T>}
           control={control}
@@ -141,16 +134,13 @@ export default function UsersForm<T extends ZodType<any, any>>({
               isVirtualized
               isClearable
               placeholder="Оберіть людину"
-              errorMessage={getNestedErrorMessage(
-                errors,
-                `personId` as Path<T>
-              )}
+              errorMessage={getNestedErrorMessage(errors, `personId` as Path<T>)}
             />
           )}
         />
       )}
 
-      {schemaKeys.includes("email") && (
+      {schemaKeys.includes('email') && (
         <InputFieldWithError
           label="Email"
           type="email"
@@ -159,7 +149,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
         />
       )}
 
-      {schemaKeys.includes("rawPassword") && (
+      {schemaKeys.includes('rawPassword') && (
         <InputFieldWithError
           label="Пароль"
           type="password"
@@ -168,7 +158,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
         />
       )}
 
-      {schemaKeys.includes("isActive") && (
+      {schemaKeys.includes('isActive') && (
         <CheckboxWithError
           label="Активний"
           {...register(`isActive` as Path<T>, formTransformers.string)}
@@ -176,7 +166,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
         />
       )}
 
-      {schemaKeys.includes("isSuperuser") && (
+      {schemaKeys.includes('isSuperuser') && (
         <CheckboxWithError
           label="Адміністратор"
           {...register(`isSuperuser` as Path<T>, formTransformers.string)}
@@ -184,7 +174,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
         />
       )}
 
-      {schemaKeys.includes("rolesIds") && (
+      {schemaKeys.includes('rolesIds') && (
         <Controller
           name={`rolesIds` as Path<T>}
           control={control}
@@ -197,16 +187,13 @@ export default function UsersForm<T extends ZodType<any, any>>({
               isMulti
               isClearable
               placeholder="Оберіть ролі"
-              errorMessage={getNestedErrorMessage(
-                errors,
-                `rolesIds` as Path<T>
-              )}
+              errorMessage={getNestedErrorMessage(errors, `rolesIds` as Path<T>)}
             />
           )}
         />
       )}
 
-      {schemaKeys.includes("permissionsIds") && (
+      {schemaKeys.includes('permissionsIds') && (
         <Controller
           name={`permissionsIds` as Path<T>}
           control={control}
@@ -219,10 +206,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
               isMulti
               isClearable
               placeholder="Оберіть права доступу"
-              errorMessage={getNestedErrorMessage(
-                errors,
-                `permissionsIds` as Path<T>
-              )}
+              errorMessage={getNestedErrorMessage(errors, `permissionsIds` as Path<T>)}
             />
           )}
         />

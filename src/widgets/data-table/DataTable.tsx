@@ -1,17 +1,15 @@
+import { useEffect, useState } from 'react'
 import {
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  getSortedRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable,
   type ColumnDef,
-  type SortingState,
   type ColumnFiltersState,
   type PaginationState,
-} from "@tanstack/react-table"
-import { useEffect, useState } from "react"
-import InputField from '@/shared/ui/input-field/InputField'
-import Button from '@/shared/ui/button/Button'
+  type SortingState,
+} from '@tanstack/react-table'
 import {
   ChevronFirst,
   ChevronLast,
@@ -21,13 +19,15 @@ import {
   ChevronUp,
   ListFilter,
   ListRestart,
-} from "lucide-react"
+} from 'lucide-react'
+import type { SetURLSearchParams } from 'react-router-dom'
+import type { CSSObjectWithLabel } from 'react-select'
+import Button from '@/shared/ui/button/Button'
+import InputField from '@/shared/ui/input-field/InputField'
 import InputFieldNoLabel from '@/shared/ui/input-field/InputFieldNoLabel'
-import type { SetURLSearchParams } from "react-router-dom"
-import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
-import type { CSSObjectWithLabel } from "react-select"
-import CustomMultiSelect from '@/shared/ui/select/ReactSelectCheckbox'
 import ModalTrigger from '@/shared/ui/modal/ModalTrigger'
+import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
+import CustomMultiSelect from '@/shared/ui/select/ReactSelectCheckbox'
 
 export type DataTableProps<T> = {
   data: T[]
@@ -52,12 +52,10 @@ export function DataTable<T>({
 }: DataTableProps<T>) {
   // Состояния таблицы
   const [sorting, setSorting] = useState<SortingState>(
-    initialSorting ?? [{ id: "id", desc: false }]
+    initialSorting ?? [{ id: 'id', desc: false }],
   )
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = useState<
-    Record<string, boolean>
-  >({})
+  const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({})
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: page - 1,
     pageSize: perPage,
@@ -75,7 +73,7 @@ export function DataTable<T>({
     data,
     columns,
     enableColumnResizing: true,
-    columnResizeMode: "onChange",
+    columnResizeMode: 'onChange',
     defaultColumn: {
       size: 100,
       minSize: 50,
@@ -96,28 +94,28 @@ export function DataTable<T>({
   const reactStyles = {
     control: (base: CSSObjectWithLabel) => ({
       ...base,
-      minHeight: "36px",
-      height: "36px",
-      minWidth: "85px",
-      padding: "0 8px",
+      minHeight: '36px',
+      height: '36px',
+      minWidth: '85px',
+      padding: '0 8px',
     }),
     valueContainer: (base: CSSObjectWithLabel) => ({
       ...base,
-      padding: "0 8px",
+      padding: '0 8px',
     }),
     input: (base: CSSObjectWithLabel) => ({
       ...base,
-      margin: "0",
+      margin: '0',
     }),
     dropdownIndicator: (base: CSSObjectWithLabel) => ({
       ...base,
-      paddingTop: "0",
-      paddingBottom: "0",
+      paddingTop: '0',
+      paddingBottom: '0',
     }),
     clearIndicator: (base: CSSObjectWithLabel) => ({
       ...base,
-      paddingTop: "0",
-      paddingBottom: "0",
+      paddingTop: '0',
+      paddingBottom: '0',
     }),
   }
 
@@ -135,25 +133,23 @@ export function DataTable<T>({
   return (
     <>
       {/* Навигация по страницам */}
-      <div className="flex items-center justify-between mb-1 whitespace-nowrap">
+      <div className="mb-1 flex items-center justify-between whitespace-nowrap">
         <div className="flex items-center gap-1">
           {/* Выбор колонок */}
           <CustomMultiSelect
             placeholder="Вибір колонок"
             customClassNames={{
-              control: () => "border-0 bg-gray-200 dark:bg-gray-700",
+              control: () => 'border-0 bg-gray-200 dark:bg-gray-700',
             }}
             customStyles={reactStyles}
             options={columnOptions}
             selectedOptions={columnOptions.filter((option) =>
-              table.getColumn(option.value)?.getIsVisible()
+              table.getColumn(option.value)?.getIsVisible(),
             )}
             onChange={(selected: Option[]) => {
               const newVisibility: Record<string, boolean> = {}
               columnOptions.forEach((option) => {
-                newVisibility[option.value] = selected.some(
-                  (sel) => sel.value === option.value
-                )
+                newVisibility[option.value] = selected.some((sel) => sel.value === option.value)
               })
               setColumnVisibility(newVisibility)
             }}
@@ -162,10 +158,10 @@ export function DataTable<T>({
           <ModalTrigger
             trigger={(open) => (
               <Button
-                className="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+                className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
                 onClick={open}
               >
-                <ListFilter className="w-5 h-5 text-slate-700 dark:text-slate-300" />
+                <ListFilter className="h-5 w-5 text-slate-700 dark:text-slate-300" />
               </Button>
             )}
             sheetProps={{
@@ -176,31 +172,28 @@ export function DataTable<T>({
               {table.getHeaderGroups().map((headerGroup) =>
                 headerGroup.headers.map((header) => {
                   if (!header.column.getCanFilter()) return null
-                  const filterValue = (header.column.getFilterValue() ??
-                    "") as string
+                  const filterValue = (header.column.getFilterValue() ?? '') as string
                   return (
                     <div key={header.id} className="w-full">
                       <InputField
                         label={`${String(header.column.columnDef.header)}`}
                         value={filterValue}
-                        onChange={(e) =>
-                          header.column.setFilterValue(e.target.value)
-                        }
+                        onChange={(e) => header.column.setFilterValue(e.target.value)}
                       />
                     </div>
                   )
-                })
+                }),
               )}
             </div>
           </ModalTrigger>
 
           {/* Кнопка сброса фильтров */}
-          {table.getState().columnFilters.some((f) => f.value !== "") && (
+          {table.getState().columnFilters.some((f) => f.value !== '') && (
             <Button
-              className="flex items-center justify-center gap-50. py-1.5 whitespace-nowrap text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+              className="gap-50. flex items-center justify-center bg-gray-200 py-1.5 whitespace-nowrap text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
               onClick={() => table.resetColumnFilters()}
             >
-              <ListRestart className="w-5 h-6" />
+              <ListRestart className="h-6 w-5" />
             </Button>
           )}
         </div>
@@ -211,14 +204,14 @@ export function DataTable<T>({
             <ReactSelect<Option>
               placeholder="Кількість"
               customClassNames={{
-                control: () => "border-0 bg-gray-200 dark:bg-gray-700",
+                control: () => 'border-0 bg-gray-200 dark:bg-gray-700',
               }}
               customStyles={reactStyles}
               isClearable={false}
               isSearchable={false}
               options={pageSizeOptions}
               value={pageSizeOptions.find(
-                (opt) => opt.value === table.getState().pagination.pageSize
+                (opt) => opt.value === table.getState().pagination.pageSize,
               )}
               onChange={(selectedOption) => {
                 const newSize = selectedOption?.value
@@ -235,7 +228,7 @@ export function DataTable<T>({
 
       {/* ===== Таблица ===== */}
       <div className="overflow-x-auto">
-        <table className="table-fixed w-full border-spacing-0 rounded-lg overflow-hidden">
+        <table className="w-full table-fixed border-spacing-0 overflow-hidden rounded-lg">
           <thead className="bg-gray-200 dark:bg-gray-700">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
@@ -246,41 +239,32 @@ export function DataTable<T>({
                     <th
                       key={header.id}
                       style={{ width: `${header.getSize()}px` }}
-                      className="relative px-4 py-2 select-none hover:bg-gray-300 dark:hover:bg-gray-600 overflow-hidden whitespace-nowrap"
+                      className="relative overflow-hidden px-4 py-2 whitespace-nowrap select-none hover:bg-gray-300 dark:hover:bg-gray-600"
                     >
                       {!header.isPlaceholder && (
                         <div
-                          className={`flex items-center ${
-                            canSort ? "cursor-pointer" : ""
-                          }`}
-                          onClick={
-                            canSort
-                              ? header.column.getToggleSortingHandler()
-                              : undefined
-                          }
+                          className={`flex items-center ${canSort ? 'cursor-pointer' : ''}`}
+                          onClick={canSort ? header.column.getToggleSortingHandler() : undefined}
                         >
-                          <div className="flex items-center min-w-0">
-                            <span className="truncate text-left min-w-0 mr-1">
-                              {flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                          <div className="flex min-w-0 items-center">
+                            <span className="mr-1 min-w-0 truncate text-left">
+                              {flexRender(header.column.columnDef.header, header.getContext())}
                             </span>
                             {/* Иконки сортировки */}
                             <ChevronUp
-                              className={`shrink-0 transform transition-all duration-300 ease-in-out origin-center ${
-                                header.column.getIsSorted() === "asc"
-                                  ? "opacity-100 w-5 h-5 rotate-0 text-blue-500"
-                                  : header.column.getIsSorted() === "desc"
-                                  ? "opacity-100 w-5 h-5 rotate-180 text-blue-500"
-                                  : "opacity-0 w-0 h-0"
+                              className={`shrink-0 origin-center transform transition-all duration-300 ease-in-out ${
+                                header.column.getIsSorted() === 'asc'
+                                  ? 'h-5 w-5 rotate-0 text-blue-500 opacity-100'
+                                  : header.column.getIsSorted() === 'desc'
+                                    ? 'h-5 w-5 rotate-180 text-blue-500 opacity-100'
+                                    : 'h-0 w-0 opacity-0'
                               }`}
                             />
                             <ChevronsUpDown
-                              className={`shrink-0 transform transition-all duration-300 ease-in-out origin-center text-gray-400 ${
+                              className={`shrink-0 origin-center transform text-gray-400 transition-all duration-300 ease-in-out ${
                                 header.column.getIsSorted()
-                                  ? "opacity-0 w-0 h-0"
-                                  : "opacity-100 w-5 h-5"
+                                  ? 'h-0 w-0 opacity-0'
+                                  : 'h-5 w-5 opacity-100'
                               }`}
                             />
                           </div>
@@ -297,7 +281,7 @@ export function DataTable<T>({
                             e.stopPropagation() // Предотвращение конфликта с сортировкой
                             header.getResizeHandler()(e)
                           }}
-                          className="absolute right-0 top-0 h-full w-1 cursor-col-resize select-none touch-none"
+                          className="absolute top-0 right-0 h-full w-1 cursor-col-resize touch-none select-none"
                         />
                       )}
                     </th>
@@ -308,21 +292,15 @@ export function DataTable<T>({
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className="border-b border-gray-200 dark:border-gray-700"
-              >
+              <tr key={row.id} className="border-b border-gray-200 dark:border-gray-700">
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
                     style={{ width: cell.column.getSize() }}
-                    className="px-4 py-2 overflow-hidden text-ellipsis whitespace-nowrap"
+                    className="overflow-hidden px-4 py-2 text-ellipsis whitespace-nowrap"
                   >
-                    <div className="truncate min-w-0">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                    <div className="min-w-0 truncate">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </div>
                   </td>
                 ))}
@@ -332,20 +310,20 @@ export function DataTable<T>({
         </table>
       </div>
       {/* Кнопки назад/вперёд */}
-      <div className="flex gap-1 items-center">
+      <div className="flex items-center gap-1">
         <Button
-          className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
           disabled={!table.getCanPreviousPage()}
           onClick={() => table.firstPage()}
         >
-          <ChevronFirst className="w-5 h-5" />
+          <ChevronFirst className="h-5 w-5" />
         </Button>
         <Button
-          className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
           disabled={!table.getCanPreviousPage()}
           onClick={() => table.previousPage()}
         >
-          <ChevronLeft className="w-5 h-5" />
+          <ChevronLeft className="h-5 w-5" />
         </Button>
         <strong className="flex items-center">
           <InputFieldNoLabel
@@ -367,18 +345,18 @@ export function DataTable<T>({
           />
         </strong>
         <Button
-          className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
           disabled={!table.getCanNextPage()}
           onClick={() => table.nextPage()}
         >
-          <ChevronRight className="w-5 h-5" />
+          <ChevronRight className="h-5 w-5" />
         </Button>
         <Button
-          className="text-slate-700 dark:text-slate-300 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
           disabled={!table.getCanNextPage()}
           onClick={() => table.lastPage()}
         >
-          <ChevronLast className="w-5 h-5" />
+          <ChevronLast className="h-5 w-5" />
         </Button>
       </div>
     </>

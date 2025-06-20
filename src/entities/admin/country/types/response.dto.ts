@@ -1,7 +1,8 @@
-import type { Timestamps } from '@/types/common'
-import type { PaginatedListResponse } from '@/types/pagination'
 import type { CityShortResponse } from '@/entities/admin/city/types/response.dto'
 import type { CountryBase } from '@/entities/admin/country/types/base.model'
+import type { Timestamps } from '@/types/common'
+import type { PaginatedListResponse } from '@/types/pagination'
+
 export interface CountryResponse extends CountryBase {
   id: number
 }

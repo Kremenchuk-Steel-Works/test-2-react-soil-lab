@@ -1,10 +1,10 @@
-import type { PageParams } from '@/types/pagination'
 import { mockRoles } from '@/entities/admin/roles/mocks/mock'
 import type {
   RoleDetailResponse,
   RoleListResponse,
   RoleLookupResponse,
 } from '@/entities/admin/roles/types/response.dto'
+import type { PageParams } from '@/types/pagination'
 
 const mockData = mockRoles
 

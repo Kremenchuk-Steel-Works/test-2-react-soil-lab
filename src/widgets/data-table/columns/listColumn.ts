@@ -1,5 +1,5 @@
-import type { ReactNode } from "react"
-import type { ColumnDef } from "@tanstack/react-table"
+import type { ReactNode } from 'react'
+import type { ColumnDef } from '@tanstack/react-table'
 
 interface ListColumnOptions<TItem> {
   placeholder?: ReactNode
@@ -19,17 +19,17 @@ interface ListColumnOptions<TItem> {
  * })
  */
 export function listColumn<TData, TItem>(
-  options?: ListColumnOptions<TItem>
-): Pick<ColumnDef<TData, TItem[] | null | undefined>, "cell" | "filterFn"> {
+  options?: ListColumnOptions<TItem>,
+): Pick<ColumnDef<TData, TItem[] | null | undefined>, 'cell' | 'filterFn'> {
   const {
-    placeholder = "—",
-    separator = ", ",
+    placeholder = '—',
+    separator = ', ',
     limit,
     formatter = (item: TItem) => String(item),
   } = options ?? {}
 
   const formatList = (list: TItem[] | null | undefined): string => {
-    if (!list || list.length === 0) return ""
+    if (!list || list.length === 0) return ''
     return list.map(formatter).join(separator)
   }
 

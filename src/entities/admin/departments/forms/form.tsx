@@ -1,15 +1,12 @@
-import { useForm, type SubmitHandler } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm, type SubmitHandler } from 'react-hook-form'
 import {
-  InputFieldWithError,
-  ButtonWithError,
-} from '@/shared/ui/with-error/fieldsWithError'
-import { departmentsSchema, type DepartmentsFormFields } from '@/entities/admin/departments/forms/schema'
+  departmentsSchema,
+  type DepartmentsFormFields,
+} from '@/entities/admin/departments/forms/schema'
 import { logger } from '@/shared/lib/logger'
-import {
-  formTransformers,
-  getNestedErrorMessage,
-} from '@/shared/lib/react-hook-form'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormFields = DepartmentsFormFields
 const schema = departmentsSchema
@@ -20,11 +17,7 @@ interface FormProps {
   submitBtnName: string
 }
 
-export default function DepartmentsForm({
-  defaultValues,
-  onSubmit,
-  submitBtnName,
-}: FormProps) {
+export default function DepartmentsForm({ defaultValues, onSubmit, submitBtnName }: FormProps) {
   const {
     register,
     handleSubmit,
@@ -38,10 +31,10 @@ export default function DepartmentsForm({
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await onSubmit(data)
-      logger.debug("Форма успешно выполнена", response)
+      logger.debug('Форма успешно выполнена', response)
     } catch (err) {
       const error = err as Error
-      setError("root", { message: error.message })
+      setError('root', { message: error.message })
       logger.error(err)
     }
   }
@@ -50,14 +43,14 @@ export default function DepartmentsForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Назва"
-        {...register("name", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "name")}
+        {...register('name', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'name')}
       />
 
       <InputFieldWithError
         label="Опис"
-        {...register("description", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "description")}
+        {...register('description', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'description')}
       />
 
       <ButtonWithError

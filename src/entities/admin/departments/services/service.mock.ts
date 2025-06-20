@@ -1,9 +1,9 @@
-import type { PageParams } from '@/types/pagination'
 import { mockDepartments } from '@/entities/admin/departments/mocks/mock'
 import type {
   DepartmentDetailResponse,
   DepartmentListResponse,
 } from '@/entities/admin/departments/types/response.dto'
+import type { PageParams } from '@/types/pagination'
 
 const mockData = mockDepartments
 

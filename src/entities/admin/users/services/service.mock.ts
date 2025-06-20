@@ -1,9 +1,9 @@
-import type { PageParams } from '@/types/pagination'
 import { mockUsers } from '@/entities/admin/users/mocks/mock'
 import type {
   UserDetailResponse,
   UserListResponse,
 } from '@/entities/admin/users/types/response.dto'
+import type { PageParams } from '@/types/pagination'
 
 const mockData = mockUsers
 
@@ -13,7 +13,7 @@ export const usersService = {
     const newData = mockData.map((item) => ({
       ...item,
       // fullName: item.person.fullName,
-      fullName: "ПІБ",
+      fullName: 'ПІБ',
       roleNames: item.roles.map((role) => role.name),
       permissionNames: item.permissions.map((permission) => permission.name),
     }))

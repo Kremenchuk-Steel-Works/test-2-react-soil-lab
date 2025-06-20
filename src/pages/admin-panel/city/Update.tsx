@@ -1,15 +1,13 @@
-import Button from '@/shared/ui/button/Button'
-import { useNavigate, useParams } from "react-router-dom"
-import { ArrowLeft } from "lucide-react"
-import { useQuery } from "@tanstack/react-query"
-import type { CityFormFields } from '@/entities/admin/city/forms/schema'
-import type { CityDetailResponse } from '@/entities/admin/city/types/response.dto'
-import { cityService } from '@/entities/admin/city/services/service'
+import { useQuery } from '@tanstack/react-query'
+import { ArrowLeft } from 'lucide-react'
+import { useNavigate, useParams } from 'react-router-dom'
 import CityForm from '@/entities/admin/city/forms/form'
+import type { CityFormFields } from '@/entities/admin/city/forms/schema'
 import { cityQueryKeys } from '@/entities/admin/city/services/keys'
-import AlertMessage, {
-  AlertType,
-} from '@/shared/ui/alert-message/AlertMessage'
+import { cityService } from '@/entities/admin/city/services/service'
+import type { CityDetailResponse } from '@/entities/admin/city/types/response.dto'
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
+import Button from '@/shared/ui/button/Button'
 
 export default function AdminCityUpdate() {
   const navigate = useNavigate()
@@ -28,7 +26,7 @@ export default function AdminCityUpdate() {
 
   const handleSubmit = async (data: CityFormFields) => {
     await cityService.update(id!, data)
-    navigate("..")
+    navigate('..')
     return data
   }
 
@@ -42,18 +40,16 @@ export default function AdminCityUpdate() {
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Button
           className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate("..")}
+          onClick={() => navigate('..')}
         >
-          <ArrowLeft className="w-5 h-5" /> <span>Назад</span>
+          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
         </Button>
       </div>
 
-      {isError && (
-        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
-      )}
+      {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
 
       {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">

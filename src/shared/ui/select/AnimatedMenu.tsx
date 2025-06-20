@@ -1,10 +1,10 @@
-import { components, type GroupBase, type MenuProps } from "react-select"
-import { motion, AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from 'framer-motion'
+import { components, type GroupBase, type MenuProps } from 'react-select'
 
 function AnimatedMenu<
   OptionType,
   IsMulti extends boolean = false,
-  Group extends GroupBase<OptionType> = GroupBase<OptionType>
+  Group extends GroupBase<OptionType> = GroupBase<OptionType>,
 >(props: MenuProps<OptionType, IsMulti, Group>) {
   return (
     <AnimatePresence>
@@ -17,7 +17,7 @@ function AnimatedMenu<
             duration: 0.3,
             ease: [0.4, 0, 0.2, 1],
           }}
-          style={{ position: "absolute", width: "100%", zIndex: 1 }}
+          style={{ position: 'absolute', width: '100%', zIndex: 1 }}
         >
           <components.Menu {...props}>{props.children}</components.Menu>
         </motion.div>

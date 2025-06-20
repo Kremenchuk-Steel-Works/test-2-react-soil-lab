@@ -1,6 +1,3 @@
-import { api } from '@/shared/api/client'
-import { handleAxiosError } from '@/shared/lib/axios'
-import type { PageParams } from '@/types/pagination'
 import type {
   PositionCreateRequest,
   PositionUpdateRequest,
@@ -10,6 +7,9 @@ import type {
   PositionListResponse,
   PositionLookupResponse,
 } from '@/entities/admin/positions/types/response.dto'
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 
 export const positionService = {
   // Request
@@ -22,10 +22,7 @@ export const positionService = {
     }
   },
 
-  async update(
-    id: string,
-    params: PositionUpdateRequest
-  ): Promise<PositionDetailResponse> {
+  async update(id: string, params: PositionUpdateRequest): Promise<PositionDetailResponse> {
     try {
       const response = await api.put(`/positions/${id}`, params)
       return response.data

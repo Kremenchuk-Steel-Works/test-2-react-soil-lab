@@ -1,5 +1,5 @@
-import { useLayoutEffect, useRef, useState } from "react"
-import { createPortal } from "react-dom"
+import { useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
 
 const Popup = ({
@@ -61,19 +61,13 @@ const Popup = ({
       <div className="fixed inset-0" onClick={closeSubMenu} />
       <div
         ref={containerRef}
-        className="
-          w-70
-          fixed
-          bg-gray-50 dark:bg-[#0e1523]
-          shadow-lg z-50
-          max-h-[50vh]
-          overflow-y-auto"
+        className="fixed z-50 max-h-[50vh] w-70 overflow-y-auto bg-gray-50 shadow-lg dark:bg-[#0e1523]"
         style={style}
       >
         {children}
       </div>
     </>,
-    document.body
+    document.body,
   )
 }
 

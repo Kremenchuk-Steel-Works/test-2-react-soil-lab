@@ -1,7 +1,7 @@
-import { X } from "lucide-react"
-import { useEffect, useState } from "react"
-import ReactDOM from "react-dom"
-import { twMerge } from "tailwind-merge"
+import { useEffect, useState } from 'react'
+import { X } from 'lucide-react'
+import ReactDOM from 'react-dom'
+import { twMerge } from 'tailwind-merge'
 
 export interface ModalProps {
   className?: string
@@ -19,7 +19,7 @@ const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   children,
-  label = " ",
+  label = ' ',
   footer,
   blocking = false,
   animationDuration = 300,
@@ -61,44 +61,40 @@ const Modal: React.FC<ModalProps> = ({
   return ReactDOM.createPortal(
     <div
       className={twMerge(
-        "fixed inset-0 z-50 flex items-center justify-center h-screen transition-opacity duration-300",
-        animateOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        'fixed inset-0 z-50 flex h-screen items-center justify-center transition-opacity duration-300',
+        animateOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
       )}
     >
       <div className="absolute inset-0 bg-black/25" onClick={handleClose} />
 
       <div
         className={twMerge(
-          "flex flex-col relative w-4/5 max-h-full max-w-2xl bg-gray-50 dark:bg-gray-800 text-slate-700 dark:text-slate-300 rounded-lg shadow-lg transform transition-transform duration-300",
-          animateOpen ? "scale-100" : "scale-0",
-          className
+          'relative flex max-h-full w-4/5 max-w-2xl transform flex-col rounded-lg bg-gray-50 text-slate-700 shadow-lg transition-transform duration-300 dark:bg-gray-800 dark:text-slate-300',
+          animateOpen ? 'scale-100' : 'scale-0',
+          className,
         )}
       >
         <div className="overflow-y-auto">
-          <div className="relative h-12 flex items-center justify-center px-10">
+          <div className="relative flex h-12 items-center justify-center px-10">
             {!blocking && (
               <button
                 onClick={handleClose}
                 className="absolute right-2.5 text-slate-400 hover:text-slate-500 dark:text-slate-400 dark:hover:text-white"
                 aria-label="Закрыть"
               >
-                <X className="w-5 h-5" />
+                <X className="h-5 w-5" />
               </button>
             )}
-            <div className="absolute flex justify-center pointer-events-none">
-              {label}
-            </div>
+            <div className="pointer-events-none absolute flex justify-center">{label}</div>
           </div>
 
-          <div className="px-6 pb-6">
-            {typeof children === "function" ? children() : children}
-          </div>
+          <div className="px-6 pb-6">{typeof children === 'function' ? children() : children}</div>
 
           {footer && <div className="p-2">{footer}</div>}
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   )
 }
 

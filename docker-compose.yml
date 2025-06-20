@@ -5,10 +5,10 @@ services:
       target: production
     image: steelworks-react-ui:${IMAGE_TAG:-latest}
     ports:
-      - "80:80"
+      - '80:80'
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: ['CMD', 'curl', '-f', 'http://localhost']
       interval: 30s
       timeout: 5s
       retries: 3

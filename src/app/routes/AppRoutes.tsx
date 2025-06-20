@@ -1,27 +1,22 @@
-import {
-  createBrowserRouter,
-  Navigate,
-  type RouteObject,
-} from "react-router-dom"
-import { Suspense } from "react"
+import { Suspense } from 'react'
+import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom'
+import { APP_ROUTES, type AppRoute } from '@/app/routes/paths'
 import ProtectedRoute from '@/app/routes/ProtectedRoute'
 import { UnAuthRoute } from '@/app/routes/UnAuthRoute'
-
 import LoginPage from '@/pages/LoginPage'
 import MainPage from '@/pages/MainPage'
-import { APP_ROUTES, type AppRoute } from '@/app/routes/paths'
 import LoadingPage from '@/pages/system/LoadingPage'
 
 export const PATHS = {
-  LOGIN: "/login",
-  MAIN: "/",
+  LOGIN: '/login',
+  MAIN: '/',
 }
 
 // Рекурсивная функция построения маршрутов
 const mapRoutes = (routes: AppRoute[]): RouteObject[] => {
   return routes.map((route) => {
     const { Component, children, path, requiredPermissions } = route
-    const isIndex = path === ""
+    const isIndex = path === ''
 
     // Создаем элемент с Suspense
     const elementWithSuspense = (
@@ -66,7 +61,7 @@ export const router = createBrowserRouter([
   },
   ...mapRoutes(APP_ROUTES),
   {
-    path: "*",
+    path: '*',
     element: <Navigate to={PATHS.MAIN} replace />,
   },
 ])

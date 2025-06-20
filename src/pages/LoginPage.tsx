@@ -1,6 +1,6 @@
+import { useAuth } from '@/app/providers/auth/model'
 import LoginForm from '@/entities/auth/forms/form'
 import type { LoginFormFields } from '@/entities/auth/forms/schema'
-import { useAuth } from '@/app/providers/auth/model'
 
 export default function AdminDepartmentsAdd() {
   const { login } = useAuth()
@@ -11,15 +11,13 @@ export default function AdminDepartmentsAdd() {
 
   return (
     <>
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-full max-w-md p-8 rounded-xl">
-          <h4 className="text-3xl font-bold text-center mb-8">
-            Вхід у систему
-          </h4>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="w-full max-w-md rounded-xl p-8">
+          <h4 className="mb-8 text-center text-3xl font-bold">Вхід у систему</h4>
           <LoginForm
             defaultValues={{
-              email: "admin@steel.pl.ua",
-              password: "admin4real",
+              email: 'admin@steel.pl.ua',
+              password: 'admin4real',
               rememberMe: false,
             }}
             onSubmit={handleSubmit}

@@ -1,8 +1,8 @@
-import type { Timestamps } from '@/types/common'
-import type { PaginatedListResponse } from '@/types/pagination'
 import type { PermissionResponse } from '@/entities/admin/permissions/types/response.dto'
 import type { RoleResponse } from '@/entities/admin/roles/types/response.dto'
 import type { UserBase } from '@/entities/admin/users/types/base.model'
+import type { Timestamps } from '@/types/common'
+import type { PaginatedListResponse } from '@/types/pagination'
 
 export interface UserResponse extends UserBase {
   id: string

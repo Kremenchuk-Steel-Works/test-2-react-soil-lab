@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from 'zod'
 
 export const positionsSchema = z.object({
   name: z.string().nonempty(),

@@ -1,6 +1,3 @@
-import { api } from '@/shared/api/client'
-import { handleAxiosError } from '@/shared/lib/axios'
-import type { PageParams } from '@/types/pagination'
 import type {
   PermissionCreateRequest,
   PermissionUpdateRequest,
@@ -10,12 +7,13 @@ import type {
   PermissionListResponse,
   PermissionLookupResponse,
 } from '@/entities/admin/permissions/types/response.dto'
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 
 export const permissionService = {
   // Request
-  async create(
-    params: PermissionCreateRequest
-  ): Promise<PermissionDetailResponse> {
+  async create(params: PermissionCreateRequest): Promise<PermissionDetailResponse> {
     try {
       const response = await api.post(`/permissions/`, params)
       return response.data
@@ -24,10 +22,7 @@ export const permissionService = {
     }
   },
 
-  async update(
-    id: string,
-    params: PermissionUpdateRequest
-  ): Promise<PermissionDetailResponse> {
+  async update(id: string, params: PermissionUpdateRequest): Promise<PermissionDetailResponse> {
     try {
       const response = await api.put(`/permissions/${id}`, params)
       return response.data

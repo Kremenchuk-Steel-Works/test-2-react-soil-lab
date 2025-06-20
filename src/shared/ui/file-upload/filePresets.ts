@@ -1,4 +1,4 @@
-import type { Accept } from "react-dropzone"
+import type { Accept } from 'react-dropzone'
 
 interface FilePreset {
   accept: Accept
@@ -8,17 +8,16 @@ interface FilePreset {
 export const fileTypePresets = {
   document: {
     accept: {
-      "application/pdf": [".pdf"],
-      "application/msword": [".doc"],
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        [".docx"],
-      "text/plain": [".txt"],
+      'application/pdf': ['.pdf'],
+      'application/msword': ['.doc'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+      'text/plain': ['.txt'],
     },
     maxSize: 10 * 1024 * 1024,
   },
   image: {
     accept: {
-      "image/*": [],
+      'image/*': [],
     },
     maxSize: 10 * 1024 * 1024,
   },

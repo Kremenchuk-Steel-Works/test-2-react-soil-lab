@@ -23,10 +23,8 @@ export interface PersonCreateRequest extends PersonBase {
 }
 
 export interface PersonUpdateRequest extends Partial<PersonBase> {
-  employeeProfileAction?: "create" | "update" | "delete"
-  employeeProfileData?:
-    | EmployeeProfileCreateRequest
-    | EmployeeProfileUpdateRequest
+  employeeProfileAction?: 'create' | 'update' | 'delete'
+  employeeProfileData?: EmployeeProfileCreateRequest | EmployeeProfileUpdateRequest
   contactOperations?: ContactOperationRequest[]
   addressOperations?: AddressOperationRequest[]
   organizationIds?: string[]

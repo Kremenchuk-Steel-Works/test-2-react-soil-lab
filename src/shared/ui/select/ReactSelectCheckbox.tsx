@@ -1,16 +1,17 @@
-import { type JSX } from "react"
-import { type OptionProps, type StylesConfig } from "react-select"
-import ReactSelect, { type ClassNamesConfig, type Option } from '@/shared/ui/select/ReactSelect'
-import { type GroupBase, type Props as SelectProps } from "react-select"
+import { type JSX } from 'react'
+import {
+  type GroupBase,
+  type OptionProps,
+  type Props as SelectProps,
+  type StylesConfig,
+} from 'react-select'
 import Checkbox from '@/shared/ui/checkbox/Checkox'
+import ReactSelect, { type ClassNamesConfig, type Option } from '@/shared/ui/select/ReactSelect'
 
 interface CustomMultiSelectProps<
   OptionType extends Option,
-  Group extends GroupBase<OptionType> = GroupBase<OptionType>
-> extends Omit<
-    SelectProps<OptionType, true, Group>,
-    "isMulti" | "value" | "onChange"
-  > {
+  Group extends GroupBase<OptionType> = GroupBase<OptionType>,
+> extends Omit<SelectProps<OptionType, true, Group>, 'isMulti' | 'value' | 'onChange'> {
   selectedOptions: OptionType[]
   onChange: (selected: OptionType[]) => void
   customClassNames?: ClassNamesConfig
@@ -19,7 +20,7 @@ interface CustomMultiSelectProps<
 
 const CustomMultiSelect = <
   OptionType extends Option,
-  Group extends GroupBase<OptionType> = GroupBase<OptionType>
+  Group extends GroupBase<OptionType> = GroupBase<OptionType>,
 >({
   options,
   selectedOptions,
@@ -37,14 +38,9 @@ const CustomMultiSelect = <
     <div
       ref={innerRef}
       {...innerProps}
-      className="flex items-center px-2 py-2 cursor-pointer gap-2"
+      className="flex cursor-pointer items-center gap-2 px-2 py-2"
     >
-      <Checkbox
-        label={label}
-        checked={isSelected}
-        readOnly
-        onClick={(e) => e.stopPropagation()}
-      />
+      <Checkbox label={label} checked={isSelected} readOnly onClick={(e) => e.stopPropagation()} />
     </div>
   )
 

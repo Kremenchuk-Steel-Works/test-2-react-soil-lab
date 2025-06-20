@@ -5,7 +5,7 @@ export interface ContactCreateRequest extends ContactBase {}
 export interface ContactUpdateRequest extends Partial<ContactBase> {}
 
 export interface ContactOperationRequest {
-  action: "create" | "update" | "delete"
+  action: 'create' | 'update' | 'delete'
   data?: ContactCreateRequest | ContactUpdateRequest
   id?: string
 }

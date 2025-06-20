@@ -1,4 +1,5 @@
-import type { ComponentType } from "react"
+import type { ComponentType } from 'react'
+import { Plus, X } from 'lucide-react'
 import {
   useFieldArray,
   type ArrayPath,
@@ -7,14 +8,10 @@ import {
   type FieldErrors,
   type FieldValues,
   type UseFormRegister,
-} from "react-hook-form"
+} from 'react-hook-form'
 import Button from '@/shared/ui/button/Button'
-import { Plus, X } from "lucide-react"
 
-interface DynamicFieldArrayProps<
-  T extends FieldValues,
-  N extends ArrayPath<T> = ArrayPath<T>
-> {
+interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> = ArrayPath<T>> {
   control: Control<T>
   register: UseFormRegister<T>
   errors: FieldErrors<T>
@@ -31,10 +28,7 @@ interface DynamicFieldArrayProps<
   removeButton?: (onRemove: () => void) => React.ReactNode
 }
 
-export function DynamicFieldArray<
-  T extends FieldValues,
-  N extends ArrayPath<T>
->({
+export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>({
   control,
   register,
   errors,
@@ -54,12 +48,7 @@ export function DynamicFieldArray<
     <div className="space-y-3">
       {fields.map((field, index) => (
         <div key={field.id} className="space-y-3">
-          <FormComponent
-            index={index}
-            control={control}
-            register={register}
-            errors={errors}
-          />
+          <FormComponent index={index} control={control} register={register} errors={errors} />
           {removeButton ? (
             removeButton(() => remove(index))
           ) : (
@@ -68,7 +57,7 @@ export function DynamicFieldArray<
               className="flex items-center justify-center gap-1 whitespace-nowrap"
               onClick={() => remove(index)}
             >
-              <X className="w-5 h-5" />{" "}
+              <X className="h-5 w-5" />{' '}
               <span>
                 Видалити {label} {index + 1}
               </span>
@@ -84,7 +73,7 @@ export function DynamicFieldArray<
           className="flex items-center justify-center gap-1 whitespace-nowrap"
           onClick={() => append(defaultItem)}
         >
-          <Plus className="w-5 h-5" /> <span>Додати {label}</span>
+          <Plus className="h-5 w-5" /> <span>Додати {label}</span>
         </Button>
       )}
     </div>

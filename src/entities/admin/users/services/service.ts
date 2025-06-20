@@ -1,11 +1,11 @@
-import { api } from '@/shared/api/client'
-import { handleAxiosError } from '@/shared/lib/axios'
-import type { PageParams } from '@/types/pagination'
 import type { UserCreateRequest, UserUpdateRequest } from '@/entities/admin/users/types/request.dto'
 import type {
   UserDetailResponse,
   UserListResponse,
 } from '@/entities/admin/users/types/response.dto'
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 
 export const userService = {
   // Request
@@ -18,10 +18,7 @@ export const userService = {
     }
   },
 
-  async update(
-    id: string,
-    params: UserUpdateRequest
-  ): Promise<UserDetailResponse> {
+  async update(id: string, params: UserUpdateRequest): Promise<UserDetailResponse> {
     try {
       const response = await api.put(`/users/${id}`, params)
       return response.data

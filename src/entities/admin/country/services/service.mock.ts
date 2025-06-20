@@ -1,10 +1,10 @@
-import type { PageParams } from '@/types/pagination'
 import { mockCountries } from '@/entities/admin/country/mocks/mock'
 import type {
   CountryDetailResponse,
   CountryListResponse,
   CountryLookupResponse,
 } from '@/entities/admin/country/types/response.dto'
+import type { PageParams } from '@/types/pagination'
 
 const mockData = mockCountries
 

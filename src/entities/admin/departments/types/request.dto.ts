@@ -2,5 +2,4 @@ import type { DepartmentBase } from '@/entities/admin/departments/types/base.mod
 
 export interface DepartmentCreateRequest extends DepartmentBase {}
 
-export interface DepartmentUpdateRequest
-  extends Partial<DepartmentCreateRequest> {}
+export interface DepartmentUpdateRequest extends Partial<DepartmentCreateRequest> {}

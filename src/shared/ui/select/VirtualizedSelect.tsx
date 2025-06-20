@@ -1,12 +1,12 @@
-import { useMemo, useState, type JSX } from "react"
-import { type GroupBase, type Props as SelectProps } from "react-select"
+import { useMemo, useState, type JSX } from 'react'
+import { type GroupBase, type Props as SelectProps } from 'react-select'
 import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
 import { VirtualizedMenuList } from '@/shared/ui/select/VirtualizedMenuList'
 
 interface VirtualizedSelectProps<
   OptionType extends Option<any>,
   IsMulti extends boolean = false,
-  Group extends GroupBase<OptionType> = GroupBase<OptionType>
+  Group extends GroupBase<OptionType> = GroupBase<OptionType>,
 > extends SelectProps<OptionType, IsMulti, Group> {
   allOptions?: OptionType[]
 }
@@ -16,13 +16,13 @@ const OPTIONS_SHOWN_LIMIT = 1000
 export function SelectVirtualized<
   OptionType extends Option<any>,
   IsMulti extends boolean = false,
-  Group extends GroupBase<OptionType> = GroupBase<OptionType>
+  Group extends GroupBase<OptionType> = GroupBase<OptionType>,
 >({
   allOptions = [],
   value,
   ...props
 }: VirtualizedSelectProps<OptionType, IsMulti, Group>): JSX.Element {
-  const [inputValue, setInputValue] = useState("")
+  const [inputValue, setInputValue] = useState('')
 
   const filteredOptions = useMemo(() => {
     let results: OptionType[] = []
@@ -44,7 +44,7 @@ export function SelectVirtualized<
       const valueSet = new Set(results.map((opt) => opt.value))
 
       const missingSelected = selectedAsArray.filter(
-        (selectedOpt) => selectedOpt && !valueSet.has(selectedOpt.value)
+        (selectedOpt) => selectedOpt && !valueSet.has(selectedOpt.value),
       )
 
       if (missingSelected.length > 0) {
@@ -66,10 +66,7 @@ export function SelectVirtualized<
       }}
       inputValue={inputValue}
       onInputChange={(newValue, actionMeta) => {
-        if (
-          actionMeta.action !== "input-blur" &&
-          actionMeta.action !== "menu-close"
-        ) {
+        if (actionMeta.action !== 'input-blur' && actionMeta.action !== 'menu-close') {
           setInputValue(newValue)
         }
         props.onInputChange?.(newValue, actionMeta)

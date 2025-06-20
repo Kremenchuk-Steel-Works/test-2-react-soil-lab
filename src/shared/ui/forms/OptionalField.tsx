@@ -1,3 +1,4 @@
+import { Plus, X } from 'lucide-react'
 import {
   useWatch,
   type Control,
@@ -8,14 +9,10 @@ import {
   type UseFormRegister,
   type UseFormResetField,
   type UseFormSetValue,
-} from "react-hook-form"
+} from 'react-hook-form'
 import Button from '@/shared/ui/button/Button'
-import { Plus, X } from "lucide-react"
 
-interface OptionalFieldProps<
-  T extends FieldValues,
-  K extends Path<T> = Path<T>
-> {
+interface OptionalFieldProps<T extends FieldValues, K extends Path<T> = Path<T>> {
   control: Control<T>
   register: UseFormRegister<T>
   errors: FieldErrors<T>
@@ -33,10 +30,7 @@ interface OptionalFieldProps<
   removeButton?: (onRemove: () => void) => React.ReactNode
 }
 
-export function OptionalField<
-  T extends FieldValues,
-  K extends Path<T> = Path<T>
->({
+export function OptionalField<T extends FieldValues, K extends Path<T> = Path<T>>({
   control,
   register,
   errors,
@@ -62,11 +56,7 @@ export function OptionalField<
     <div className="space-y-3">
       {isVisible ? (
         <div className="space-y-3">
-          <FormComponent
-            control={control}
-            register={register}
-            errors={errors}
-          />
+          <FormComponent control={control} register={register} errors={errors} />
           {removeButton ? (
             removeButton(handleRemove)
           ) : (
@@ -75,7 +65,7 @@ export function OptionalField<
               className="flex items-center justify-center gap-1 whitespace-nowrap"
               onClick={handleRemove}
             >
-              <X className="w-5 h-5" /> <span>Видалити {label}</span>
+              <X className="h-5 w-5" /> <span>Видалити {label}</span>
             </Button>
           )}
         </div>
@@ -84,7 +74,7 @@ export function OptionalField<
           className="flex items-center justify-center gap-1 whitespace-nowrap"
           onClick={handleAdd}
         >
-          <Plus className="w-5 h-5" /> <span>Додати {label}</span>
+          <Plus className="h-5 w-5" /> <span>Додати {label}</span>
         </Button>
       )}
     </div>

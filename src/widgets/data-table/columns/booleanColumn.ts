@@ -1,4 +1,4 @@
-import type { ColumnDef } from "@tanstack/react-table"
+import type { ColumnDef } from '@tanstack/react-table'
 import { optionColumn } from '@/widgets/data-table/columns/optionColumn'
 
 /**
@@ -8,9 +8,9 @@ import { optionColumn } from '@/widgets/data-table/columns/optionColumn'
  * @param falseLabel - Текст для значения `false`. По умолчанию "Ні".
  */
 export function booleanColumn<TData>(
-  trueLabel = "Так",
-  falseLabel = "Ні"
-): Pick<ColumnDef<TData, boolean>, "cell" | "filterFn"> {
+  trueLabel = 'Так',
+  falseLabel = 'Ні',
+): Pick<ColumnDef<TData, boolean>, 'cell' | 'filterFn'> {
   const booleanOptions = [
     { value: true, label: trueLabel },
     { value: false, label: falseLabel },

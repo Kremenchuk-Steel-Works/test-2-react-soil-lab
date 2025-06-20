@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react"
+import React, { createContext, useContext, useEffect, useState } from 'react'
 
 type SidebarContextType = {
   collapsed: boolean
@@ -15,32 +15,26 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined)
 
 export const useSidebar = () => {
   const ctx = useContext(SidebarContext)
-  if (!ctx) throw new Error("useSidebar must be used within SidebarProvider")
+  if (!ctx) throw new Error('useSidebar must be used within SidebarProvider')
   return ctx
 }
 
-export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(
     () =>
-      window.matchMedia("(max-width: 768px)").matches ||
-      localStorage.getItem("sidebar-collapsed") === "true"
+      window.matchMedia('(max-width: 768px)').matches ||
+      localStorage.getItem('sidebar-collapsed') === 'true',
   )
-  const [isMobile, setIsMobile] = useState(
-    () => window.matchMedia("(max-width: 768px)").matches
-  )
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 768px)').matches)
 
   // **Multiple** expanded sub-menus when expanded
-  const [expandedSubMenus, setExpandedSubMenus] = useState<Set<string>>(
-    new Set()
-  )
+  const [expandedSubMenus, setExpandedSubMenus] = useState<Set<string>>(new Set())
   // **Single** open sub-menu when collapsed (popup)
   const [collapsedSubMenu, setCollapsedSubMenu] = useState<string | null>(null)
 
   // sync media query
   useEffect(() => {
-    const mql = window.matchMedia("(max-width: 768px)")
+    const mql = window.matchMedia('(max-width: 768px)')
     const listener = () => {
       const mobile = mql.matches
       setIsMobile(mobile)
@@ -51,14 +45,14 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     }
 
-    mql.addEventListener("change", listener)
-    return () => mql.removeEventListener("change", listener)
+    mql.addEventListener('change', listener)
+    return () => mql.removeEventListener('change', listener)
   }, [])
 
   // when the sidebar **toggles** collapsed state, only reset collapsedSubMenu
   useEffect(() => {
     setCollapsedSubMenu(null)
-    localStorage.setItem("sidebar-collapsed", String(collapsed))
+    localStorage.setItem('sidebar-collapsed', String(collapsed))
   }, [collapsed])
 
   const toggleSidebar = () => setCollapsed((c) => !c)
@@ -95,7 +89,5 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({
     closeSubMenu,
   }
 
-  return (
-    <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>
-  )
+  return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>
 }

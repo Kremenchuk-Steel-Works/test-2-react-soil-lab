@@ -1,25 +1,19 @@
-import { useCallback, useState } from "react"
+import { useCallback, useState } from 'react'
 import Modal, { type ModalProps } from '@/shared/ui/modal/Modal'
 
 interface ModalTriggerProps {
   trigger: (open: () => void) => React.ReactNode
-  sheetProps?: Omit<ModalProps, "isOpen" | "onClose" | "children">
-  children:
-    | React.ReactNode
-    | ((props: { onSuccess: () => void }) => React.ReactNode)
+  sheetProps?: Omit<ModalProps, 'isOpen' | 'onClose' | 'children'>
+  children: React.ReactNode | ((props: { onSuccess: () => void }) => React.ReactNode)
 }
 
-const ModalTrigger: React.FC<ModalTriggerProps> = ({
-  trigger,
-  sheetProps,
-  children,
-}) => {
+const ModalTrigger: React.FC<ModalTriggerProps> = ({ trigger, sheetProps, children }) => {
   const [isOpen, setIsOpen] = useState(false)
   const open = useCallback(() => setIsOpen(true), [])
   const close = useCallback(() => setIsOpen(false), [])
 
   const renderChildren = () =>
-    typeof children === "function" ? children({ onSuccess: close }) : children
+    typeof children === 'function' ? children({ onSuccess: close }) : children
 
   return (
     <>

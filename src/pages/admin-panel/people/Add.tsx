@@ -1,27 +1,27 @@
-import { type PeopleFormFields } from '@/entities/admin/people/forms/schema'
+import { ArrowLeft } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import PeopleForm from '@/entities/admin/people/forms/form'
-import { useNavigate } from "react-router-dom"
-import Button from '@/shared/ui/button/Button'
-import { ArrowLeft } from "lucide-react"
+import { type PeopleFormFields } from '@/entities/admin/people/forms/schema'
 import { personService } from '@/entities/admin/people/services/service'
+import Button from '@/shared/ui/button/Button'
 
 export default function AdminPeopleAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: PeopleFormFields) => {
     await personService.create(data)
-    navigate("..")
+    navigate('..')
     return data
   }
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Button
           className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate("..")}
+          onClick={() => navigate('..')}
         >
-          <ArrowLeft className="w-5 h-5" /> <span>Назад</span>
+          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
         </Button>
       </div>
 

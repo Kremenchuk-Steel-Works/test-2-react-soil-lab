@@ -1,19 +1,19 @@
-import { StrictMode } from "react"
-import { createRoot } from "react-dom/client"
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
 import '@/index.css'
-import { RouterProvider } from "react-router-dom"
-import { initApp } from '@/init.ts'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { RouterProvider } from 'react-router-dom'
 import { AuthProvider } from '@/app/providers/auth/ui.tsx'
 import { router } from '@/app/routes/AppRoutes.tsx'
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { initApp } from '@/init.ts'
 import { ModalProvider } from '@/shared/ui/modal/ModalContext.tsx'
 import { SidebarProvider } from '@/widgets/sidebar/SidebarProvider.tsx'
 
 const queryClient = new QueryClient()
 initApp()
 
-createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -29,5 +29,5 @@ createRoot(document.getElementById("root")!).render(
         </SidebarProvider>
       </AuthProvider>
     </QueryClientProvider>
-  </StrictMode>
+  </StrictMode>,
 )

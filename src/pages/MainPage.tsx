@@ -1,7 +1,7 @@
+import { useNavigate } from 'react-router-dom'
+import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
 import Button from '@/shared/ui/button/Button'
 import Layout from '@/widgets/page-layout/Layout'
-import { useNavigate } from "react-router-dom"
-import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
 
 export default function MainPage() {
   const visibleRoutes = useVisibleRoutes()
@@ -20,7 +20,7 @@ export default function MainPage() {
                 className="flex items-center justify-center gap-1 whitespace-nowrap"
                 onClick={() => navigate(route.path)}
               >
-                <route.icon className="w-5 h-5" /> <span>{route.label}</span>
+                <route.icon className="h-5 w-5" /> <span>{route.label}</span>
               </Button>
             ))}
         </div>

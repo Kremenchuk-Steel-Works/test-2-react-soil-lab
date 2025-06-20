@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from 'framer-motion'
 
 interface CollapseFMProps {
   isOpen: boolean
@@ -14,11 +14,11 @@ export const CollapseFM: React.FC<CollapseFMProps> = ({ isOpen, children }) => {
           animate="open"
           exit="collapsed"
           variants={{
-            open: { height: "auto" },
+            open: { height: 'auto' },
             collapsed: { height: 0 },
           }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          style={{ overflow: "hidden" }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          style={{ overflow: 'hidden' }}
         >
           {children}
         </motion.div>

@@ -1,34 +1,34 @@
-import { createColumnHelper } from "@tanstack/react-table"
+import { createColumnHelper } from '@tanstack/react-table'
+import { genderOptions } from '@/entities/admin/people/types/gender'
 import type { PersonListItemResponse } from '@/entities/admin/people/types/response.dto'
 import { booleanColumn } from '@/widgets/data-table/columns/booleanColumn'
-import { optionColumn } from '@/widgets/data-table/columns/optionColumn'
-import { genderOptions } from '@/entities/admin/people/types/gender'
-import { idColumn } from '@/widgets/data-table/columns/idColumn'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
+import { idColumn } from '@/widgets/data-table/columns/idColumn'
 import { listColumn } from '@/widgets/data-table/columns/listColumn'
+import { optionColumn } from '@/widgets/data-table/columns/optionColumn'
 
 const columnHelper = createColumnHelper<PersonListItemResponse>()
 
 export const adminPeopleColumns = [
-  columnHelper.accessor("id", {
-    header: "ID",
+  columnHelper.accessor('id', {
+    header: 'ID',
     ...idColumn(),
   }),
 
-  columnHelper.accessor("fullName", {
+  columnHelper.accessor('fullName', {
     header: "Повне ім'я",
     size: 145,
     ...displayColumn(),
   }),
 
-  columnHelper.accessor("gender", {
-    header: "Стать",
+  columnHelper.accessor('gender', {
+    header: 'Стать',
     size: 100,
     ...optionColumn(genderOptions),
   }),
 
-  columnHelper.accessor("photoUrl", {
-    header: "Фото",
+  columnHelper.accessor('photoUrl', {
+    header: 'Фото',
     size: 100,
     cell: (info) => {
       const file = info.getValue()
@@ -36,46 +36,46 @@ export const adminPeopleColumns = [
         <img
           src={URL.createObjectURL(file)}
           alt="Photo"
-          className="w-10 h-10 rounded-full object-cover"
+          className="h-10 w-10 rounded-full object-cover"
         />
       ) : (
-        "—"
+        '—'
       )
     },
   }),
 
-  columnHelper.accessor("isUser", {
-    header: "Користувач?",
+  columnHelper.accessor('isUser', {
+    header: 'Користувач?',
     size: 155,
     ...booleanColumn(),
   }),
 
-  columnHelper.accessor("isEmployee", {
-    header: "Робітник?",
+  columnHelper.accessor('isEmployee', {
+    header: 'Робітник?',
     size: 135,
     ...booleanColumn(),
   }),
 
-  columnHelper.accessor("contactsCount", {
-    header: "К-сть контактів",
+  columnHelper.accessor('contactsCount', {
+    header: 'К-сть контактів',
     size: 180,
     ...displayColumn(),
   }),
 
-  columnHelper.accessor("addressesCount", {
-    header: "К-сть адрес",
+  columnHelper.accessor('addressesCount', {
+    header: 'К-сть адрес',
     size: 150,
     ...displayColumn(),
   }),
 
-  columnHelper.accessor("organizationNames", {
-    header: "Організація",
+  columnHelper.accessor('organizationNames', {
+    header: 'Організація',
     size: 150,
     ...listColumn(),
   }),
 
-  columnHelper.accessor("positionNames", {
-    header: "Посада",
+  columnHelper.accessor('positionNames', {
+    header: 'Посада',
     size: 115,
     ...listColumn(),
   }),

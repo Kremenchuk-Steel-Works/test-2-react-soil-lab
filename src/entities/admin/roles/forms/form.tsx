@@ -1,24 +1,16 @@
-import { Controller, useForm, type SubmitHandler } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  InputFieldWithError,
-  ButtonWithError,
-} from '@/shared/ui/with-error/fieldsWithError'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
+import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
+import { permissionService } from '@/entities/admin/permissions/services/service'
+import type { PermissionLookupResponse } from '@/entities/admin/permissions/types/response.dto'
 import { rolesSchema, type RolesFormFields } from '@/entities/admin/roles/forms/schema'
 import { logger } from '@/shared/lib/logger'
-import {
-  formTransformers,
-  getNestedErrorMessage,
-} from '@/shared/lib/react-hook-form'
-import { useQuery } from "@tanstack/react-query"
-import AlertMessage, {
-  AlertType,
-} from '@/shared/ui/alert-message/AlertMessage'
-import type { Option } from '@/shared/ui/select/ReactSelect'
-import type { PermissionLookupResponse } from '@/entities/admin/permissions/types/response.dto'
-import { permissionService } from '@/entities/admin/permissions/services/service'
-import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import type { Option } from '@/shared/ui/select/ReactSelect'
+import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormFields = RolesFormFields
 const schema = rolesSchema
@@ -29,11 +21,7 @@ interface FormProps {
   submitBtnName: string
 }
 
-export default function RolesForm({
-  defaultValues,
-  onSubmit,
-  submitBtnName,
-}: FormProps) {
+export default function RolesForm({ defaultValues, onSubmit, submitBtnName }: FormProps) {
   const {
     control,
     register,
@@ -48,10 +36,10 @@ export default function RolesForm({
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await onSubmit(data)
-      logger.debug("Форма успешно выполнена", response)
+      logger.debug('Форма успешно выполнена', response)
     } catch (err) {
       const error = err as Error
-      setError("root", { message: error.message })
+      setError('root', { message: error.message })
       logger.error(err)
     }
   }
@@ -84,14 +72,14 @@ export default function RolesForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Назва"
-        {...register("name", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "name")}
+        {...register('name', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'name')}
       />
 
       <InputFieldWithError
         label="Опис"
-        {...register("description", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "description")}
+        {...register('description', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'description')}
       />
 
       <Controller
@@ -106,7 +94,7 @@ export default function RolesForm({
             isMulti
             isClearable
             placeholder="Оберіть права доступу"
-            errorMessage={getNestedErrorMessage(errors, "permissionIds")}
+            errorMessage={getNestedErrorMessage(errors, 'permissionIds')}
           />
         )}
       />

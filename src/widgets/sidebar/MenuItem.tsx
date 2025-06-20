@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom"
-import type { LucideIcon } from "lucide-react"
+import type { LucideIcon } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useIsTruncated } from '@/shared/hooks/useIsTruncated'
 import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
 
@@ -30,8 +30,8 @@ export default function MenuItem({ label, Icon, to }: MenuItemProps) {
       className="flex items-center gap-2 px-4.5 py-4 hover:bg-gray-200 dark:hover:bg-blue-700"
       {...(isTruncated || collapsed ? { title: label } : {})}
     >
-      {Icon && <Icon className="w-5 h-5 flex-shrink-0" />}
-      <div ref={ref} className={"truncate flex-shrink min-w-0 overflow-hidden"}>
+      {Icon && <Icon className="h-5 w-5 flex-shrink-0" />}
+      <div ref={ref} className={'min-w-0 flex-shrink truncate overflow-hidden'}>
         <span key={label}>{label}</span>
       </div>
     </Link>

@@ -1,43 +1,43 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "tailwind-scrollbar-hide";
-@import "./app/styles/datepicker-override.css";
+@import './app/styles/datepicker-override.css';
 
 @layer base {
   h1.layout-text {
-    @apply text-5xl font-bold leading-tight;
+    @apply text-5xl leading-tight font-bold;
   }
   h2.layout-text {
-    @apply text-4xl font-semibold leading-snug;
+    @apply text-4xl leading-snug font-semibold;
   }
   h3.layout-text {
-    @apply text-3xl font-semibold leading-snug;
+    @apply text-3xl leading-snug font-semibold;
   }
   h4.layout-text {
-    @apply text-2xl font-medium leading-snug;
+    @apply text-2xl leading-snug font-medium;
   }
   h5.layout-text {
-    @apply text-xl font-medium leading-relaxed;
+    @apply text-xl leading-relaxed font-medium;
   }
   h6.layout-text {
-    @apply text-lg font-medium leading-relaxed;
+    @apply text-lg leading-relaxed font-medium;
   }
   p.layout-text {
     @apply text-base leading-relaxed;
   }
 
   /* Убираем стандартный number WebKit-браузеры: Chrome, Safari, Edge, Opera */
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    @apply appearance-none m-0;
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    @apply m-0 appearance-none;
   }
 
   /* Убираем стандартный number Firefox */
-  input[type="number"] {
+  input[type='number'] {
     @apply appearance-none;
   }
 
   /* Убираем стандартный date WebKit-браузеры: Chrome, Safari, Edge, Opera */
-  input[type="date"]::-webkit-calendar-picker-indicator {
+  input[type='date']::-webkit-calendar-picker-indicator {
     opacity: 0;
     position: absolute;
     right: 0;
@@ -47,19 +47,19 @@
   }
 
   /* Убираем стрелки в поле ввода даты в браузерах на основе WebKit */
-  input[type="date"]::-webkit-inner-spin-button {
+  input[type='date']::-webkit-inner-spin-button {
     display: none;
     -webkit-appearance: none;
   }
 
   /* Убираем стандартный date Firefox */
-  input[type="date"] {
+  input[type='date'] {
     -moz-appearance: textfield;
   }
 
   /* Ширина полосы прокрутки */
   ::-webkit-scrollbar {
-    @apply w-2 h-2;
+    @apply h-2 w-2;
   }
 
   /* Фон трека полосы прокрутки */
@@ -69,7 +69,7 @@
 
   /* Ползунок полосы прокрутки */
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-500 rounded-xl;
+    @apply rounded-xl bg-gray-300 dark:bg-gray-500;
   }
 
   /* Ползунок при наведении */

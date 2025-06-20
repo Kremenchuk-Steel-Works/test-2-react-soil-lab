@@ -1,16 +1,13 @@
-import { useForm, type SubmitHandler } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm, type SubmitHandler } from 'react-hook-form'
 import { loginSchema, type LoginFormFields } from '@/entities/auth/forms/schema'
+import { logger } from '@/shared/lib/logger'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
 import {
   ButtonWithError,
   CheckboxWithError,
   InputFieldWithError,
 } from '@/shared/ui/with-error/fieldsWithError'
-import { logger } from '@/shared/lib/logger'
-import {
-  formTransformers,
-  getNestedErrorMessage,
-} from '@/shared/lib/react-hook-form'
 
 type FormFields = LoginFormFields
 const schema = loginSchema
@@ -21,11 +18,7 @@ interface FormProps {
   submitBtnName: string
 }
 
-export default function LoginForm({
-  defaultValues,
-  onSubmit,
-  submitBtnName,
-}: FormProps) {
+export default function LoginForm({ defaultValues, onSubmit, submitBtnName }: FormProps) {
   const {
     register,
     handleSubmit,
@@ -39,10 +32,10 @@ export default function LoginForm({
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await onSubmit(data)
-      logger.debug("Форма успешно выполнена", response)
+      logger.debug('Форма успешно выполнена', response)
     } catch (err) {
       const error = err as Error
-      setError("root", { message: error.message })
+      setError('root', { message: error.message })
       logger.error(err)
     }
   }
@@ -52,20 +45,20 @@ export default function LoginForm({
       <InputFieldWithError
         label="Email"
         errorMessage={errors.email?.message}
-        {...register("email")}
+        {...register('email')}
       />
 
       <InputFieldWithError
         label="Пароль"
         type="password"
-        {...register("password")}
-        errorMessage={getNestedErrorMessage(errors, "password")}
+        {...register('password')}
+        errorMessage={getNestedErrorMessage(errors, 'password')}
       />
 
       <CheckboxWithError
         label="Запам'ятати мене"
         {...register(`rememberMe`, formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "rememberMe")}
+        errorMessage={getNestedErrorMessage(errors, 'rememberMe')}
       />
 
       <ButtonWithError

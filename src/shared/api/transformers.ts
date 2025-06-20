@@ -11,7 +11,7 @@ export function nullsToUndefined<T>(obj: T): T {
   }
 
   // Если это не объект (например, строка, число) или массив, возвращаем как есть
-  if (typeof obj !== "object") {
+  if (typeof obj !== 'object') {
     return obj
   }
 

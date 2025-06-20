@@ -1,12 +1,12 @@
-import { api } from '@/shared/api/client'
-import { handleAxiosError } from '@/shared/lib/axios'
-import type { PageParams } from '@/types/pagination'
 import type { CityCreateRequest, CityUpdateRequest } from '@/entities/admin/city/types/request.dto'
 import type {
   CityDetailResponse,
   CityListResponse,
   CityLookupResponse,
 } from '@/entities/admin/city/types/response.dto'
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 
 export const cityService = {
   // Request
@@ -19,10 +19,7 @@ export const cityService = {
     }
   },
 
-  async update(
-    id: string,
-    params: CityUpdateRequest
-  ): Promise<CityDetailResponse> {
+  async update(id: string, params: CityUpdateRequest): Promise<CityDetailResponse> {
     try {
       const response = await api.put(`/cities/${id}`, params)
       return response.data

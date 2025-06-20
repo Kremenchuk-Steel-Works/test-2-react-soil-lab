@@ -1,7 +1,7 @@
-import type { PropsWithChildren } from "react"
-import { Navigate } from "react-router-dom"
-import { PATHS } from '@/app/routes/AppRoutes'
+import type { PropsWithChildren } from 'react'
+import { Navigate } from 'react-router-dom'
 import { useAuth } from '@/app/providers/auth/model'
+import { PATHS } from '@/app/routes/AppRoutes'
 import LoadingPage from '@/pages/system/LoadingPage'
 import NotAccessPage from '@/pages/system/NotAccessPage'
 import { useUserPermissionsTo } from '@/shared/hooks/usePermissions'
@@ -10,10 +10,7 @@ type ProtectedRouteProps = PropsWithChildren & {
   allowedPermissions?: string[]
 }
 
-export default function ProtectedRoute({
-  allowedPermissions,
-  children,
-}: ProtectedRouteProps) {
+export default function ProtectedRoute({ allowedPermissions, children }: ProtectedRouteProps) {
   const { currentUser } = useAuth()
   const hasAccessTo = useUserPermissionsTo()
 

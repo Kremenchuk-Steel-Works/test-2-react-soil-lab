@@ -1,29 +1,21 @@
+import { useQuery } from '@tanstack/react-query'
 import {
   Controller,
   type Control,
   type FieldErrors,
   type Path,
   type UseFormRegister,
-} from "react-hook-form"
-import {
-  InputFieldWithError,
-  CheckboxWithError,
-} from '@/shared/ui/with-error/fieldsWithError'
+} from 'react-hook-form'
 import type { AddressFormFields } from '@/entities/admin/address/forms/schema'
 import { addressOptions } from '@/entities/admin/address/types/address'
-import type { CityLookupResponse } from '@/entities/admin/city/types/response.dto'
-import { useQuery } from "@tanstack/react-query"
-import { cityService } from '@/entities/admin/city/services/service'
-import AlertMessage, {
-  AlertType,
-} from '@/shared/ui/alert-message/AlertMessage'
-import {
-  formTransformers,
-  getNestedErrorMessage,
-} from '@/shared/lib/react-hook-form'
 import { cityQueryKeys } from '@/entities/admin/city/services/keys'
-import type { Option } from '@/shared/ui/select/ReactSelect'
+import { cityService } from '@/entities/admin/city/services/service'
+import type { CityLookupResponse } from '@/entities/admin/city/types/response.dto'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import type { Option } from '@/shared/ui/select/ReactSelect'
+import { CheckboxWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 export type FormFields = {
   addresses: AddressFormFields[]
@@ -72,14 +64,8 @@ export function AddressForm<T extends FormFields>({
 
       <CheckboxWithError
         label="Основна"
-        {...register(
-          `addresses.${index}.isPrimary` as Path<T>,
-          formTransformers.string
-        )}
-        errorMessage={getNestedErrorMessage(
-          errors,
-          `addresses.${index}.isPrimary` as Path<T>
-        )}
+        {...register(`addresses.${index}.isPrimary` as Path<T>, formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, `addresses.${index}.isPrimary` as Path<T>)}
       />
 
       <Controller
@@ -93,36 +79,21 @@ export function AddressForm<T extends FormFields>({
             isVirtualized
             isClearable
             placeholder="Оберіть місто"
-            errorMessage={getNestedErrorMessage(
-              errors,
-              `addresses.${index}.cityId` as Path<T>
-            )}
+            errorMessage={getNestedErrorMessage(errors, `addresses.${index}.cityId` as Path<T>)}
           />
         )}
       />
 
       <InputFieldWithError
         label="Вулиця"
-        {...register(
-          `addresses.${index}.street` as Path<T>,
-          formTransformers.string
-        )}
-        errorMessage={getNestedErrorMessage(
-          errors,
-          `addresses.${index}.street` as Path<T>
-        )}
+        {...register(`addresses.${index}.street` as Path<T>, formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, `addresses.${index}.street` as Path<T>)}
       />
 
       <InputFieldWithError
         label="Поштовий код"
-        {...register(
-          `addresses.${index}.postalCode` as Path<T>,
-          formTransformers.string
-        )}
-        errorMessage={getNestedErrorMessage(
-          errors,
-          `addresses.${index}.postalCode` as Path<T>
-        )}
+        {...register(`addresses.${index}.postalCode` as Path<T>, formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, `addresses.${index}.postalCode` as Path<T>)}
       />
 
       <Controller
@@ -136,24 +107,15 @@ export function AddressForm<T extends FormFields>({
             isVirtualized
             isClearable
             placeholder="Оберіть тип"
-            errorMessage={getNestedErrorMessage(
-              errors,
-              `addresses.${index}.type` as Path<T>
-            )}
+            errorMessage={getNestedErrorMessage(errors, `addresses.${index}.type` as Path<T>)}
           />
         )}
       />
 
       <InputFieldWithError
         label="Примітка"
-        {...register(
-          `addresses.${index}.note` as Path<T>,
-          formTransformers.string
-        )}
-        errorMessage={getNestedErrorMessage(
-          errors,
-          `addresses.${index}.note` as Path<T>
-        )}
+        {...register(`addresses.${index}.note` as Path<T>, formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, `addresses.${index}.note` as Path<T>)}
       />
     </div>
   )

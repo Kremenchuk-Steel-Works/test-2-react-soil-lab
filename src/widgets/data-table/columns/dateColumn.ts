@@ -1,4 +1,4 @@
-import type { ColumnDef } from "@tanstack/react-table"
+import type { ColumnDef } from '@tanstack/react-table'
 
 interface DateColumnOptions {
   placeholder?: string
@@ -13,13 +13,10 @@ interface DateColumnOptions {
  * @param options - Объект с опциями для кастомизации.
  */
 export function dateColumn<TData>(
-  options?: DateColumnOptions
-): Pick<ColumnDef<TData, string | undefined | null>, "cell" | "filterFn"> {
+  options?: DateColumnOptions,
+): Pick<ColumnDef<TData, string | undefined | null>, 'cell' | 'filterFn'> {
   // Устанавливаем значения по умолчанию, если они не предоставлены
-  const {
-    placeholder = "—",
-    formatter = (date: Date) => date.toLocaleString(),
-  } = options ?? {}
+  const { placeholder = '—', formatter = (date: Date) => date.toLocaleString() } = options ?? {}
 
   return {
     cell: ({ getValue }) => {
@@ -31,7 +28,7 @@ export function dateColumn<TData>(
       const rawValue = row.getValue<string | undefined | null>(columnId)
 
       // Получаем отформатированное значение в том же виде, как в `cell`,
-      const displayValue = rawValue ? formatter(new Date(rawValue)) : ""
+      const displayValue = rawValue ? formatter(new Date(rawValue)) : ''
 
       return displayValue.toLowerCase().includes(filterValue.toLowerCase())
     },

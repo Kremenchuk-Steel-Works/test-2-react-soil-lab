@@ -1,5 +1,3 @@
-import type { Timestamps } from '@/types/common'
-import type { PaginatedListResponse } from '@/types/pagination'
 import type {
   AddressDetailResponse,
   AddressResponse,
@@ -10,6 +8,8 @@ import type {
 } from '@/entities/admin/contact/types/response.dto'
 import type { CountryShortResponse } from '@/entities/admin/country/types/response.dto'
 import type { OrganizationBase } from '@/entities/admin/organizations/types/base.model'
+import type { Timestamps } from '@/types/common'
+import type { PaginatedListResponse } from '@/types/pagination'
 
 export interface OrganizationResponse extends OrganizationBase {
   id: string
@@ -19,7 +19,7 @@ export interface OrganizationResponse extends OrganizationBase {
 }
 
 export interface OrganizationDetailResponse
-  extends Omit<OrganizationResponse, "contacts" | "addresses">,
+  extends Omit<OrganizationResponse, 'contacts' | 'addresses'>,
     Timestamps {
   contacts: ContactDetailResponse[]
   addresses: AddressDetailResponse[]
@@ -36,5 +36,4 @@ export interface OrganizationLookupResponse {
   registrationNumber?: string
 }
 
-export type OrganizationListResponse =
-  PaginatedListResponse<OrganizationShortResponse>
+export type OrganizationListResponse = PaginatedListResponse<OrganizationShortResponse>

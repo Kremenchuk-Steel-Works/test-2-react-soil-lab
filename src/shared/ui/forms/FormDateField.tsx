@@ -1,15 +1,9 @@
-import { format } from "date-fns"
-import type {
-  ControllerFieldState,
-  ControllerRenderProps,
-} from "react-hook-form"
+import { format } from 'date-fns'
+import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
 import type { InputDateFieldProps } from '@/shared/ui/input-field/InputDateField'
 import { InputDateFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
-type FormDateFieldProps = Omit<
-  InputDateFieldProps,
-  "value" | "onChange" | "onBlur" | "ref"
-> & {
+type FormDateFieldProps = Omit<InputDateFieldProps, 'value' | 'onChange' | 'onBlur' | 'ref'> & {
   field: ControllerRenderProps<any, any>
   fieldState: ControllerFieldState
   stringFormat?: string
@@ -19,7 +13,7 @@ type FormDateFieldProps = Omit<
 const FormDateField = ({
   field,
   fieldState,
-  stringFormat = "yyyy-MM-dd",
+  stringFormat = 'yyyy-MM-dd',
   errorMessage,
   ...rest
 }: FormDateFieldProps) => {

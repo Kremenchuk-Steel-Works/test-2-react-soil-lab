@@ -1,6 +1,3 @@
-import { api } from '@/shared/api/client'
-import { handleAxiosError } from '@/shared/lib/axios'
-import type { PageParams } from '@/types/pagination'
 import type {
   DepartmentCreateRequest,
   DepartmentUpdateRequest,
@@ -10,12 +7,13 @@ import type {
   DepartmentListResponse,
   DepartmentLookupResponse,
 } from '@/entities/admin/departments/types/response.dto'
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 
 export const departmentService = {
   // Request
-  async create(
-    params: DepartmentCreateRequest
-  ): Promise<DepartmentDetailResponse> {
+  async create(params: DepartmentCreateRequest): Promise<DepartmentDetailResponse> {
     try {
       const response = await api.post(`/departments/`, params)
       return response.data
@@ -24,10 +22,7 @@ export const departmentService = {
     }
   },
 
-  async update(
-    id: string,
-    params: DepartmentUpdateRequest
-  ): Promise<DepartmentDetailResponse> {
+  async update(id: string, params: DepartmentUpdateRequest): Promise<DepartmentDetailResponse> {
     try {
       const response = await api.put(`/departments/${id}`, params)
       return response.data

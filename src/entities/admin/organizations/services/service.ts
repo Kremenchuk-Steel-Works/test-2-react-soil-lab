@@ -1,6 +1,3 @@
-import { api } from '@/shared/api/client'
-import { handleAxiosError } from '@/shared/lib/axios'
-import type { PageParams } from '@/types/pagination'
 import type {
   OrganizationCreateRequest,
   OrganizationUpdateRequest,
@@ -10,12 +7,13 @@ import type {
   OrganizationListResponse,
   OrganizationLookupResponse,
 } from '@/entities/admin/organizations/types/response.dto'
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 
 export const organizationService = {
   // Request
-  async create(
-    params: OrganizationCreateRequest
-  ): Promise<OrganizationDetailResponse> {
+  async create(params: OrganizationCreateRequest): Promise<OrganizationDetailResponse> {
     try {
       const response = await api.post(`/organizations/`, params)
       return response.data
@@ -24,10 +22,7 @@ export const organizationService = {
     }
   },
 
-  async update(
-    id: string,
-    params: OrganizationUpdateRequest
-  ): Promise<OrganizationDetailResponse> {
+  async update(id: string, params: OrganizationUpdateRequest): Promise<OrganizationDetailResponse> {
     try {
       const response = await api.put(`/organizations/${id}`, params)
       return response.data

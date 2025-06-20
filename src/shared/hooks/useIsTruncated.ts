@@ -1,4 +1,4 @@
-import { useState, useRef, useLayoutEffect } from "react"
+import { useLayoutEffect, useRef, useState } from 'react'
 
 // Опции хука: debounce-задержка в мс (0 — без задержки)
 interface UseIsTruncatedOptions {

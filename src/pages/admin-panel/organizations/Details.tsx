@@ -1,13 +1,11 @@
-import Button from '@/shared/ui/button/Button'
-import { useNavigate, useParams } from "react-router-dom"
-import { ArrowLeft, Pen } from "lucide-react"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery } from '@tanstack/react-query'
+import { ArrowLeft, Pen } from 'lucide-react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { organizationQueryKeys } from '@/entities/admin/organizations/services/keys'
 import { organizationService } from '@/entities/admin/organizations/services/service'
 import type { OrganizationDetailResponse } from '@/entities/admin/organizations/types/response.dto'
-import { organizationQueryKeys } from '@/entities/admin/organizations/services/keys'
-import AlertMessage, {
-  AlertType,
-} from '@/shared/ui/alert-message/AlertMessage'
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
+import Button from '@/shared/ui/button/Button'
 
 export default function AdminOrganizationsDetails() {
   const navigate = useNavigate()
@@ -26,26 +24,24 @@ export default function AdminOrganizationsDetails() {
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Button
           className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate("..")}
+          onClick={() => navigate('..')}
         >
-          <ArrowLeft className="w-5 h-5" /> <span>Назад</span>
+          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
         </Button>
       </div>
 
       <div>
-        {isError && (
-          <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
-        )}
+        {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
         {!isLoading && !isError && data && (
-          <div className="bg-white dark:bg-gray-800 p-6">
-            <h2 className="text-xl font-semibold mb-4 text-slate-900 dark:text-slate-100">
+          <div className="bg-white p-6 dark:bg-gray-800">
+            <h2 className="mb-4 text-xl font-semibold text-slate-900 dark:text-slate-100">
               Деталі
             </h2>
 
-            <dl className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+            <dl className="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2">
               <div>
                 <dt>ID</dt>
                 <dd>{data.id}</dd>
@@ -84,16 +80,14 @@ export default function AdminOrganizationsDetails() {
               <div>
                 <dt>Email</dt>
                 <dd>
-                  {data.contacts.find((c) => c.type === "email" && c.isPrimary)
-                    ?.value || "—"}
+                  {data.contacts.find((c) => c.type === 'email' && c.isPrimary)?.value || '—'}
                 </dd>
               </div>
 
               <div>
                 <dt>Телефон</dt>
                 <dd>
-                  {data.contacts.find((c) => c.type === "phone" && c.isPrimary)
-                    ?.value || "—"}
+                  {data.contacts.find((c) => c.type === 'phone' && c.isPrimary)?.value || '—'}
                 </dd>
               </div>
 
@@ -101,9 +95,8 @@ export default function AdminOrganizationsDetails() {
                 <dt>Інші контакти</dt>
                 <dd>
                   {data.contacts.find(
-                    (c) =>
-                      c.type !== "phone" && c.type !== "email" && c.isPrimary
-                  )?.value || "—"}
+                    (c) => c.type !== 'phone' && c.type !== 'email' && c.isPrimary,
+                  )?.value || '—'}
                 </dd>
               </div>
 
@@ -124,7 +117,7 @@ export default function AdminOrganizationsDetails() {
                     const addr = data.addresses.find((a) => a.isPrimary)
                     return addr
                       ? `${addr.street}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
-                      : "—"
+                      : '—'
                   })()}
                 </dd>
               </div>
@@ -136,18 +129,18 @@ export default function AdminOrganizationsDetails() {
                     const addr = data.addresses.find((a) => !a.isPrimary)
                     return addr
                       ? `${addr.street}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
-                      : "—"
+                      : '—'
                   })()}
                 </dd>
               </div>
             </dl>
 
-            <div className="flex justify-between items-center py-2">
+            <div className="flex items-center justify-between py-2">
               <Button
-                className="flex items-center justify-center gap-1 whitespace-nowrap bg-orange-500 hover:bg-orange-600"
-                onClick={() => navigate("update")}
+                className="flex items-center justify-center gap-1 bg-orange-500 whitespace-nowrap hover:bg-orange-600"
+                onClick={() => navigate('update')}
               >
-                <Pen className="w-5 h-5" /> <span>Редагувати</span>
+                <Pen className="h-5 w-5" /> <span>Редагувати</span>
               </Button>
             </div>
           </div>

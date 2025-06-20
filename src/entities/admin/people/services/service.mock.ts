@@ -1,10 +1,10 @@
-import type { PageParams } from '@/types/pagination'
 import { mockPeople } from '@/entities/admin/people/mocks/mock'
 import type {
   PersonDetailResponse,
   PersonListResponse,
   PersonLookupResponse,
 } from '@/entities/admin/people/types/response.dto'
+import type { PageParams } from '@/types/pagination'
 
 const mockData = mockPeople
 
@@ -26,9 +26,7 @@ export const peopleService = {
       organizationNames: item.organizations.map((org) => org.legalName),
       positionNames: item.positions.map((pos) => pos.name),
       employeeStatus: item.employeeProfile?.employmentStatus ?? null,
-      fullName: `${item.lastName} ${item.firstName}${
-        item.middleName ? " " + item.middleName : ""
-      }`,
+      fullName: `${item.lastName} ${item.firstName}${item.middleName ? ' ' + item.middleName : ''}`,
       createdAt: item.createdAt,
       updatedAt: item.updatedAt,
     }))
@@ -53,9 +51,7 @@ export const peopleService = {
   async getLookup(): Promise<PersonLookupResponse[]> {
     const newData = mockData.map((item) => ({
       ...item,
-      fullName: `${item.lastName} ${item.firstName}${
-        item.middleName ? " " + item.middleName : ""
-      }`,
+      fullName: `${item.lastName} ${item.firstName}${item.middleName ? ' ' + item.middleName : ''}`,
     }))
     return newData
   },

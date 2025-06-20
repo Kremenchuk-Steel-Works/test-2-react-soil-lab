@@ -1,14 +1,7 @@
-import {
-  CircleMinus,
-  File as FileIcon,
-  FileArchive,
-  FileText,
-  UploadCloud,
-  X,
-} from "lucide-react"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { useDropzone, type Accept, type FileRejection } from "react-dropzone"
-import { twMerge } from "tailwind-merge"
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { CircleMinus, FileArchive, File as FileIcon, FileText, UploadCloud, X } from 'lucide-react'
+import { useDropzone, type Accept, type FileRejection } from 'react-dropzone'
+import { twMerge } from 'tailwind-merge'
 import { logger } from '@/shared/lib/logger'
 
 // --- Props and Utils (без изменений) ---
@@ -20,20 +13,15 @@ export interface FileUploadProps {
   accept?: Accept
   maxSize?: number
 }
-const generateFileId = (file: File) =>
-  `${file.name}-${file.size}-${file.lastModified}`
-const processAndRenameFiles = (
-  newFiles: File[],
-  existingFiles: File[]
-): File[] => {
+const generateFileId = (file: File) => `${file.name}-${file.size}-${file.lastModified}`
+const processAndRenameFiles = (newFiles: File[], existingFiles: File[]): File[] => {
   const existingFileNames = new Set(existingFiles.map((file) => file.name))
   return newFiles.map((file) => {
     let newName = file.name
     if (existingFileNames.has(newName)) {
-      const dotIndex = file.name.lastIndexOf(".")
-      const baseName =
-        dotIndex > -1 ? file.name.substring(0, dotIndex) : file.name
-      const extension = dotIndex > -1 ? file.name.substring(dotIndex) : ""
+      const dotIndex = file.name.lastIndexOf('.')
+      const baseName = dotIndex > -1 ? file.name.substring(0, dotIndex) : file.name
+      const extension = dotIndex > -1 ? file.name.substring(dotIndex) : ''
       let counter = 1
       do {
         newName = `${baseName}(${counter})${extension}`
@@ -49,14 +37,11 @@ const processAndRenameFiles = (
 }
 
 // --- FileChip (без изменений) ---
-const FileChip: React.FC<{ file: File; onRemove: () => void }> = ({
-  file,
-  onRemove,
-}) => {
+const FileChip: React.FC<{ file: File; onRemove: () => void }> = ({ file, onRemove }) => {
   const [preview, setPreview] = useState<string | null>(null)
   useEffect(() => {
     let objectUrl: string | null = null
-    if (file.type.startsWith("image/")) {
+    if (file.type.startsWith('image/')) {
       objectUrl = URL.createObjectURL(file)
       setPreview(objectUrl)
     }
@@ -71,19 +56,19 @@ const FileChip: React.FC<{ file: File; onRemove: () => void }> = ({
         <img
           src={preview}
           alt={file.name}
-          className="h-6 w-6 rounded-full object-cover flex-shrink-0"
+          className="h-6 w-6 flex-shrink-0 rounded-full object-cover"
         />
       )
-    if (file.type.startsWith("text/")) return <FileText className="h-5 w-5" />
-    if (file.type.includes("zip") || file.type.includes("archive"))
+    if (file.type.startsWith('text/')) return <FileText className="h-5 w-5" />
+    if (file.type.includes('zip') || file.type.includes('archive'))
       return <FileArchive className="h-5 w-5" />
     return <FileIcon className="h-5 w-5" />
   }
 
   return (
-    <div className="pointer-events-auto flex items-center gap-2 overflow-hidden rounded-full bg-gray-200 py-0.5 pl-2 pr-1 text-sm text-gray-800 dark:bg-gray-600 dark:text-gray-100">
+    <div className="pointer-events-auto flex items-center gap-2 overflow-hidden rounded-full bg-gray-200 py-0.5 pr-1 pl-2 text-sm text-gray-800 dark:bg-gray-600 dark:text-gray-100">
       {getIcon()}
-      <span className="truncate flex-shrink min-w-0">{file.name}</span>
+      <span className="min-w-0 flex-shrink truncate">{file.name}</span>
       <button
         type="button"
         aria-label={`Remove ${file.name}`}
@@ -91,7 +76,7 @@ const FileChip: React.FC<{ file: File; onRemove: () => void }> = ({
           e.stopPropagation()
           onRemove()
         }}
-        className="rounded-full p-0.5 text-gray-600 transition-colors hover:bg-gray-300 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-500 dark:hover:text-gray-50 flex-shrink-0"
+        className="flex-shrink-0 rounded-full p-0.5 text-gray-600 transition-colors hover:bg-gray-300 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-500 dark:hover:text-gray-50"
       >
         <X className="h-4 w-4" />
       </button>
@@ -117,7 +102,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
       // Принятые файлы
       if (accepted.length > 0) {
-        logger.debug("Accepted:", accepted)
+        logger.debug('Accepted:', accepted)
         if (!multiple) {
           onFilesChange(processAndRenameFiles(accepted, []))
           return
@@ -127,37 +112,36 @@ export const FileUpload: React.FC<FileUploadProps> = ({
       }
       // Отклоненные файлы
       if (rejected.length > 0) {
-        logger.warn("Rejected:", rejected)
+        logger.warn('Rejected:', rejected)
       }
     },
-    [multiple, acceptedFiles, onFilesChange]
+    [multiple, acceptedFiles, onFilesChange],
   )
 
   const handleFileRemove = (fileToRemove: File) => {
     onFilesChange(acceptedFiles.filter((file) => file !== fileToRemove))
   }
 
-  const { getRootProps, getInputProps, isDragAccept, isDragReject } =
-    useDropzone({
-      onDrop,
-      onDragEnter: () => setIsDragging(true),
-      onDragLeave: () => setIsDragging(false),
-      multiple,
-      accept,
-      maxSize,
-    })
+  const { getRootProps, getInputProps, isDragAccept, isDragReject } = useDropzone({
+    onDrop,
+    onDragEnter: () => setIsDragging(true),
+    onDragLeave: () => setIsDragging(false),
+    multiple,
+    accept,
+    maxSize,
+  })
 
   const hasFiles = acceptedFiles.length > 0
 
   const containerClassName = useMemo(() => {
     const baseClasses =
-      "peer relative flex w-full items-start rounded-md border bg-gray-50 px-4 pt-5 pb-2 text-base text-gray-900 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-gray-50 min-h-[54px]"
+      'peer relative flex w-full items-start rounded-md border bg-gray-50 px-4 pt-5 pb-2 text-base text-gray-900 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-gray-50 min-h-[54px]'
     const stateClasses = {
       default:
-        "cursor-pointer border-gray-300 hover:border-gray-400 dark:border-gray-600 focus:ring-blue-500",
-      active: "cursor-pointer border-blue-500 focus:ring-blue-500",
-      accept: "cursor-pointer border-green-500 focus:ring-green-500",
-      reject: "cursor-not-allowed border-red-500 focus:ring-red-500",
+        'cursor-pointer border-gray-300 hover:border-gray-400 dark:border-gray-600 focus:ring-blue-500',
+      active: 'cursor-pointer border-blue-500 focus:ring-blue-500',
+      accept: 'cursor-pointer border-green-500 focus:ring-green-500',
+      reject: 'cursor-not-allowed border-red-500 focus:ring-red-500',
     }
 
     if (isDragging) {
@@ -172,12 +156,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   const labelClassName = useMemo(() => {
     const shouldFloat = hasFiles || isDragging
     return twMerge(
-      "pointer-events-none absolute left-4 inline-block w-full truncate pr-12 transition-all",
-      shouldFloat ? "top-1 text-sm" : "top-3.5 text-base",
-      hasFiles
-        ? "text-gray-500 dark:text-gray-400"
-        : "text-gray-400 dark:text-gray-400",
-      "peer-focus:text-blue-500"
+      'pointer-events-none absolute left-4 inline-block w-full truncate pr-12 transition-all',
+      shouldFloat ? 'top-1 text-sm' : 'top-3.5 text-base',
+      hasFiles ? 'text-gray-500 dark:text-gray-400' : 'text-gray-400 dark:text-gray-400',
+      'peer-focus:text-blue-500',
     )
   }, [hasFiles, isDragging])
 
@@ -190,8 +172,8 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           {hasFiles && (
             <div
               className={twMerge(
-                "flex flex-wrap gap-2 mt-1 pr-8",
-                isDragging && "pointer-events-none"
+                'mt-1 flex flex-wrap gap-2 pr-8',
+                isDragging && 'pointer-events-none',
               )}
             >
               {acceptedFiles.map((file) => (
@@ -205,18 +187,14 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           )}
 
           {isDragging && (
-            <div className="absolute inset-0 z-20 flex flex-row items-center justify-center rounded-md bg-gray-900/60 backdrop-blur-sm pointer-events-none">
+            <div className="pointer-events-none absolute inset-0 z-20 flex flex-row items-center justify-center rounded-md bg-gray-900/60 backdrop-blur-sm">
               {isDragReject ? (
                 <>
-                  <CircleMinus size={22} className="text-red-400 mr-2" />
-                  <span className="font-semibold text-red-300">
-                    Непідтримуваний тип файлу
-                  </span>
+                  <CircleMinus size={22} className="mr-2 text-red-400" />
+                  <span className="font-semibold text-red-300">Непідтримуваний тип файлу</span>
                 </>
               ) : (
-                <span className="font-semibold text-white">
-                  Відпустіть для завантаження...
-                </span>
+                <span className="font-semibold text-white">Відпустіть для завантаження...</span>
               )}
             </div>
           )}
@@ -224,13 +202,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
         <label className={labelClassName}>{label}</label>
 
-        <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2">
+        <div className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
           <UploadCloud
             size={20}
             className={`${
               hasFiles
-                ? "text-gray-500 dark:text-gray-400"
-                : "text-gray-500/50 dark:text-gray-400/50"
+                ? 'text-gray-500 dark:text-gray-400'
+                : 'text-gray-500/50 dark:text-gray-400/50'
             }`}
           />
         </div>

@@ -1,10 +1,10 @@
-import type { PageParams } from '@/types/pagination'
 import { mockPositions } from '@/entities/admin/positions/mocks/mock'
 import type {
   PositionDetailResponse,
   PositionListResponse,
   PositionLookupResponse,
 } from '@/entities/admin/positions/types/response.dto'
+import type { PageParams } from '@/types/pagination'
 
 const mockData = mockPositions
 

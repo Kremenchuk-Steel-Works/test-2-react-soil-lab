@@ -1,5 +1,5 @@
-import type { ReactNode } from "react"
-import type { ColumnDef } from "@tanstack/react-table"
+import type { ReactNode } from 'react'
+import type { ColumnDef } from '@tanstack/react-table'
 
 interface DisplayColumnOptions<TValue> {
   placeholder?: ReactNode
@@ -14,16 +14,16 @@ interface DisplayColumnOptions<TValue> {
  * @param options - Опции для кастомизации.
  */
 export function displayColumn<TData, TValue>(
-  options?: DisplayColumnOptions<TValue>
-): Pick<ColumnDef<TData, TValue>, "cell"> {
-  const { placeholder = "—", formatter } = options ?? {}
+  options?: DisplayColumnOptions<TValue>,
+): Pick<ColumnDef<TData, TValue>, 'cell'> {
+  const { placeholder = '—', formatter } = options ?? {}
 
   return {
     cell: ({ getValue }) => {
       const value = getValue()
 
       // Проверяем на самые частые случаи "отсутствия" значения
-      if (value === null || value === undefined || value === "") {
+      if (value === null || value === undefined || value === '') {
         return placeholder
       }
 

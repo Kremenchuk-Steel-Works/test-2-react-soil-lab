@@ -1,4 +1,4 @@
-import type { ColumnDef } from "@tanstack/react-table"
+import type { ColumnDef } from '@tanstack/react-table'
 
 export type Option<TValue> = {
   value: TValue
@@ -14,10 +14,10 @@ export type Option<TValue> = {
  */
 export function optionColumn<TData, TValue>(
   options: ReadonlyArray<Option<TValue>>,
-  defaultValue: string = "-"
-): Pick<ColumnDef<TData, TValue>, "cell" | "filterFn"> {
+  defaultValue: string = '-',
+): Pick<ColumnDef<TData, TValue>, 'cell' | 'filterFn'> {
   const valueToLabelMap = new Map<TValue, string>(
-    options.map((option) => [option.value, option.label])
+    options.map((option) => [option.value, option.label]),
   )
 
   return {

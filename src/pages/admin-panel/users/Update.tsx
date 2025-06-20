@@ -1,18 +1,13 @@
-import Button from '@/shared/ui/button/Button'
-import { useNavigate, useParams } from "react-router-dom"
-import { ArrowLeft } from "lucide-react"
-import { useQuery } from "@tanstack/react-query"
-import {
-  userUpdateSchema,
-  type UserUpdateFormFields,
-} from '@/entities/admin/users/forms/schema'
-import type { UserDetailResponse } from '@/entities/admin/users/types/response.dto'
-import { userService } from '@/entities/admin/users/services/service'
+import { useQuery } from '@tanstack/react-query'
+import { ArrowLeft } from 'lucide-react'
+import { useNavigate, useParams } from 'react-router-dom'
 import UsersForm from '@/entities/admin/users/forms/form'
-import AlertMessage, {
-  AlertType,
-} from '@/shared/ui/alert-message/AlertMessage'
+import { userUpdateSchema, type UserUpdateFormFields } from '@/entities/admin/users/forms/schema'
 import { userQueryKeys } from '@/entities/admin/users/services/keys'
+import { userService } from '@/entities/admin/users/services/service'
+import type { UserDetailResponse } from '@/entities/admin/users/types/response.dto'
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
+import Button from '@/shared/ui/button/Button'
 
 export default function AdminUsersUpdate() {
   const navigate = useNavigate()
@@ -31,14 +26,12 @@ export default function AdminUsersUpdate() {
 
   const handleSubmit = async (data: UserUpdateFormFields) => {
     await userService.update(id!, data)
-    navigate("..")
+    navigate('..')
     return data
   }
 
   // Адаптируем данные под форму
-  function mapToFormDefaults(
-    obj: UserDetailResponse
-  ): Partial<UserUpdateFormFields> {
+  function mapToFormDefaults(obj: UserDetailResponse): Partial<UserUpdateFormFields> {
     return {
       ...obj,
       rolesIds: obj.roles?.map((rol) => rol.id) || [],
@@ -48,18 +41,16 @@ export default function AdminUsersUpdate() {
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <Button
           className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate("..")}
+          onClick={() => navigate('..')}
         >
-          <ArrowLeft className="w-5 h-5" /> <span>Назад</span>
+          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
         </Button>
       </div>
 
-      {isError && (
-        <AlertMessage type={AlertType.ERROR} message={queryError?.message} />
-      )}
+      {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
 
       {!isLoading && !isError && data && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">

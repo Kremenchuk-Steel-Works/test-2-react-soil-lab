@@ -1,12 +1,12 @@
-import { api } from '@/shared/api/client'
-import { handleAxiosError } from '@/shared/lib/axios'
-import type { PageParams } from '@/types/pagination'
 import type { RoleCreateRequest, RoleUpdateRequest } from '@/entities/admin/roles/types/request.dto'
 import type {
   RoleDetailResponse,
   RoleListResponse,
   RoleLookupResponse,
 } from '@/entities/admin/roles/types/response.dto'
+import { api } from '@/shared/api/client'
+import { handleAxiosError } from '@/shared/lib/axios'
+import type { PageParams } from '@/types/pagination'
 
 export const roleService = {
   // Request
@@ -19,10 +19,7 @@ export const roleService = {
     }
   },
 
-  async update(
-    id: string,
-    params: RoleUpdateRequest
-  ): Promise<RoleDetailResponse> {
+  async update(id: string, params: RoleUpdateRequest): Promise<RoleDetailResponse> {
     try {
       const response = await api.put(`/roles/${id}`, params)
       return response.data

@@ -4,18 +4,12 @@ import {
   type FieldErrors,
   type Path,
   type UseFormRegister,
-} from "react-hook-form"
-import {
-  InputFieldWithError,
-  CheckboxWithError,
-} from '@/shared/ui/with-error/fieldsWithError'
-import { contactOptions } from '@/entities/admin/contact/types/contact'
+} from 'react-hook-form'
 import type { ContactFormFields } from '@/entities/admin/contact/forms/schema'
-import {
-  formTransformers,
-  getNestedErrorMessage,
-} from '@/shared/lib/react-hook-form'
+import { contactOptions } from '@/entities/admin/contact/types/contact'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import { CheckboxWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 export type FormFields = {
   contacts: ContactFormFields[]
@@ -40,14 +34,8 @@ export function ContactForm<T extends FormFields>({
 
       <CheckboxWithError
         label="Основний"
-        {...register(
-          `contacts.${index}.isPrimary` as Path<T>,
-          formTransformers.string
-        )}
-        errorMessage={getNestedErrorMessage(
-          errors,
-          `contacts.${index}.isPrimary` as Path<T>
-        )}
+        {...register(`contacts.${index}.isPrimary` as Path<T>, formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, `contacts.${index}.isPrimary` as Path<T>)}
       />
 
       <Controller
@@ -61,36 +49,21 @@ export function ContactForm<T extends FormFields>({
             isVirtualized
             isClearable
             placeholder="Оберіть тип"
-            errorMessage={getNestedErrorMessage(
-              errors,
-              `contacts.${index}.type` as Path<T>
-            )}
+            errorMessage={getNestedErrorMessage(errors, `contacts.${index}.type` as Path<T>)}
           />
         )}
       />
 
       <InputFieldWithError
         label="Значення"
-        {...register(
-          `contacts.${index}.value` as Path<T>,
-          formTransformers.string
-        )}
-        errorMessage={getNestedErrorMessage(
-          errors,
-          `contacts.${index}.value` as Path<T>
-        )}
+        {...register(`contacts.${index}.value` as Path<T>, formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, `contacts.${index}.value` as Path<T>)}
       />
 
       <InputFieldWithError
         label="Примітка"
-        {...register(
-          `contacts.${index}.note` as Path<T>,
-          formTransformers.string
-        )}
-        errorMessage={getNestedErrorMessage(
-          errors,
-          `contacts.${index}.note` as Path<T>
-        )}
+        {...register(`contacts.${index}.note` as Path<T>, formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, `contacts.${index}.note` as Path<T>)}
       />
     </div>
   )

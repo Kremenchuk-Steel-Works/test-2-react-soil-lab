@@ -1,6 +1,6 @@
-import { z } from "zod"
-import { contactSchema } from '@/entities/admin/contact/forms/schema'
+import { z } from 'zod'
 import { addressSchema } from '@/entities/admin/address/forms/schema'
+import { contactSchema } from '@/entities/admin/contact/forms/schema'
 
 export const organizationsSchema = z.object({
   legalName: z.string().nonempty(),

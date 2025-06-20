@@ -1,8 +1,8 @@
 import type { LoginRequest } from '@/entities/auth/types/login/request.dto'
-import type { TokenRefreshRequest } from '@/entities/auth/types/token/request.dto'
-import { api } from '@/shared/api/client'
-import type { TokenRefreshResponse } from '@/entities/auth/types/token/response.dto'
 import type { LoginResponse } from '@/entities/auth/types/login/response.dto'
+import type { TokenRefreshRequest } from '@/entities/auth/types/token/request.dto'
+import type { TokenRefreshResponse } from '@/entities/auth/types/token/response.dto'
+import { api } from '@/shared/api/client'
 import { handleAxiosError } from '@/shared/lib/axios'
 
 export const authService = {
@@ -16,7 +16,7 @@ export const authService = {
     } catch (err) {
       handleAxiosError(err, (error) => {
         if (error.response?.status === 401) {
-          return Error("Невірний email або пароль")
+          return Error('Невірний email або пароль')
         }
         return false // Продолжить стандартную обработку
       })
@@ -28,7 +28,7 @@ export const authService = {
       const response = await api.post<TokenRefreshResponse>(
         `/auth/refresh`,
         { refreshToken: refreshToken },
-        { addAccessToken: false }
+        { addAccessToken: false },
       )
       return response.data
     } catch (err) {

@@ -2,5 +2,4 @@ import type { EmployeeProfileBase } from '@/entities/admin/employeeProfile/types
 
 export interface EmployeeProfileCreateRequest extends EmployeeProfileBase {}
 
-export interface EmployeeProfileUpdateRequest
-  extends Partial<EmployeeProfileBase> {}
+export interface EmployeeProfileUpdateRequest extends Partial<EmployeeProfileBase> {}

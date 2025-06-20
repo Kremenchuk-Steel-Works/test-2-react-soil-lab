@@ -1,59 +1,45 @@
-import { lazy } from "react"
-import {
-  Database,
-  CirclePlus,
-  Info,
-  RefreshCcw,
-  BriefcaseBusiness,
-} from "lucide-react"
+import { lazy } from 'react'
+import { BriefcaseBusiness, CirclePlus, Database, Info, RefreshCcw } from 'lucide-react'
 import type { AppRoute } from '@/app/routes/paths'
 import AdminPositionsLayout from '@/pages/admin-panel/positions/Layout'
 
-const AdminPositionsList = lazy(
-  () => import("../../../pages/admin-panel/positions/list/List")
-)
-const AdminPositionsAdd = lazy(
-  () => import("../../../pages/admin-panel/positions/Add")
-)
-const AdminPositionsDetails = lazy(
-  () => import("../../../pages/admin-panel/positions/Details")
-)
-const AdminPositionsUpdate = lazy(
-  () => import("../../../pages/admin-panel/positions/Update")
-)
+const AdminPositionsList = lazy(() => import('../../../pages/admin-panel/positions/list/List'))
+const AdminPositionsAdd = lazy(() => import('../../../pages/admin-panel/positions/Add'))
+const AdminPositionsDetails = lazy(() => import('../../../pages/admin-panel/positions/Details'))
+const AdminPositionsUpdate = lazy(() => import('../../../pages/admin-panel/positions/Update'))
 
 export const positonsRoutes: AppRoute = {
-  key: "adminPositions",
-  path: "positions",
-  label: "Посади",
+  key: 'adminPositions',
+  path: 'positions',
+  label: 'Посади',
   icon: BriefcaseBusiness,
   Component: AdminPositionsLayout,
   children: [
     {
-      key: "adminPositionsList",
-      path: "",
-      label: "Список",
+      key: 'adminPositionsList',
+      path: '',
+      label: 'Список',
       icon: Database,
       Component: AdminPositionsList,
     },
     {
-      key: "adminPositionsAdd",
-      path: "add",
-      label: "Додати",
+      key: 'adminPositionsAdd',
+      path: 'add',
+      label: 'Додати',
       icon: CirclePlus,
       Component: AdminPositionsAdd,
     },
     {
-      key: "adminPositionsDetail",
-      path: ":id",
-      label: "Деталі",
+      key: 'adminPositionsDetail',
+      path: ':id',
+      label: 'Деталі',
       icon: Info,
       Component: AdminPositionsDetails,
     },
     {
-      key: "adminPositionsUpdate",
-      path: ":id/update",
-      label: "Оновити",
+      key: 'adminPositionsUpdate',
+      path: ':id/update',
+      label: 'Оновити',
       icon: RefreshCcw,
       Component: AdminPositionsUpdate,
     },

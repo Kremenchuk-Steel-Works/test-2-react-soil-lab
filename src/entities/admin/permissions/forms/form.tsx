@@ -1,24 +1,19 @@
-import { Controller, useForm, type SubmitHandler } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import {
-  InputFieldWithError,
-  ButtonWithError,
-} from '@/shared/ui/with-error/fieldsWithError'
-import { permissionsSchema, type PermissionsFormFields } from '@/entities/admin/permissions/forms/schema'
-import { logger } from '@/shared/lib/logger'
-import {
-  formTransformers,
-  getNestedErrorMessage,
-} from '@/shared/lib/react-hook-form'
-import type { Option } from '@/shared/ui/select/ReactSelect'
-import AlertMessage, {
-  AlertType,
-} from '@/shared/ui/alert-message/AlertMessage'
-import { useQuery } from "@tanstack/react-query"
-import type { DepartmentLookupResponse } from '@/entities/admin/departments/types/response.dto'
-import { departmentService } from '@/entities/admin/departments/services/service'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
+import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { departmentQueryKeys } from '@/entities/admin/departments/services/keys'
+import { departmentService } from '@/entities/admin/departments/services/service'
+import type { DepartmentLookupResponse } from '@/entities/admin/departments/types/response.dto'
+import {
+  permissionsSchema,
+  type PermissionsFormFields,
+} from '@/entities/admin/permissions/forms/schema'
+import { logger } from '@/shared/lib/logger'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import type { Option } from '@/shared/ui/select/ReactSelect'
+import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormFields = PermissionsFormFields
 const schema = permissionsSchema
@@ -29,11 +24,7 @@ interface FormProps {
   submitBtnName: string
 }
 
-export default function PermissionsForm({
-  defaultValues,
-  onSubmit,
-  submitBtnName,
-}: FormProps) {
+export default function PermissionsForm({ defaultValues, onSubmit, submitBtnName }: FormProps) {
   const {
     control,
     register,
@@ -48,10 +39,10 @@ export default function PermissionsForm({
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
       const response = await onSubmit(data)
-      logger.debug("Форма успешно выполнена", response)
+      logger.debug('Форма успешно выполнена', response)
     } catch (err) {
       const error = err as Error
-      setError("root", { message: error.message })
+      setError('root', { message: error.message })
       logger.error(err)
     }
   }
@@ -81,14 +72,14 @@ export default function PermissionsForm({
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Назва"
-        {...register("name", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "name")}
+        {...register('name', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'name')}
       />
 
       <InputFieldWithError
         label="Опис"
-        {...register("description", formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, "description")}
+        {...register('description', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'description')}
       />
 
       <Controller
@@ -102,7 +93,7 @@ export default function PermissionsForm({
             isVirtualized
             isClearable
             placeholder="Оберіть відділ"
-            errorMessage={getNestedErrorMessage(errors, "departmentId")}
+            errorMessage={getNestedErrorMessage(errors, 'departmentId')}
           />
         )}
       />
