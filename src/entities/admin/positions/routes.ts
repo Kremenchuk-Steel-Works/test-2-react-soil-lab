@@ -8,7 +8,7 @@ const AdminPositionsAdd = lazy(() => import('../../../pages/admin-panel/position
 const AdminPositionsDetails = lazy(() => import('../../../pages/admin-panel/positions/Details'))
 const AdminPositionsUpdate = lazy(() => import('../../../pages/admin-panel/positions/Update'))
 
-export const positonsRoutes: AppRoute = {
+export const positionsRoutes: AppRoute = {
   key: 'adminPositions',
   path: 'positions',
   label: 'Посади',

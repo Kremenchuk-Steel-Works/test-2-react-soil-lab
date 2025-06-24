@@ -5,9 +5,10 @@ import { departmentsRoutes } from '@/entities/admin/departments/routes'
 import { organizationsRoutes } from '@/entities/admin/organizations/routes'
 import { peopleRoutes } from '@/entities/admin/people/routes'
 import { permissionsRoutes } from '@/entities/admin/permissions/routes'
-import { positonsRoutes } from '@/entities/admin/positions/routes'
+import { positionsRoutes } from '@/entities/admin/positions/routes'
 import { rolesRoutes } from '@/entities/admin/roles/routes'
 import { usersRoutes } from '@/entities/admin/users/routes'
+import { libraryRoutes } from '@/entities/library/routes'
 import AdminPanelLayout from '@/pages/admin-panel/Layout'
 import AdminPanelMain from '@/pages/admin-panel/Main'
 import StreamlitCalculator from '@/pages/StreamlitCalculator'
@@ -52,7 +53,7 @@ export const APP_ROUTES: AppRoute[] = [
       peopleRoutes,
       usersRoutes,
       organizationsRoutes,
-      positonsRoutes,
+      positionsRoutes,
       departmentsRoutes,
       rolesRoutes,
       permissionsRoutes,
@@ -60,6 +61,7 @@ export const APP_ROUTES: AppRoute[] = [
       cityRoutes,
     ],
   },
+  libraryRoutes,
   {
     key: 'streamlitDashboard',
     path: '/streamlit-dashboard',

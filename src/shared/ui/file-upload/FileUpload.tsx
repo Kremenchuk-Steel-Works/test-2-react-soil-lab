@@ -66,9 +66,9 @@ const FileChip: React.FC<{ file: File; onRemove: () => void }> = ({ file, onRemo
   }
 
   return (
-    <div className="pointer-events-auto flex items-center gap-2 overflow-hidden rounded-full bg-gray-200 py-0.5 pr-1 pl-2 text-sm text-gray-800 dark:bg-gray-600 dark:text-gray-100">
+    <div className="pointer-events-auto flex max-w-full min-w-0 items-center gap-2 overflow-hidden rounded-full bg-gray-200 py-0.5 pr-1 pl-2 text-sm text-gray-800 dark:bg-gray-600 dark:text-gray-100">
       {getIcon()}
-      <span className="min-w-0 flex-shrink truncate">{file.name}</span>
+      <span className="min-w-0 flex-1 truncate">{file.name}</span>
       <button
         type="button"
         aria-label={`Remove ${file.name}`}
@@ -172,7 +172,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           {hasFiles && (
             <div
               className={twMerge(
-                'mt-1 flex flex-wrap gap-2 pr-8',
+                'mt-1 flex w-full flex-wrap gap-2 pr-8',
                 isDragging && 'pointer-events-none',
               )}
             >

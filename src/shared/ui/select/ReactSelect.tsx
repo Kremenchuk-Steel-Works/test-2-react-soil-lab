@@ -8,6 +8,7 @@ import Select, {
   type Props as SelectProps,
   type StylesConfig,
 } from 'react-select'
+import CreatableSelect from 'react-select/creatable'
 import { twMerge } from 'tailwind-merge'
 import AnimatedMenu from '@/shared/ui/select/AnimatedMenu'
 
@@ -40,6 +41,7 @@ interface ReactSelectProps<
 > extends SelectProps<OptionType, IsMulti, Group> {
   customClassNames?: ClassNamesConfig
   customStyles?: StylesConfig<OptionType, IsMulti, Group>
+  isCreatable?: boolean
 }
 
 function ReactSelect<
@@ -49,12 +51,15 @@ function ReactSelect<
 >({
   customClassNames = {},
   customStyles = {},
+  isCreatable = false,
   ...props
 }: ReactSelectProps<OptionType, IsMulti, Group>): JSX.Element {
+  const SelectComponent = isCreatable ? CreatableSelect : Select
   return (
-    <Select<OptionType, IsMulti, Group>
+    <SelectComponent<OptionType, IsMulti, Group>
       {...props}
       noOptionsMessage={() => 'Нічого не знайдено'}
+      formatCreateLabel={(inputValue) => `Додати: "${inputValue}"`}
       unstyled
       styles={{
         ...customStyles,

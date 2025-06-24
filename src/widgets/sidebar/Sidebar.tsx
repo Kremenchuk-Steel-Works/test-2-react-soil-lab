@@ -36,24 +36,31 @@ const Sidebar: React.FC = () => {
           <nav onClick={(e) => e.stopPropagation()}>
             {visibleRoutes
               .filter((route) => route.inSidebar !== false)
-              .map((route) =>
-                !route.children ? (
-                  <MenuItem key={route.key} label={route.label} Icon={route.icon} to={route.path} />
-                ) : (
-                  <SubMenu key={route.key} id={route.key} label={route.label} Icon={route.icon}>
-                    {route.children
-                      .filter((child) => child.inSidebar !== false)
-                      .map((child) => (
+              .map((route) => {
+                // Находим дочерние элементы, которые должны быть видимы в сайдбаре
+                const visibleChildren = route.children?.filter((child) => child.inSidebar !== false)
+
+                // Если видимые дочерние элементы есть, то рендерим SubMenu
+                if (visibleChildren && visibleChildren.length > 0) {
+                  return (
+                    <SubMenu key={route.key} id={route.key} label={route.label} Icon={route.icon}>
+                      {visibleChildren.map((child) => (
                         <MenuItem
                           key={child.key}
                           label={child.label}
                           Icon={child.icon}
                           to={getFullPath(route.path, child.path)}
-                        ></MenuItem>
+                        />
                       ))}
-                  </SubMenu>
-                ),
-              )}
+                    </SubMenu>
+                  )
+                }
+
+                // В противном случае (если children нет или все они скрыты) рендерим простой MenuItem
+                return (
+                  <MenuItem key={route.key} label={route.label} Icon={route.icon} to={route.path} />
+                )
+              })}
           </nav>
         </div>
       </aside>

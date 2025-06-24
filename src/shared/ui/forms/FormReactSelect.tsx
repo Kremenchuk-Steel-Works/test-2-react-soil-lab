@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
-import type { OnChangeValue, Props as SelectProps } from 'react-select'
+import type { GroupBase, OnChangeValue, Props as SelectProps } from 'react-select'
+import type { CreatableProps } from 'react-select/creatable'
 import {
   ReactSelectMultiWithError,
   ReactSelectWithError,
@@ -20,64 +21,79 @@ type BaseSelectProps<TValue, IsMulti extends boolean> = Omit<
 type FormSelectFieldProps<TValue, IsMulti extends boolean> = BaseSelectProps<TValue, IsMulti> & {
   field: ControllerRenderProps<any, any>
   fieldState: ControllerFieldState
-  options: Option<TValue>[] // Это всегда будет полный список
+  options: Option<TValue>[]
   errorMessage?: string
   isMulti?: IsMulti
-  isVirtualized?: boolean // <-- Управляющий проп
+  isVirtualized?: boolean
+  isCreatable?: boolean
+  formatCreateLabel?: CreatableProps<
+    Option<TValue>,
+    IsMulti,
+    GroupBase<Option<TValue>>
+  >['formatCreateLabel']
 }
 
 // ЕДИНЫЙ КОМПОНЕНТ
 const FormSelectField = <TValue, IsMulti extends boolean>({
   field,
   fieldState,
-  options, // <-- Получаем полный список опций
+  options,
   isMulti,
   errorMessage,
   isVirtualized,
+  isCreatable,
   ...rest
 }: FormSelectFieldProps<TValue, IsMulti>) => {
-  // Выбираем, какой компонент рендерить
   const Component = useMemo(() => {
     if (isVirtualized) {
-      // Здесь должен быть ваш SelectVirtualizedWithError, который оборачивает исправленный SelectVirtualized
       return SelectVirtualizedWithError
     }
     return isMulti ? ReactSelectMultiWithError : ReactSelectWithError
   }, [isVirtualized, isMulti]) as React.ElementType
 
-  // Эта логика теперь общая и безопасная для обоих случаев
+  // --- ГЛАВНОЕ ИСПРАВЛЕНИЕ ЗДЕСЬ ---
   const selectedValue = useMemo(() => {
+    const fieldValue = field.value
+
     if (isMulti) {
-      const fieldValue = Array.isArray(field.value) ? field.value : []
-      return options.filter((opt) => fieldValue.includes(opt.value))
+      const fieldValuesArray = Array.isArray(fieldValue) ? fieldValue : []
+
+      // Если это Creatable Select, то label и value - это одно и то же.
+      if (isCreatable) {
+        return fieldValuesArray.map((val) => ({ label: String(val), value: val as TValue }))
+      }
+
+      // Для ОБЫЧНОГО Multi-Select, мы должны найти полные объекты в `options`, чтобы получить правильные `label`.
+      return options.filter((opt) => fieldValuesArray.includes(opt.value))
     }
-    return options.find((opt) => opt.value === field.value) || null
-  }, [field.value, options, isMulti])
+
+    // Логика для одиночного Select остается прежней, она работает корректно.
+    return options.find((opt) => opt.value === fieldValue) || null
+  }, [field.value, options, isMulti, isCreatable]) // <-- Добавлен isCreatable в зависимости
 
   const handleChange = (selected: OnChangeValue<Option<TValue>, IsMulti>) => {
     if (isMulti) {
       const values = (selected as Option<TValue>[]).map((opt) => opt.value)
-      field.onChange(values)
+      const uniqueValues = [...new Set(values)]
+      field.onChange(uniqueValues)
     } else {
       const value = (selected as Option<TValue> | null)?.value ?? null
       field.onChange(value)
     }
   }
 
-  // Определяем, как передавать опции
-  const optionsProps = isVirtualized
-    ? { allOptions: options } // для виртуализированного
-    : { options: options } // для обычного
+  const optionsProps = isVirtualized ? { allOptions: options } : { options: options }
 
   return (
     <Component
       {...rest}
-      {...optionsProps} // <-- Передаем правильные пропсы
+      {...optionsProps}
       ref={field.ref}
       onBlur={field.onBlur}
       name={field.name}
       isMulti={isMulti}
-      value={selectedValue} // <-- `selectedValue` теперь будет корректно отображаться
+      isCreatable={isCreatable}
+      value={selectedValue}
       onChange={handleChange}
       errorMessage={errorMessage || fieldState.error?.message}
     />
