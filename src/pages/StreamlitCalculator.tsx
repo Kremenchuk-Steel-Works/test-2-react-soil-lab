@@ -9,7 +9,6 @@ export default function StreamlitCalculator() {
   return (
     <Layout>
       <div className="space-y-2">
-        <h4 className="layout-text">Calculator</h4>
         <Button
           className="flex items-center justify-center gap-1 whitespace-nowrap"
           onClick={() => navigate(PATHS.MAIN)}

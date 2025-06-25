@@ -82,7 +82,7 @@ export const APP_ROUTES: AppRoute[] = [
   {
     key: 'streamlitCalculator',
     path: '/streamlit-calculator',
-    label: 'Calculator',
+    label: 'Калькулятор енергоспоживання',
     icon: Calculator,
     Component: StreamlitCalculator,
     requiredPermissions: ['calculator_view'],
