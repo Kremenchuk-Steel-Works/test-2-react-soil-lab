@@ -18,8 +18,8 @@ export interface PersonCreateRequest extends PersonBase {
   contacts?: ContactCreateRequest[]
   addresses?: AddressCreateRequest[]
 
-  organizationIds: string[]
-  positionIds: string[]
+  organizationIds?: string[]
+  positionIds?: string[]
 }
 
 export interface PersonUpdateRequest extends Partial<PersonBase> {
