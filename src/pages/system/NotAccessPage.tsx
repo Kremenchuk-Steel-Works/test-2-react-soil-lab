@@ -1,6 +1,6 @@
 import { ArrowLeft, House, Lock } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { PATHS } from '@/app/routes/AppRoutes'
+import { PATHS } from '@/app/routes/paths'
 import Button from '@/shared/ui/button/Button'
 
 export default function NotAccessPage() {

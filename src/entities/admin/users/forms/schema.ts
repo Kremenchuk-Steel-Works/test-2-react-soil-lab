@@ -6,8 +6,8 @@ export const userSchema = z.object({
   rawPassword: z.string().nonempty(),
   isActive: z.boolean(),
   isSuperuser: z.boolean(),
-  rolesIds: z.array(number()),
-  permissionsIds: z.array(number()),
+  rolesIds: z.array(number()).optional(),
+  permissionsIds: z.array(number()).optional(),
 })
 
 export const userUpdateSchema = userSchema.omit({

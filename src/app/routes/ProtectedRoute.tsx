@@ -1,18 +1,18 @@
 import type { PropsWithChildren } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '@/app/providers/auth/model'
-import { PATHS } from '@/app/routes/AppRoutes'
 import LoadingPage from '@/pages/system/LoadingPage'
 import NotAccessPage from '@/pages/system/NotAccessPage'
-import { useUserPermissionsTo } from '@/shared/hooks/usePermissions'
+import { useHasAccessToCurrentRoute } from '@/shared/hooks/usePermissions'
+import { PATHS } from './paths'
 
 type ProtectedRouteProps = PropsWithChildren & {
   allowedPermissions?: string[]
 }
 
-export default function ProtectedRoute({ allowedPermissions, children }: ProtectedRouteProps) {
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { currentUser } = useAuth()
-  const hasAccessTo = useUserPermissionsTo()
+  const hasAccess = useHasAccessToCurrentRoute()
 
   if (currentUser === undefined) {
     return <LoadingPage />
@@ -22,7 +22,7 @@ export default function ProtectedRoute({ allowedPermissions, children }: Protect
     return <Navigate to={PATHS.LOGIN} replace />
   }
 
-  if (allowedPermissions && !hasAccessTo(location.pathname)) {
+  if (!hasAccess) {
     return <NotAccessPage />
   }
 

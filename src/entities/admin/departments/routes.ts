@@ -1,6 +1,6 @@
 import { lazy } from 'react'
 import { CirclePlus, Database, Info, Layers, RefreshCcw } from 'lucide-react'
-import type { AppRoute } from '@/app/routes/paths'
+import type { AppRoute } from '@/app/routes/routes'
 import AdminDepartmentsLayout from '@/pages/admin-panel/departments/Layout'
 
 const AdminDepartmentsList = lazy(() => import('../../../pages/admin-panel/departments/list/List'))

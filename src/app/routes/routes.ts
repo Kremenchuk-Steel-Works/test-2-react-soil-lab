@@ -1,0 +1,90 @@
+import { Calculator, Database, House, Shield, Users, type LucideIcon } from 'lucide-react'
+import { cityRoutes } from '@/entities/admin/city/routes'
+import { countryRoutes } from '@/entities/admin/country/routes'
+import { departmentsRoutes } from '@/entities/admin/departments/routes'
+import { organizationsRoutes } from '@/entities/admin/organizations/routes'
+import { peopleRoutes } from '@/entities/admin/people/routes'
+import { permissionsRoutes } from '@/entities/admin/permissions/routes'
+import { positionsRoutes } from '@/entities/admin/positions/routes'
+import { rolesRoutes } from '@/entities/admin/roles/routes'
+import { usersRoutes } from '@/entities/admin/users/routes'
+import { libraryRoutes } from '@/entities/library/routes'
+import AdminPanelLayout from '@/pages/admin-panel/Layout'
+import AdminPanelMain from '@/pages/admin-panel/Main'
+import MainPage from '@/pages/MainPage'
+import StreamlitCalculator from '@/pages/StreamlitCalculator'
+import StreamlitDashboard from '@/pages/StreamlitDashboard'
+import { PATHS } from './paths'
+
+export type Permission =
+  | 'admin'
+  | 'quality_dash_view'
+  | 'calculator_view'
+  | 'library_view'
+  | 'library_edit'
+
+export interface AppRoute {
+  key: string
+  path: string
+  label: string
+  icon: LucideIcon
+  Component: React.LazyExoticComponent<React.ComponentType<any>> | React.ComponentType<any>
+  requiredPermissions?: Permission[]
+  inSidebar?: boolean
+  children?: AppRoute[]
+}
+
+export const APP_ROUTES: AppRoute[] = [
+  {
+    key: 'main',
+    path: PATHS.MAIN,
+    label: 'Головна сторінка',
+    icon: House,
+    Component: MainPage,
+    inSidebar: false,
+  },
+  {
+    key: 'admin',
+    path: '/admin',
+    label: 'Адмін панель',
+    icon: Shield,
+    Component: AdminPanelLayout,
+    requiredPermissions: ['admin'],
+    children: [
+      {
+        key: 'adminPanel',
+        path: '',
+        label: '',
+        icon: Users,
+        Component: AdminPanelMain,
+        inSidebar: false,
+      },
+      peopleRoutes,
+      usersRoutes,
+      organizationsRoutes,
+      positionsRoutes,
+      departmentsRoutes,
+      rolesRoutes,
+      permissionsRoutes,
+      countryRoutes,
+      cityRoutes,
+    ],
+  },
+  libraryRoutes,
+  {
+    key: 'streamlitDashboard',
+    path: '/streamlit-dashboard',
+    label: 'Quality Dash',
+    icon: Database,
+    Component: StreamlitDashboard,
+    requiredPermissions: ['quality_dash_view'],
+  },
+  {
+    key: 'streamlitCalculator',
+    path: '/streamlit-calculator',
+    label: 'Calculator',
+    icon: Calculator,
+    Component: StreamlitCalculator,
+    requiredPermissions: ['calculator_view'],
+  },
+]

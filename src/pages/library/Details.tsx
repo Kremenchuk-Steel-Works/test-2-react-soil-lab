@@ -1,15 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft, Clock, FileText, Hash, Pen, Pencil, Tag } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useResolvedPath } from 'react-router-dom'
 import { libraryQueryKeys } from '@/entities/library/services/keys'
 import { libraryService } from '@/entities/library/services/service.mock'
 import type { LibraryDetailResponse } from '@/entities/library/types/response.dto'
+import { useCanAccessPath } from '@/shared/hooks/usePermissions'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 
 export default function LibraryDetails() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
+
+  const canEdit = useCanAccessPath(useResolvedPath('edit').pathname)
 
   const {
     data,
@@ -123,14 +126,16 @@ export default function LibraryDetails() {
               </div>
             </dl>
 
-            <div className="flex items-center justify-between py-2">
-              <Button
-                className="flex items-center justify-center gap-1 bg-orange-500 whitespace-nowrap hover:bg-orange-600"
-                onClick={() => navigate('update')}
-              >
-                <Pen className="h-5 w-5" /> <span>Редагувати</span>
-              </Button>
-            </div>
+            {canEdit && (
+              <div className="flex items-center justify-between py-2">
+                <Button
+                  className="flex items-center justify-center gap-1 bg-orange-500 whitespace-nowrap hover:bg-orange-600"
+                  onClick={() => navigate('update')}
+                >
+                  <Pen className="h-5 w-5" /> <span>Редагувати</span>
+                </Button>
+              </div>
+            )}
           </div>
         )}
       </div>

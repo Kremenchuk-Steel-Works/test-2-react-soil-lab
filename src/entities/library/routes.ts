@@ -1,6 +1,6 @@
 import { lazy } from 'react'
 import { Book, CirclePlus, Database, Info, RefreshCcw } from 'lucide-react'
-import type { AppRoute } from '@/app/routes/paths'
+import type { AppRoute } from '@/app/routes/routes'
 import LibraryLayout from '@/pages/library/Layout'
 
 const LibraryList = lazy(() => import('@/pages/library/list/List'))
@@ -14,6 +14,7 @@ export const libraryRoutes: AppRoute = {
   label: 'Бібліотека',
   icon: Book,
   Component: LibraryLayout,
+  requiredPermissions: ['library_view'],
   children: [
     {
       key: 'libraryList',
@@ -30,6 +31,7 @@ export const libraryRoutes: AppRoute = {
       icon: CirclePlus,
       Component: LibraryAdd,
       inSidebar: false,
+      requiredPermissions: ['library_edit'],
     },
     {
       key: 'libraryDetail',
@@ -46,6 +48,7 @@ export const libraryRoutes: AppRoute = {
       icon: RefreshCcw,
       Component: LibraryUpdate,
       inSidebar: false,
+      requiredPermissions: ['library_edit'],
     },
   ],
 }

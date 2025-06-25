@@ -1,6 +1,9 @@
-import { match } from 'path-to-regexp'
+import { useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useAuth } from '@/app/providers/auth/model'
-import { APP_ROUTES, type AppRoute } from '@/app/routes/paths'
+import { APP_ROUTES, type AppRoute } from '@/app/routes/routes'
+import { findRouteObjectByPath } from '@/app/routes/utils'
+import type { UserResponse } from '@/entities/admin/users/types/response.dto'
 
 export function useUserPermissionNames(): string[] {
   const { currentUser } = useAuth()
@@ -11,37 +14,67 @@ export function useUserPermissionsSet(): Set<string> {
   return new Set(useUserPermissionNames())
 }
 
-// Есть ли доступ к определенному маршруту
-export function useUserPermissionsTo() {
-  const { currentUser } = useAuth()
-  const visibleRoutes = useVisibleRoutes()
-
-  const hasAccessToPath = (path: string): boolean => {
-    // isAdmin
-    if (currentUser?.isSuperuser) return true
-
-    const checkAccess = (routes: AppRoute[], basePath = ''): boolean => {
-      for (const route of routes) {
-        const fullPath = `${basePath}/${route.path}`.replace(/\/+/g, '/')
-        const matcher = match(fullPath, { decode: decodeURIComponent })
-
-        if (matcher(path)) {
-          return true
-        }
-
-        if (route.children && route.children.length > 0) {
-          if (checkAccess(route.children, fullPath)) {
-            return true
-          }
-        }
-      }
-      return false
-    }
-
-    return checkAccess(visibleRoutes)
+/**
+ * Чистая функция, проверяющая доступ к пути на основе данных пользователя и его прав.
+ * Не является хуком.
+ * @param path - Путь для проверки.
+ * @param user - Объект текущего пользователя.
+ * @param permissions - Set с правами пользователя.
+ * @returns {boolean} - true, если доступ разрешен.
+ */
+function checkAccessLogic(
+  path: string,
+  user: UserResponse | null | undefined,
+  permissions: Set<string>,
+): boolean {
+  // Суперпользователь имеет доступ ко всему
+  if (user?.isSuperuser) {
+    return true
   }
 
-  return hasAccessToPath
+  // Находим объект маршрута
+  const route = findRouteObjectByPath(path)
+
+  // Если маршрут не описан, доступа нет
+  if (!route) {
+    return false
+  }
+
+  //  Если права не требуются, доступ есть
+  const requiredPermissions = route.requiredPermissions
+  if (!requiredPermissions || requiredPermissions.length === 0) {
+    return true
+  }
+
+  // Проверяем наличие хотя бы одного из требуемых прав
+  return requiredPermissions.some((p) => permissions.has(p))
+}
+
+/**
+ * Хук для проверки, имеет ли пользователь доступ к произвольному пути.
+ * Получает данные из React-контекста и вызывает чистую логику проверки.
+ * @param path - Путь для проверки.
+ * @returns {boolean}
+ */
+export function useCanAccessPath(path: string): boolean {
+  const { currentUser } = useAuth()
+  const userPermissions = useUserPermissionsSet()
+
+  // Мемоизация остается, но теперь она оборачивает вызов единой функции
+  return useMemo(
+    () => checkAccessLogic(path, currentUser, userPermissions),
+    [path, currentUser, userPermissions],
+  )
+}
+
+/**
+ * Хук-обертка для проверки доступа к ТЕКУЩЕМУ маршруту.
+ * Просто использует useCanAccessPath для всей логики.
+ * @returns {boolean}
+ */
+export function useHasAccessToCurrentRoute(): boolean {
+  const { pathname } = useLocation()
+  return useCanAccessPath(pathname)
 }
 
 // Рекурсивно фильтрует массив маршрутов, оставляя только те, у которых нет requiredPermissions или у пользователя есть все нужные права

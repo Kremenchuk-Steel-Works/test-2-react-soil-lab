@@ -15,8 +15,8 @@ export const peopleSchema = z.object({
   employeeProfile: employeeProfileSchema.optional(),
   contacts: z.array(contactSchema),
   addresses: z.array(addressSchema),
-  organizationIds: z.array(z.string()).nonempty(),
-  positionIds: z.array(z.string()).nonempty(),
+  organizationIds: z.array(z.string()).optional(),
+  positionIds: z.array(z.string()).optional(),
 })
 
 export type PeopleFormFields = z.infer<typeof peopleSchema>
