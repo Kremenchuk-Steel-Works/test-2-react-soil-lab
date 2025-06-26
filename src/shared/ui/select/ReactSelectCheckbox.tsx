@@ -6,20 +6,23 @@ import {
   type StylesConfig,
 } from 'react-select'
 import Checkbox from '@/shared/ui/checkbox/Checkox'
-import ReactSelect, { type ClassNamesConfig, type Option } from '@/shared/ui/select/ReactSelect'
+import ReactSelectNoLabel, {
+  type ReactSelectNoLabelClassNamesConfig,
+  type ReactSelectNoLabelOption,
+} from './ReactSelectNoLabel'
 
 interface CustomMultiSelectProps<
-  OptionType extends Option,
+  OptionType extends ReactSelectNoLabelOption,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>,
 > extends Omit<SelectProps<OptionType, true, Group>, 'isMulti' | 'value' | 'onChange'> {
   selectedOptions: OptionType[]
   onChange: (selected: OptionType[]) => void
-  customClassNames?: ClassNamesConfig
+  customClassNames?: ReactSelectNoLabelClassNamesConfig
   customStyles?: StylesConfig<OptionType, true, Group>
 }
 
 const CustomMultiSelect = <
-  OptionType extends Option,
+  OptionType extends ReactSelectNoLabelOption,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>,
 >({
   options,
@@ -45,7 +48,7 @@ const CustomMultiSelect = <
   )
 
   return (
-    <ReactSelect
+    <ReactSelectNoLabel
       {...props}
       isMulti
       options={options}

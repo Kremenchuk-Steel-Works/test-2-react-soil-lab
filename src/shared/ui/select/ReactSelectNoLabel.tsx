@@ -3,80 +3,48 @@ import { ChevronDown, X } from 'lucide-react'
 import Select, {
   components,
   type ClearIndicatorProps,
-  type ControlProps,
   type DropdownIndicatorProps,
   type GroupBase,
   type Props as SelectProps,
   type StylesConfig,
-  type ValueContainerProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import { twMerge } from 'tailwind-merge'
 import AnimatedMenu from '@/shared/ui/select/AnimatedMenu'
 
-export type Option<ValueType = string | number | boolean> = {
+export type ReactSelectNoLabelOption<ValueType = string | number | boolean> = {
   value: ValueType
   label: string
 }
 
-export type ClassNameFunctionParams = {
+export type ReactSelectNoLabelClassNameFunctionParams = {
   isFocused?: boolean
   isSelected?: boolean
 }
 
-export type ClassNamesConfig = Partial<{
-  control: (params: ClassNameFunctionParams) => string
+export type ReactSelectNoLabelClassNamesConfig = Partial<{
+  control: (params: ReactSelectNoLabelClassNameFunctionParams) => string
   input: () => string
   placeholder: () => string
-  option: (params: ClassNameFunctionParams) => string
+  option: (params: ReactSelectNoLabelClassNameFunctionParams) => string
   menu: () => string
-  valueContainer: (state: ValueContainerProps<any, boolean>) => string
-  singleValue: () => string
+  valueContainer: () => string
   multiValue: () => string
   multiValueLabel: () => string
   multiValueRemove: () => string
 }>
 
-interface ReactSelectProps<
+interface ReactSelectNoLabelProps<
   OptionType,
   IsMulti extends boolean = false,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>,
 > extends SelectProps<OptionType, IsMulti, Group> {
-  customClassNames?: ClassNamesConfig
+  customClassNames?: ReactSelectNoLabelClassNamesConfig
   customStyles?: StylesConfig<OptionType, IsMulti, Group>
   isCreatable?: boolean
 }
 
-const FloatingLabelControl = <
-  OptionType,
-  IsMulti extends boolean = false,
-  Group extends GroupBase<OptionType> = GroupBase<OptionType>,
->({
-  children,
-  ...props
-}: ControlProps<OptionType, IsMulti, Group>) => {
-  const { isFocused, hasValue, selectProps } = props
-  const inputValue = selectProps.inputValue
-  const isFloating = hasValue || isFocused || (inputValue && inputValue.length > 0)
-
-  const placeholderClasses = twMerge(
-    'pointer-events-none absolute left-4 transition-all duration-200 ease-in-out',
-    'text-gray-400 dark:text-gray-400',
-    isFloating
-      ? 'top-1 text-xs bg-white dark:bg-gray-700 text-sm'
-      : 'top-1/2 -translate-y-1/2 text-base',
-    isFocused && isFloating && 'text-blue-500 dark:text-blue-500',
-  )
-
-  return (
-    <components.Control {...props}>
-      <span className={placeholderClasses}>{selectProps.placeholder}</span>
-      {children}
-    </components.Control>
-  )
-}
-
-function ReactSelect<
+function ReactSelectNoLabel<
   OptionType,
   IsMulti extends boolean = false,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>,
@@ -85,9 +53,8 @@ function ReactSelect<
   customStyles = {},
   isCreatable = false,
   ...props
-}: ReactSelectProps<OptionType, IsMulti, Group>): JSX.Element {
+}: ReactSelectNoLabelProps<OptionType, IsMulti, Group>): JSX.Element {
   const SelectComponent = isCreatable ? CreatableSelect : Select
-
   return (
     <SelectComponent<OptionType, IsMulti, Group>
       {...props}
@@ -98,17 +65,24 @@ function ReactSelect<
         ...customStyles,
         control: (base, state) => {
           const custom = customStyles.control ? customStyles.control(base, state) : {}
-          return { ...base, ...custom, minHeight: custom.minHeight ?? '54px' }
+          return {
+            ...base,
+            ...custom,
+            minHeight: custom.minHeight ?? '54px',
+          }
         },
         valueContainer: (base, state) => {
           const custom = customStyles.valueContainer ? customStyles.valueContainer(base, state) : {}
-          return { ...base, ...custom, height: custom.height ?? '100%' }
+          return {
+            ...base,
+            ...custom,
+            height: custom.height ?? '100%',
+          }
         },
       }}
       components={{
         ...props.components,
         Menu: AnimatedMenu,
-        Control: FloatingLabelControl,
         IndicatorSeparator: () => (
           <span className="mx-[3px] h-5 w-px bg-gray-300 dark:bg-gray-600" />
         ),
@@ -136,12 +110,8 @@ function ReactSelect<
         option: (props) =>
           twMerge(baseClassNames.option?.(props), customClassNames.option?.(props)),
         menu: () => twMerge(baseClassNames.menu?.(), customClassNames.menu?.()),
-
-        valueContainer: (state) =>
-          twMerge(baseClassNames.valueContainer?.(state), customClassNames.valueContainer?.(state)),
-
-        singleValue: () =>
-          twMerge(baseClassNames.singleValue?.(), customClassNames.singleValue?.()),
+        valueContainer: () =>
+          twMerge(baseClassNames.valueContainer?.(), customClassNames.valueContainer?.()),
         multiValue: () => twMerge(baseClassNames.multiValue?.(), customClassNames.multiValue?.()),
         multiValueLabel: () =>
           twMerge(baseClassNames.multiValueLabel?.(), customClassNames.multiValueLabel?.()),
@@ -152,34 +122,18 @@ function ReactSelect<
   )
 }
 
-const baseClassNames: ClassNamesConfig = {
+const baseClassNames: ReactSelectNoLabelClassNamesConfig = {
   control: ({ isFocused }) =>
     twMerge(
-      'relative border rounded-md px-4 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600',
-      'flex',
+      'border rounded-md px-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600',
+      'py-1',
+      'flex items-center',
       isFocused && 'ring-2 ring-blue-500',
     ),
+  valueContainer: () => 'h-full',
 
-  // Условное применение стилей
-  valueContainer: (state) => {
-    // Для MULTI-селекта, в котором есть значения
-    if (state.isMulti && state.hasValue) {
-      return 'pt-6 pb-2 h-full flex flex-wrap items-start flex-grow gap-0.5'
-    }
-
-    // Для ПУСТОГО MULTI-селекта
-    if (state.isMulti && !state.hasValue) {
-      return 'pt-6 pb-2 h-full flex-grow'
-    }
-
-    // Для SINGLE-селекта
-    return 'pt-3 h-full flex-grow'
-  },
-
-  singleValue: () => '',
-  placeholder: () => 'text-transparent',
-  input: () => ' my-1',
-
+  placeholder: () => 'text-gray-400 dark:text-gray-400',
+  input: () => 'text-black dark:text-white',
   option: ({ isFocused, isSelected }) =>
     twMerge(
       'px-3 py-3 cursor-pointer',
@@ -194,7 +148,7 @@ const baseClassNames: ClassNamesConfig = {
       'bg-gray-200 dark:bg-gray-600 rounded pl-2 mx-0.5 my-0.5 flex items-center',
       'text-gray-700 dark:text-gray-300',
     ),
-  multiValueLabel: () => 'py-0.5',
+  multiValueLabel: () => 'py-1',
   multiValueRemove: () =>
     twMerge(
       'ml-1 p-[5px] cursor-pointer rounded-md',
@@ -205,4 +159,4 @@ const baseClassNames: ClassNamesConfig = {
     ),
 }
 
-export default ReactSelect
+export default ReactSelectNoLabel

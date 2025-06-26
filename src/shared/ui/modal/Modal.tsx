@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { X } from 'lucide-react'
 import ReactDOM from 'react-dom'
 import { twMerge } from 'tailwind-merge'
@@ -24,53 +24,66 @@ const Modal: React.FC<ModalProps> = ({
   blocking = false,
   animationDuration = 300,
 }) => {
-  const [shouldRender, setShouldRender] = useState(false)
-  const [animateOpen, setAnimateOpen] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
-    let openTimeout: NodeJS.Timeout
-    let closeTimeout: NodeJS.Timeout
+    let timeoutId: NodeJS.Timeout
 
     if (isOpen) {
-      setShouldRender(true)
-      // Даем фрейму примениться, потом включаем анимацию
-      openTimeout = setTimeout(() => {
-        setAnimateOpen(true)
-      }, 10)
+      setIsMounted(true)
     } else {
-      setAnimateOpen(false)
-      closeTimeout = setTimeout(() => {
-        setShouldRender(false)
+      timeoutId = setTimeout(() => {
+        setIsMounted(false)
       }, animationDuration)
     }
 
     return () => {
-      clearTimeout(openTimeout)
-      clearTimeout(closeTimeout)
+      clearTimeout(timeoutId)
     }
   }, [isOpen, animationDuration])
 
-  const handleClose = () => {
+  // Управляет исключительно состоянием анимации.
+  useEffect(() => {
+    if (isMounted) {
+      // Сразу после монтирования, мы меняем состояние для запуска анимации открытия.
+      const frameId = requestAnimationFrame(() => {
+        setIsTransitioning(true)
+      })
+      return () => cancelAnimationFrame(frameId)
+    } else {
+      // При размонтировании сбрасываем состояние анимации.
+      setIsTransitioning(false)
+    }
+  }, [isMounted])
+
+  const handleClose = useCallback(() => {
     if (!blocking) {
       onClose()
     }
+  }, [blocking, onClose])
+
+  // Если компонент не смонтирован, ничего не рендерим.
+  if (!isMounted) {
+    return null
   }
 
-  if (!shouldRender) return null
-
+  // Рендерим портал
   return ReactDOM.createPortal(
     <div
       className={twMerge(
-        'fixed inset-0 z-50 flex h-screen items-center justify-center transition-opacity duration-300',
-        animateOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
+        'fixed inset-0 z-50 flex h-screen items-center justify-center transition-opacity',
+        `duration-${animationDuration}`,
+        isOpen && isTransitioning ? 'opacity-100' : 'pointer-events-none opacity-0',
       )}
     >
       <div className="absolute inset-0 bg-black/25" onClick={handleClose} />
 
       <div
         className={twMerge(
-          'relative flex max-h-full w-4/5 max-w-2xl transform flex-col rounded-lg bg-gray-50 text-slate-700 shadow-lg transition-transform duration-300 dark:bg-gray-800 dark:text-slate-300',
-          animateOpen ? 'scale-100' : 'scale-0',
+          'relative flex max-h-full w-4/5 max-w-2xl transform flex-col rounded-lg bg-gray-50 text-slate-700 shadow-lg transition-transform dark:bg-gray-800 dark:text-slate-300',
+          `duration-${animationDuration}`,
+          isOpen && isTransitioning ? 'scale-100' : 'scale-95', // scale-95 вместо scale-0 выглядит плавнее
           className,
         )}
       >

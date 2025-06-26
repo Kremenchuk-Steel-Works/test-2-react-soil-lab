@@ -26,8 +26,10 @@ import Button from '@/shared/ui/button/Button'
 import InputField from '@/shared/ui/input-field/InputField'
 import InputFieldNoLabel from '@/shared/ui/input-field/InputFieldNoLabel'
 import ModalTrigger from '@/shared/ui/modal/ModalTrigger'
-import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
 import CustomMultiSelect from '@/shared/ui/select/ReactSelectCheckbox'
+import ReactSelectNoLabel, {
+  type ReactSelectNoLabelOption,
+} from '@/shared/ui/select/ReactSelectNoLabel'
 
 export type DataTableProps<T> = {
   data: T[]
@@ -141,12 +143,13 @@ export function DataTable<T>({
             customClassNames={{
               control: () => 'border-0 bg-gray-200 dark:bg-gray-700',
             }}
+            isSearchable={false}
             customStyles={reactStyles}
             options={columnOptions}
             selectedOptions={columnOptions.filter((option) =>
               table.getColumn(option.value)?.getIsVisible(),
             )}
-            onChange={(selected: Option[]) => {
+            onChange={(selected: ReactSelectNoLabelOption[]) => {
               const newVisibility: Record<string, boolean> = {}
               columnOptions.forEach((option) => {
                 newVisibility[option.value] = selected.some((sel) => sel.value === option.value)
@@ -201,7 +204,7 @@ export function DataTable<T>({
         <div className="flex items-center gap-1">
           {/* Выбор числа строк */}
           <strong className="flex items-center">
-            <ReactSelect<Option>
+            <ReactSelectNoLabel
               placeholder="Кількість"
               customClassNames={{
                 control: () => 'border-0 bg-gray-200 dark:bg-gray-700',
