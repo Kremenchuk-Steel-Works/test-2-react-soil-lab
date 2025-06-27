@@ -17,7 +17,7 @@ export default function StreamlitDashboard() {
           <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
         </Button>
         <div className="block h-full w-full">
-          <iframe src="http://195.189.63.125:8501" width="100%" height="900px" />
+          <iframe src="http://138.199.209.211:8501" width="100%" height="900px" />
         </div>
       </div>
     </Layout>
