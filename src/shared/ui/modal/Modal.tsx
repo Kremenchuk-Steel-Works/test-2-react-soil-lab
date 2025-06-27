@@ -22,7 +22,7 @@ const Modal: React.FC<ModalProps> = ({
   label = ' ',
   footer,
   blocking = false,
-  animationDuration = 300,
+  animationDuration = 200,
 }) => {
   const [isMounted, setIsMounted] = useState(false)
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -83,7 +83,7 @@ const Modal: React.FC<ModalProps> = ({
         className={twMerge(
           'relative flex max-h-full w-4/5 max-w-2xl transform flex-col rounded-lg bg-gray-50 text-slate-700 shadow-lg transition-transform dark:bg-gray-800 dark:text-slate-300',
           `duration-${animationDuration}`,
-          isOpen && isTransitioning ? 'scale-100' : 'scale-95', // scale-95 вместо scale-0 выглядит плавнее
+          isOpen && isTransitioning ? 'scale-100' : 'scale-95',
           className,
         )}
       >

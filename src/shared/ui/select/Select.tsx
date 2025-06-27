@@ -106,7 +106,7 @@ const Select: React.FC<SelectProps> = ({
           <ChevronUp
             size={20}
             className={twMerge(
-              'transform transition-transform duration-300 ease-in-out',
+              'transform transition-transform duration-200 ease-in-out',
               'text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300',
               isOpen ? 'rotate-0' : 'rotate-180',
             )}

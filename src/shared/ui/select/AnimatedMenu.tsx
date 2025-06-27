@@ -1,25 +1,58 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import { components, type GroupBase, type MenuProps } from 'react-select'
+import type { CSSProperties } from 'react'
+import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import { type GroupBase, type MenuProps } from 'react-select'
+
+const menuVariants: Variants = {
+  hidden: {
+    opacity: 1,
+    height: 0,
+  },
+  visible: {
+    opacity: 1,
+    height: 'auto',
+  },
+}
+
+const menuTransition = {
+  duration: 0.2,
+  ease: 'easeOut',
+}
 
 function AnimatedMenu<
   OptionType,
   IsMulti extends boolean = false,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>,
 >(props: MenuProps<OptionType, IsMulti, Group>) {
+  const { children, className, cx, getStyles, innerProps, selectProps } = props
+
+  const baseMenuStyles = getStyles('menu', props)
+  const { transition, ...safeStyles } = baseMenuStyles as CSSProperties
+
+  const { onDrag, onDragStart, onDragEnd, onAnimationStart, ...safeInnerProps } = innerProps
+
   return (
     <AnimatePresence>
-      {props.selectProps.menuIsOpen && (
+      {selectProps.menuIsOpen && (
         <motion.div
-          initial={{ opacity: 0, y: 0, scale: 0 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 0, scale: 0 }}
-          transition={{
-            duration: 0.3,
-            ease: [0.4, 0, 0.2, 1],
+          variants={menuVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+          transition={menuTransition}
+          {...safeInnerProps}
+          className={cx(
+            { menu: true },
+            'mt-1 rounded-md border p-0 shadow-lg',
+            'border-gray-200 bg-white',
+            'dark:border-gray-700 dark:bg-gray-700',
+            className,
+          )}
+          style={{
+            ...safeStyles,
+            overflow: 'hidden',
           }}
-          style={{ position: 'absolute', width: '100%', zIndex: 1 }}
         >
-          <components.Menu {...props}>{props.children}</components.Menu>
+          {children}
         </motion.div>
       )}
     </AnimatePresence>

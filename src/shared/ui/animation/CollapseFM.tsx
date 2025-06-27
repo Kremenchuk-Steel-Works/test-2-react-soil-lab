@@ -17,7 +17,7 @@ export const CollapseFM: React.FC<CollapseFMProps> = ({ isOpen, children }) => {
             open: { height: 'auto' },
             collapsed: { height: 0 },
           }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          transition={{ duration: 0.2, ease: 'easeInOut' }}
           style={{ overflow: 'hidden' }}
         >
           {children}

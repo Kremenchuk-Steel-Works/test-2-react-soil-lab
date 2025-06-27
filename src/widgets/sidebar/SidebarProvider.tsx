@@ -27,9 +27,9 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
   )
   const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 768px)').matches)
 
-  // **Multiple** expanded sub-menus when expanded
+  // Multiple expanded sub-menus when expanded
   const [expandedSubMenus, setExpandedSubMenus] = useState<Set<string>>(new Set())
-  // **Single** open sub-menu when collapsed (popup)
+  // Single open sub-menu when collapsed (popup)
   const [collapsedSubMenu, setCollapsedSubMenu] = useState<string | null>(null)
 
   // sync media query
@@ -49,7 +49,7 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return () => mql.removeEventListener('change', listener)
   }, [])
 
-  // when the sidebar **toggles** collapsed state, only reset collapsedSubMenu
+  // when the sidebar toggles collapsed state, only reset collapsedSubMenu
   useEffect(() => {
     setCollapsedSubMenu(null)
     localStorage.setItem('sidebar-collapsed', String(collapsed))

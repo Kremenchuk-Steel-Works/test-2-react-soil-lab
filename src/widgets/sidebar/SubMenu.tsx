@@ -43,7 +43,7 @@ export const SubMenu: React.FC<SubMenuProps> = ({
           {...(isTruncated || collapsed ? { title: label } : {})}
         >
           <div
-            className={`transition-colors duration-300 ${
+            className={`transition-colors duration-200 ${
               !collapsed && isMainMenu && isExpandedOpen ? 'text-blue-600 dark:text-cyan-400' : ''
             }`}
           >
@@ -51,7 +51,7 @@ export const SubMenu: React.FC<SubMenuProps> = ({
           </div>
           <div
             ref={ref}
-            className={`min-w-0 flex-shrink truncate overflow-hidden whitespace-nowrap transition-[max-width] duration-300 ease-in-out ${
+            className={`min-w-0 flex-shrink truncate overflow-hidden whitespace-nowrap transition-[max-width] duration-200 ease-in-out ${
               collapsed && isMainMenu ? 'max-w-0' : 'max-w-full'
             } ${isExpandedOpen ? 'font-bold' : ''}`}
           >
@@ -61,12 +61,12 @@ export const SubMenu: React.FC<SubMenuProps> = ({
 
         {/* иконки */}
         <ChevronRight
-          className={`flex-shrink-0 transform transition-all duration-300 ease-in-out ${isExpandedOpen ? 'rotate-90' : 'rotate-0'} ${
+          className={`flex-shrink-0 transform transition-all duration-200 ease-in-out ${isExpandedOpen ? 'rotate-90' : 'rotate-0'} ${
             !collapsed || !isMainMenu ? 'h-5 w-5 opacity-100' : 'h-0 w-0 opacity-0'
           } `}
         />
         <span
-          className={`absolute right-2 block transform rounded-full bg-current/50 transition-all duration-300 ease-in-out ${
+          className={`absolute right-2 block transform rounded-full bg-current/50 transition-all duration-200 ease-in-out ${
             !collapsed || !isMainMenu ? 'h-0 w-0 opacity-0' : 'h-1.5 w-1.5 opacity-100'
           } `}
         />

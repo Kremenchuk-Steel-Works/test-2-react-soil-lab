@@ -34,12 +34,12 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
       <div
         className={twMerge(
-          `group relative h-5 w-5 rounded-md border border-gray-300 bg-white text-white transition-colors duration-300 peer-checked:border-blue-600 peer-checked:bg-blue-600 dark:border-gray-600 dark:bg-gray-700`,
+          `group relative h-5 w-5 rounded-md border border-gray-300 bg-white text-white transition-colors duration-200 peer-checked:border-blue-600 peer-checked:bg-blue-600 dark:border-gray-600 dark:bg-gray-700`,
         )}
       >
         <Check
           className={twMerge(
-            `absolute top-1/2 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-all duration-300 group-peer-checked:opacity-100`,
+            `absolute top-1/2 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 opacity-0 transition-all duration-200 group-peer-checked:opacity-100`,
           )}
           strokeWidth={3}
         />

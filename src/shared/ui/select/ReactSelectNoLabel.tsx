@@ -94,7 +94,7 @@ function ReactSelectNoLabel<
         DropdownIndicator: (dropdownProps: DropdownIndicatorProps<OptionType, IsMulti, Group>) => (
           <components.DropdownIndicator {...dropdownProps}>
             <ChevronDown
-              className={`h-5 w-5 text-gray-600 transition-all duration-300 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 ${
+              className={`h-5 w-5 text-gray-600 transition-all duration-200 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 ${
                 dropdownProps.selectProps.menuIsOpen ? '-rotate-180' : 'rotate-0'
               }`}
             />

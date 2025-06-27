@@ -1,9 +1,7 @@
-// scripts/relative-to-absolute.mjs
 import fs from 'fs'
 import path from 'path'
 
 function getTsConfig() {
-  // --- ИЗМЕНЕНИЕ ЗДЕСЬ ---
   // Указываем скрипту читать tsconfig.app.json, где лежат реальные настройки
   const tsConfigPath = path.resolve(process.cwd(), 'tsconfig.app.json')
 

@@ -10,7 +10,7 @@ type UnAuthRouteProps = PropsWithChildren & {
 
 export const UnAuthRoute = ({ children }: UnAuthRouteProps) => {
   const { currentUser } = useAuth()
-  // Если пользователь залогинен, возвращаем обратно
+  // Если пользователь залогинен, возвращаем на главную
   if (currentUser !== null && currentUser !== undefined) {
     logger.debug('Пользователь авторизован, переходим на главную')
     return <Navigate to={PATHS.MAIN} replace />

@@ -10,7 +10,7 @@ const Sidebar: React.FC = () => {
   const visibleRoutes = useVisibleRoutes()
 
   const baseClasses = `
-    z-50 flex flex-col bg-white dark:bg-gray-900 shadow-md transition-all duration-300 ease-in-out overflow-hidden
+    z-50 flex flex-col bg-white dark:bg-gray-900 shadow-md transition-all duration-200 ease-in-out overflow-hidden
   `
   // При broken-mode — fixed overlay, иначе - static в потоке
   const modeClasses = broken

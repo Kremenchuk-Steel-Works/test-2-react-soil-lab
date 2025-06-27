@@ -255,7 +255,7 @@ export function DataTable<T>({
                             </span>
                             {/* Иконки сортировки */}
                             <ChevronUp
-                              className={`shrink-0 origin-center transform transition-all duration-300 ease-in-out ${
+                              className={`shrink-0 origin-center transform transition-all duration-200 ease-in-out ${
                                 header.column.getIsSorted() === 'asc'
                                   ? 'h-5 w-5 rotate-0 text-blue-500 opacity-100'
                                   : header.column.getIsSorted() === 'desc'
@@ -264,7 +264,7 @@ export function DataTable<T>({
                               }`}
                             />
                             <ChevronsUpDown
-                              className={`shrink-0 origin-center transform text-gray-400 transition-all duration-300 ease-in-out ${
+                              className={`shrink-0 origin-center transform text-gray-400 transition-all duration-200 ease-in-out ${
                                 header.column.getIsSorted()
                                   ? 'h-0 w-0 opacity-0'
                                   : 'h-5 w-5 opacity-100'
