@@ -1,7 +1,7 @@
 import type { OrganizationDetailResponse } from '@/entities/admin/organizations/types/response.dto'
 
 export const mockOrganizations: OrganizationDetailResponse[] = Array.from(
-  { length: 10 },
+  { length: 10000 },
   (_, i) => {
     const id = `${i + 1}2a7a8bcf-5123-4466-a0f6-8bdbd21f8a91`
     const timestamp = new Date().toISOString()

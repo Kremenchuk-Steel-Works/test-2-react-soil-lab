@@ -1,18 +1,24 @@
-import { type JSX } from 'react'
+import { useMemo, useState, type ElementType, type JSX } from 'react'
 import { ChevronDown, X } from 'lucide-react'
 import Select, {
   components,
   type ClearIndicatorProps,
   type ControlProps,
+  type CSSObjectWithLabel,
   type DropdownIndicatorProps,
   type GroupBase,
+  type OptionProps,
   type Props as SelectProps,
   type StylesConfig,
   type ValueContainerProps,
 } from 'react-select'
+import { AsyncPaginate, withAsyncPaginate, type LoadOptions } from 'react-select-async-paginate'
 import CreatableSelect from 'react-select/creatable'
 import { twMerge } from 'tailwind-merge'
+import { logger } from '@/shared/lib/logger'
 import AnimatedMenu from '@/shared/ui/select/AnimatedMenu'
+
+const CreatableAsyncPaginate = withAsyncPaginate(CreatableSelect)
 
 export type Option<ValueType = string | number | boolean> = {
   value: ValueType
@@ -25,12 +31,12 @@ export type ClassNameFunctionParams = {
 }
 
 export type ClassNamesConfig = Partial<{
-  control: (params: ClassNameFunctionParams) => string
+  control: (props: { isFocused: boolean; isDisabled: boolean }) => string
   input: () => string
   placeholder: () => string
-  option: (params: ClassNameFunctionParams) => string
+  option: (props: OptionProps<any, any, any>) => string
   menu: () => string
-  valueContainer: (state: ValueContainerProps<any, boolean>) => string
+  valueContainer: (state: ValueContainerProps<any, any>) => string
   singleValue: () => string
   multiValue: () => string
   multiValueLabel: () => string
@@ -38,17 +44,26 @@ export type ClassNamesConfig = Partial<{
 }>
 
 interface ReactSelectProps<
-  OptionType,
+  OptionType extends Option,
   IsMulti extends boolean = false,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>,
-> extends SelectProps<OptionType, IsMulti, Group> {
+> extends Omit<SelectProps<OptionType, IsMulti, Group>, 'loadOptions'> {
   customClassNames?: ClassNamesConfig
   customStyles?: StylesConfig<OptionType, IsMulti, Group>
   isCreatable?: boolean
+  isAsyncPaginate?: boolean
+  loadOptions?: (
+    search: string,
+    page: number,
+  ) => Promise<{
+    options: OptionType[]
+    hasMore: boolean
+  }>
+  debounceTimeout?: number
 }
 
 const FloatingLabelControl = <
-  OptionType,
+  OptionType extends Option,
   IsMulti extends boolean = false,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>,
 >({
@@ -77,79 +92,122 @@ const FloatingLabelControl = <
 }
 
 function ReactSelect<
-  OptionType,
+  OptionType extends Option,
   IsMulti extends boolean = false,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>,
 >({
   customClassNames = {},
   customStyles = {},
   isCreatable = false,
+  isAsyncPaginate = false,
+  loadOptions,
+  debounceTimeout = 350,
   ...props
 }: ReactSelectProps<OptionType, IsMulti, Group>): JSX.Element {
-  const SelectComponent = isCreatable ? CreatableSelect : Select
+  const [isLoading, setIsLoading] = useState(false)
+  const loadOptionsAdapter: LoadOptions<OptionType, Group, { page: number }> = async (
+    search,
+    _loadedOptions,
+    additional,
+  ) => {
+    if (!loadOptions) {
+      logger.error('`loadOptions` prop is required when `isAsyncPaginate` is true.')
+      return { options: [], hasMore: false }
+    }
+    setIsLoading(true)
+    try {
+      const page = additional?.page || 1
+      const result = await loadOptions(search, page)
+      return {
+        options: result.options,
+        hasMore: result.hasMore,
+        additional: { page: page + 1 },
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-  return (
-    <SelectComponent<OptionType, IsMulti, Group>
-      {...props}
-      noOptionsMessage={() => 'Нічого не знайдено'}
-      formatCreateLabel={(inputValue) => `Додати: "${inputValue}"`}
-      unstyled
-      styles={{
-        ...customStyles,
-        control: (base, state) => {
-          const custom = customStyles.control ? customStyles.control(base, state) : {}
-          return { ...base, ...custom, minHeight: custom.minHeight ?? '54px' }
-        },
-        valueContainer: (base, state) => {
-          const custom = customStyles.valueContainer ? customStyles.valueContainer(base, state) : {}
-          return { ...base, ...custom, height: custom.height ?? '100%' }
-        },
-      }}
-      components={{
-        ...props.components,
-        Menu: AnimatedMenu,
-        Control: FloatingLabelControl,
-        IndicatorSeparator: () => (
-          <span className="mx-[3px] h-5 w-px bg-gray-300 dark:bg-gray-600" />
-        ),
-        ClearIndicator: (indicatorProps: ClearIndicatorProps<OptionType, IsMulti, Group>) => (
-          <components.ClearIndicator {...indicatorProps}>
-            <X className="h-4 w-4 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200" />
-          </components.ClearIndicator>
-        ),
-        DropdownIndicator: (dropdownProps: DropdownIndicatorProps<OptionType, IsMulti, Group>) => (
-          <components.DropdownIndicator {...dropdownProps}>
-            <ChevronDown
-              className={`h-5 w-5 text-gray-600 transition-all duration-200 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 ${
-                dropdownProps.selectProps.menuIsOpen ? '-rotate-180' : 'rotate-0'
-              }`}
-            />
-          </components.DropdownIndicator>
-        ),
-      }}
-      classNames={{
-        control: (props) =>
-          twMerge(baseClassNames.control?.(props), customClassNames.control?.(props)),
-        input: () => twMerge(baseClassNames.input?.(), customClassNames.input?.()),
-        placeholder: () =>
-          twMerge(baseClassNames.placeholder?.(), customClassNames.placeholder?.()),
-        option: (props) =>
-          twMerge(baseClassNames.option?.(props), customClassNames.option?.(props)),
-        menu: () => twMerge(baseClassNames.menu?.(), customClassNames.menu?.()),
+  const SelectComponent = useMemo(() => {
+    if (isAsyncPaginate) {
+      return isCreatable ? CreatableAsyncPaginate : AsyncPaginate
+    }
+    return isCreatable ? CreatableSelect : Select
+  }, [isCreatable, isAsyncPaginate]) as ElementType
 
-        valueContainer: (state) =>
-          twMerge(baseClassNames.valueContainer?.(state), customClassNames.valueContainer?.(state)),
+  const commonProps = {
+    ...props,
+    unstyled: true,
+    noOptionsMessage: () => (isLoading ? 'Завантаження...' : 'Нічого не знайдено'),
+    formatCreateLabel: (inputValue: string) => `Додати: "${inputValue}"`,
+    styles: {
+      ...customStyles,
+      control: (base: CSSObjectWithLabel, state: ControlProps<OptionType, IsMulti, Group>) => {
+        const custom = customStyles.control ? customStyles.control(base, state) : {}
+        return { ...base, ...custom, minHeight: '54px' }
+      },
+      valueContainer: (
+        base: CSSObjectWithLabel,
+        state: ValueContainerProps<OptionType, IsMulti, Group>,
+      ) => {
+        const custom = customStyles.valueContainer ? customStyles.valueContainer(base, state) : {}
+        return { ...base, ...custom, height: '100%' }
+      },
+    },
+    components: {
+      ...props.components,
+      Menu: AnimatedMenu,
+      Control: FloatingLabelControl,
+      IndicatorSeparator: () => <span className="mx-[3px] h-5 w-px bg-gray-300 dark:bg-gray-600" />,
+      ClearIndicator: (indicatorProps: ClearIndicatorProps<OptionType, IsMulti, Group>) => (
+        <components.ClearIndicator {...indicatorProps}>
+          <X className="h-4 w-4 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200" />
+        </components.ClearIndicator>
+      ),
+      DropdownIndicator: (dropdownProps: DropdownIndicatorProps<OptionType, IsMulti, Group>) => (
+        <components.DropdownIndicator {...dropdownProps}>
+          <ChevronDown
+            className={`h-5 w-5 text-gray-600 transition-all duration-200 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200 ${
+              dropdownProps.selectProps.menuIsOpen ? '-rotate-180' : 'rotate-0'
+            }`}
+          />
+        </components.DropdownIndicator>
+      ),
+    },
+    classNames: {
+      control: (state: { isFocused: boolean; isDisabled: boolean }) =>
+        twMerge(baseClassNames.control?.(state), customClassNames.control?.(state)),
+      input: () => twMerge(baseClassNames.input?.(), customClassNames.input?.()),
+      placeholder: () => twMerge(baseClassNames.placeholder?.(), customClassNames.placeholder?.()),
+      option: (state: OptionProps<OptionType, IsMulti, Group>) =>
+        twMerge(baseClassNames.option?.(state), customClassNames.option?.(state)),
+      menu: () => twMerge(baseClassNames.menu?.(), customClassNames.menu?.()),
+      valueContainer: (state: ValueContainerProps<OptionType, IsMulti, Group>) =>
+        twMerge(baseClassNames.valueContainer?.(state), customClassNames.valueContainer?.(state)),
+      singleValue: () => twMerge(baseClassNames.singleValue?.(), customClassNames.singleValue?.()),
+      multiValue: () => twMerge(baseClassNames.multiValue?.(), customClassNames.multiValue?.()),
+      multiValueLabel: () =>
+        twMerge(baseClassNames.multiValueLabel?.(), customClassNames.multiValueLabel?.()),
+      multiValueRemove: () =>
+        twMerge(baseClassNames.multiValueRemove?.(), customClassNames.multiValueRemove?.()),
+    },
+  }
 
-        singleValue: () =>
-          twMerge(baseClassNames.singleValue?.(), customClassNames.singleValue?.()),
-        multiValue: () => twMerge(baseClassNames.multiValue?.(), customClassNames.multiValue?.()),
-        multiValueLabel: () =>
-          twMerge(baseClassNames.multiValueLabel?.(), customClassNames.multiValueLabel?.()),
-        multiValueRemove: () =>
-          twMerge(baseClassNames.multiValueRemove?.(), customClassNames.multiValueRemove?.()),
-      }}
-    />
-  )
+  const finalProps = {
+    ...commonProps,
+    ...(isAsyncPaginate && {
+      loadOptions: loadOptionsAdapter,
+      debounceTimeout,
+      additional: { page: 1 },
+      loadingMessage: () => 'Завантаження...',
+    }),
+  }
+
+  if (isAsyncPaginate) {
+    finalProps.isLoading = isLoading
+  }
+
+  return <SelectComponent {...finalProps} />
 }
 
 const baseClassNames: ClassNamesConfig = {
@@ -159,27 +217,22 @@ const baseClassNames: ClassNamesConfig = {
       'flex',
       isFocused && 'ring-2 ring-blue-500',
     ),
-
   // Условное применение стилей
   valueContainer: (state) => {
     // Для MULTI-селекта, в котором есть значения
     if (state.isMulti && state.hasValue) {
       return 'pt-6 pb-2 h-full flex flex-wrap items-start flex-grow gap-0.5'
     }
-
     // Для ПУСТОГО MULTI-селекта
     if (state.isMulti && !state.hasValue) {
       return 'pt-6 pb-2 h-full flex-grow'
     }
-
     // Для SINGLE-селекта
     return 'pt-3 h-full flex-grow'
   },
-
   singleValue: () => '',
   placeholder: () => 'text-transparent',
   input: () => ' my-1',
-
   option: ({ isFocused, isSelected }) =>
     twMerge(
       'px-3 py-3 cursor-pointer',

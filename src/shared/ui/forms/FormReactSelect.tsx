@@ -1,49 +1,38 @@
-import { useMemo } from 'react'
+import { useMemo, type ComponentProps } from 'react'
 import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
-import type { GroupBase, OnChangeValue, Props as SelectProps } from 'react-select'
-import type { CreatableProps } from 'react-select/creatable'
+import type { OnChangeValue } from 'react-select'
+import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
 import {
   ReactSelectMultiWithError,
   ReactSelectWithError,
   SelectVirtualizedWithError,
-} from '@/shared/ui/with-error/fieldsWithError'
+} from '../with-error/fieldsWithError'
 
-export type Option<T = unknown> = {
-  label: string
-  value: T
-}
+type ReactSelectProps = ComponentProps<typeof ReactSelect>
 
-type BaseSelectProps<TValue, IsMulti extends boolean> = Omit<
-  SelectProps<Option<TValue>, IsMulti>,
-  'value' | 'onChange' | 'onBlur' | 'ref' | 'name' | 'options'
->
+type BaseSelectProps = Omit<ReactSelectProps, 'value' | 'onChange' | 'onBlur' | 'name' | 'ref'>
 
-type FormSelectFieldProps<TValue, IsMulti extends boolean> = BaseSelectProps<TValue, IsMulti> & {
+type FormSelectFieldProps<TValue, IsMulti extends boolean = false> = BaseSelectProps & {
   field: ControllerRenderProps<any, any>
   fieldState: ControllerFieldState
-  options: Option<TValue>[]
-  errorMessage?: string
   isMulti?: IsMulti
+  errorMessage?: string
   isVirtualized?: boolean
-  isCreatable?: boolean
-  formatCreateLabel?: CreatableProps<
-    Option<TValue>,
-    IsMulti,
-    GroupBase<Option<TValue>>
-  >['formatCreateLabel']
+  options?: Option<TValue>[]
+  defaultOptions?: Option<TValue>[] | boolean
 }
 
-// ЕДИНЫЙ КОМПОНЕНТ
-const FormSelectField = <TValue, IsMulti extends boolean>({
+function FormSelectField<TValue, IsMulti extends boolean = false>({
   field,
   fieldState,
-  options,
   isMulti,
-  errorMessage,
   isVirtualized,
   isCreatable,
+  options,
+  defaultOptions,
+  errorMessage,
   ...rest
-}: FormSelectFieldProps<TValue, IsMulti>) => {
+}: FormSelectFieldProps<TValue, IsMulti>) {
   const Component = useMemo(() => {
     if (isVirtualized) {
       return SelectVirtualizedWithError
@@ -51,34 +40,42 @@ const FormSelectField = <TValue, IsMulti extends boolean>({
     return isMulti ? ReactSelectMultiWithError : ReactSelectWithError
   }, [isVirtualized, isMulti]) as React.ElementType
 
-  // --- ГЛАВНОЕ ИСПРАВЛЕНИЕ ЗДЕСЬ ---
+  const { name, value: fieldValue, onChange, onBlur, ref } = field
   const selectedValue = useMemo(() => {
-    const fieldValue = field.value
+    const allAvailableOptions = [
+      ...(options || []),
+      ...(Array.isArray(defaultOptions) ? defaultOptions : []),
+    ]
 
     if (isMulti) {
       const fieldValuesArray = Array.isArray(fieldValue) ? fieldValue : []
 
-      // Если это Creatable Select, то label и value - это одно и то же.
       if (isCreatable) {
-        return fieldValuesArray.map((val) => ({ label: String(val), value: val as TValue }))
+        return fieldValuesArray.map(
+          (val) =>
+            allAvailableOptions.find((opt) => opt.value === val) ?? {
+              label: String(val),
+              value: val as TValue,
+            },
+        )
       }
 
-      // Для ОБЫЧНОГО Multi-Select, мы должны найти полные объекты в `options`, чтобы получить правильные `label`.
-      return options.filter((opt) => fieldValuesArray.includes(opt.value))
+      const valueSet = new Set(fieldValuesArray)
+      return allAvailableOptions.filter((opt) => valueSet.has(opt.value))
     }
 
-    // Логика для одиночного Select остается прежней, она работает корректно.
-    return options.find((opt) => opt.value === fieldValue) || null
-  }, [field.value, options, isMulti, isCreatable]) // <-- Добавлен isCreatable в зависимости
+    // Для одиночного значения
+    return allAvailableOptions.find((opt) => opt.value === fieldValue) || null
+  }, [fieldValue, options, defaultOptions, isMulti, isCreatable])
 
+  // Обработчик изменений
   const handleChange = (selected: OnChangeValue<Option<TValue>, IsMulti>) => {
     if (isMulti) {
-      const values = (selected as Option<TValue>[]).map((opt) => opt.value)
-      const uniqueValues = [...new Set(values)]
-      field.onChange(uniqueValues)
+      const values = (selected as Option<TValue>[] | null)?.map((opt) => opt.value) ?? []
+      onChange(values)
     } else {
       const value = (selected as Option<TValue> | null)?.value ?? null
-      field.onChange(value)
+      onChange(value)
     }
   }
 
@@ -86,15 +83,17 @@ const FormSelectField = <TValue, IsMulti extends boolean>({
 
   return (
     <Component
-      {...rest}
-      {...optionsProps}
-      ref={field.ref}
-      onBlur={field.onBlur}
-      name={field.name}
-      isMulti={isMulti}
-      isCreatable={isCreatable}
+      {...(rest as any)}
+      instanceId={name}
+      ref={ref}
+      name={name}
+      onBlur={onBlur}
       value={selectedValue}
       onChange={handleChange}
+      {...optionsProps}
+      isCreatable={isCreatable}
+      isMulti={isMulti}
+      defaultOptions={defaultOptions}
       errorMessage={errorMessage || fieldState.error?.message}
     />
   )

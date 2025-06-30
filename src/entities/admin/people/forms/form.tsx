@@ -22,6 +22,7 @@ import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { OptionalField } from '@/shared/ui/forms/OptionalField'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
+import { organizationMockService } from '../../organizations/services/service.mock'
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -57,8 +58,13 @@ export default function PeopleForm({ defaultValues, onSubmit, submitBtnName }: F
   }
 
   // Queries
+  const initialOrganizationIds = defaultValues?.organizationIds || []
   const queries = useQueries({
     queries: [
+      {
+        queryKey: organizationQueryKeys.lookupByIds(initialOrganizationIds),
+        queryFn: () => organizationMockService.getLookupByIds(initialOrganizationIds),
+      },
       {
         queryKey: organizationQueryKeys.lookups(),
         queryFn: () => organizationService.getLookup(),
@@ -81,7 +87,8 @@ export default function PeopleForm({ defaultValues, onSubmit, submitBtnName }: F
   }
 
   // Queries data
-  const [organizationsQ, positionsQ] = queries as [
+  const [initialOrganizationQ, organizationsQ, positionsQ] = queries as [
+    UseQueryResult<OrganizationLookupResponse[], Error>,
     UseQueryResult<OrganizationLookupResponse[], Error>,
     UseQueryResult<PositionLookupResponse[], Error>,
   ]
@@ -98,6 +105,28 @@ export default function PeopleForm({ defaultValues, onSubmit, submitBtnName }: F
       value: c.id,
       label: c.name,
     })) || []
+
+  // Преобразуем загруженные данные в формат для селекта
+  const initialOrganizationOptions: Option<string>[] =
+    initialOrganizationQ.data?.map((org) => ({
+      value: org.id,
+      label: org.legalName,
+    })) || []
+
+  // Функция-загрузчик для организаций
+  const loadOrganizationOptions = async (search: string, page: number) => {
+    // Вызываем новый метод сервиса
+    const { options, hasMore } = await organizationMockService.getPaginatedLookup(search, page)
+
+    // Трансформируем данные в формат { value, label }
+    return {
+      options: options.map((org) => ({
+        value: org.id,
+        label: org.legalName,
+      })),
+      hasMore,
+    }
+  }
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
@@ -197,6 +226,24 @@ export default function PeopleForm({ defaultValues, onSubmit, submitBtnName }: F
             isMulti
             isClearable
             placeholder="Оберіть організацію"
+            errorMessage={getNestedErrorMessage(errors, 'organizationIds')}
+          />
+        )}
+      />
+
+      <Controller
+        name="organizationIds"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
+            fieldState={fieldState}
+            isAsyncPaginate
+            loadOptions={loadOrganizationOptions}
+            defaultOptions={initialOrganizationOptions}
+            isMulti
+            isClearable
+            placeholder="Оберіть організацію 2"
             errorMessage={getNestedErrorMessage(errors, 'organizationIds')}
           />
         )}
