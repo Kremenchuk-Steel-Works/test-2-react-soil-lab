@@ -234,11 +234,12 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
           <FormSelectField
             field={field}
             fieldState={fieldState}
-            isAsyncPaginate
             loadOptions={loadOrganizationOptions}
             defaultOptions={options.organizations}
             isMulti
             isClearable
+            isAsyncPaginate
+            isVirtualized
             placeholder="Оберіть організацію 2"
             errorMessage={getNestedErrorMessage(errors, 'organizationIds')}
           />

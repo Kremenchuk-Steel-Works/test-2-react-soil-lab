@@ -54,7 +54,7 @@ export const organizationMockService = {
   async getPaginatedLookup(
     search: string,
     page: number,
-    perPage: number = 1000,
+    perPage: number = 20,
   ): Promise<PaginatedLookupResponse<OrganizationLookupResponse>> {
     console.log(`Fetching page: ${page}, search: "${search}", perPage: ${perPage}`)
 

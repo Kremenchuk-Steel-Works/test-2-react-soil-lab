@@ -1,66 +1,56 @@
-import { useCallback, useEffect, useRef, type JSX } from 'react'
+import { type JSX } from 'react'
 import { type GroupBase, type MenuListProps } from 'react-select'
-import { FixedSizeList } from 'react-window'
+import { FixedSizeList, type ListOnScrollProps } from 'react-window'
 
 const OPTION_HEIGHT = 48
 const MENU_MAX_HEIGHT = 300
+
+type AsyncPaginateMenuListProps<
+  OptionType,
+  IsMulti extends boolean,
+  Group extends GroupBase<OptionType>,
+> = MenuListProps<OptionType, IsMulti, Group> & {
+  selectProps: {
+    isLoading: boolean
+    handleScrolledToBottom?: () => void
+  }
+}
 
 export function VirtualizedMenuList<
   OptionType extends { label: string; value: unknown },
   IsMulti extends boolean = false,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>,
->(props: MenuListProps<OptionType, IsMulti, Group>): JSX.Element {
-  const { options, children, maxHeight = MENU_MAX_HEIGHT, focusedOption } = props
+>(props: AsyncPaginateMenuListProps<OptionType, IsMulti, Group>): JSX.Element {
+  const { children, maxHeight = MENU_MAX_HEIGHT, selectProps } = props
+  const { handleScrolledToBottom, isLoading } = selectProps
 
-  const outerRef = useRef<HTMLDivElement | null>(null)
-  const initialIndex = focusedOption ? options.indexOf(focusedOption) : -1
-  const initialOffset = initialIndex !== -1 ? initialIndex * OPTION_HEIGHT : 0
-
-  const handleWheel = useCallback((event: globalThis.WheelEvent) => {
-    const list = outerRef.current
-    if (!list) return
-
-    const { scrollTop, scrollHeight, clientHeight } = list
-    const { deltaY } = event
-
-    if (deltaY < 0 && scrollTop === 0) {
-      event.preventDefault()
-      return
-    }
-
-    if (deltaY > 0 && scrollHeight - clientHeight - scrollTop <= 1) {
-      event.preventDefault()
-      return
-    }
-  }, [])
-
-  useEffect(() => {
-    const listElement = outerRef.current
-    if (listElement) {
-      listElement.addEventListener('wheel', handleWheel)
-    }
-
-    return () => {
-      if (listElement) {
-        listElement.removeEventListener('wheel', handleWheel)
-      }
-    }
-  }, [handleWheel])
-
+  // Если дочерних элементов нет (например, при поиске ничего не найдено),
   if (!Array.isArray(children) || children.length === 0) {
     return <>{children}</>
   }
 
   const listHeight = Math.min(maxHeight, children.length * OPTION_HEIGHT)
+  const itemCount = children.length
+
+  // Эта функция будет вызываться при каждом событии скролла в FixedSizeList
+  const handleScroll = ({ scrollOffset }: ListOnScrollProps): void => {
+    if (!handleScrolledToBottom || isLoading) {
+      return
+    }
+
+    // Проверяем, достиг ли пользователь конца списка, с небольшим запасом
+    if (scrollOffset + listHeight >= itemCount * OPTION_HEIGHT - 20) {
+      handleScrolledToBottom()
+    }
+  }
 
   return (
     <FixedSizeList
       height={listHeight}
-      itemCount={children.length}
+      itemCount={itemCount}
       itemSize={OPTION_HEIGHT}
-      initialScrollOffset={initialOffset}
       width="100%"
-      outerRef={outerRef}
+      onScroll={handleScroll}
     >
       {({ index, style }) => <div style={style}>{children[index]}</div>}
     </FixedSizeList>

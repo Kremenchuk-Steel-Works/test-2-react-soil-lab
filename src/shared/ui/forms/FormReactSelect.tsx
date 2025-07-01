@@ -2,11 +2,7 @@ import { useEffect, useMemo, useState, type ComponentProps } from 'react'
 import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
 import type { OnChangeValue } from 'react-select'
 import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
-import {
-  ReactSelectMultiWithError,
-  ReactSelectWithError,
-  SelectVirtualizedWithError,
-} from '../with-error/fieldsWithError'
+import { ReactSelectMultiWithError, ReactSelectWithError } from '../with-error/fieldsWithError'
 
 type ReactSelectProps = ComponentProps<typeof ReactSelect>
 
@@ -34,11 +30,8 @@ function FormSelectField<TValue, IsMulti extends boolean = false>({
   ...rest
 }: FormSelectFieldProps<TValue, IsMulti>) {
   const Component = useMemo(() => {
-    if (isVirtualized) {
-      return SelectVirtualizedWithError
-    }
     return isMulti ? ReactSelectMultiWithError : ReactSelectWithError
-  }, [isVirtualized, isMulti]) as React.ElementType
+  }, [isMulti]) as React.ElementType
 
   const { name, value: fieldValue, onChange, onBlur, ref } = field
 
@@ -105,8 +98,6 @@ function FormSelectField<TValue, IsMulti extends boolean = false>({
     }
   }
 
-  const optionsProps = isVirtualized ? { allOptions: options } : { options: options }
-
   return (
     <Component
       {...(rest as any)}
@@ -116,8 +107,9 @@ function FormSelectField<TValue, IsMulti extends boolean = false>({
       onBlur={onBlur}
       value={selectedValue}
       onChange={handleChange}
-      {...optionsProps}
+      options={options}
       isCreatable={isCreatable}
+      isVirtualized={isVirtualized}
       isMulti={isMulti}
       defaultOptions={defaultOptions}
       errorMessage={errorMessage || fieldState.error?.message}

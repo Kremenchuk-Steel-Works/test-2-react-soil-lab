@@ -6,7 +6,6 @@ import InputDateField from '@/shared/ui/input-field/InputDateField'
 import InputField from '@/shared/ui/input-field/InputField'
 import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
 import Select from '@/shared/ui/select/Select'
-import { SelectVirtualized } from '@/shared/ui/select/VirtualizedSelect'
 import { withError } from '@/shared/ui/with-error/WithError'
 
 export const InputFieldWithError = withError(InputField)
@@ -17,8 +16,6 @@ export const ButtonWithError = withError(Button)
 export const SelectWithError = withError(Select)
 export const ReactSelectWithError = withError<SelectProps<Option, false>>(ReactSelect)
 export const ReactSelectMultiWithError = withError<SelectProps<Option, true>>(ReactSelect)
-
-export const SelectVirtualizedWithError = withError(SelectVirtualized)
 
 export const CheckboxWithError = withError(Checkbox)
 

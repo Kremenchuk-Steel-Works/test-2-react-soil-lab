@@ -17,6 +17,7 @@ import CreatableSelect from 'react-select/creatable'
 import { twMerge } from 'tailwind-merge'
 import { logger } from '@/shared/lib/logger'
 import AnimatedMenu from '@/shared/ui/select/AnimatedMenu'
+import { VirtualizedMenuList } from './VirtualizedMenuList'
 
 const CreatableAsyncPaginate = withAsyncPaginate(CreatableSelect)
 
@@ -52,6 +53,7 @@ interface ReactSelectProps<
   customStyles?: StylesConfig<OptionType, IsMulti, Group>
   isCreatable?: boolean
   isAsyncPaginate?: boolean
+  isVirtualized?: boolean
   loadOptions?: (
     search: string,
     page: number,
@@ -100,11 +102,13 @@ function ReactSelect<
   customStyles = {},
   isCreatable = false,
   isAsyncPaginate = false,
+  isVirtualized = false,
   loadOptions,
   debounceTimeout = 350,
   ...props
 }: ReactSelectProps<OptionType, IsMulti, Group>): JSX.Element {
   const [isLoading, setIsLoading] = useState(false)
+
   const loadOptionsAdapter: LoadOptions<OptionType, Group, { page: number }> = async (
     search,
     _loadedOptions,
@@ -138,7 +142,15 @@ function ReactSelect<
   const commonProps = {
     ...props,
     unstyled: true,
-    noOptionsMessage: () => (isLoading ? 'Завантаження...' : 'Нічого не знайдено'),
+    noOptionsMessage: ({ inputValue }: { inputValue: string }) => {
+      if (isLoading) {
+        return 'Завантаження...'
+      }
+      if (inputValue) {
+        return 'Нічого не знайдено'
+      }
+      return null
+    },
     formatCreateLabel: (inputValue: string) => `Додати: "${inputValue}"`,
     styles: {
       ...customStyles,
@@ -173,6 +185,7 @@ function ReactSelect<
           />
         </components.DropdownIndicator>
       ),
+      ...(isVirtualized && { MenuList: VirtualizedMenuList }),
     },
     classNames: {
       control: (state: { isFocused: boolean; isDisabled: boolean }) =>
