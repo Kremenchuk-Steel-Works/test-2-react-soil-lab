@@ -11,7 +11,6 @@ export interface PaginatedLookupResponse<T> {
   hasMore: boolean
   totalPages: number
 }
-const PAGE_SIZE = 15
 const mockData = mockOrganizations
 
 export const organizationMockService = {
@@ -50,22 +49,23 @@ export const organizationMockService = {
    * Получает пагинированный список организаций для селекта с поиском.
    * @param search - Поисковая строка для фильтрации по имени.
    * @param page - Номер страницы (начиная с 1).
+   * @param perPage - (Опционально) Количество элементов на странице. По умолчанию 15.
    */
   async getPaginatedLookup(
     search: string,
     page: number,
+    perPage: number = 1000,
   ): Promise<PaginatedLookupResponse<OrganizationLookupResponse>> {
-    console.log(`Fetching page: ${page}, search: "${search}"`)
+    console.log(`Fetching page: ${page}, search: "${search}", perPage: ${perPage}`)
 
-    // Имитация задержки сети
     await new Promise((resolve) => setTimeout(resolve, 300))
 
     const filteredData = mockData.filter((item) =>
       item.legalName.toLowerCase().includes(search.toLowerCase()),
     )
 
-    const startIndex = (page - 1) * PAGE_SIZE
-    const endIndex = startIndex + PAGE_SIZE
+    const startIndex = (page - 1) * perPage
+    const endIndex = startIndex + perPage
     const paginatedItems = filteredData.slice(startIndex, endIndex)
 
     const hasMore = endIndex < filteredData.length
@@ -73,40 +73,9 @@ export const organizationMockService = {
     const response = {
       options: paginatedItems,
       hasMore,
-      totalPages: Math.ceil(filteredData.length / PAGE_SIZE),
+      totalPages: Math.ceil(filteredData.length / perPage),
     }
 
     return response
-  },
-
-  /**
-   * Получает список организаций по массиву их идентификаторов.
-   * Корректная и эффективная реализация.
-   * @param ids - Массив ID организаций для поиска.
-   */
-  async getLookupByIds(ids: string[]): Promise<OrganizationLookupResponse[]> {
-    console.log(`[Mock] Fetching organizations by ${ids.length} IDs:`, ids)
-    await new Promise((resolve) => setTimeout(resolve, 50)) // Меньшая задержка для быстрого ответа
-
-    if (!ids || ids.length === 0) {
-      return []
-    }
-
-    // Используем Map для эффективного поиска.
-    // Сохраняем порядок исходного массива ids.
-    const organizationsByIdMap = new Map<string, OrganizationDetailResponse>(
-      mockOrganizations.map((org) => [org.id, org]),
-    )
-    const result = ids
-      .map((id) => organizationsByIdMap.get(id)) // O(1) операция для каждого ID
-      .filter((org): org is OrganizationDetailResponse => !!org) // Убираем undefined, если ID не найден
-      .map((org) => ({
-        // Преобразуем в формат OrganizationLookupResponse
-        id: org.id,
-        legalName: org.legalName,
-      }))
-
-    console.log('[Mock] Found organizations:', result)
-    return result
   },
 }

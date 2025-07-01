@@ -27,13 +27,21 @@ import { organizationMockService } from '../../organizations/services/service.mo
 type FormFields = PeopleFormFields
 const schema = peopleSchema
 
-interface FormProps {
+export interface PeopleFormInitialData {
   defaultValues?: Partial<FormFields>
+  options?: {
+    organizations?: Option<string>[]
+  }
+}
+
+interface FormProps {
+  initialData?: PeopleFormInitialData
   onSubmit: SubmitHandler<FormFields>
   submitBtnName: string
 }
 
-export default function PeopleForm({ defaultValues, onSubmit, submitBtnName }: FormProps) {
+export default function PeopleForm({ initialData, onSubmit, submitBtnName }: FormProps) {
+  const { defaultValues = {}, options = {} } = initialData || {}
   const {
     control,
     register,
@@ -48,6 +56,7 @@ export default function PeopleForm({ defaultValues, onSubmit, submitBtnName }: F
   })
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
+      logger.debug('Отправка формы', data)
       const response = await onSubmit(data)
       logger.debug('Форма успешно выполнена', response)
     } catch (err) {
@@ -58,13 +67,8 @@ export default function PeopleForm({ defaultValues, onSubmit, submitBtnName }: F
   }
 
   // Queries
-  const initialOrganizationIds = defaultValues?.organizationIds || []
   const queries = useQueries({
     queries: [
-      {
-        queryKey: organizationQueryKeys.lookupByIds(initialOrganizationIds),
-        queryFn: () => organizationMockService.getLookupByIds(initialOrganizationIds),
-      },
       {
         queryKey: organizationQueryKeys.lookups(),
         queryFn: () => organizationService.getLookup(),
@@ -87,8 +91,7 @@ export default function PeopleForm({ defaultValues, onSubmit, submitBtnName }: F
   }
 
   // Queries data
-  const [initialOrganizationQ, organizationsQ, positionsQ] = queries as [
-    UseQueryResult<OrganizationLookupResponse[], Error>,
+  const [organizationsQ, positionsQ] = queries as [
     UseQueryResult<OrganizationLookupResponse[], Error>,
     UseQueryResult<PositionLookupResponse[], Error>,
   ]
@@ -104,13 +107,6 @@ export default function PeopleForm({ defaultValues, onSubmit, submitBtnName }: F
     positionsQ.data?.map((c) => ({
       value: c.id,
       label: c.name,
-    })) || []
-
-  // Преобразуем загруженные данные в формат для селекта
-  const initialOrganizationOptions: Option<string>[] =
-    initialOrganizationQ.data?.map((org) => ({
-      value: org.id,
-      label: org.legalName,
     })) || []
 
   // Функция-загрузчик для организаций
@@ -240,7 +236,7 @@ export default function PeopleForm({ defaultValues, onSubmit, submitBtnName }: F
             fieldState={fieldState}
             isAsyncPaginate
             loadOptions={loadOrganizationOptions}
-            defaultOptions={initialOrganizationOptions}
+            defaultOptions={options.organizations}
             isMulti
             isClearable
             placeholder="Оберіть організацію 2"

@@ -1,4 +1,4 @@
-import { useMemo, type ComponentProps } from 'react'
+import { useEffect, useMemo, useState, type ComponentProps } from 'react'
 import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
 import type { OnChangeValue } from 'react-select'
 import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
@@ -41,37 +41,63 @@ function FormSelectField<TValue, IsMulti extends boolean = false>({
   }, [isVirtualized, isMulti]) as React.ElementType
 
   const { name, value: fieldValue, onChange, onBlur, ref } = field
-  const selectedValue = useMemo(() => {
-    const allAvailableOptions = [
+
+  // Кэш для всех опций, которые мы когда-либо видели (начальные, загруженные, созданные).
+  const [optionsCache, setOptionsCache] = useState(new Map<TValue, Option<TValue>>())
+
+  // Эффект для первоначального заполнения и обновления кэша из пропсов
+  useEffect(() => {
+    const allInitialOptions = [
       ...(options || []),
       ...(Array.isArray(defaultOptions) ? defaultOptions : []),
     ]
 
+    if (allInitialOptions.length > 0) {
+      setOptionsCache((prevCache) => {
+        const newCache = new Map(prevCache)
+        allInitialOptions.forEach((opt) => {
+          if (!newCache.has(opt.value)) {
+            newCache.set(opt.value, opt)
+          }
+        })
+        return newCache
+      })
+    }
+  }, [options, defaultOptions])
+
+  // Преобразуем ID из формы в объекты для react-select, используя наш кэш
+  const selectedValue = useMemo(() => {
     if (isMulti) {
       const fieldValuesArray = Array.isArray(fieldValue) ? fieldValue : []
-
-      if (isCreatable) {
-        return fieldValuesArray.map(
-          (val) =>
-            allAvailableOptions.find((opt) => opt.value === val) ?? {
-              label: String(val),
-              value: val as TValue,
-            },
-        )
-      }
-
-      const valueSet = new Set(fieldValuesArray)
-      return allAvailableOptions.filter((opt) => valueSet.has(opt.value))
+      return fieldValuesArray
+        .map((value) => optionsCache.get(value))
+        .filter((option): option is Option<TValue> => !!option)
     }
-
-    // Для одиночного значения
-    return allAvailableOptions.find((opt) => opt.value === fieldValue) || null
-  }, [fieldValue, options, defaultOptions, isMulti, isCreatable])
+    return optionsCache.get(fieldValue as TValue) || null
+  }, [fieldValue, optionsCache, isMulti])
 
   // Обработчик изменений
   const handleChange = (selected: OnChangeValue<Option<TValue>, IsMulti>) => {
+    const selectedOptionsArray = (Array.isArray(selected) ? selected : [selected]).filter(
+      Boolean,
+    ) as Option<TValue>[]
+
+    // Обновляем кэш новыми выбранными опциями
+    if (selectedOptionsArray.length > 0) {
+      setOptionsCache((prevCache) => {
+        const newCache = new Map(prevCache)
+        selectedOptionsArray.forEach((opt) => {
+          if (opt && !newCache.has(opt.value)) {
+            newCache.set(opt.value, opt)
+          }
+        })
+        return newCache
+      })
+    }
+
+    // Обновляем состояние формы (react-hook-form) только ID
     if (isMulti) {
-      const values = (selected as Option<TValue>[] | null)?.map((opt) => opt.value) ?? []
+      const values = selectedOptionsArray.map((opt) => opt.value)
       onChange(values)
     } else {
       const value = (selected as Option<TValue> | null)?.value ?? null

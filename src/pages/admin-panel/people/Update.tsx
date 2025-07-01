@@ -3,7 +3,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import type { AddressOperationRequest } from '@/entities/admin/address/types/request.dto'
 import type { ContactOperationRequest } from '@/entities/admin/contact/types/request.dto'
-import PeopleForm from '@/entities/admin/people/forms/form'
+import PeopleForm, { type PeopleFormInitialData } from '@/entities/admin/people/forms/form'
 import type { PeopleFormFields } from '@/entities/admin/people/forms/schema'
 import { personQueryKeys } from '@/entities/admin/people/services/keys'
 import { personService } from '@/entities/admin/people/services/service'
@@ -28,6 +28,7 @@ export default function AdminPeopleUpdate() {
     enabled: !!id,
   })
 
+  // Запрос на обновление
   const handleSubmit = async (formData: PeopleFormFields) => {
     if (!data) {
       return
@@ -56,20 +57,28 @@ export default function AdminPeopleUpdate() {
     return payload
   }
 
-  // Адаптируем данные под форму
-  function mapToFormDefaults(obj: PersonDetailResponse): Partial<PeopleFormFields> {
+  // Адаптируем данные с запроса под форму
+  function mapResponseToInitialData(obj: PersonDetailResponse): PeopleFormInitialData {
     const orgIds = obj.organizations.map((org) => org.id)
     const posIds = obj.positions.map((pos) => pos.id)
 
     return {
-      ...obj,
-      organizationIds: orgIds.length > 0 ? (orgIds as [string, ...string[]]) : undefined,
-      positionIds: posIds.length > 0 ? (posIds as [string, ...string[]]) : undefined,
-      addresses:
-        obj.addresses?.map((addr) => ({
-          ...addr,
-          cityId: addr.cityId,
-        })) || [],
+      defaultValues: {
+        ...obj,
+        organizationIds: orgIds.length > 0 ? (orgIds as [string, ...string[]]) : undefined,
+        positionIds: posIds.length > 0 ? (posIds as [string, ...string[]]) : undefined,
+        addresses:
+          obj.addresses?.map((addr) => ({
+            ...addr,
+            cityId: addr.cityId,
+          })) || [],
+      },
+      options: {
+        organizations: obj.organizations.map((org) => ({
+          value: org.id,
+          label: org.legalName,
+        })),
+      },
     }
   }
 
@@ -91,7 +100,7 @@ export default function AdminPeopleUpdate() {
           <div className="w-full">
             <PeopleForm
               onSubmit={handleSubmit}
-              defaultValues={mapToFormDefaults(data)}
+              initialData={mapResponseToInitialData(data)}
               submitBtnName="Оновити"
             />
           </div>
