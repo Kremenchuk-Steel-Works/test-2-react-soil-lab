@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { CircleMinus, FileArchive, File as FileIcon, FileText, UploadCloud, X } from 'lucide-react'
 import { useDropzone, type Accept, type FileRejection } from 'react-dropzone'
 import { twMerge } from 'tailwind-merge'
 import { logger } from '@/shared/lib/logger'
 
-// --- Props and Utils (без изменений) ---
 export interface FileUploadProps {
   label: string
   onFilesChange: (files: File[]) => void
@@ -12,6 +11,8 @@ export interface FileUploadProps {
   multiple?: boolean
   accept?: Accept
   maxSize?: number
+  id?: string
+  name?: string
 }
 const generateFileId = (file: File) => `${file.name}-${file.size}-${file.lastModified}`
 const processAndRenameFiles = (newFiles: File[], existingFiles: File[]): File[] => {
@@ -36,7 +37,6 @@ const processAndRenameFiles = (newFiles: File[], existingFiles: File[]): File[] 
   })
 }
 
-// --- FileChip (без изменений) ---
 const FileChip: React.FC<{ file: File; onRemove: () => void }> = ({ file, onRemove }) => {
   const [preview, setPreview] = useState<string | null>(null)
   useEffect(() => {
@@ -84,7 +84,7 @@ const FileChip: React.FC<{ file: File; onRemove: () => void }> = ({ file, onRemo
   )
 }
 
-// --- Основной компонент ---
+// Основной компонент
 export const FileUpload: React.FC<FileUploadProps> = ({
   label,
   onFilesChange,
@@ -92,8 +92,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({
   multiple = false,
   accept,
   maxSize,
+  id,
+  name,
 }) => {
   const [isDragging, setIsDragging] = useState(false)
+
+  const generatedId = useId()
+  const finalId = id || generatedId
 
   const onDrop = useCallback(
     (accepted: File[], rejected: FileRejection[]) => {
@@ -167,7 +172,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
     <div className="w-full">
       <div className="relative">
         <div {...getRootProps({ className: containerClassName })}>
-          <input {...getInputProps()} />
+          <input {...getInputProps({ id: finalId, name })} />
 
           {hasFiles && (
             <div
@@ -200,7 +205,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           )}
         </div>
 
-        <label className={labelClassName}>{label}</label>
+        <label htmlFor={finalId} className={labelClassName}>
+          {label}
+        </label>
 
         <div className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
           <UploadCloud

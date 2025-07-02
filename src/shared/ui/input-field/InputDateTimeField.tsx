@@ -2,31 +2,43 @@ import React, { forwardRef, useId, useState } from 'react'
 import { Calendar, X } from 'lucide-react'
 import DatePicker, { registerLocale } from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { isValid, parse } from 'date-fns'
+import { useMergeRefs } from '@floating-ui/react'
+import { useMask } from '@react-input/mask'
 import { uk } from 'date-fns/locale'
-import InputFieldWithMask from '@/shared/ui/input-field/InputFieldWithMask'
+import InputField from './InputField' // Предполагаем, что базовый InputField здесь
 
 registerLocale('uk', uk)
 
-export type InputDateFieldProps = {
+export type InputDateTimeFieldProps = {
   label: string
   value: Date | undefined
   onChange: (date: Date | null) => void
   onBlur?: React.FocusEventHandler<HTMLInputElement>
   placeholder?: string
-  minDate?: Date
-  maxDate?: Date
   disabled?: boolean
   required?: boolean
   className?: string
-  allowFutureDates?: boolean
-  showTodayButton?: boolean
   locale?: string
   id?: string
   name?: string
 }
 
-const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
+const InputDateTimeFieldWithMask = forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement> & { label: string }
+>(({ label, ...props }, ref) => {
+  const inputRef = useMask({
+    mask: 'дд.мм.рррр __:__',
+    replacement: { д: /\d/, м: /\d/, р: /\d/, _: /\d/ },
+    showMask: true,
+  })
+  const mergedRefs = useMergeRefs([ref, inputRef])
+
+  return <InputField {...props} label={label} ref={mergedRefs} />
+})
+InputDateTimeFieldWithMask.displayName = 'InputDateTimeFieldWithMask'
+
+const InputDateTimeField = forwardRef<HTMLInputElement, InputDateTimeFieldProps>(
   (
     {
       label,
@@ -34,46 +46,19 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
       onChange,
       onBlur,
       placeholder,
-      minDate,
-      maxDate,
       required,
       disabled = false,
       className,
-      allowFutureDates = false,
-      showTodayButton = false,
       locale = 'uk',
       id,
       name,
     },
     ref,
   ) => {
-    // Определяем максимальную дату: если allowFutureDates true, используем переданный maxDate
-    // (или не устанавливаем его, если не передан), иначе - текущая дата.
-    const effectiveMaxDate = allowFutureDates ? maxDate : maxDate || new Date()
-
-    // Состояние для отслеживания фокуса
     const [isFocused, setIsFocused] = useState(false)
     const generatedId = useId()
     const finalId = id || generatedId
-
-    const handleFocus = () => setIsFocused(true)
-    const handleBlur = () => setIsFocused(false)
-
-    // Определяем, заполнено ли поле
-    const hasValue = !!value // Преобразуем Date | null | undefined в boolean
-
-    function handleChangeRaw(e?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) {
-      const input = (e?.target as HTMLInputElement)?.value
-      if (!input) return
-      const parsed = parse(input, 'dd.MM.yyyy', new Date(), { locale: uk })
-      if (
-        isValid(parsed) &&
-        (effectiveMaxDate ? parsed <= effectiveMaxDate : true) &&
-        (minDate ? parsed >= minDate : true)
-      ) {
-        onChange(parsed)
-      }
-    }
+    const hasValue = !!value
 
     return (
       <div className={`relative w-full ${className || ''}`}>
@@ -81,23 +66,21 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
           <DatePicker
             selected={value}
             onChange={onChange}
-            onChangeRaw={handleChangeRaw}
             onBlur={onBlur}
-            dateFormat="dd.MM.yyyy"
+            showTimeSelect
+            timeFormat="HH:mm"
+            timeIntervals={15}
+            timeCaption="Час"
+            dateFormat="dd.MM.yyyy HH:mm"
             placeholderText={placeholder}
-            minDate={minDate}
-            maxDate={effectiveMaxDate}
             disabled={disabled}
             required={required}
-            onCalendarOpen={handleFocus}
-            onCalendarClose={handleBlur}
-            showYearDropdown
-            showMonthDropdown
-            scrollableYearDropdown
-            yearDropdownItemNumber={200}
-            todayButton={showTodayButton ? 'Сьогодні' : undefined}
+            onCalendarOpen={() => setIsFocused(true)}
+            onCalendarClose={() => setIsFocused(false)}
             locale={locale}
-            customInput={<InputFieldWithMask ref={ref} id={finalId} name={name} label={label} />}
+            customInput={
+              <InputDateTimeFieldWithMask ref={ref} id={finalId} name={name} label={label} />
+            }
             wrapperClassName="react-datepicker__wrapper w-full"
             calendarClassName="react-datepicker__calendar--themed"
           />
@@ -124,4 +107,5 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
   },
 )
 
-export default InputDateField
+InputDateTimeField.displayName = 'InputDateTimeField'
+export default InputDateTimeField

@@ -31,6 +31,39 @@
   @apply top-3.5 px-6;
 }
 
+/*
+  Иконка-стрелка.
+*/
+.react-datepicker__calendar--themed .react-datepicker__navigation-icon::before {
+  content: '';
+  display: block;
+  @apply border-slate-600 dark:border-slate-400;
+  border-style: solid;
+  border-width: 2px 2px 0 0;
+  height: 0.5rem;
+  width: 0.5rem;
+}
+
+/*
+  Поворачиваем стрелку "назад".
+*/
+.react-datepicker__calendar--themed
+  .react-datepicker__navigation--previous
+  .react-datepicker__navigation-icon::before {
+  transform: rotate(225deg);
+}
+
+/*
+  Поворачиваем стрелку "вперед".
+*/
+.react-datepicker__calendar--themed
+  .react-datepicker__navigation--next
+  .react-datepicker__navigation-icon::before {
+  transform: rotate(45deg);
+  /* Небольшая коррекция положения для визуального центрирования */
+  @apply -translate-x-0.5;
+}
+
 /* Выпадающие списки для выбора месяца и года */
 .react-datepicker__month-read-view--selected-month,
 .react-datepicker__year-read-view--selected-year {
@@ -125,7 +158,7 @@
 /* Общий стиль для каждого пункта (месяца или года) в списке */
 .react-datepicker__calendar--themed .react-datepicker__month-option,
 .react-datepicker__calendar--themed .react-datepicker__year-option {
-  @apply w-full cursor-pointer p-2 text-left text-sm text-gray-800 transition-colors dark:text-slate-200;
+  @apply w-full cursor-pointer p-2 text-left text-base text-gray-800 transition-colors dark:text-slate-200;
   @apply hover:bg-gray-300 dark:hover:bg-slate-600;
 }
 
@@ -145,4 +178,60 @@
 .react-datepicker__calendar--themed .react-datepicker__month-option--selected,
 .react-datepicker__calendar--themed .react-datepicker__year-option--selected {
   @apply hidden;
+}
+
+/* ВЫБОР ВРЕМЕНИ (Time List)
+-------------------------------------------------------------------------- */
+
+/* Контейнер для списка времени. Убираем лишнюю границу */
+.react-datepicker__calendar--themed .react-datepicker__time-container {
+  @apply w-full border-0;
+}
+
+/* Заголовок "Час" */
+.react-datepicker__calendar--themed
+  .react-datepicker__time-container
+  .react-datepicker-time__header {
+  @apply bg-gray-200 p-2 text-center text-base font-bold text-gray-800 dark:bg-gray-900 dark:text-slate-200;
+}
+
+.react-datepicker__calendar--themed .react-datepicker__time {
+  @apply bg-transparent;
+}
+
+/* Сам список времени, который скроллится */
+.react-datepicker__calendar--themed .react-datepicker__time-list {
+  @apply h-60 overflow-y-auto pb-2;
+}
+
+/* Базовый стиль для элемента списка времени */
+.react-datepicker__calendar--themed .react-datepicker__time-list-item {
+  /* FIX 1: Убираем font-semibold отсюда, чтобы жирным был только ВЫБРАННЫЙ пункт. Меняем цвет текста на slate-200 для полного соответствия. */
+  @apply flex h-auto cursor-pointer items-center bg-transparent px-4 py-2 text-left text-base text-gray-800 transition-colors dark:text-slate-200;
+}
+
+/* Стиль для наведения */
+.react-datepicker__calendar--themed
+  .react-datepicker__time-list-item:not(
+    .react-datepicker__time-list-item--disabled,
+    .react-datepicker__time-list-item--selected
+  ):hover {
+  /* FIX 2: Меняем цвет фона при наведении на dark:bg-slate-600 для соответствия месяцам. */
+  @apply bg-gray-300 dark:bg-slate-600;
+}
+
+/* Стиль для ВЫБРАННОГО времени */
+.react-datepicker__calendar--themed .react-datepicker__time-list-item--selected {
+  /* FIX 1: Добавляем font-semibold сюда. */
+  @apply bg-blue-600 font-semibold text-white dark:bg-blue-500;
+}
+
+/* FIX 3: Обновляем правило, чтобы оно было консистентным и точно работало */
+.react-datepicker__calendar--themed .react-datepicker__time-list-item--selected:hover {
+  @apply bg-blue-600 font-semibold text-white dark:bg-blue-500;
+}
+
+/* Стиль для неактивного времени */
+.react-datepicker__calendar--themed .react-datepicker__time-list-item--disabled {
+  @apply cursor-not-allowed text-gray-300 dark:text-slate-700;
 }

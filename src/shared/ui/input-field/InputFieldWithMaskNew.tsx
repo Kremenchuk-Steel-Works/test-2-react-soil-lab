@@ -1,29 +1,38 @@
 import { forwardRef, useCallback } from 'react'
 import { useMergeRefs } from '@floating-ui/react'
-import { useMask } from '@react-input/mask'
+import { useMask, type InputMaskProps } from '@react-input/mask'
 import { getCorrectedDateString } from '@/shared/lib/react-input-mask/сorrected-date-string'
 import InputField, { type InputFieldProps } from '@/shared/ui/input-field/InputField'
 
-// Расширяем пропсы, чтобы включить стандартные атрибуты инпута, включая onChange
-type InputFieldWithMaskProps = InputFieldProps & React.InputHTMLAttributes<HTMLInputElement>
+// Расширяем пропсы, чтобы включить параметры для маски
+type InputFieldWithMaskProps = InputFieldProps &
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    mask: InputMaskProps['mask']
+    replacement: InputMaskProps['replacement']
+    showMask?: InputMaskProps['showMask']
+  }
 
 const InputFieldWithMask = forwardRef<HTMLInputElement, InputFieldWithMaskProps>(
-  ({ id, name, label, onChange, ...props }, ref) => {
+  ({ id, name, label, onChange, mask, replacement, showMask = false, ...props }, ref) => {
     const inputRef = useMask({
-      mask: 'дд.мм.рррр',
-      replacement: { д: /\d/, м: /\d/, р: /\d/ },
-      showMask: false,
+      mask,
+      replacement,
+      showMask,
       separate: true,
     })
 
     const mergedRefs = useMergeRefs([inputRef, ref])
 
+    // Логика автокорреции даты. Ты можешь расширить ее или сделать отключаемой,
+    // если для времени она не нужна. Пока оставляем как есть.
     const handleChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
         const input = e.target
         const originalValue = input.value
         const originalCursorPosition = input.selectionStart
 
+        // Важно: getCorrectedDateString может потребовать доработки для поддержки времени,
+        // если в нем есть строгая логика, завязанная на формат dd.MM.yyyy
         const correctedValue = getCorrectedDateString(originalValue, originalCursorPosition)
 
         if (originalValue !== correctedValue) {
@@ -58,5 +67,7 @@ const InputFieldWithMask = forwardRef<HTMLInputElement, InputFieldWithMaskProps>
     )
   },
 )
+
+InputFieldWithMask.displayName = 'InputFieldWithMask'
 
 export default InputFieldWithMask

@@ -34,7 +34,7 @@ export default function LibraryForm({ defaultValues, onSubmit, submitBtnName }: 
     } catch (err) {
       const error = err as Error
       setError('root', { message: error.message })
-      logger.error(err)
+      logger.error(err, data)
     }
   }
 

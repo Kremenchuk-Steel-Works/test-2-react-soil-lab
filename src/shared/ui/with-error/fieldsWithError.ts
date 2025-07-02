@@ -7,9 +7,11 @@ import InputField from '@/shared/ui/input-field/InputField'
 import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
 import Select from '@/shared/ui/select/Select'
 import { withError } from '@/shared/ui/with-error/WithError'
+import { DateTimePicker } from '../input-field/DateTimePicker'
 
 export const InputFieldWithError = withError(InputField)
 export const InputDateFieldWithError = withError(InputDateField)
+export const DateTimePickerWithError = withError(DateTimePicker)
 
 export const ButtonWithError = withError(Button)
 

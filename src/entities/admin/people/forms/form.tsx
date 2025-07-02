@@ -17,6 +17,7 @@ import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
 import FormDateField from '@/shared/ui/forms/FormDateField'
+import FormDateTimePicker from '@/shared/ui/forms/FormDateTime'
 import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { OptionalField } from '@/shared/ui/forms/OptionalField'
@@ -56,13 +57,12 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
   })
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
-      logger.debug('Отправка формы', data)
       const response = await onSubmit(data)
       logger.debug('Форма успешно выполнена', response)
     } catch (err) {
       const error = err as Error
       setError('root', { message: error.message })
-      logger.error(err)
+      logger.error(err, data)
     }
   }
 
@@ -242,6 +242,34 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
             isVirtualized
             placeholder="Оберіть організацію 2"
             errorMessage={getNestedErrorMessage(errors, 'organizationIds')}
+          />
+        )}
+      />
+
+      <Controller
+        name="eventDeadline"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormDateTimePicker field={field} fieldState={fieldState} type="date" label="ДАТА" />
+        )}
+      />
+
+      <Controller
+        name="eventTime"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormDateTimePicker field={field} fieldState={fieldState} type="time" label="ЧАС" />
+        )}
+      />
+      <Controller
+        name="eventDeadline"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormDateTimePicker
+            field={field}
+            fieldState={fieldState}
+            type="datetime"
+            label="ДАТА ЧАС"
           />
         )}
       />

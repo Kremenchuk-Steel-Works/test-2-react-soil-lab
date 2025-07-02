@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react'
+import React, { forwardRef, useId, useState } from 'react'
 import { Calendar, Eye, EyeOff } from 'lucide-react'
 import 'react-datepicker/dist/react-datepicker.css'
 
@@ -21,17 +21,23 @@ const filterInput = (type: string | undefined, e: React.FormEvent<HTMLInputEleme
 }
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
-  ({ label, type, ...props }, ref) => {
+  ({ label, type, id, ...props }, ref) => {
     const isPassword = type === 'password'
     const [visibleText, setVisibleText] = useState(false)
-    const currentType = isPassword ? (visibleText ? 'text' : 'password') : type
 
+    // Генерируем уникальный ID с помощью хука useId
+    const generatedId = useId()
+    // Используем переданный id, если он есть, иначе — сгенерированный
+    const finalId = id || generatedId
+
+    const currentType = isPassword ? (visibleText ? 'text' : 'password') : type
     const toggleVisibility = () => setVisibleText((v) => !v)
 
     return (
       <div className="relative w-full">
         <input
           ref={ref}
+          id={finalId}
           type={currentType}
           onWheel={(e) => e.currentTarget.blur()}
           onBeforeInput={(e) => filterInput(type, e)}
@@ -40,6 +46,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           placeholder=" "
         />
         <label
+          htmlFor={finalId}
           className={`pointer-events-none absolute top-1 left-4 inline-block w-full truncate pr-5 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-sm peer-focus:text-blue-500 dark:text-gray-400`}
         >
           {label}
