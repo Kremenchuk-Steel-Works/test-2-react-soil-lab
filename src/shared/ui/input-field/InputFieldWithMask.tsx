@@ -10,8 +10,8 @@ type InputFieldWithMaskProps = InputFieldProps & React.InputHTMLAttributes<HTMLI
 const InputFieldWithMask = forwardRef<HTMLInputElement, InputFieldWithMaskProps>(
   ({ id, name, label, onChange, ...props }, ref) => {
     const inputRef = useMask({
-      mask: 'дд.мм.рррр',
-      replacement: { д: /\d/, м: /\d/, р: /\d/ },
+      mask: '__.__.____',
+      replacement: { _: /\d/ },
       showMask: false,
       separate: true,
     })

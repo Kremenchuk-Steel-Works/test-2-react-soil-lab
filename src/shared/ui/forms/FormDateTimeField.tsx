@@ -1,26 +1,30 @@
-import { format, isValid, parse } from 'date-fns' // FIX: Импортируем isValid и parse
+import { format, isValid, parse } from 'date-fns'
 import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
-import type { DateTimePickerProps } from '../input-field/DateTimePicker'
+import type {
+  DateTimePickerProps,
+  DateTimePickerType,
+} from '../input-field/DateTime/DateTimePicker'
 import { DateTimePickerWithError } from '../with-error/fieldsWithError'
 
-type FormDateTimePickerProps = Omit<
+type FormDateTimeFieldProps = Omit<
   DateTimePickerProps,
-  'value' | 'onChange' | 'onBlur' | 'ref'
+  'value' | 'onChange' | 'onBlur' | 'ref' | 'type'
 > & {
   field: ControllerRenderProps<any, any>
   fieldState: ControllerFieldState
+  type?: DateTimePickerType
   stringFormat?: string
   errorMessage?: string
 }
 
-const FormDateTimePicker = ({
+const FormDateTimeField = ({
   field,
   fieldState,
-  type,
+  type = 'date',
   stringFormat,
   errorMessage,
   ...rest
-}: FormDateTimePickerProps) => {
+}: FormDateTimeFieldProps) => {
   const getFormat = () => {
     if (stringFormat) return stringFormat
     switch (type) {
@@ -29,6 +33,7 @@ const FormDateTimePicker = ({
       case 'datetime':
         return "yyyy-MM-dd'T'HH:mm"
       case 'date':
+        return 'yyyy-MM-dd'
       default:
         return 'yyyy-MM-dd'
     }
@@ -64,4 +69,4 @@ const FormDateTimePicker = ({
   )
 }
 
-export default FormDateTimePicker
+export default FormDateTimeField

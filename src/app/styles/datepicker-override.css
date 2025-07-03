@@ -98,12 +98,13 @@
 
 /* Названия дней недели (пн, вт, ср...) */
 .react-datepicker__calendar--themed .react-datepicker__day-name {
-  @apply m-0.5 h-7 w-9 text-center text-sm font-medium text-gray-600 dark:text-slate-400;
+  @apply m-0.5 h-7 w-9 text-center text-base font-medium text-gray-600 dark:text-slate-400;
+  user-select: none;
 }
 
 /* Базовый стиль для ячейки с днем */
 .react-datepicker__calendar--themed .react-datepicker__day {
-  @apply m-0.5 h-9 w-9 rounded-md leading-9 font-semibold text-gray-800 transition-colors dark:text-slate-300;
+  @apply m-0.5 h-9 w-9 rounded-md text-base leading-9 font-semibold text-gray-800 transition-colors dark:text-slate-300;
 }
 
 /* Стиль для наведения на обычный день */
@@ -188,50 +189,132 @@
   @apply w-full border-0;
 }
 
-/* Заголовок "Час" */
-.react-datepicker__calendar--themed
-  .react-datepicker__time-container
-  .react-datepicker-time__header {
-  @apply bg-gray-200 p-2 text-center text-base font-bold text-gray-800 dark:bg-gray-900 dark:text-slate-200;
+/*
+  Базовый стиль для заголовка "Час".
+  По умолчанию он имеет отступ py-2, который подходит для
+  комбинированного вида (Date + Time).
+*/
+.react-datepicker__calendar--themed .react-datepicker-time__header {
+  @apply bg-gray-200 p-2 py-6 text-center text-base font-bold text-gray-800 dark:bg-gray-900 dark:text-slate-200;
+}
+
+/*
+  Более специфичный селектор для time-only пикера.
+  Библиотека добавляет класс `.react-datepicker--time-only` к корневому элементу.
+  Мы используем это, чтобы переопределить вертикальный отступ на py-6.
+*/
+.react-datepicker__calendar--themed.react-datepicker--time-only .react-datepicker-time__header {
+  @apply py-2;
 }
 
 .react-datepicker__calendar--themed .react-datepicker__time {
   @apply bg-transparent;
 }
 
-/* Сам список времени, который скроллится */
-.react-datepicker__calendar--themed .react-datepicker__time-list {
-  @apply h-60 overflow-y-auto pb-2;
-}
-
 /* Базовый стиль для элемента списка времени */
 .react-datepicker__calendar--themed .react-datepicker__time-list-item {
-  /* FIX 1: Убираем font-semibold отсюда, чтобы жирным был только ВЫБРАННЫЙ пункт. Меняем цвет текста на slate-200 для полного соответствия. */
-  @apply flex h-auto cursor-pointer items-center bg-transparent px-4 py-2 text-left text-base text-gray-800 transition-colors dark:text-slate-200;
+  /* FIX: Добавляем flex для идеального центрирования и h-auto для отмены фикс. высоты */
+  @apply flex h-auto cursor-pointer items-center bg-transparent px-4 py-2 text-left text-base font-semibold text-gray-800 transition-colors dark:text-slate-300;
 }
 
 /* Стиль для наведения */
 .react-datepicker__calendar--themed
-  .react-datepicker__time-list-item:not(
-    .react-datepicker__time-list-item--disabled,
-    .react-datepicker__time-list-item--selected
-  ):hover {
-  /* FIX 2: Меняем цвет фона при наведении на dark:bg-slate-600 для соответствия месяцам. */
-  @apply bg-gray-300 dark:bg-slate-600;
+  .react-datepicker__time-list-item:not(.react-datepicker__time-list-item--disabled):hover {
+  @apply bg-gray-200 dark:bg-slate-700;
 }
 
 /* Стиль для ВЫБРАННОГО времени */
 .react-datepicker__calendar--themed .react-datepicker__time-list-item--selected {
-  /* FIX 1: Добавляем font-semibold сюда. */
-  @apply bg-blue-600 font-semibold text-white dark:bg-blue-500;
+  @apply bg-blue-600 text-white dark:bg-blue-500;
 }
 
-/* FIX 3: Обновляем правило, чтобы оно было консистентным и точно работало */
+/* FIX: Это правило гарантирует, что фон ВЫБРАННОГО элемента не меняется при наведении */
 .react-datepicker__calendar--themed .react-datepicker__time-list-item--selected:hover {
-  @apply bg-blue-600 font-semibold text-white dark:bg-blue-500;
+  @apply bg-blue-600 text-white dark:bg-blue-500;
 }
 
 /* Стиль для неактивного времени */
 .react-datepicker__calendar--themed .react-datepicker__time-list-item--disabled {
   @apply cursor-not-allowed text-gray-300 dark:text-slate-700;
+}
+
+/* Контейнер для объединённого Date + Timepicker */
+.date-time-picker {
+  @apply flex flex-row items-start; /* по горизонтали, выровнено по верхнему краю */
+}
+
+/* Дата-календарь и список времени занимают свои области */
+.date-time-picker .react-datepicker {
+  display: inline-flex !important;
+  flex-direction: row !important;
+
+  /* FIX: задаём базовую ширину и минимальную ширину */
+  flex-basis: auto;
+  min-width: 0; /* позволяет элементам сжиматься и не вылазить */
+}
+
+/* Контейнер даты — занимает оставшееся пространство */
+.date-time-picker .react-datepicker__month-container {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Контейнер времени — фиксированной ширины */
+.date-time-picker .react-datepicker__time-container {
+  flex: 0 0 7rem; /* фиксируем ширину */
+  max-height: 20rem; /* или любое разумное ограничение высоты */
+  overflow-y: auto; /* включаем прокрутку времени */
+  border-left: 1px solid #ccc;
+}
+
+/* Убираем внутренние лишние рамки */
+.react-datepicker__time-container,
+.react-datepicker__month-container {
+  @apply border-0 p-0;
+}
+
+/* Стилизация заголовка "Час" — по центру на ширине контейнера времени */
+.date-time-picker .react-datepicker__time-container .react-datepicker-time__header {
+  @apply bg-gray-200 p-2 text-center font-bold dark:bg-gray-900;
+}
+
+/* Убираем стандартный блок .react-datepicker (избавимся от column-dir) */
+.react-datepicker {
+  display: inline-flex !important;
+  flex-direction: row !important;
+}
+
+.react-datepicker__time-list {
+  max-height: 15rem; /* чуть меньше родительского, чтобы не съезжало */
+  overflow-y: auto;
+}
+
+/* Таймер внутри общего контейнера date-time-picker */
+.date-time-picker .react-datepicker__time-container .react-datepicker-time__header {
+  @apply bg-gray-200 p-2 text-center text-base font-semibold text-gray-800 dark:bg-gray-900 dark:text-slate-200;
+
+  font-size: 1rem; /* чуть больше: 16px */
+  line-height: 1.5; /* чтобы текст не выглядел мелко */
+}
+
+/* Отдельный datepicker — не меняем стандартный размер */
+.react-datepicker--standalone .react-datepicker-time__header {
+  font-size: 0.875rem; /* как было: 14px */
+}
+
+/* Чтобы flex-элемент не вылезал за границы */
+.date-time-picker .react-datepicker {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  flex-basis: auto;
+  min-width: 0; /* предотвращает рост flex-элемента по содержимому */ /* :contentReference[oaicite:5]{index=5} */
+}
+
+/* Предотвращает "scroll chaining". Скролл "запирается" внутри этого элемента. */
+.react-datepicker__calendar--themed .react-datepicker__time-list,
+.react-datepicker__calendar--themed .react-datepicker__month-dropdown,
+.react-datepicker__calendar--themed .react-datepicker__year-dropdown {
+  /* contain: Предотвращает "scroll chaining". Скролл "запирается" внутри этого элемента.
+  */
+  overscroll-behavior: contain;
 }

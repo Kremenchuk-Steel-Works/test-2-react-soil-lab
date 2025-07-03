@@ -5,7 +5,6 @@ import InputTimeField, { type InputTimeFieldProps } from './InputTimeField'
 
 export type DateTimePickerType = 'date' | 'time' | 'datetime'
 
-// Собираем все возможные пропсы в один тип
 type SharedProps = Omit<InputDateFieldProps & InputTimeFieldProps & InputDateTimeFieldProps, 'ref'>
 
 export type DateTimePickerProps = SharedProps & {

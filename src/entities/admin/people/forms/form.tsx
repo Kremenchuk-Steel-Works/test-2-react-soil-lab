@@ -17,7 +17,7 @@ import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
 import FormDateField from '@/shared/ui/forms/FormDateField'
-import FormDateTimePicker from '@/shared/ui/forms/FormDateTime'
+import FormDateTimePicker from '@/shared/ui/forms/FormDateTimeField'
 import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { OptionalField } from '@/shared/ui/forms/OptionalField'
@@ -175,6 +175,19 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
       />
 
       <Controller
+        name="birthDate"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormDateTimePicker
+            field={field}
+            fieldState={fieldState}
+            label="Дата народження"
+            errorMessage={getNestedErrorMessage(errors, 'birthDate')}
+          />
+        )}
+      />
+
+      <Controller
         name="photoUrl"
         control={control}
         render={({ field, fieldState }) => (
@@ -250,7 +263,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
         name="eventDeadline"
         control={control}
         render={({ field, fieldState }) => (
-          <FormDateTimePicker field={field} fieldState={fieldState} type="date" label="ДАТА" />
+          <FormDateTimePicker field={field} fieldState={fieldState} label="ДАТА" />
         )}
       />
 
@@ -262,7 +275,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
         )}
       />
       <Controller
-        name="eventDeadline"
+        name="eventDeadline2"
         control={control}
         render={({ field, fieldState }) => (
           <FormDateTimePicker
