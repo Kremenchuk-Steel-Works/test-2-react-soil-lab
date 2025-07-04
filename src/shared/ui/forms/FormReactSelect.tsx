@@ -2,7 +2,10 @@ import { useEffect, useMemo, useState, type ComponentProps } from 'react'
 import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
 import type { OnChangeValue } from 'react-select'
 import ReactSelect, { type Option } from '@/shared/ui/select/ReactSelect'
-import { ReactSelectMultiWithError, ReactSelectWithError } from '../with-error/fieldsWithError'
+import {
+  ReactSelectMultiWithError,
+  ReactSelectWithError,
+} from '@/shared/ui/with-error/fieldsWithError'
 
 type ReactSelectProps = ComponentProps<typeof ReactSelect>
 

@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge'
 
-export type InputFieldProps = {
+type InputFieldProps = {
   className?: string
   inputClassName?: string
 } & React.InputHTMLAttributes<HTMLInputElement>

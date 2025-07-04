@@ -1,6 +1,6 @@
 import { components, type ControlProps, type GroupBase } from 'react-select'
 import { twMerge } from 'tailwind-merge'
-import type { Option } from './ReactSelect'
+import type { Option } from '@/shared/ui/select/ReactSelect'
 
 export const FloatingLabelControl = <
   OptionType extends Option,

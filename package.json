@@ -7,7 +7,8 @@
     "dev": "vite --host",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "spellcheck": "cspell \"**/*.{ts,tsx,md,json}\" --show-context"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.8",
@@ -55,6 +56,7 @@
     "zod-i18n-map": "^2.27.0"
   },
   "devDependencies": {
+    "@cspell/dict-ru_ru": "^2.3.0",
     "@eslint/js": "^9.25.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
     "@tailwindcss/postcss": "^4.1.5",
@@ -64,6 +66,8 @@
     "@types/react-window": "^1.8.8",
     "@types/react-window-infinite-loader": "^1.0.9",
     "autoprefixer": "^10.4.21",
+    "cspell": "^9.1.2",
+    "cspell-dict-uk-ua": "^1.1.1",
     "eslint": "^9.25.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",

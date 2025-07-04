@@ -1,4 +1,4 @@
-import type { LibraryDetailResponse } from '../types/response.dto'
+import type { LibraryDetailResponse } from '@/entities/library/types/response.dto'
 
 export const mockLibrary: LibraryDetailResponse[] = [
   {

@@ -7,7 +7,7 @@ import {
   type ValueContainerProps,
 } from 'react-select'
 import { twMerge } from 'tailwind-merge'
-import type { Option } from './ReactSelect'
+import type { Option } from '@/shared/ui/select/ReactSelect'
 
 export type ClassNamesConfig = Partial<{
   control: (props: { isFocused: boolean; isDisabled: boolean }) => string

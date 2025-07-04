@@ -5,11 +5,11 @@ import {
   type Props as SelectProps,
   type StylesConfig,
 } from 'react-select'
-import Checkbox from '@/shared/ui/checkbox/Checkox'
+import Checkbox from '@/shared/ui/checkbox/Checkbox'
 import ReactSelectNoLabel, {
   type ReactSelectNoLabelClassNamesConfig,
   type ReactSelectNoLabelOption,
-} from './ReactSelectNoLabel'
+} from '@/shared/ui/select/ReactSelectNoLabel'
 
 interface CustomMultiSelectProps<
   OptionType extends ReactSelectNoLabelOption,

@@ -1,6 +1,6 @@
+import type { LibraryBase } from '@/entities/library/types/base.model'
 import type { Timestamps } from '@/types/common'
 import type { PaginatedListResponse } from '@/types/pagination'
-import type { LibraryBase } from './base.model'
 
 export interface LibraryResponse {
   id: string

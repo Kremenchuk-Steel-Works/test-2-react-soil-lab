@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { CirclePlus, Database, Info, Languages, RefreshCcw } from 'lucide-react'
 import type { AppRoute } from '@/app/routes/routes'
-import AdminCityLayout from '@/pages/admin-panel/city/Layout'
 
-const AdminCityList = lazy(() => import('../../../pages/admin-panel/city/list/List'))
-const AdminCityAdd = lazy(() => import('../../../pages/admin-panel/city/Add'))
-const AdminCityDetails = lazy(() => import('../../../pages/admin-panel/city/Details'))
-const AdminCityUpdate = lazy(() => import('../../../pages/admin-panel/city/Update'))
+const AdminCityLayout = lazy(() => import('@/pages/admin-panel/city/Layout'))
+const AdminCityList = lazy(() => import('@/pages/admin-panel/city/list/List'))
+const AdminCityAdd = lazy(() => import('@/pages/admin-panel/city/Add'))
+const AdminCityDetails = lazy(() => import('@/pages/admin-panel/city/Details'))
+const AdminCityUpdate = lazy(() => import('@/pages/admin-panel/city/Update'))
 
 export const cityRoutes: AppRoute = {
   key: 'adminCity',

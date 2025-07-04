@@ -5,12 +5,12 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { isValid, parse } from 'date-fns'
 import { uk } from 'date-fns/locale'
 import { useCloseOnScrollOutside } from '@/shared/hooks/useCloseOnScrollOutside'
-import { getCorrectedDateString } from '@/shared/lib/react-input-mask/corrected-date-string'
 import InputFieldWithMask from '@/shared/ui/input-field/DateTime/InputFieldWithMask'
 
 registerLocale('uk', uk)
 
-export type InputDateFieldProps = {
+// 1. Добавляем новые пропсы для управления диапазоном
+export type InputYearFieldProps = {
   label: string
   value: Date | undefined
   onChange: (date: Date | null) => void
@@ -22,13 +22,12 @@ export type InputDateFieldProps = {
   required?: boolean
   className?: string
   allowFutureDates?: boolean
-  showTodayButton?: boolean
   locale?: string
   id?: string
   name?: string
 }
 
-const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
+const InputYearField = forwardRef<HTMLInputElement, InputYearFieldProps>(
   (
     {
       label,
@@ -42,7 +41,6 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
       disabled = false,
       className,
       allowFutureDates = false,
-      showTodayButton = false,
       locale = 'uk',
       id,
       name,
@@ -59,28 +57,29 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
 
     const effectiveMaxDate = allowFutureDates ? maxDate : maxDate || new Date()
 
+    // Используем onChangeRaw для надежной обработки ручного ввода
     const handleChangeRaw = (
       e?: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>,
     ) => {
       const inputValue = (e?.target as HTMLInputElement)?.value
 
-      // Очищаем значение, если инпут пустой
-      if (inputValue === '') {
+      if (inputValue === '' || inputValue === '____') {
         onChange(null)
         return
       }
 
-      // Проверяем, что дата введена полностью, чтобы не парсить неполные значения
-      if (!/^\d{2}\.\d{2}\.\d{4}$/.test(inputValue)) {
+      // Проверяем, что год введен полностью (4 цифры)
+      if (!/^\d{4}$/.test(inputValue)) {
         return
       }
 
-      const parsedDate = parse(inputValue, 'dd.MM.yyyy', new Date())
+      const parsedDate = parse(inputValue, 'yyyy', new Date())
 
       if (isValid(parsedDate)) {
         const isWithinMaxDate = effectiveMaxDate ? parsedDate <= effectiveMaxDate : true
         const isWithinMinDate = minDate ? parsedDate >= minDate : true
 
+        // Применяем значение, только если оно в разрешенном диапазоне
         if (isWithinMaxDate && isWithinMinDate) {
           onChange(parsedDate)
         }
@@ -97,32 +96,32 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
           onBlur={onBlur}
           onCalendarOpen={() => setCalendarOpen(true)}
           onCalendarClose={() => setCalendarOpen(false)}
+          showYearPicker
+          dateFormat="yyyy"
+          minDate={minDate}
+          maxDate={effectiveMaxDate}
+          scrollableYearDropdown
+          yearDropdownItemNumber={200}
           customInput={
             <InputFieldWithMask
               ref={ref}
               id={finalId}
               name={name}
               label={label}
+              placeholder={placeholder}
+              disabled={disabled}
+              required={required}
               maskOptions={{
-                mask: '__.__.____',
+                mask: '____',
                 replacement: { _: /\d/ },
                 showMask: false,
                 separate: true,
               }}
-              correctionFn={getCorrectedDateString}
             />
           }
-          dateFormat="dd.MM.yyyy"
           placeholderText={placeholder}
-          minDate={minDate}
-          maxDate={effectiveMaxDate}
           disabled={disabled}
           required={required}
-          showYearDropdown
-          showMonthDropdown
-          scrollableYearDropdown
-          yearDropdownItemNumber={200}
-          todayButton={showTodayButton ? 'Сьогодні' : undefined}
           locale={locale}
           onInputClick={() => datePickerRef.current?.setFocus()}
           wrapperClassName="w-full"
@@ -135,7 +134,7 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => onChange(null)}
             className="absolute top-1/2 right-11 -translate-y-1/2 transform rounded text-gray-600 transition-colors hover:text-gray-900 focus:outline-none dark:text-gray-400 dark:hover:text-gray-200"
-            aria-label="Очистить дату"
+            aria-label="Очистити рік"
           >
             <X size={16} />
           </button>
@@ -153,4 +152,4 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
   },
 )
 
-export default InputDateField
+export default InputYearField

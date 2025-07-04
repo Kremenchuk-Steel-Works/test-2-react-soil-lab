@@ -1,0 +1,69 @@
+{
+  "version": "0.2",
+  "language": "en,ru,uk",
+  "import": [
+    "@cspell/dict-ru_ru/cspell-ext.json",
+    "./node_modules/cspell-dict-uk-ua/cspell-ext.json"
+  ],
+  "allowCompoundWords": true,
+  "ignoreRegExpList": ["//.*", "/\\*\\*[\\s\\S]*?\\*/"],
+  "ignorePaths": [
+    "node_modules/",
+    "dist/",
+    "build/",
+    "package.json",
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    "tailwind.config.js",
+    "vite.config.ts"
+  ],
+  "words": [
+    // Technical Terms & Libraries
+    "Vite",
+    "Zustand",
+    "tsx",
+    "clsx",
+    "lucide",
+    "endregion",
+    "Streamlit",
+    "tanstack",
+    "axios",
+    "enum",
+    "wordprocessingml",
+
+    // IT Jargon (Cyrillic)
+    "пагинированный",
+    "селектов",
+    "Мемоизированная",
+    "скролле",
+    "гггг",
+    "типобезопасна",
+    "плейсхолдер",
+    "маппируемых",
+    "маппинга",
+    "скролла",
+    "селекта",
+
+    // Ukrainian/Russian words specific to the project's domain
+    "Адмін",
+    "проєктів",
+    "проєктами",
+    "логів",
+    "репозиторію",
+    "Інклюзивність",
+    "інклюзивність",
+    "електробезпеки",
+    "електробезпека",
+    "Налоговий",
+
+    // Foreign Words & Names
+    "İstanbul",
+    "القاهرة",
+    "München",
+    "भारत",
+    "दिल्ली",
+
+    // Compound or Specific Terms
+    "financials"
+  ]
+}

@@ -190,21 +190,17 @@
 }
 
 /*
-  Базовый стиль для заголовка "Час".
-  По умолчанию он имеет отступ py-2, который подходит для
-  комбинированного вида (Date + Time).
+  Базовый стиль для заголовка "Час" в datetime.
 */
 .react-datepicker__calendar--themed .react-datepicker-time__header {
   @apply bg-gray-200 p-2 py-6 text-center text-base font-bold text-gray-800 dark:bg-gray-900 dark:text-slate-200;
 }
 
 /*
-  Более специфичный селектор для time-only пикера.
-  Библиотека добавляет класс `.react-datepicker--time-only` к корневому элементу.
-  Мы используем это, чтобы переопределить вертикальный отступ на py-6.
+  Стиль для заголовка "Час" отдельно.
 */
 .react-datepicker__calendar--themed.react-datepicker--time-only .react-datepicker-time__header {
-  @apply py-2;
+  @apply py-1;
 }
 
 .react-datepicker__calendar--themed .react-datepicker__time {
@@ -317,4 +313,67 @@
   /* contain: Предотвращает "scroll chaining". Скролл "запирается" внутри этого элемента.
   */
   overscroll-behavior: contain;
+}
+
+/* СЕТКА ЛЕТ (ДЛЯ YEAR PICKER)
+-------------------------------------------------------------------------- */
+
+/* Контейнер-шапка */
+.react-datepicker__calendar--themed .react-datepicker-year-header {
+  @apply bg-gray-200 p-2 text-center text-lg font-bold text-gray-800 dark:bg-gray-900 dark:text-slate-200;
+  user-select: none;
+}
+
+/* Оболочка для сетки годов.
+*/
+.react-datepicker__calendar--themed .react-datepicker__year-wrapper {
+  @apply grid max-w-xs cursor-not-allowed grid-cols-4 gap-0 p-2;
+}
+
+/* Базовый стиль для ячейки с годом */
+.react-datepicker__calendar--themed .react-datepicker__year-text {
+  @apply flex h-10 w-14 items-center justify-center rounded-md text-base font-semibold text-gray-800 transition-colors dark:text-slate-300;
+}
+
+/* Активный (не disabled) год.
+*/
+.react-datepicker__calendar--themed
+  .react-datepicker__year-text:not(.react-datepicker__year-text--disabled) {
+  @apply pointer-events-auto cursor-pointer;
+}
+
+/* Стиль для наведения на обычный год */
+.react-datepicker__calendar--themed
+  .react-datepicker__year-text:not(.react-datepicker__year-text--disabled):hover {
+  @apply bg-gray-200 dark:bg-slate-700;
+}
+
+.react-datepicker__calendar--themed .react-datepicker__year-text:focus {
+  @apply outline-none;
+}
+.react-datepicker__calendar--themed .react-datepicker__year-text--selected {
+  @apply bg-blue-600 font-semibold text-white ring-0 dark:bg-blue-500 dark:text-slate-100;
+}
+.react-datepicker__calendar--themed .react-datepicker__year-text--selected:hover {
+  @apply bg-blue-600 dark:bg-blue-500;
+}
+.react-datepicker__calendar--themed .react-datepicker__year-text--today {
+  @apply font-bold ring-1 ring-blue-500;
+}
+
+/* Неактивные (disabled) года.
+*/
+.react-datepicker__calendar--themed .react-datepicker__year-text--disabled {
+  @apply pointer-events-none text-gray-300 dark:text-slate-700;
+}
+
+.react-datepicker__calendar--themed .react-datepicker__year-text--disabled:hover {
+  @apply bg-transparent dark:bg-transparent;
+}
+.react-datepicker__calendar--themed .react-datepicker__year-text--keyboard-selected {
+  @apply bg-transparent dark:bg-transparent;
+}
+.react-datepicker__calendar--themed:has(.react-datepicker-year-header)
+  .react-datepicker__navigation {
+  @apply top-2;
 }

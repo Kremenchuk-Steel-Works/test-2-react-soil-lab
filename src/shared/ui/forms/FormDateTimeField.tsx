@@ -3,8 +3,8 @@ import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-for
 import type {
   DateTimePickerProps,
   DateTimePickerType,
-} from '../input-field/DateTime/DateTimePicker'
-import { DateTimePickerWithError } from '../with-error/fieldsWithError'
+} from '@/shared/ui/input-field/DateTime/DateTimePicker'
+import { DateTimePickerWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormDateTimeFieldProps = Omit<
   DateTimePickerProps,

@@ -1,11 +1,11 @@
 import { Suspense } from 'react'
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom'
+import { PATHS } from '@/app/routes/paths'
 import ProtectedRoute from '@/app/routes/ProtectedRoute'
+import { APP_ROUTES, type AppRoute } from '@/app/routes/routes'
 import { UnAuthRoute } from '@/app/routes/UnAuthRoute'
 import LoginPage from '@/pages/LoginPage'
 import LoadingPage from '@/pages/system/LoadingPage'
-import { PATHS } from './paths'
-import { APP_ROUTES, type AppRoute } from './routes'
 
 // Рекурсивная функция построения маршрутов
 const mapRoutes = (routes: AppRoute[]): RouteObject[] => {

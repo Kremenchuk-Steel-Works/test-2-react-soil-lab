@@ -1,6 +1,9 @@
+import { mockLibrary } from '@/entities/library/mocks/mock'
+import type {
+  LibraryDetailResponse,
+  LibraryListResponse,
+} from '@/entities/library/types/response.dto'
 import type { PageParams } from '@/types/pagination'
-import { mockLibrary } from '../mocks/mock'
-import type { LibraryDetailResponse, LibraryListResponse } from '../types/response.dto'
 
 const mockData = mockLibrary
 

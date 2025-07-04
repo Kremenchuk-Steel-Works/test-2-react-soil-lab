@@ -24,9 +24,13 @@ import CreatableSelect from 'react-select/creatable'
 import { twMerge } from 'tailwind-merge'
 import { logger } from '@/shared/lib/logger'
 import AnimatedMenu from '@/shared/ui/select/AnimatedMenu'
-import { FloatingLabelControl } from './FloatingLabelControl'
-import { baseClassNames, customComponents, type ClassNamesConfig } from './ReactSelect.styles'
-import { VirtualizedMenuList } from './VirtualizedMenuList'
+import { FloatingLabelControl } from '@/shared/ui/select/FloatingLabelControl'
+import {
+  baseClassNames,
+  customComponents,
+  type ClassNamesConfig,
+} from '@/shared/ui/select/ReactSelect.styles'
+import { VirtualizedMenuList } from '@/shared/ui/select/VirtualizedMenuList'
 
 const CreatableAsyncPaginate = withAsyncPaginate(CreatableSelect)
 

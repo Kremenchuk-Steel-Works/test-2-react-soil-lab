@@ -8,7 +8,7 @@ import {
 import type { EmployeeProfileFormFields } from '@/entities/admin/employeeProfile/forms/schema'
 import { employeeProfileOptions } from '@/entities/admin/employeeProfile/types/employmentStatus'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
-import FormDateField from '@/shared/ui/forms/FormDateField'
+import FormDateTimeField from '@/shared/ui/forms/FormDateTimeField'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
@@ -42,10 +42,9 @@ export function EmployeeProfileForm<T extends FormFields>({
         name={'employeeProfile.hiredAt' as Path<T>}
         control={control}
         render={({ field, fieldState }) => (
-          <FormDateField
+          <FormDateTimeField
             field={field}
             fieldState={fieldState}
-            minDate={new Date('1800-01-01')}
             label="Дата найму"
             errorMessage={getNestedErrorMessage(errors, 'employeeProfile.hiredAt' as Path<T>)}
           />

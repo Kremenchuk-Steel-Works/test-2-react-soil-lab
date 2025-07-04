@@ -5,8 +5,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { isValid, parse } from 'date-fns'
 import { uk } from 'date-fns/locale'
 import { useCloseOnScrollOutside } from '@/shared/hooks/useCloseOnScrollOutside'
-import { getCorrectedTimeString } from '@/shared/lib/react-input-mask/сorrected-time-string'
-import InputFieldWithMask from './InputFieldWithMask'
+import { getCorrectedTimeString } from '@/shared/lib/react-input-mask/corrected-time-string'
+import InputFieldWithMask from '@/shared/ui/input-field/DateTime/InputFieldWithMask'
 
 registerLocale('uk', uk)
 
@@ -107,7 +107,7 @@ const InputTimeField = forwardRef<HTMLInputElement, InputTimeFieldProps>(
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => onChange(null)}
             className="absolute top-1/2 right-11 -translate-y-1/2 transform rounded text-gray-600 transition-colors hover:text-gray-900 focus:outline-none dark:text-gray-400 dark:hover:text-gray-200"
-            aria-label="Очистить время"
+            aria-label="Очистити час"
           >
             <X size={16} />
           </button>
@@ -125,5 +125,4 @@ const InputTimeField = forwardRef<HTMLInputElement, InputTimeFieldProps>(
   },
 )
 
-InputTimeField.displayName = 'InputTimeField'
 export default InputTimeField

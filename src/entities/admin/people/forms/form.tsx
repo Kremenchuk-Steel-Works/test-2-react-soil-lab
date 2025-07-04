@@ -16,14 +16,12 @@ import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
-import FormDateField from '@/shared/ui/forms/FormDateField'
-import FormDateTimePicker from '@/shared/ui/forms/FormDateTimeField'
+import FormDateTimeField from '@/shared/ui/forms/FormDateTimeField'
 import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { OptionalField } from '@/shared/ui/forms/OptionalField'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
-import { organizationMockService } from '../../organizations/services/service.mock'
 
 type FormFields = PeopleFormFields
 const schema = peopleSchema
@@ -42,7 +40,8 @@ interface FormProps {
 }
 
 export default function PeopleForm({ initialData, onSubmit, submitBtnName }: FormProps) {
-  const { defaultValues = {}, options = {} } = initialData || {}
+  const { defaultValues = {} } = initialData || {}
+  // const { defaultValues = {}, options = {} } = initialData || {}
   const {
     control,
     register,
@@ -109,20 +108,11 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
       label: c.name,
     })) || []
 
-  // Функция-загрузчик для организаций
-  const loadOrganizationOptions = async (search: string, page: number) => {
-    // Вызываем новый метод сервиса
-    const { options, hasMore } = await organizationMockService.getPaginatedLookup(search, page)
-
-    // Трансформируем данные в формат { value, label }
-    return {
-      options: options.map((org) => ({
-        value: org.id,
-        label: org.legalName,
-      })),
-      hasMore,
-    }
-  }
+  // // Загрузчик для организаций
+  // const loadAsyncOrganizationOptions = useAsyncOptionsLoader(organizationMockService, {
+  //   value: 'id',
+  //   label: 'legalName',
+  // })
 
   return (
     <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
@@ -164,21 +154,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
         name="birthDate"
         control={control}
         render={({ field, fieldState }) => (
-          <FormDateField
-            field={field}
-            fieldState={fieldState}
-            minDate={new Date('1800-01-01')}
-            label="Дата народження"
-            errorMessage={getNestedErrorMessage(errors, 'birthDate')}
-          />
-        )}
-      />
-
-      <Controller
-        name="birthDate"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormDateTimePicker
+          <FormDateTimeField
             field={field}
             fieldState={fieldState}
             label="Дата народження"
@@ -240,14 +216,14 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
         )}
       />
 
-      <Controller
+      {/* <Controller
         name="organizationIds"
         control={control}
         render={({ field, fieldState }) => (
           <FormSelectField
             field={field}
             fieldState={fieldState}
-            loadOptions={loadOrganizationOptions}
+            loadOptions={loadAsyncOrganizationOptions}
             defaultOptions={options.organizations}
             isMulti
             isClearable
@@ -257,35 +233,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
             errorMessage={getNestedErrorMessage(errors, 'organizationIds')}
           />
         )}
-      />
-
-      <Controller
-        name="eventDeadline"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormDateTimePicker field={field} fieldState={fieldState} label="ДАТА" />
-        )}
-      />
-
-      <Controller
-        name="eventTime"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormDateTimePicker field={field} fieldState={fieldState} type="time" label="ЧАС" />
-        )}
-      />
-      <Controller
-        name="eventDeadline2"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormDateTimePicker
-            field={field}
-            fieldState={fieldState}
-            type="datetime"
-            label="ДАТА ЧАС"
-          />
-        )}
-      />
+      /> */}
 
       <Controller
         name="positionIds"

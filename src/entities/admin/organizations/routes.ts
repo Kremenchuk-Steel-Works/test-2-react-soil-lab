@@ -1,18 +1,12 @@
 import { lazy } from 'react'
 import { Building, CirclePlus, Database, Info, RefreshCcw } from 'lucide-react'
 import type { AppRoute } from '@/app/routes/routes'
-import AdminOrganizationsLayout from '@/pages/admin-panel/organizations/Layout'
 
-const AdminOrganizationsList = lazy(
-  () => import('../../../pages/admin-panel/organizations/list/List'),
-)
-const AdminOrganizationsAdd = lazy(() => import('../../../pages/admin-panel/organizations/Add'))
-const AdminOrganizationsDetails = lazy(
-  () => import('../../../pages/admin-panel/organizations/Details'),
-)
-const AdminOrganizationsUpdate = lazy(
-  () => import('../../../pages/admin-panel/organizations/Update'),
-)
+const AdminOrganizationsLayout = lazy(() => import('@/pages/admin-panel/organizations/Layout'))
+const AdminOrganizationsList = lazy(() => import('@/pages/admin-panel/organizations/list/List'))
+const AdminOrganizationsAdd = lazy(() => import('@/pages/admin-panel/organizations/Add'))
+const AdminOrganizationsDetails = lazy(() => import('@/pages/admin-panel/organizations/Details'))
+const AdminOrganizationsUpdate = lazy(() => import('@/pages/admin-panel/organizations/Update'))
 
 export const organizationsRoutes: AppRoute = {
   key: 'adminOrganizations',

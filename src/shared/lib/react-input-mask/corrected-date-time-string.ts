@@ -1,5 +1,5 @@
-import { getCorrectedDateString } from './сorrected-date-string'
-import { getCorrectedTimeString } from './сorrected-time-string'
+import { getCorrectedDateString } from '@/shared/lib/react-input-mask/corrected-date-string'
+import { getCorrectedTimeString } from '@/shared/lib/react-input-mask/corrected-time-string'
 
 /**
  * Корректирует строку, содержащую дату и время (дд.мм.гггг чч:мм).

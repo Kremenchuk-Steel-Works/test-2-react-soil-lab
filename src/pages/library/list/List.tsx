@@ -4,12 +4,12 @@ import { useNavigate, useResolvedPath } from 'react-router-dom'
 import { libraryQueryKeys } from '@/entities/library/services/keys'
 import { libraryService } from '@/entities/library/services/service.mock'
 import type { LibraryListResponse } from '@/entities/library/types/response.dto'
+import { libraryColumns } from '@/pages/library/list/columns'
 import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
 import { useCanAccessPath } from '@/shared/hooks/usePermissions'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 import { DataTable } from '@/widgets/data-table/DataTable'
-import { libraryColumns } from './columns'
 
 export default function LibraryList() {
   // Состояние из URL

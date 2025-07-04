@@ -1,10 +1,10 @@
 import type { PropsWithChildren } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '@/app/providers/auth/model'
+import { PATHS } from '@/app/routes/paths'
 import LoadingPage from '@/pages/system/LoadingPage'
 import NotAccessPage from '@/pages/system/NotAccessPage'
 import { useHasAccessToCurrentRoute } from '@/shared/hooks/usePermissions'
-import { PATHS } from './paths'
 
 type ProtectedRouteProps = PropsWithChildren & {
   allowedPermissions?: string[]

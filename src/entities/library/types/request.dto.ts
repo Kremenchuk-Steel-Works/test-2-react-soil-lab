@@ -1,4 +1,4 @@
-import type { LibraryBase } from './base.model'
+import type { LibraryBase } from '@/entities/library/types/base.model'
 
 export interface LibraryCreateRequest extends LibraryBase {
   file: File

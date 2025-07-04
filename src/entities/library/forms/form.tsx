@@ -1,11 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
+import { librarySchema, type LibraryFormFields } from '@/entities/library/forms/schema'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
 import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
-import { librarySchema, type LibraryFormFields } from './schema'
 
 type FormFields = LibraryFormFields
 const schema = librarySchema

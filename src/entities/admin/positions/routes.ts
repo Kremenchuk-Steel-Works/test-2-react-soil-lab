@@ -1,12 +1,12 @@
 import { lazy } from 'react'
 import { BriefcaseBusiness, CirclePlus, Database, Info, RefreshCcw } from 'lucide-react'
 import type { AppRoute } from '@/app/routes/routes'
-import AdminPositionsLayout from '@/pages/admin-panel/positions/Layout'
 
-const AdminPositionsList = lazy(() => import('../../../pages/admin-panel/positions/list/List'))
-const AdminPositionsAdd = lazy(() => import('../../../pages/admin-panel/positions/Add'))
-const AdminPositionsDetails = lazy(() => import('../../../pages/admin-panel/positions/Details'))
-const AdminPositionsUpdate = lazy(() => import('../../../pages/admin-panel/positions/Update'))
+const AdminPositionsLayout = lazy(() => import('@/pages/admin-panel/positions/Layout'))
+const AdminPositionsList = lazy(() => import('@/pages/admin-panel/positions/list/List'))
+const AdminPositionsAdd = lazy(() => import('@/pages/admin-panel/positions/Add'))
+const AdminPositionsDetails = lazy(() => import('@/pages/admin-panel/positions/Details'))
+const AdminPositionsUpdate = lazy(() => import('@/pages/admin-panel/positions/Update'))
 
 export const positionsRoutes: AppRoute = {
   key: 'adminPositions',
