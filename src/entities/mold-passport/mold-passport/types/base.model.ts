@@ -6,12 +6,12 @@ export interface MoldPassportBase {
   shiftNumber: ShiftNumber
   shiftMoldingNumber: number
   workshopTemperatureCelsius: number
-  pressingPressure: number
+  pressingPressure?: number
   markingYear: number
   moldAssemblyTimestamp: string
   status: MoldPassportStatus
   defectsDescription?: string
 
   experimentIds?: string[]
-  passportData?: PassportDataResponse
+  passportData: PassportDataResponse
 }

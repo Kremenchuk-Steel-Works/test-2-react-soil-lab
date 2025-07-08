@@ -11,6 +11,9 @@ import { positionsRoutes } from '@/entities/admin/positions/routes'
 import { rolesRoutes } from '@/entities/admin/roles/routes'
 import { usersRoutes } from '@/entities/admin/users/routes'
 import { libraryRoutes } from '@/entities/library/routes'
+import { moldPassportRoutes } from '@/entities/mold-passport/routes'
+import MoldPassportMainLayout from '@/pages/mold-passport/Layout'
+import MoldPassportMain from '@/pages/mold-passport/Main'
 
 const MainPage = lazy(() => import('@/pages/MainPage'))
 const AdminPanelLayout = lazy(() => import('@/pages/admin-panel/Layout'))
@@ -70,6 +73,25 @@ export const APP_ROUTES: AppRoute[] = [
       permissionsRoutes,
       countryRoutes,
       cityRoutes,
+    ],
+  },
+  {
+    key: 'moldPassport',
+    path: '/mold-passport',
+    label: 'Паспорт плавки',
+    icon: Shield,
+    Component: MoldPassportMainLayout,
+    requiredPermissions: ['admin'],
+    children: [
+      {
+        key: 'moldPassportMain',
+        path: '',
+        label: '',
+        icon: Users,
+        Component: MoldPassportMain,
+        inSidebar: false,
+      },
+      moldPassportRoutes,
     ],
   },
   libraryRoutes,

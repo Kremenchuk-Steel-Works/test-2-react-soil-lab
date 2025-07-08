@@ -1,3 +1,5 @@
+import type { ExperimentBase } from '@/entities/mold-passport/experiments/types/base.model'
+
 export interface ExperimentCreateRequest extends ExperimentBase {}
 
 export interface ExperimentUpdateRequest extends Partial<ExperimentCreateRequest> {}

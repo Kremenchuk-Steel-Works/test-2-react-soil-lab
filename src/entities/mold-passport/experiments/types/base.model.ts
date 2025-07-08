@@ -1,5 +1,5 @@
 export interface ExperimentBase {
   documentId: string
   description: string
-  note: string
+  note?: string
 }

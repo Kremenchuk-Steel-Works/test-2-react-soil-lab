@@ -1,3 +1,4 @@
+import type { ExperimentDetailResponse } from '@/entities/mold-passport/experiments/types/response.dto'
 import type { MoldCavityDetailResponse } from '@/entities/mold-passport/mold-cavities/types/response.dto'
 import type { MoldPassportBase } from '@/entities/mold-passport/mold-passport/types/base.model'
 import type { MoldPassportStatus } from '@/entities/mold-passport/mold-passport/types/status'

@@ -4,6 +4,7 @@ export interface MoldCoreBase {
   coreModelNumber: string
   manufacturingTimestamp: string
   hardness: number
-  castingModelId: number
+  castingPatternId: string
+  moldCavityId: string
   status: MoldCoresStatus
 }

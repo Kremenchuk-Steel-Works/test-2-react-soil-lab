@@ -1,4 +1,4 @@
 export interface MoldingTechnologyBase {
   abbreviation: string
-  name: number
+  name: string
 }
