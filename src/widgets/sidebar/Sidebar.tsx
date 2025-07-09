@@ -22,10 +22,12 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {/* Бекдроп для мобильного, при клике вне области закрываем sidebar */}
-      {broken && !collapsed && <div className="fixed inset-0 bg-black/50" onClick={closeSidebar} />}
+      {broken && !collapsed && (
+        <div className="fixed inset-0 top-14 z-40 bg-black/50" onClick={closeSidebar} />
+      )}
 
       <aside
-        className={`${baseClasses} ${modeClasses} h-full`}
+        className={`${baseClasses} ${modeClasses}`}
         onClick={() =>
           (collapsed && expandedSubMenus && closeSubMenu()) ||
           (broken && !collapsed && closeSidebar())

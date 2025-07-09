@@ -28,6 +28,34 @@ interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> =
   removeButton?: (onRemove: () => void) => React.ReactNode
 }
 
+/**
+ * Универсальный компонент для управления динамическим массивом полей в react-hook-form.
+ *
+ * Является оберткой над хуком `useFieldArray`. Позволяет пользователю добавлять и удалять
+ * группы полей (суб-формы), например, несколько телефонных номеров или адресов.
+ *
+ * @param control - Объект `control` из `useForm`, передается в `useFieldArray`.
+ * @param register - Функция `register` из `useForm`, пробрасывается в компонент каждого элемента.
+ * @param errors - Объект `errors` из `useForm`, пробрасывается в компонент каждого элемента.
+ * @param name - Имя (путь) к полю-массиву в схеме формы (например, 'contacts').
+ * @param form - React-компонент, отвечающий за рендеринг UI для **одного элемента** массива.
+ * @param defaultItem - Объект со значениями по умолчанию для нового элемента, добавляемого в массив.
+ * @param label - Текстовая метка для кастомизации кнопок "Добавить" / "Удалить".
+ * @param addButton - Опциональный рендер-проп для полной кастомизации кнопки "Добавить".
+ * @param removeButton - Опциональный рендер-проп для полной кастомизации кнопки "Удалить".
+ *
+ * @example
+ * // Внутри формы, для управления списком контактов
+ * <DynamicFieldArray
+ * control={control}
+ * register={register}
+ * errors={errors}
+ * name="contacts"
+ * form={ContactForm} // ContactForm - это компонент для одного контакта
+ * defaultItem={{ type: '', value: '' }}
+ * label="контакт"
+ * />
+ */
 export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>({
   control,
   register,

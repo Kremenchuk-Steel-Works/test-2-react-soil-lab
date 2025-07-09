@@ -94,7 +94,6 @@ export const APP_ROUTES: AppRoute[] = [
       moldPassportRoutes,
     ],
   },
-  libraryRoutes,
   {
     key: 'streamlitDashboard',
     path: '/streamlit-dashboard',
@@ -111,4 +110,5 @@ export const APP_ROUTES: AppRoute[] = [
     Component: StreamlitCalculator,
     requiredPermissions: ['calculator_view'],
   },
+  libraryRoutes,
 ]

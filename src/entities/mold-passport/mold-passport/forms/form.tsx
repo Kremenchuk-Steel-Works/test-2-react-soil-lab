@@ -11,14 +11,17 @@ import { genderOptions } from '@/entities/admin/people/types/gender'
 import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
 import { positionService } from '@/entities/admin/positions/services/service'
 import type { PositionLookupResponse } from '@/entities/admin/positions/types/response.dto'
+import { moldPassportDynamicFieldConfig } from '@/entities/mold-passport/mold-passport/forms/config'
 import {
   moldPassportSchema,
   type MoldPassportFormFields,
 } from '@/entities/mold-passport/mold-passport/forms/schema'
+import { useDynamicFieldManager } from '@/shared/hooks/useDynamicFieldManager'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
+import { DynamicFieldsRenderer } from '@/shared/ui/forms/DynamicFieldsRenderer'
 import FormDateTimeField from '@/shared/ui/forms/FormDateTimeField'
 import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
@@ -28,6 +31,7 @@ import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fie
 
 type FormFields = MoldPassportFormFields
 const schema = moldPassportSchema
+const config = moldPassportDynamicFieldConfig
 
 export interface MoldPassportFormInitialData {
   defaultValues?: Partial<FormFields>
@@ -48,7 +52,6 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
   const {
     control,
     register,
-    watch,
     resetField,
     handleSubmit,
     setError,
@@ -69,7 +72,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
     }
   }
 
-  const watchedGender = watch('gender')
+  useDynamicFieldManager({ control, resetField, config })
 
   // Queries
   const queries = useQueries({
@@ -128,6 +131,9 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
         errorMessage={getNestedErrorMessage(errors, 'firstName')}
       />
 
+      {/* Динамические поля */}
+      <DynamicFieldsRenderer control={control} triggerFor="firstName" config={config} />
+
       <InputFieldWithError
         label="Прізвище"
         {...register('lastName', formTransformers.string)}
@@ -156,34 +162,8 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
         )}
       />
 
-      {/* Динамический блок для "Чоловіча" */}
-      {watchedGender === 'male' && (
-        <div className="space-y-3 rounded-md border border-blue-200 bg-blue-50 p-4">
-          <h3 className="font-semibold text-gray-700">Військовий облік</h3>
-          <InputFieldWithError
-            label="Номер військового квитка"
-            {...register('militaryId')}
-            errorMessage={getNestedErrorMessage(errors, 'militaryId')}
-          />
-        </div>
-      )}
-
-      {/* Динамический блок для "Жіноча" */}
-      {watchedGender === 'female' && (
-        <div className="space-y-3 rounded-md border border-pink-200 bg-pink-50 p-4">
-          <h3 className="font-semibold text-gray-700">Додаткова інформація</h3>
-          <InputFieldWithError
-            label="Номер військового квитка"
-            {...register('militaryId')}
-            errorMessage={getNestedErrorMessage(errors, 'militaryId')}
-          />
-          <InputFieldWithError
-            label="Дівоче прізвище"
-            {...register('maidenName')}
-            errorMessage={getNestedErrorMessage(errors, 'maidenName')}
-          />
-        </div>
-      )}
+      {/* Динамические поля */}
+      <DynamicFieldsRenderer control={control} triggerFor="gender" config={config} />
 
       <Controller
         name="birthDate"
