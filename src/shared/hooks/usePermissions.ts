@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAuth } from '@/app/providers/auth/model'
-import { APP_ROUTES, type AppRoute } from '@/app/routes/routes'
+import { APP_ROUTES } from '@/app/routes/routes'
+import type { AppRoute } from '@/app/routes/types'
 import { findRouteObjectByPath } from '@/app/routes/utils'
 import type { UserResponse } from '@/entities/admin/users/types/response.dto'
 

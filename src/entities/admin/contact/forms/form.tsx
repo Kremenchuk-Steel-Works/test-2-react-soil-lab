@@ -29,9 +29,7 @@ export function ContactForm<T extends FormFields>({
   errors,
 }: FormProps<T>) {
   return (
-    <div className="space-y-3">
-      <h4 className="layout-text">Контактні дані {index + 1}</h4>
-
+    <>
       <CheckboxWithError
         label="Основний"
         {...register(`contacts.${index}.isPrimary` as Path<T>, formTransformers.string)}
@@ -65,6 +63,6 @@ export function ContactForm<T extends FormFields>({
         {...register(`contacts.${index}.note` as Path<T>, formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, `contacts.${index}.note` as Path<T>)}
       />
-    </div>
+    </>
   )
 }

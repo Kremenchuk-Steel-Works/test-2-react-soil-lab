@@ -10,6 +10,7 @@ import {
   type UseFormRegister,
 } from 'react-hook-form'
 import Button from '@/shared/ui/button/Button'
+import { FieldsetWrapper } from '@/shared/ui/forms/FieldsetWrapper'
 
 interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> = ArrayPath<T>> {
   control: Control<T>
@@ -23,6 +24,7 @@ interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> =
     errors: FieldErrors<T>
   }>
   defaultItem: FieldArray<T, N>
+  title?: string
   label?: string
   addButton?: React.ReactNode
   removeButton?: (onRemove: () => void) => React.ReactNode
@@ -63,6 +65,7 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>
   name,
   form: FormComponent,
   defaultItem,
+  title,
   label,
   addButton,
   removeButton,
@@ -75,7 +78,7 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>
   return (
     <div className="space-y-3">
       {fields.map((field, index) => (
-        <div key={field.id} className="space-y-3">
+        <FieldsetWrapper key={field.id} title={title ? `${title} ${index + 1}` : undefined}>
           <FormComponent index={index} control={control} register={register} errors={errors} />
           {removeButton ? (
             removeButton(() => remove(index))
@@ -91,7 +94,7 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>
               </span>
             </Button>
           )}
-        </div>
+        </FieldsetWrapper>
       ))}
 
       {addButton ? (

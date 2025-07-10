@@ -27,29 +27,86 @@ export const toZodEnumValues = <T extends readonly { value: string }[]>(options:
   options.map((o) => o.value) as [T[number]['value'], ...T[number]['value'][]]
 
 /**
- * Тип для конфигурации динамических полей.
- * Ключ верхнего уровня - имя поля-триггера.
- * Внутренний ключ - значение поля-триггера.
+ * Условие для активации правила.
+ * Может быть строкой (точное совпадение) или массивом строк (любое из значений).
  */
-export type DynamicFieldConfig = Record<
-  string,
-  Record<
-    string,
-    {
-      // Схема для валидации, когда триггер активирован
-      schema: z.ZodObject<any>
-      // Компонент для рендеринга (если он нужен рендереру)
-      Component: React.ComponentType<any>
-    }
-  >
->
+type ConditionValue = string | string[]
 
 /**
- * Создает Zod-схему с поддержкой динамической валидации на основе конфига.
- * Собирает ошибки со всех полей одновременно, обходя "fail-fast" поведение Zod.
- * @param baseSchema - Базовая Zod-схема объекта.
- * @param dynamicConfig - Конфигурация правил для динамических полей.
- * @returns Финальная Zod-схема, готовая для использования в zodResolver.
+ * Карта условий, где ключ - имя поля, а значение - требуемое значение или массив значений.
+ * Правило сработает, если ВСЕ условия в карте будут выполнены (логика "И").
+ */
+type ConditionsMap = Record<string, ConditionValue>
+
+/**
+ * Описание одного динамического правила.
+ */
+export interface DynamicRule {
+  // Условия, при которых правило активно
+  conditions: ConditionsMap
+  // Исключения, при которых правило НЕ активно, даже если условия совпали (логика "И")
+  exceptions?: ConditionsMap
+  // Схема для валидации, когда правило активно
+  schema: z.ZodObject<any>
+  // Компонент для рендеринга, когда правило активно
+  Component: React.ComponentType<{ control: any }> // Уточнили props
+  renderTrigger?: string
+}
+
+/**
+ * Тип для конфигурации динамических полей.
+ */
+export type DynamicFieldConfig = DynamicRule[]
+
+/**
+ * Проверяет, соответствует ли значение поля указанному условию.
+ * @param formValue - Значение из формы.
+ * @param conditionValue - Условие из конфига (строка или массив строк).
+ * @returns boolean
+ */
+function valueMatchesCondition(formValue: unknown, conditionValue: string | string[]): boolean {
+  if (Array.isArray(conditionValue)) {
+    // Для массива проверяем вхождение
+    return typeof formValue === 'string' && conditionValue.includes(formValue)
+  }
+  // Для строки проверяем точное совпадение
+  return formValue === conditionValue
+}
+
+/**
+ * Проверяет, удовлетворяют ли данные формы условиям и исключениям правила.
+ * @param formData - текущие данные формы
+ * @param rule - правило для проверки
+ * @returns boolean
+ */
+export function checkConditions(formData: Record<string, unknown>, rule: DynamicRule): boolean {
+  const { conditions, exceptions } = rule
+
+  // 1. Проверяем основные условия (логика "И")
+  // Если хотя бы одно условие не выполнено, правило неактивно.
+  for (const fieldName in conditions) {
+    if (!valueMatchesCondition(formData[fieldName], conditions[fieldName])) {
+      return false
+    }
+  }
+
+  // 2. Если есть исключения, проверяем их (логика "И")
+  // Если хотя бы одно исключение сработало, правило неактивно.
+  if (exceptions) {
+    for (const fieldName in exceptions) {
+      if (valueMatchesCondition(formData[fieldName], exceptions[fieldName])) {
+        // Нашли совпадение с исключением, значит правило нужно деактивировать.
+        return false
+      }
+    }
+  }
+
+  // Если все условия выполнены и ни одно исключение не сработало, правило активно.
+  return true
+}
+
+/**
+ * Создает Zod-схему с поддержкой сложных динамических правил.
  */
 export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
   baseSchema: T,
@@ -60,19 +117,12 @@ export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
       return input
     }
 
-    // Применяем логику валидации для динамических полей
-    for (const triggerFieldName in dynamicConfig) {
-      // @ts-ignore - Мы знаем, что input это объект
-      const triggerValue = input[triggerFieldName as keyof typeof input]
-
-      if (typeof triggerValue !== 'string' || !triggerValue) continue
-
-      const rules = dynamicConfig[triggerFieldName]
-      const ruleForValue = rules?.[triggerValue]
-
-      if (ruleForValue) {
-        const result = ruleForValue.schema.safeParse(input)
-
+    // Проходим по каждому правилу в конфиге
+    for (const rule of dynamicConfig) {
+      // Проверяем, активны ли условия для этого правила
+      if (checkConditions(input as Record<string, unknown>, rule)) {
+        // Если да, применяем его схему валидации
+        const result = rule.schema.safeParse(input)
         if (!result.success) {
           result.error.issues.forEach((issue) => {
             ctx.addIssue(issue)
@@ -81,10 +131,8 @@ export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
       }
     }
 
-    // Возвращаем оригинальный input для дальнейшей проверки базовой схемой
     return input
   }, baseSchema)
 
-  // Оборачиваем в pipe для совместимости с react-hook-form
   return z.any().pipe(processedSchema)
 }

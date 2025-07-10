@@ -1,5 +1,6 @@
 import { match } from 'path-to-regexp'
-import { APP_ROUTES, type AppRoute } from '@/app/routes/routes'
+import { APP_ROUTES } from '@/app/routes/routes'
+import type { AppRoute } from '@/app/routes/types'
 
 /**
  * Рекурсивно находит объект маршрута, соответствующий указанному URL-пути.

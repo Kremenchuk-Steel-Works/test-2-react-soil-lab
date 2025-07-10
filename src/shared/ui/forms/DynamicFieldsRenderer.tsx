@@ -1,5 +1,7 @@
+// shared/ui/forms/DynamicFieldsRenderer.tsx
+import { Fragment } from 'react'
 import { useWatch, type Control, type FieldValues, type Path } from 'react-hook-form'
-import type { DynamicFieldConfig } from '@/shared/lib/zod'
+import { checkConditions, type DynamicFieldConfig } from '@/shared/lib/zod'
 
 interface DynamicFieldsRendererProps<
   TFieldValues extends FieldValues,
@@ -10,44 +12,52 @@ interface DynamicFieldsRendererProps<
   triggerFor: TTrigger
 }
 
-/**
- * Компонент для условного рендеринга полей формы в зависимости от значения другого поля.
- *
- * Он отслеживает значение поля, указанного в `triggerFor`. Когда это значение меняется,
- * компонент ищет соответствующее правило в объекте `config` и, если находит,
- * отображает связанный с этим правилом UI-компонент.
- *
- * @param control - Объект `control` из `react-hook-form`.
- * @param config - Объект конфигурации, который связывает значения полей-триггеров с компонентами для рендеринга.
- * @param triggerFor - Имя поля-триггера, за значением которого нужно следить.
- *
- * @example
- * // Внутри формы, если нужно показать разные поля в зависимости от значения поля 'gender'
- * <DynamicFieldsRenderer
- * control={control}
- * triggerFor="gender"
- * config={myDynamicConfig}
- * />
- */
 export function DynamicFieldsRenderer<
   TFieldValues extends FieldValues,
   TTrigger extends Path<TFieldValues>,
 >({ control, config, triggerFor }: DynamicFieldsRendererProps<TFieldValues, TTrigger>) {
-  const triggerValue = useWatch({
-    control,
-    name: triggerFor,
+  const formValues = useWatch({ control })
+
+  // Новая, более умная логика фильтрации
+  const relevantRules = config.filter((rule) => {
+    const conditionKeys = Object.keys(rule.conditions)
+
+    // 1. Если `renderTrigger` задан явно, используем только его.
+    if (rule.renderTrigger) {
+      return rule.renderTrigger === triggerFor
+    }
+
+    // 2. Если `renderTrigger` не задан, и правило простое (1 условие),
+    // то оно относится к рендереру своего единственного ключа.
+    if (conditionKeys.length === 1) {
+      return conditionKeys[0] === triggerFor
+    }
+
+    // 3. Во всех остальных случаях (сложное правило без renderTrigger)
+    // считаем его "бездомным", чтобы избежать дублирования.
+    return false
   })
 
-  if (typeof triggerValue !== 'string' || !triggerValue) {
+  if (relevantRules.length === 0) {
     return null
   }
 
-  const rule = config[triggerFor]?.[triggerValue]
+  return (
+    <>
+      {relevantRules.map((rule, index) => {
+        const isRuleActive = checkConditions(formValues, rule)
 
-  if (!rule) {
-    return null
-  }
+        if (isRuleActive) {
+          const { Component } = rule
+          return (
+            <Fragment key={index}>
+              <Component control={control} />
+            </Fragment>
+          )
+        }
 
-  const { Component } = rule
-  return <Component control={control} />
+        return null
+      })}
+    </>
+  )
 }

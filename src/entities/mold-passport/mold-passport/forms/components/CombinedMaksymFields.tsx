@@ -1,0 +1,23 @@
+import { useFormState, type Control } from 'react-hook-form'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
+
+interface SpecificFieldsProps {
+  control: Control<any>
+}
+
+export function CombinedMaksymFields({ control }: SpecificFieldsProps) {
+  const { errors } = useFormState({ control })
+  return (
+    <div className="space-y-3 rounded-md border border-green-200 bg-green-50 px-4 py-2 pb-4 dark:border-green-900/50 dark:bg-green-950/50">
+      <h3 className="font-semibold text-gray-700 dark:text-gray-300">
+        Певні умови для "Максим Максим чоловік | інша"
+      </h3>
+      <InputFieldWithError
+        label="Дівоче прізвище"
+        {...control.register('maidenName', { ...formTransformers.string })}
+        errorMessage={getNestedErrorMessage(errors, 'maidenName')}
+      />
+    </div>
+  )
+}

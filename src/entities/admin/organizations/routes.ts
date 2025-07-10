@@ -1,6 +1,6 @@
 import { lazy } from 'react'
 import { Building, CirclePlus, Database, Info, RefreshCcw } from 'lucide-react'
-import type { AppRoute } from '@/app/routes/routes'
+import type { AppRoute } from '@/app/routes/types'
 
 const AdminOrganizationsLayout = lazy(() => import('@/pages/admin-panel/organizations/Layout'))
 const AdminOrganizationsList = lazy(() => import('@/pages/admin-panel/organizations/list/List'))

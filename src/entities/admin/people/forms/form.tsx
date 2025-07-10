@@ -179,6 +179,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
 
       {/* Contacts */}
       <DynamicFieldArray
+        title="Контактні дані"
         label="контактні дані"
         name="contacts"
         form={ContactForm}
@@ -190,6 +191,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
 
       {/* Address */}
       <DynamicFieldArray
+        title="Адреса"
         label="адресу"
         name="addresses"
         form={AddressForm}

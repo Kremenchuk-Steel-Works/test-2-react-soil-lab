@@ -59,9 +59,7 @@ export function AddressForm<T extends FormFields>({
     })) || []
 
   return (
-    <div className="space-y-3">
-      <h4 className="layout-text">Адреса {index + 1}</h4>
-
+    <>
       <CheckboxWithError
         label="Основна"
         {...register(`addresses.${index}.isPrimary` as Path<T>, formTransformers.string)}
@@ -117,6 +115,6 @@ export function AddressForm<T extends FormFields>({
         {...register(`addresses.${index}.note` as Path<T>, formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, `addresses.${index}.note` as Path<T>)}
       />
-    </div>
+    </>
   )
 }

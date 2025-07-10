@@ -112,8 +112,9 @@ export default function OrganizationsForm({ defaultValues, onSubmit, submitBtnNa
 
       {/* Contacts */}
       <DynamicFieldArray
-        name="contacts"
+        title="Контактні дані"
         label="контактні дані"
+        name="contacts"
         form={ContactForm}
         defaultItem={undefined!}
         control={control}
@@ -123,6 +124,7 @@ export default function OrganizationsForm({ defaultValues, onSubmit, submitBtnNa
 
       {/* Address */}
       <DynamicFieldArray
+        title="Адреса"
         label="адресу"
         name="addresses"
         form={AddressForm}

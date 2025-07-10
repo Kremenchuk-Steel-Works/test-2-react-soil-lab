@@ -7,46 +7,37 @@ import {
   type UseFormResetField,
 } from 'react-hook-form'
 import { usePrevious } from '@/shared/hooks/usePrevious'
-import type { DynamicFieldConfig } from '@/shared/lib/zod'
+import { checkConditions, type DynamicFieldConfig } from '@/shared/lib/zod'
 
-// Используем Generics, чтобы хук был типизирован под конкретную форму и конфиг
-interface UseDynamicFieldManagerProps<
-  TFieldValues extends FieldValues,
-  TConfig extends DynamicFieldConfig,
-> {
+interface UseDynamicFieldManagerProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>
   resetField: UseFormResetField<TFieldValues>
-  config: TConfig // Добавляем конфиг как обязательный аргумент
+  config: DynamicFieldConfig
 }
 
-export function useDynamicFieldManager<
-  TFieldValues extends FieldValues,
-  TConfig extends DynamicFieldConfig,
->({ control, resetField, config }: UseDynamicFieldManagerProps<TFieldValues, TConfig>) {
-  // Получаем ключи из переданного конфига
-  const triggerFieldNames = Object.keys(config) as Array<FieldPath<TFieldValues>>
-
-  const watchedValues = useWatch({ control, name: triggerFieldNames })
-  const prevWatchedValues = usePrevious(watchedValues)
+export function useDynamicFieldManager<TFieldValues extends FieldValues>({
+  control,
+  resetField,
+  config,
+}: UseDynamicFieldManagerProps<TFieldValues>) {
+  const formValues = useWatch({ control })
+  const prevFormValues = usePrevious(formValues)
 
   useEffect(() => {
-    if (!prevWatchedValues) return
+    if (!prevFormValues) return
 
-    triggerFieldNames.forEach((triggerName, index) => {
-      const currentValue = watchedValues[index]
-      const prevValue = prevWatchedValues[index]
+    // Проверяем каждое правило
+    config.forEach((rule) => {
+      const wasActive = checkConditions(prevFormValues, rule)
+      const isActive = checkConditions(formValues, rule)
 
-      if (currentValue !== prevValue && prevValue) {
-        // Ищем правило в переданном конфиге
-        const prevRule = config[triggerName as string]?.[prevValue]
-
-        if (prevRule) {
-          const fieldsToReset = Object.keys(prevRule.schema.shape)
-          fieldsToReset.forEach((fieldName) => {
-            resetField(fieldName as FieldPath<TFieldValues>)
-          })
-        }
+      // Если правило было активно, а теперь нет - сбрасываем его поля
+      if (wasActive && !isActive) {
+        const fieldsToReset = Object.keys(rule.schema.shape) as FieldPath<TFieldValues>[]
+        fieldsToReset.forEach((fieldName) => {
+          resetField(fieldName)
+        })
       }
     })
-  }, [watchedValues, prevWatchedValues, triggerFieldNames, resetField, config])
+  }, [formValues, prevFormValues, config, resetField])
 }

@@ -1,6 +1,7 @@
 import { lazy } from 'react'
-import { Calculator, Database, House, Shield, Users, type LucideIcon } from 'lucide-react'
+import { Calculator, Database, House, Shield, Users } from 'lucide-react'
 import { PATHS } from '@/app/routes/paths'
+import type { AppRoute } from '@/app/routes/types'
 import { cityRoutes } from '@/entities/admin/city/routes'
 import { countryRoutes } from '@/entities/admin/country/routes'
 import { departmentsRoutes } from '@/entities/admin/departments/routes'
@@ -11,33 +12,13 @@ import { positionsRoutes } from '@/entities/admin/positions/routes'
 import { rolesRoutes } from '@/entities/admin/roles/routes'
 import { usersRoutes } from '@/entities/admin/users/routes'
 import { libraryRoutes } from '@/entities/library/routes'
-import { moldPassportRoutes } from '@/entities/mold-passport/routes'
-import MoldPassportMainLayout from '@/pages/mold-passport/Layout'
-import MoldPassportMain from '@/pages/mold-passport/Main'
+import { moldPassportMainRoutes } from '@/entities/mold-passport/routes'
 
 const MainPage = lazy(() => import('@/pages/MainPage'))
 const AdminPanelLayout = lazy(() => import('@/pages/admin-panel/Layout'))
 const AdminPanelMain = lazy(() => import('@/pages/admin-panel/Main'))
 const StreamlitDashboard = lazy(() => import('@/pages/StreamlitDashboard'))
 const StreamlitCalculator = lazy(() => import('@/pages/StreamlitCalculator'))
-
-export type Permission =
-  | 'admin'
-  | 'quality_dash_view'
-  | 'calculator_view'
-  | 'library_view'
-  | 'library_edit'
-
-export interface AppRoute {
-  key: string
-  path: string
-  label: string
-  icon: LucideIcon
-  Component: React.LazyExoticComponent<React.ComponentType<any>> | React.ComponentType<any>
-  requiredPermissions?: Permission[]
-  inSidebar?: boolean
-  children?: AppRoute[]
-}
 
 export const APP_ROUTES: AppRoute[] = [
   {
@@ -75,25 +56,7 @@ export const APP_ROUTES: AppRoute[] = [
       cityRoutes,
     ],
   },
-  {
-    key: 'moldPassport',
-    path: '/mold-passport',
-    label: 'Паспорт плавки',
-    icon: Shield,
-    Component: MoldPassportMainLayout,
-    requiredPermissions: ['admin'],
-    children: [
-      {
-        key: 'moldPassportMain',
-        path: '',
-        label: '',
-        icon: Users,
-        Component: MoldPassportMain,
-        inSidebar: false,
-      },
-      moldPassportRoutes,
-    ],
-  },
+  moldPassportMainRoutes,
   {
     key: 'streamlitDashboard',
     path: '/streamlit-dashboard',

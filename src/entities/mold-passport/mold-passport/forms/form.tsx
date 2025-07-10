@@ -194,6 +194,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
 
       {/* Contacts */}
       <DynamicFieldArray
+        title="Контактні дані"
         label="контактні дані"
         name="contacts"
         form={ContactForm}
@@ -205,6 +206,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
 
       {/* Address */}
       <DynamicFieldArray
+        title="Адреса"
         label="адресу"
         name="addresses"
         form={AddressForm}
@@ -268,6 +270,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
       />
 
       <OptionalField
+        title="Профіль працівника"
         label="профіль працівника"
         name="employeeProfile"
         form={EmployeeProfileForm}

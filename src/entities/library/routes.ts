@@ -1,6 +1,6 @@
 import { lazy } from 'react'
 import { Book, CirclePlus, Database, Info, RefreshCcw } from 'lucide-react'
-import type { AppRoute } from '@/app/routes/routes'
+import type { AppRoute } from '@/app/routes/types'
 import LibraryLayout from '@/pages/library/Layout'
 
 const LibraryList = lazy(() => import('@/pages/library/list/List'))

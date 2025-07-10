@@ -1,45 +1,56 @@
 import { z } from 'zod'
+import { CombinedMaksymFields } from '@/entities/mold-passport/mold-passport/forms/components/CombinedMaksymFields'
 import {
   FemaleSpecificFields,
   MaleSpecificFields,
 } from '@/entities/mold-passport/mold-passport/forms/components/GenderSpecificFields'
-import {
-  Maksim2SpecificFields,
-  MaksimSpecificFields,
-} from '@/entities/mold-passport/mold-passport/forms/components/NameSpecificFields'
+import { MaksimSpecificFields } from '@/entities/mold-passport/mold-passport/forms/components/NameSpecificFields'
 import type { DynamicFieldConfig } from '@/shared/lib/zod'
 
-export const moldPassportDynamicFieldConfig: DynamicFieldConfig = {
-  // Правила, зависящие от поля 'gender'
-  gender: {
-    male: {
-      schema: z.object({
-        militaryId: z.string().nonempty(),
-      }),
-      Component: MaleSpecificFields,
+export const moldPassportDynamicFieldConfig: DynamicFieldConfig = [
+  // Для мужчин (gender: 'male')
+  {
+    conditions: {
+      gender: 'male',
     },
-    female: {
-      schema: z.object({
-        maidenName: z.string().optional(),
-        militaryId: z.string().optional(),
-      }),
-      Component: FemaleSpecificFields,
-    },
+    schema: z.object({
+      militaryId: z.string().nonempty('Вкажіть номер військового квитка'),
+    }),
+    Component: MaleSpecificFields,
   },
-  // Правила, зависящие от поля 'firstName'
-  firstName: {
-    Максим: {
-      schema: z.object({
-        identifier: z.string().nonempty(),
-        letterCount: z.number(),
-      }),
-      Component: MaksimSpecificFields,
+  // Для женщин (gender: 'female')
+  {
+    conditions: {
+      gender: 'female',
     },
-    'Максим 2': {
-      schema: z.object({
-        identifier: z.string().optional(),
-      }),
-      Component: Maksim2SpecificFields,
-    },
+    schema: z.object({
+      militaryId: z.string().optional(),
+      maidenName: z.string().optional(),
+    }),
+    Component: FemaleSpecificFields,
   },
-}
+  // Имя 'Максим'
+  {
+    conditions: {
+      firstName: 'Максим',
+    },
+    schema: z.object({
+      identifier: z.string().nonempty(),
+      letterCount: z.number(),
+    }),
+    Component: MaksimSpecificFields,
+  },
+  // Имя 'Максим', фамилия 'Максимов' И пол 'male'
+  {
+    renderTrigger: 'gender',
+    conditions: {
+      firstName: 'Максим',
+      lastName: 'Максимов',
+      gender: ['male', 'other'],
+    },
+    schema: z.object({
+      maidenName: z.string().optional(),
+    }),
+    Component: CombinedMaksymFields,
+  },
+]

@@ -1,0 +1,47 @@
+import { lazy } from 'react'
+import { CirclePlus, Database, Info, RefreshCcw, Users } from 'lucide-react'
+import type { AppRoute } from '@/app/routes/types'
+
+const MoldPassportLayout = lazy(() => import('@/pages/mold-passport/mold-passport/Layout'))
+const MoldPassportList = lazy(() => import('@/pages/mold-passport/mold-passport/list/List'))
+const MoldPassportAdd = lazy(() => import('@/pages/mold-passport/mold-passport/Add'))
+const MoldPassportDetails = lazy(() => import('@/pages/mold-passport/mold-passport/Details'))
+const MoldPassportUpdate = lazy(() => import('@/pages/mold-passport/mold-passport/Update'))
+
+export const moldPassportRoutes: AppRoute = {
+  key: 'MoldPassport',
+  path: 'mold-passport',
+  label: 'Паспорт плавки',
+  icon: Users,
+  Component: MoldPassportLayout,
+  children: [
+    {
+      key: 'MoldPassportList',
+      path: '',
+      label: 'Список',
+      icon: Database,
+      Component: MoldPassportList,
+    },
+    {
+      key: 'MoldPassportAdd',
+      path: 'add',
+      label: 'Додати',
+      icon: CirclePlus,
+      Component: MoldPassportAdd,
+    },
+    {
+      key: 'MoldPassportDetail',
+      path: ':id',
+      label: 'Деталі',
+      icon: Info,
+      Component: MoldPassportDetails,
+    },
+    {
+      key: 'MoldPassportUpdate',
+      path: ':id/update',
+      label: 'Оновити',
+      icon: RefreshCcw,
+      Component: MoldPassportUpdate,
+    },
+  ],
+}

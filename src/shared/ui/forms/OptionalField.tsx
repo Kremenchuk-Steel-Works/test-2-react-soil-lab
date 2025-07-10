@@ -11,6 +11,7 @@ import {
   type UseFormSetValue,
 } from 'react-hook-form'
 import Button from '@/shared/ui/button/Button'
+import { FieldsetWrapper } from '@/shared/ui/forms/FieldsetWrapper'
 
 interface OptionalFieldProps<T extends FieldValues, K extends Path<T> = Path<T>> {
   control: Control<T>
@@ -25,6 +26,7 @@ interface OptionalFieldProps<T extends FieldValues, K extends Path<T> = Path<T>>
   }>
   name: K
   defaultItem: Partial<PathValue<T, K>>
+  title?: string
   label?: string
   addButton?: React.ReactNode
   removeButton?: (onRemove: () => void) => React.ReactNode
@@ -36,6 +38,7 @@ export function OptionalField<T extends FieldValues, K extends Path<T> = Path<T>
   errors,
   setValue,
   form: FormComponent,
+  title,
   label,
   removeButton,
   name,
@@ -55,7 +58,7 @@ export function OptionalField<T extends FieldValues, K extends Path<T> = Path<T>
   return (
     <div className="space-y-3">
       {isVisible ? (
-        <div className="space-y-3">
+        <FieldsetWrapper title={title ? title : undefined}>
           <FormComponent control={control} register={register} errors={errors} />
           {removeButton ? (
             removeButton(handleRemove)
@@ -68,7 +71,7 @@ export function OptionalField<T extends FieldValues, K extends Path<T> = Path<T>
               <X className="h-5 w-5" /> <span>Видалити {label}</span>
             </Button>
           )}
-        </div>
+        </FieldsetWrapper>
       ) : (
         <Button
           className="flex items-center justify-center gap-1 whitespace-nowrap"

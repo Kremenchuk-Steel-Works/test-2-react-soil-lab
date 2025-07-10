@@ -28,9 +28,7 @@ export function EmployeeProfileForm<T extends FormFields>({
   errors,
 }: FormProps<T>) {
   return (
-    <div className="space-y-3">
-      <h4 className="layout-text">Профіль робітника</h4>
-
+    <>
       <InputFieldWithError
         label="Номер робітника"
         type="number"
@@ -69,6 +67,6 @@ export function EmployeeProfileForm<T extends FormFields>({
           />
         )}
       />
-    </div>
+    </>
   )
 }

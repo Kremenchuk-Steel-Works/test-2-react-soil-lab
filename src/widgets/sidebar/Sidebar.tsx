@@ -1,4 +1,5 @@
 import React from 'react'
+import type { AppRoute } from '@/app/routes/types'
 import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
 import { getFullPath } from '@/utils/path'
 import MenuItem from '@/widgets/sidebar/MenuItem'
@@ -34,19 +35,21 @@ const Sidebar: React.FC = () => {
         }
       >
         {/* Обёртка для скролла */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto pb-14">
           <nav onClick={(e) => e.stopPropagation()}>
             {visibleRoutes
               .filter((route) => route.inSidebar !== false)
               .map((route) => {
                 // Находим дочерние элементы, которые должны быть видимы в сайдбаре
-                const visibleChildren = route.children?.filter((child) => child.inSidebar !== false)
+                const visibleChildren = route.children?.filter(
+                  (child: AppRoute) => child.inSidebar !== false,
+                )
 
                 // Если видимые дочерние элементы есть, то рендерим SubMenu
                 if (visibleChildren && visibleChildren.length > 0) {
                   return (
                     <SubMenu key={route.key} id={route.key} label={route.label} Icon={route.icon}>
-                      {visibleChildren.map((child) => (
+                      {visibleChildren.map((child: AppRoute) => (
                         <MenuItem
                           key={child.key}
                           label={child.label}

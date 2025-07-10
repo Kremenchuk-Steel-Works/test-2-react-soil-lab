@@ -1,47 +1,27 @@
 import { lazy } from 'react'
-import { CirclePlus, Database, Info, RefreshCcw, Users } from 'lucide-react'
-import type { AppRoute } from '@/app/routes/routes'
+import { Shield, Users } from 'lucide-react'
+import type { AppRoute } from '@/app/routes/types'
+import { moldPassportRoutes } from '@/entities/mold-passport/mold-passport/routes'
 
-const MoldPassportLayout = lazy(() => import('@/pages/mold-passport/mold-passport/Layout'))
-const MoldPassportList = lazy(() => import('@/pages/mold-passport/mold-passport/list/List'))
-const MoldPassportAdd = lazy(() => import('@/pages/mold-passport/mold-passport/Add'))
-const MoldPassportDetails = lazy(() => import('@/pages/mold-passport/mold-passport/Details'))
-const MoldPassportUpdate = lazy(() => import('@/pages/mold-passport/mold-passport/Update'))
+const MoldPassportMain = lazy(() => import('@/pages/mold-passport/Main'))
+const MoldPassportMainLayout = lazy(() => import('@/pages/mold-passport/Layout'))
 
-export const moldPassportRoutes: AppRoute = {
-  key: 'MoldPassport',
-  path: 'mold-passport',
+export const moldPassportMainRoutes: AppRoute = {
+  key: 'moldPassport',
+  path: '/mold-passport',
   label: 'Паспорт плавки',
-  icon: Users,
-  Component: MoldPassportLayout,
+  icon: Shield,
+  Component: MoldPassportMainLayout,
+  requiredPermissions: ['admin'],
   children: [
     {
-      key: 'MoldPassportList',
+      key: 'moldPassportMain',
       path: '',
-      label: 'Список',
-      icon: Database,
-      Component: MoldPassportList,
+      label: '',
+      icon: Users,
+      Component: MoldPassportMain,
+      inSidebar: false,
     },
-    {
-      key: 'MoldPassportAdd',
-      path: 'add',
-      label: 'Додати',
-      icon: CirclePlus,
-      Component: MoldPassportAdd,
-    },
-    {
-      key: 'MoldPassportDetail',
-      path: ':id',
-      label: 'Деталі',
-      icon: Info,
-      Component: MoldPassportDetails,
-    },
-    {
-      key: 'MoldPassportUpdate',
-      path: ':id/update',
-      label: 'Оновити',
-      icon: RefreshCcw,
-      Component: MoldPassportUpdate,
-    },
+    moldPassportRoutes,
   ],
 }
