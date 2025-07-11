@@ -164,7 +164,6 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
 
       {/* Динамические поля */}
       <DynamicFieldsRenderer control={control} triggerFor="gender" config={config} />
-
       <Controller
         name="birthDate"
         control={control}

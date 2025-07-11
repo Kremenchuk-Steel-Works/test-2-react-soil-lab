@@ -77,6 +77,16 @@
     @apply bg-gray-400 dark:bg-gray-400;
   }
 
+  /* Делаем фон уголка скроллбара прозрачным */
+  ::-webkit-scrollbar-corner {
+    @apply bg-transparent;
+  }
+
+  /* Скрывает саму иконку ресайза (три полоски) */
+  ::-webkit-resizer {
+    display: none;
+  }
+
   html {
     /* Перенос строк */
     overflow-wrap: anywhere;
