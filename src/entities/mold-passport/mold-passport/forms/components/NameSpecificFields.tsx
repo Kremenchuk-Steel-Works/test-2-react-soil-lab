@@ -10,7 +10,7 @@ interface SpecificFieldsProps {
 export function MaksimSpecificFields({ control }: SpecificFieldsProps) {
   const { errors } = useFormState({ control })
   return (
-    <FieldsetWrapper title="Поля для Максим">
+    <FieldsetWrapper title="Поля для Максим" className="rounded-lg">
       <InputFieldWithError
         label="Ідентифікатор"
         {...control.register('identifier', { ...formTransformers.string })}

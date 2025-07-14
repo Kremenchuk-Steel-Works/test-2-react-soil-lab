@@ -124,7 +124,9 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
   // })
 
   return (
-    <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
+    <form className="mx-auto max-w-2xl space-y-3" onSubmit={handleSubmit(submitHandler)}>
+      <h4 className="layout-text">Паспорт ливарної форми</h4>
+
       <InputFieldWithError
         label="Ім'я"
         {...register('firstName', formTransformers.string)}
@@ -197,7 +199,6 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
         label="контактні дані"
         name="contacts"
         form={ContactForm}
-        defaultItem={undefined!}
         control={control}
         register={register}
         errors={errors}
@@ -209,7 +210,6 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
         label="адресу"
         name="addresses"
         form={AddressForm}
-        defaultItem={undefined!}
         control={control}
         register={register}
         errors={errors}

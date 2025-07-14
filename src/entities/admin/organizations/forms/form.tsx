@@ -116,7 +116,6 @@ export default function OrganizationsForm({ defaultValues, onSubmit, submitBtnNa
         label="контактні дані"
         name="contacts"
         form={ContactForm}
-        defaultItem={undefined!}
         control={control}
         register={register}
         errors={errors}
@@ -128,7 +127,6 @@ export default function OrganizationsForm({ defaultValues, onSubmit, submitBtnNa
         label="адресу"
         name="addresses"
         form={AddressForm}
-        defaultItem={undefined!}
         control={control}
         register={register}
         errors={errors}

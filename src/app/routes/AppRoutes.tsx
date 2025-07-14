@@ -27,6 +27,7 @@ const mapRoutes = (routes: AppRoute[]): RouteObject[] => {
       return {
         index: true,
         element: elementWithSuspense,
+        handle: { route },
       }
     }
 
@@ -34,6 +35,7 @@ const mapRoutes = (routes: AppRoute[]): RouteObject[] => {
       path: path,
       element: elementWithSuspense,
       children: children ? mapRoutes(children) : undefined,
+      handle: { route },
     }
   })
 }

@@ -11,7 +11,7 @@ const MoldPassportUpdate = lazy(() => import('@/pages/mold-passport/mold-passpor
 export const moldPassportRoutes: AppRoute = {
   key: 'MoldPassport',
   path: 'mold-passport',
-  label: 'Паспорт плавки',
+  label: 'Паспорт ливарної форми',
   icon: Users,
   Component: MoldPassportLayout,
   children: [

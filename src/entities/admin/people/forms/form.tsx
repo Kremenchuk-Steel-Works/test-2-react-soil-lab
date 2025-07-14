@@ -183,7 +183,6 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
         label="контактні дані"
         name="contacts"
         form={ContactForm}
-        defaultItem={undefined!}
         control={control}
         register={register}
         errors={errors}
@@ -195,7 +194,6 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
         label="адресу"
         name="addresses"
         form={AddressForm}
-        defaultItem={undefined!}
         control={control}
         register={register}
         errors={errors}

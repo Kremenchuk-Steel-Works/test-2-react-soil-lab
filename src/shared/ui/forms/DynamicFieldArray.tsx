@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react'
+import clsx from 'clsx'
 import { Plus, X } from 'lucide-react'
 import {
   useFieldArray,
@@ -23,7 +24,7 @@ interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> =
     register: UseFormRegister<T>
     errors: FieldErrors<T>
   }>
-  defaultItem: FieldArray<T, N>
+  defaultItem?: FieldArray<T, N>
   title?: string
   label?: string
   addButton?: React.ReactNode
@@ -42,7 +43,6 @@ interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> =
  * @param name - Имя (путь) к полю-массиву в схеме формы (например, 'contacts').
  * @param form - React-компонент, отвечающий за рендеринг UI для **одного элемента** массива.
  * @param defaultItem - Объект со значениями по умолчанию для нового элемента, добавляемого в массив.
- * @param label - Текстовая метка для кастомизации кнопок "Добавить" / "Удалить".
  * @param addButton - Опциональный рендер-проп для полной кастомизации кнопки "Добавить".
  * @param removeButton - Опциональный рендер-проп для полной кастомизации кнопки "Удалить".
  *
@@ -75,37 +75,55 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>
     name,
   })
 
-  return (
-    <div className="space-y-3">
-      {fields.map((field, index) => (
-        <FieldsetWrapper key={field.id} title={title ? `${title} ${index + 1}` : undefined}>
-          <FormComponent index={index} control={control} register={register} errors={errors} />
-          {removeButton ? (
-            removeButton(() => remove(index))
-          ) : (
-            <Button
-              customColor="red"
-              className="flex items-center justify-center gap-1 whitespace-nowrap"
-              onClick={() => remove(index)}
-            >
-              <X className="h-5 w-5" />{' '}
-              <span>
-                Видалити {label} {index + 1}
-              </span>
-            </Button>
-          )}
-        </FieldsetWrapper>
-      ))}
+  const handleAppend = () => {
+    append(defaultItem as FieldArray<T, N>, {
+      shouldFocus: false,
+    })
+  }
 
+  return (
+    <div className="space-y-0">
+      <div className="space-y-0 divide-y-2 divide-gray-300 dark:divide-gray-950/20">
+        {fields.map((field, index) => (
+          <FieldsetWrapper
+            key={field.id}
+            title={title ? `${title} ${index + 1}` : undefined}
+            className={clsx({
+              'rounded-t-lg': index === 0, // если это первый элемент
+            })}
+            button={
+              removeButton ? (
+                removeButton(() => remove(index))
+              ) : (
+                <Button
+                  customColor="red"
+                  className="flex items-center justify-center gap-1 p-1.5 whitespace-nowrap"
+                  onClick={() => remove(index)}
+                >
+                  <X size={18} />
+                </Button>
+              )
+            }
+          >
+            <FormComponent index={index} control={control} register={register} errors={errors} />
+          </FieldsetWrapper>
+        ))}
+      </div>
       {addButton ? (
         <div>{addButton}</div>
       ) : (
-        <Button
-          className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => append(defaultItem)}
+        <div
+          className={clsx('px-4', {
+            'rounded-b-lg bg-gray-200 pb-4 dark:bg-gray-950/20': fields.length > 0, // если есть хотя бы один элемент
+          })}
         >
-          <Plus className="h-5 w-5" /> <span>Додати {label}</span>
-        </Button>
+          <Button
+            className="flex items-center justify-center gap-1 whitespace-nowrap"
+            onClick={handleAppend}
+          >
+            <Plus className="h-5 w-5" /> <span>Додати {label}</span>
+          </Button>
+        </div>
       )}
     </div>
   )

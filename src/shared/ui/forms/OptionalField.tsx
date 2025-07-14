@@ -58,19 +58,24 @@ export function OptionalField<T extends FieldValues, K extends Path<T> = Path<T>
   return (
     <div className="space-y-3">
       {isVisible ? (
-        <FieldsetWrapper title={title ? title : undefined}>
+        <FieldsetWrapper
+          title={title ? title : undefined}
+          className="rounded-lg"
+          button={
+            removeButton ? (
+              removeButton(handleRemove)
+            ) : (
+              <Button
+                customColor="red"
+                className="flex items-center justify-center gap-1 whitespace-nowrap"
+                onClick={handleRemove}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )
+          }
+        >
           <FormComponent control={control} register={register} errors={errors} />
-          {removeButton ? (
-            removeButton(handleRemove)
-          ) : (
-            <Button
-              customColor="red"
-              className="flex items-center justify-center gap-1 whitespace-nowrap"
-              onClick={handleRemove}
-            >
-              <X className="h-5 w-5" /> <span>Видалити {label}</span>
-            </Button>
-          )}
         </FieldsetWrapper>
       ) : (
         <Button

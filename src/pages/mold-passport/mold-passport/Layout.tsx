@@ -3,9 +3,7 @@ import { Outlet } from 'react-router-dom'
 export default function MoldPassportLayout() {
   return (
     <div className="flex flex-1 flex-col space-y-2">
-      <div className="flex items-center justify-between">
-        <h4 className="layout-text">Люди</h4>
-      </div>
+      <div className="flex items-center justify-between"></div>
       <Outlet />
     </div>
   )
