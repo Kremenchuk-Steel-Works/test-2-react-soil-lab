@@ -5,14 +5,14 @@ import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
 import { positionService } from '@/entities/admin/positions/services/service'
 import type { PositionListResponse } from '@/entities/admin/positions/types/response.dto'
 import { adminPositionsColumns } from '@/pages/admin-panel/positions/list/columns'
-import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
+import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 import { DataTable } from '@/widgets/data-table/DataTable'
 
 export default function AdminPositionsList() {
   // Состояние из URL
-  const { page, perPage, setSearchParams } = usePaginationParams()
+  const { page, perPage, setSearchParams, isReady } = useUrlPagination()
   const navigate = useNavigate()
 
   // Получение данных, usersData
@@ -30,6 +30,7 @@ export default function AdminPositionsList() {
       })
     },
     placeholderData: keepPreviousData,
+    enabled: isReady,
   })
 
   return (

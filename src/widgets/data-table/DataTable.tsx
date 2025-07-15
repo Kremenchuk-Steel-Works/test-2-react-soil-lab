@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   flexRender,
   getCoreRowModel,
@@ -58,18 +58,14 @@ export function DataTable<T>({
   )
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({})
-  const [pagination, setPagination] = useState<PaginationState>({
-    pageIndex: page - 1,
-    pageSize: perPage,
-  })
 
-  // Синхронизируем URL с изменениями пагинации
-  useEffect(() => {
-    setSearchParams({
-      page: String(pagination.pageIndex + 1),
-      perPage: String(pagination.pageSize),
-    })
-  }, [pagination.pageIndex, pagination.pageSize, setSearchParams])
+  const pagination = useMemo<PaginationState>(
+    () => ({
+      pageIndex: page - 1,
+      pageSize: perPage,
+    }),
+    [page, perPage],
+  )
 
   const table = useReactTable({
     data,
@@ -80,11 +76,26 @@ export function DataTable<T>({
       size: 100,
       minSize: 50,
     },
-    state: { sorting, columnFilters, columnVisibility, pagination },
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      pagination,
+    },
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
-    onPaginationChange: setPagination,
+    onPaginationChange: (updater) => {
+      const newState = typeof updater === 'function' ? updater(pagination) : updater
+      setSearchParams(
+        (prev) => {
+          prev.set('page', String(newState.pageIndex + 1))
+          prev.set('perPage', String(newState.pageSize))
+          return prev
+        },
+        { replace: true },
+      )
+    },
     pageCount: totalPages ?? 0,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -218,11 +229,16 @@ export function DataTable<T>({
               )}
               onChange={(selectedOption) => {
                 const newSize = selectedOption?.value
-                setPagination((old) => ({
-                  ...old,
-                  pageSize: Number(newSize),
-                  pageIndex: 0, // сброс на первую  страницу
-                }))
+                if (!newSize) return
+
+                setSearchParams(
+                  (prev) => {
+                    prev.set('perPage', String(newSize))
+                    prev.set('page', '1') // Сбрасываем на первую страницу
+                    return prev
+                  },
+                  { replace: true },
+                )
               }}
             />
           </strong>

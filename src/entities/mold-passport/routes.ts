@@ -7,8 +7,8 @@ const MoldPassportMain = lazy(() => import('@/pages/mold-passport/Main'))
 const MoldPassportMainLayout = lazy(() => import('@/pages/mold-passport/Layout'))
 
 export const moldPassportMainRoutes: AppRoute = {
-  key: 'moldPassport',
-  path: '/mold-passport',
+  key: 'mold',
+  path: '/mold',
   label: 'Паспорт плавки',
   icon: Shield,
   Component: MoldPassportMainLayout,

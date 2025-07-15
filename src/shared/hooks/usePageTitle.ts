@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { APP_ROUTES } from '@/app/routes/routes'
 import { findRouteObjectByPath } from '@/app/routes/utils'
 
 const BASE_TITLE = 'KSZ'
@@ -9,7 +10,7 @@ export function usePageTitle(): void {
   const { pathname } = location
 
   useEffect(() => {
-    const currentRoute = findRouteObjectByPath(pathname)
+    const currentRoute = findRouteObjectByPath(pathname, APP_ROUTES)
 
     if (currentRoute && currentRoute.label) {
       document.title = `${BASE_TITLE} | ${currentRoute.label}`

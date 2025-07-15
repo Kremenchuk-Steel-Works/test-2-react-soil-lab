@@ -7,6 +7,10 @@ export type Permission =
   | 'library_view'
   | 'library_edit'
 
+export interface RouteMeta {
+  showAddButton?: boolean
+}
+
 export interface AppRoute {
   key: string
   path: string
@@ -16,4 +20,5 @@ export interface AppRoute {
   requiredPermissions?: Permission[]
   inSidebar?: boolean
   children?: AppRoute[]
+  meta?: RouteMeta
 }

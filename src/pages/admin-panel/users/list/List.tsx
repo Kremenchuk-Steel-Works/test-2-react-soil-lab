@@ -5,14 +5,14 @@ import { userQueryKeys } from '@/entities/admin/users/services/keys'
 import { userService } from '@/entities/admin/users/services/service'
 import type { UserListResponse } from '@/entities/admin/users/types/response.dto'
 import { adminUsersColumns } from '@/pages/admin-panel/users/list/columns'
-import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
+import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 import { DataTable } from '@/widgets/data-table/DataTable'
 
 export default function AdminUsersList() {
   // Состояние из URL
-  const { page, perPage, setSearchParams } = usePaginationParams()
+  const { page, perPage, setSearchParams, isReady } = useUrlPagination()
   const navigate = useNavigate()
 
   // Получение данных
@@ -30,6 +30,7 @@ export default function AdminUsersList() {
       })
     },
     placeholderData: keepPreviousData,
+    enabled: isReady,
   })
   return (
     <>

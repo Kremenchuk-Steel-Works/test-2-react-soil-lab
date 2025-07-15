@@ -67,10 +67,10 @@ export function OptionalField<T extends FieldValues, K extends Path<T> = Path<T>
             ) : (
               <Button
                 customColor="red"
-                className="flex items-center justify-center gap-1 whitespace-nowrap"
+                className="flex items-center justify-center gap-1 p-1.5 whitespace-nowrap"
                 onClick={handleRemove}
               >
-                <X className="h-4 w-4" />
+                <X size={18} />
               </Button>
             )
           }

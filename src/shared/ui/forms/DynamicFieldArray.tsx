@@ -81,6 +81,12 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>
     })
   }
 
+  const handleRemove = (index: number) => {
+    return () => {
+      remove(index)
+    }
+  }
+
   return (
     <div className="space-y-0">
       <div className="space-y-0 divide-y-2 divide-gray-300 dark:divide-gray-950/20">
@@ -93,12 +99,12 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>
             })}
             button={
               removeButton ? (
-                removeButton(() => remove(index))
+                removeButton(handleRemove(index))
               ) : (
                 <Button
                   customColor="red"
                   className="flex items-center justify-center gap-1 p-1.5 whitespace-nowrap"
-                  onClick={() => remove(index)}
+                  onClick={handleRemove(index)}
                 >
                   <X size={18} />
                 </Button>
@@ -113,8 +119,9 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>
         <div>{addButton}</div>
       ) : (
         <div
-          className={clsx('px-4', {
-            'rounded-b-lg bg-gray-200 pb-4 dark:bg-gray-950/20': fields.length > 0, // если есть хотя бы один элемент
+          className={clsx({
+            // если есть хотя бы один элемент
+            'rounded-b-lg bg-gray-200 px-4 pb-4 dark:bg-gray-950/20': fields.length > 0,
           })}
         >
           <Button

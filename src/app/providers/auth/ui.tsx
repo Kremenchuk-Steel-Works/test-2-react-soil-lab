@@ -12,6 +12,29 @@ const getStoredItem = (itemName: string): string | null => {
   return localStorage.getItem(itemName) || sessionStorage.getItem(itemName) || null
 }
 
+/**
+ * Функция для очистки localStorage по префиксу.
+ * Находит все ключи, начинающиеся с заданной строки, и удаляет их.
+ * @param prefix Префикс ключей для удаления.
+ */
+const clearLocalStorageByKeyPrefix = (prefix: string) => {
+  // Мы не можем итерироваться по localStorage напрямую,
+  // поэтому сначала собираем все ключи в массив.
+  const keysToRemove: string[] = []
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i)
+    if (key && key.startsWith(prefix)) {
+      keysToRemove.push(key)
+    }
+  }
+
+  // Удаляем найденные ключи
+  keysToRemove.forEach((key) => {
+    localStorage.removeItem(key)
+    logger.debug(`Кэш формы очищен: ${key}`)
+  })
+}
+
 // Компонент-провайдер
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(() => getStoredItem('accessToken'))
@@ -47,6 +70,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.removeItem('refreshToken')
     sessionStorage.removeItem('accessToken')
     sessionStorage.removeItem('refreshToken')
+
+    // Очищаем весь кэш форм
+    clearLocalStorageByKeyPrefix('formCache:')
   }
 
   // Перехватчик для добавления токена в header Authorization

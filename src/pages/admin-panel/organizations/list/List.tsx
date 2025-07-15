@@ -5,14 +5,14 @@ import { organizationQueryKeys } from '@/entities/admin/organizations/services/k
 import { organizationService } from '@/entities/admin/organizations/services/service'
 import type { OrganizationListResponse } from '@/entities/admin/organizations/types/response.dto'
 import { adminOrganizationsColumns } from '@/pages/admin-panel/organizations/list/columns'
-import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
+import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 import { DataTable } from '@/widgets/data-table/DataTable'
 
 export default function AdminOrganizationsList() {
   // Состояние из URL
-  const { page, perPage, setSearchParams } = usePaginationParams()
+  const { page, perPage, setSearchParams, isReady } = useUrlPagination()
   const navigate = useNavigate()
 
   // Получение данных, usersData
@@ -31,6 +31,7 @@ export default function AdminOrganizationsList() {
       })
     },
     placeholderData: keepPreviousData,
+    enabled: isReady,
   })
 
   return (

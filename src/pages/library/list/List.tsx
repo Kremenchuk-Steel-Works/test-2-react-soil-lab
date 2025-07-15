@@ -5,15 +5,15 @@ import { libraryQueryKeys } from '@/entities/library/services/keys'
 import { libraryService } from '@/entities/library/services/service.mock'
 import type { LibraryListResponse } from '@/entities/library/types/response.dto'
 import { libraryColumns } from '@/pages/library/list/columns'
-import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
 import { useCanAccessPath } from '@/shared/hooks/usePermissions'
+import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 import { DataTable } from '@/widgets/data-table/DataTable'
 
 export default function LibraryList() {
   // Состояние из URL
-  const { page, perPage, setSearchParams } = usePaginationParams()
+  const { page, perPage, setSearchParams, isReady } = useUrlPagination()
   const navigate = useNavigate()
 
   const canAdd = useCanAccessPath(useResolvedPath('add').pathname)
@@ -33,6 +33,7 @@ export default function LibraryList() {
       })
     },
     placeholderData: keepPreviousData,
+    enabled: isReady,
   })
 
   return (

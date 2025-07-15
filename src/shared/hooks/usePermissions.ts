@@ -34,7 +34,7 @@ function checkAccessLogic(
   }
 
   // Находим объект маршрута
-  const route = findRouteObjectByPath(path)
+  const route = findRouteObjectByPath(path, APP_ROUTES)
 
   // Если маршрут не описан, доступа нет
   if (!route) {

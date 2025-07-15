@@ -5,14 +5,14 @@ import { countryQueryKeys } from '@/entities/admin/country/services/keys'
 import { countryService } from '@/entities/admin/country/services/service'
 import type { CountryListResponse } from '@/entities/admin/country/types/response.dto'
 import { adminCountryColumns } from '@/pages/admin-panel/country/list/columns'
-import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
+import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 import { DataTable } from '@/widgets/data-table/DataTable'
 
 export default function AdminCountryList() {
   // Состояние из URL
-  const { page, perPage, setSearchParams } = usePaginationParams()
+  const { page, perPage, setSearchParams, isReady } = useUrlPagination()
   const navigate = useNavigate()
 
   // Получение данных
@@ -30,6 +30,7 @@ export default function AdminCountryList() {
       })
     },
     placeholderData: keepPreviousData,
+    enabled: isReady,
   })
 
   return (

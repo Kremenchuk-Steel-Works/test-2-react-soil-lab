@@ -5,14 +5,14 @@ import { departmentQueryKeys } from '@/entities/admin/departments/services/keys'
 import { departmentService } from '@/entities/admin/departments/services/service'
 import type { DepartmentListResponse } from '@/entities/admin/departments/types/response.dto'
 import { adminDepartmentsColumns } from '@/pages/admin-panel/departments/list/columns'
-import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
+import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 import { DataTable } from '@/widgets/data-table/DataTable'
 
 export default function AdminDepartmentsList() {
   // Состояние из URL
-  const { page, perPage, setSearchParams } = usePaginationParams()
+  const { page, perPage, setSearchParams, isReady } = useUrlPagination()
   const navigate = useNavigate()
 
   // Получение данных
@@ -30,6 +30,7 @@ export default function AdminDepartmentsList() {
       })
     },
     placeholderData: keepPreviousData,
+    enabled: isReady,
   })
 
   return (

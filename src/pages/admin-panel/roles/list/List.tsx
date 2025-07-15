@@ -5,14 +5,14 @@ import { roleQueryKeys } from '@/entities/admin/roles/services/keys'
 import { roleService } from '@/entities/admin/roles/services/service'
 import type { RoleListResponse } from '@/entities/admin/roles/types/response.dto'
 import { adminRolesColumns } from '@/pages/admin-panel/roles/list/columns'
-import { usePaginationParams } from '@/shared/hooks/usePaginationParams'
+import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 import { DataTable } from '@/widgets/data-table/DataTable'
 
 export default function AdminRolesList() {
   // Состояние из URL
-  const { page, perPage, setSearchParams } = usePaginationParams()
+  const { page, perPage, setSearchParams, isReady } = useUrlPagination()
   const navigate = useNavigate()
 
   // Получение данных
@@ -30,6 +30,7 @@ export default function AdminRolesList() {
       })
     },
     placeholderData: keepPreviousData,
+    enabled: isReady,
   })
 
   return (

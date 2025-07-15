@@ -12,7 +12,7 @@ export function Breadcrumbs() {
     .filter((match) => {
       const route = match.handle?.route
       // Убираем роуты без label
-      return Boolean(route?.label)
+      return Boolean(route?.label) && route.path
     })
     // Создаем массив объектов для рендеринга
     .map((match) => {
@@ -25,7 +25,7 @@ export function Breadcrumbs() {
 
   return (
     <nav aria-label="Breadcrumb">
-      <ol className="flex items-center space-x-2 font-medium text-gray-500">
+      <ol className="flex items-center space-x-2 font-medium text-gray-600 dark:text-gray-400">
         {crumbs.map((crumb, index) => {
           const isLast = index === crumbs.length - 1
           return (

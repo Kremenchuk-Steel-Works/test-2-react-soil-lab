@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
+import { Breadcrumbs } from '@/shared/ui/Breadcrumbs/Breadcrumbs'
 import Button from '@/shared/ui/button/Button'
 import Layout from '@/widgets/page-layout/Layout'
 
@@ -10,7 +11,7 @@ export default function MainPage() {
   return (
     <Layout>
       <div className="space-y-2">
-        <h4 className="layout-text">Головна сторінка</h4>
+        <Breadcrumbs />
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           {visibleRoutes
             .filter((route) => route.inSidebar !== false)

@@ -14,6 +14,9 @@ export const moldPassportRoutes: AppRoute = {
   label: 'Паспорт ливарної форми',
   icon: Users,
   Component: MoldPassportLayout,
+  meta: {
+    showAddButton: true,
+  },
   children: [
     {
       key: 'MoldPassportList',

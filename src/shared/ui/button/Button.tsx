@@ -1,26 +1,39 @@
 import { twMerge } from 'tailwind-merge'
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  customColor?: ButtonColors
+  customColor?: keyof typeof colorVariants
 }
 
-const buttonColors = ['blue', 'red', 'orange', 'green'] as const
+// Определяем варианты цветов в виде объекта
+const colorVariants = {
+  blue: [
+    'bg-blue-600 text-white',
+    'hover:bg-blue-500',
 
-type ButtonColors = (typeof buttonColors)[number]
+    'dark:bg-blue-600 dark:text-white',
+    'dark:hover:bg-blue-700',
+  ],
+  red: [
+    'bg-red-600 text-white',
+    'hover:bg-red-500',
 
-const getColorStyles = (color: string) => {
-  switch (color) {
-    case 'blue':
-      return 'bg-blue-600 hover:bg-blue-700'
-    case 'red':
-      return 'bg-red-600 hover:bg-red-500 hover:dark:bg-red-800'
-    case 'orange':
-      return 'bg-orange-600 hover:bg-orange-800'
-    case 'green':
-      return 'bg-green-700 hover:bg-green-800'
-    default:
-      return ''
-  }
+    'dark:bg-red-600 dark:text-white',
+    'dark:hover:bg-red-700',
+  ],
+  green: [
+    'bg-green-600 text-white',
+    'hover:bg-green-500',
+
+    'dark:bg-green-600 dark:text-white',
+    'dark:hover:bg-green-700',
+  ],
+  neutral: [
+    'bg-slate-200 text-slate-900',
+    'hover:bg-slate-300',
+
+    'dark:bg-slate-700 dark:text-slate-200',
+    'dark:hover:bg-slate-600',
+  ],
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -36,11 +49,13 @@ const Button: React.FC<ButtonProps> = ({
     transition cursor-pointer active:scale-95
     focus:outline-none
     disabled:opacity-50 disabled:cursor-not-allowed
-    ${getColorStyles(customColor)}
   `
 
+  // Выбираем стили цвета из объекта
+  const colorStyles = colorVariants[customColor]
+
   return (
-    <button {...rest} type={type} className={twMerge(baseStyles, className)}>
+    <button {...rest} type={type} className={twMerge(baseStyles, colorStyles, className)}>
       {children}
     </button>
   )
