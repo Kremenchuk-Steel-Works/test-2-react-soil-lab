@@ -3,6 +3,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { positionsSchema, type PositionsFormFields } from '@/entities/admin/positions/forms/schema'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import { FormLayout } from '@/shared/ui/forms/FormLayout'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormFields = PositionsFormFields
@@ -39,7 +40,9 @@ export default function PositionsForm({ defaultValues, onSubmit, submitBtnName }
   console.log(errors)
 
   return (
-    <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+      <h4 className="layout-text">Посада</h4>
+
       <InputFieldWithError
         label="Назва"
         {...register('name', formTransformers.string)}
@@ -60,6 +63,6 @@ export default function PositionsForm({ defaultValues, onSubmit, submitBtnName }
       >
         {submitBtnName}
       </ButtonWithError>
-    </form>
+    </FormLayout>
   )
 }

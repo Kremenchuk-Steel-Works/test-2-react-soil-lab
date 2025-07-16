@@ -14,6 +14,9 @@ export const peopleRoutes: AppRoute = {
   label: 'Люди',
   icon: Users,
   Component: AdminPeopleLayout,
+  meta: {
+    showAddButton: true,
+  },
   children: [
     {
       key: 'adminPeopleList',
@@ -35,6 +38,9 @@ export const peopleRoutes: AppRoute = {
       label: 'Деталі',
       icon: Info,
       Component: AdminPeopleDetails,
+      meta: {
+        showEditButton: true,
+      },
     },
     {
       key: 'adminPeopleUpdate',

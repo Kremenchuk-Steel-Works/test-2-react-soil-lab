@@ -14,6 +14,9 @@ export const countryRoutes: AppRoute = {
   label: 'Країни',
   icon: Globe,
   Component: AdminCountryLayout,
+  meta: {
+    showAddButton: true,
+  },
   children: [
     {
       key: 'adminCountryList',
@@ -35,6 +38,9 @@ export const countryRoutes: AppRoute = {
       label: 'Деталі',
       icon: Info,
       Component: AdminCountryDetails,
+      meta: {
+        showEditButton: true,
+      },
     },
     {
       key: 'adminCountryUpdate',

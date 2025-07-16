@@ -15,6 +15,9 @@ export const libraryRoutes: AppRoute = {
   icon: Book,
   Component: LibraryLayout,
   requiredPermissions: ['library_view'],
+  meta: {
+    showAddButton: true,
+  },
   children: [
     {
       key: 'libraryList',
@@ -40,6 +43,9 @@ export const libraryRoutes: AppRoute = {
       icon: Info,
       Component: LibraryDetails,
       inSidebar: false,
+      meta: {
+        showEditButton: true,
+      },
     },
     {
       key: 'libraryUpdate',

@@ -1,8 +1,6 @@
-import { ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import LibraryForm from '@/entities/library/forms/form'
 import type { LibraryFormFields } from '@/entities/library/forms/schema'
-import Button from '@/shared/ui/button/Button'
 
 export default function LibraryAdd() {
   const navigate = useNavigate()
@@ -15,15 +13,6 @@ export default function LibraryAdd() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <Button
-          className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate('..')}
-        >
-          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
-        </Button>
-      </div>
-
       <div className="flex flex-wrap gap-x-2 gap-y-2">
         <div className="w-full">
           <LibraryForm onSubmit={handleSubmit} submitBtnName="Додати" />

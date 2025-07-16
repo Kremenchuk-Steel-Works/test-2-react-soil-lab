@@ -1,14 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft, Pen } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { userQueryKeys } from '@/entities/admin/users/services/keys'
 import { userService } from '@/entities/admin/users/services/service'
 import type { UserDetailResponse } from '@/entities/admin/users/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import Button from '@/shared/ui/button/Button'
 
 export default function AdminUsersDetails() {
-  const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
 
   const {
@@ -24,15 +21,6 @@ export default function AdminUsersDetails() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <Button
-          className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate('..')}
-        >
-          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
-        </Button>
-      </div>
-
       <div>
         {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
 
@@ -110,34 +98,6 @@ export default function AdminUsersDetails() {
                 </dd>
               </div>
             </dl>
-
-            <div className="flex items-center justify-between py-2">
-              <Button
-                className="flex items-center justify-center gap-1 bg-orange-500 whitespace-nowrap hover:bg-orange-600"
-                onClick={() => navigate('update')}
-              >
-                <Pen className="h-5 w-5" /> <span>Редагувати</span>
-              </Button>
-
-              {/* <BottomSheetButton
-                label={
-                  <>
-                    <Pen className="w-5 h-5" /> <span>Редагувати</span>
-                  </>
-                }
-                buttonProps={{
-                  customColor: "orange",
-                  className:
-                    "flex items-center justify-center gap-1 whitespace-nowrap",
-                }}
-                sheetProps={{
-                  className: "h-full",
-                  label: <p className="text-lg font-semibold">Користувач</p>,
-                }}
-              >
-                {({ onSuccess }) => <AdminUsersUpdate2 onSuccess={onSuccess} />}
-              </BottomSheetButton> */}
-            </div>
           </div>
         )}
       </div>

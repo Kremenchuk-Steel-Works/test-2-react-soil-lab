@@ -1,25 +1,15 @@
-import { ArrowLeft } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import { PATHS } from '@/app/routes/paths'
-import Button from '@/shared/ui/button/Button'
-import Layout from '@/widgets/page-layout/Layout'
+import MainLayout from '@/widgets/page-layout/MainLayout'
+import { PageHeader } from '@/widgets/page/PageHeader'
 
 export default function StreamlitDashboard() {
-  const navigate = useNavigate()
   return (
-    <Layout>
-      <div className="space-y-2">
-        <h4 className="layout-text">Quality Dash</h4>
-        <Button
-          className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate(PATHS.MAIN)}
-        >
-          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
-        </Button>
-        <div className="block h-full w-full">
+    <MainLayout>
+      <div className="flex flex-1 flex-col space-y-2">
+        <PageHeader />
+        <div className="w-ful block h-full">
           <iframe src="http://138.199.209.211:8501" width="100%" height="900px" />
         </div>
       </div>
-    </Layout>
+    </MainLayout>
   )
 }

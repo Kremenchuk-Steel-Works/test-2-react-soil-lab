@@ -14,6 +14,9 @@ export const positionsRoutes: AppRoute = {
   label: 'Посади',
   icon: BriefcaseBusiness,
   Component: AdminPositionsLayout,
+  meta: {
+    showAddButton: true,
+  },
   children: [
     {
       key: 'adminPositionsList',
@@ -35,6 +38,9 @@ export const positionsRoutes: AppRoute = {
       label: 'Деталі',
       icon: Info,
       Component: AdminPositionsDetails,
+      meta: {
+        showEditButton: true,
+      },
     },
     {
       key: 'adminPositionsUpdate',

@@ -9,6 +9,7 @@ export type Permission =
 
 export interface RouteMeta {
   showAddButton?: boolean
+  showEditButton?: boolean
 }
 
 export interface AppRoute {

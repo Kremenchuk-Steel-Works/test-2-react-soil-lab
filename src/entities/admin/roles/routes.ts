@@ -14,6 +14,9 @@ export const rolesRoutes: AppRoute = {
   label: 'Ролі',
   icon: ShieldCheck,
   Component: AdminRolesLayout,
+  meta: {
+    showAddButton: true,
+  },
   children: [
     {
       key: 'adminRolesList',
@@ -35,6 +38,9 @@ export const rolesRoutes: AppRoute = {
       label: 'Деталі',
       icon: Info,
       Component: AdminRolesDetails,
+      meta: {
+        showEditButton: true,
+      },
     },
     {
       key: 'adminRolesUpdate',

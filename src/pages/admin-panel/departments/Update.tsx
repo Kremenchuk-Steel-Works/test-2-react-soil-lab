@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import DepartmentsForm from '@/entities/admin/departments/forms/form'
 import type { DepartmentsFormFields } from '@/entities/admin/departments/forms/schema'
@@ -7,7 +6,6 @@ import { departmentQueryKeys } from '@/entities/admin/departments/services/keys'
 import { departmentService } from '@/entities/admin/departments/services/service'
 import type { DepartmentDetailResponse } from '@/entities/admin/departments/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import Button from '@/shared/ui/button/Button'
 
 export default function AdminDepartmentsUpdate() {
   const navigate = useNavigate()
@@ -32,15 +30,6 @@ export default function AdminDepartmentsUpdate() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <Button
-          className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate('..')}
-        >
-          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
-        </Button>
-      </div>
-
       {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
 
       {!isLoading && !isError && data && (

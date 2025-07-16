@@ -4,6 +4,7 @@ import { librarySchema, type LibraryFormFields } from '@/entities/library/forms/
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
 import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
+import { FormLayout } from '@/shared/ui/forms/FormLayout'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
@@ -39,7 +40,9 @@ export default function LibraryForm({ defaultValues, onSubmit, submitBtnName }: 
   }
 
   return (
-    <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+      <h4 className="layout-text">Документ</h4>
+
       <InputFieldWithError
         label="Коротка назва"
         {...register('shortName', formTransformers.string)}
@@ -92,6 +95,6 @@ export default function LibraryForm({ defaultValues, onSubmit, submitBtnName }: 
       >
         {submitBtnName}
       </ButtonWithError>
-    </form>
+    </FormLayout>
   )
 }

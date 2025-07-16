@@ -38,6 +38,9 @@ export const moldPassportRoutes: AppRoute = {
       label: 'Деталі',
       icon: Info,
       Component: MoldPassportDetails,
+      meta: {
+        showEditButton: true,
+      },
     },
     {
       key: 'MoldPassportUpdate',

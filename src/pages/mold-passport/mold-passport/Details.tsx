@@ -1,14 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { Pen } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { personQueryKeys } from '@/entities/admin/people/services/keys'
 import { personService } from '@/entities/admin/people/services/service'
 import type { PersonDetailResponse } from '@/entities/admin/people/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import Button from '@/shared/ui/button/Button'
 
 export default function MoldPassportDetails() {
-  const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
 
   const {
@@ -162,15 +159,6 @@ export default function MoldPassportDetails() {
               </div>
             ))}
           </dl>
-
-          <div className="flex items-center justify-between py-2">
-            <Button
-              className="flex items-center justify-center gap-1 bg-orange-500 whitespace-nowrap hover:bg-orange-600"
-              onClick={() => navigate('update')}
-            >
-              <Pen className="h-5 w-5" /> <span>Редагувати</span>
-            </Button>
-          </div>
         </>
       )}
     </>

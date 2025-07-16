@@ -28,17 +28,17 @@ function checkAccessLogic(
   user: UserResponse | null | undefined,
   permissions: Set<string>,
 ): boolean {
-  // Суперпользователь имеет доступ ко всему
-  if (user?.isSuperuser) {
-    return true
-  }
-
   // Находим объект маршрута
   const route = findRouteObjectByPath(path, APP_ROUTES)
 
   // Если маршрут не описан, доступа нет
   if (!route) {
     return false
+  }
+
+  // Суперпользователь имеет доступ ко всему
+  if (user?.isSuperuser) {
+    return true
   }
 
   //  Если права не требуются, доступ есть

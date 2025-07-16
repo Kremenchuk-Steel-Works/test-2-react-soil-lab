@@ -14,6 +14,9 @@ export const permissionsRoutes: AppRoute = {
   label: 'Права доступу',
   icon: Lock,
   Component: AdminPermissionsLayout,
+  meta: {
+    showAddButton: true,
+  },
   children: [
     {
       key: 'adminPermissionsList',
@@ -35,6 +38,9 @@ export const permissionsRoutes: AppRoute = {
       label: 'Деталі',
       icon: Info,
       Component: AdminPermissionsDetails,
+      meta: {
+        showEditButton: true,
+      },
     },
     {
       key: 'adminPermissionsUpdate',

@@ -24,6 +24,7 @@ import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
 import { DynamicFieldsRenderer } from '@/shared/ui/forms/DynamicFieldsRenderer'
 import FormDateTimeField from '@/shared/ui/forms/FormDateTimeField'
 import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
+import { FormLayout } from '@/shared/ui/forms/FormLayout'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { OptionalField } from '@/shared/ui/forms/OptionalField'
 import type { Option } from '@/shared/ui/select/ReactSelect'
@@ -124,7 +125,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
   // })
 
   return (
-    <form className="mx-auto max-w-2xl space-y-3" onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={handleSubmit(submitHandler)}>
       <h4 className="layout-text">Паспорт ливарної форми</h4>
 
       <InputFieldWithError
@@ -289,6 +290,6 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
       >
         {submitBtnName}
       </ButtonWithError>
-    </form>
+    </FormLayout>
   )
 }

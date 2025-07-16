@@ -14,6 +14,7 @@ import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
+import { FormLayout } from '@/shared/ui/forms/FormLayout'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
@@ -75,7 +76,9 @@ export default function OrganizationsForm({ defaultValues, onSubmit, submitBtnNa
     })) || []
 
   return (
-    <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+      <h4 className="layout-text">Організація</h4>
+
       <InputFieldWithError
         label="Назва"
         {...register('legalName', formTransformers.string)}
@@ -141,6 +144,6 @@ export default function OrganizationsForm({ defaultValues, onSubmit, submitBtnNa
       >
         {submitBtnName}
       </ButtonWithError>
-    </form>
+    </FormLayout>
   )
 }

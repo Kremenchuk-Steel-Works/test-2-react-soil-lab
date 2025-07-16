@@ -11,6 +11,7 @@ import {
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
+import { FormLayout } from '@/shared/ui/forms/FormLayout'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
@@ -69,7 +70,9 @@ export default function PermissionsForm({ defaultValues, onSubmit, submitBtnName
   }
 
   return (
-    <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+      <h4 className="layout-text">Права доступу</h4>
+
       <InputFieldWithError
         label="Назва"
         {...register('name', formTransformers.string)}
@@ -106,6 +109,6 @@ export default function PermissionsForm({ defaultValues, onSubmit, submitBtnName
       >
         {submitBtnName}
       </ButtonWithError>
-    </form>
+    </FormLayout>
   )
 }

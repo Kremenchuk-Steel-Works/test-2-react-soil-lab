@@ -18,6 +18,7 @@ import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
 import FormDateTimeField from '@/shared/ui/forms/FormDateTimeField'
 import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
+import { FormLayout } from '@/shared/ui/forms/FormLayout'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { OptionalField } from '@/shared/ui/forms/OptionalField'
 import type { Option } from '@/shared/ui/select/ReactSelect'
@@ -115,7 +116,9 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
   // })
 
   return (
-    <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+      <h4 className="layout-text">Людина</h4>
+
       <InputFieldWithError
         label="Ім'я"
         {...register('firstName', formTransformers.string)}
@@ -272,6 +275,6 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
       >
         {submitBtnName}
       </ButtonWithError>
-    </form>
+    </FormLayout>
   )
 }

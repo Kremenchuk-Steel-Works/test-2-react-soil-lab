@@ -3,6 +3,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { countrySchema, type CountryFormFields } from '@/entities/admin/country/forms/schema'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import { FormLayout } from '@/shared/ui/forms/FormLayout'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormFields = CountryFormFields
@@ -37,7 +38,9 @@ export default function CountryForm({ defaultValues, onSubmit, submitBtnName }: 
   }
 
   return (
-    <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+      <h4 className="layout-text">Країна</h4>
+
       <InputFieldWithError
         label="Назва"
         {...register('name', formTransformers.string)}
@@ -76,6 +79,6 @@ export default function CountryForm({ defaultValues, onSubmit, submitBtnName }: 
       >
         {submitBtnName}
       </ButtonWithError>
-    </form>
+    </FormLayout>
   )
 }

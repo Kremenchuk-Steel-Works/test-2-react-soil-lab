@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import PermissionsForm from '@/entities/admin/permissions/forms/form'
 import type { PermissionsFormFields } from '@/entities/admin/permissions/forms/schema'
@@ -7,7 +6,6 @@ import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
 import { permissionService } from '@/entities/admin/permissions/services/service'
 import type { PermissionDetailResponse } from '@/entities/admin/permissions/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import Button from '@/shared/ui/button/Button'
 
 export default function AdminPermissionsUpdate() {
   const navigate = useNavigate()
@@ -40,15 +38,6 @@ export default function AdminPermissionsUpdate() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <Button
-          className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate('..')}
-        >
-          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
-        </Button>
-      </div>
-
       {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
 
       {!isLoading && !isError && data && (

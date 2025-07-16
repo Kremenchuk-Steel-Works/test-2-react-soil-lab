@@ -1,33 +1,31 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-export const useUrlPagination = (maxPerPage = 20) => {
+export const useUrlPagination = (defaultPerPage = 10, maxPerPage = 20) => {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  // Парсим параметры из URL с дефолтными значениями
+  // Синхронно получаем параметры
   const page = Math.max(Number(searchParams.get('page')) || 1, 1)
-  const rawPerPage = Number(searchParams.get('perPage')) || 10
+  const rawPerPage = Number(searchParams.get('perPage')) || defaultPerPage
   const perPage = Math.min(rawPerPage, maxPerPage)
 
-  // Добавляем флаг готовности. Изначально false.
-  const [isReady, setIsReady] = useState(false)
-
-  // Логика проверки и "очистки" URL
+  // Эффект для формирования URL.
   useEffect(() => {
-    const hasPage = searchParams.has('page')
-    const hasPerPage = searchParams.has('perPage')
+    const newParams = new URLSearchParams(searchParams)
+    let updated = false
 
-    if (!hasPage || !hasPerPage) {
-      // Если URL неполный, исправляем его
-      const newParams = new URLSearchParams(searchParams)
+    if (!searchParams.has('page')) {
       newParams.set('page', String(page))
+      updated = true
+    }
+    if (!searchParams.has('perPage')) {
       newParams.set('perPage', String(perPage))
+      updated = true
+    }
 
+    // Обновляем URL только если он действительно был неполным.
+    if (updated) {
       setSearchParams(newParams, { replace: true })
-      // Готовность будет выставлена на следующем рендере после исправления URL
-    } else {
-      // Если URL уже в порядке, сразу сообщаем, что все готово
-      setIsReady(true)
     }
   }, [page, perPage, searchParams, setSearchParams])
 
@@ -35,6 +33,5 @@ export const useUrlPagination = (maxPerPage = 20) => {
     page,
     perPage,
     setSearchParams,
-    isReady,
   }
 }

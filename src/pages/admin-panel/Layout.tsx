@@ -1,14 +1,14 @@
 import { Outlet } from 'react-router-dom'
-import Layout from '@/widgets/page-layout/Layout'
+import MainLayout from '@/widgets/page-layout/MainLayout'
 import { PageHeader } from '@/widgets/page/PageHeader'
 
 export default function AdminPanelLayout() {
   return (
-    <Layout>
+    <MainLayout>
       <div className="flex flex-1 flex-col space-y-2">
         <PageHeader />
         <Outlet />
       </div>
-    </Layout>
+    </MainLayout>
   )
 }

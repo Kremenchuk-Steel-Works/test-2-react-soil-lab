@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import LibraryForm from '@/entities/library/forms/form'
 import type { LibraryFormFields } from '@/entities/library/forms/schema'
@@ -7,7 +6,6 @@ import { libraryQueryKeys } from '@/entities/library/services/keys'
 import { libraryService } from '@/entities/library/services/service.mock'
 import type { LibraryDetailResponse } from '@/entities/library/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import Button from '@/shared/ui/button/Button'
 
 export default function LibraryUpdate() {
   const navigate = useNavigate()
@@ -39,15 +37,6 @@ export default function LibraryUpdate() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <Button
-          className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate('..')}
-        >
-          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
-        </Button>
-      </div>
-
       {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
 
       {!isLoading && !isError && data && (

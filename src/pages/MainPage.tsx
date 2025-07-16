@@ -2,14 +2,14 @@ import { useNavigate } from 'react-router-dom'
 import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs/Breadcrumbs'
 import Button from '@/shared/ui/button/Button'
-import Layout from '@/widgets/page-layout/Layout'
+import MainLayout from '@/widgets/page-layout/MainLayout'
 
 export default function MainPage() {
   const visibleRoutes = useVisibleRoutes()
   const navigate = useNavigate()
 
   return (
-    <Layout>
+    <MainLayout>
       <div className="space-y-2">
         <Breadcrumbs />
         <div className="flex flex-wrap gap-x-2 gap-y-2">
@@ -26,6 +26,6 @@ export default function MainPage() {
             ))}
         </div>
       </div>
-    </Layout>
+    </MainLayout>
   )
 }

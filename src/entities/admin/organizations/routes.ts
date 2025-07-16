@@ -14,6 +14,9 @@ export const organizationsRoutes: AppRoute = {
   label: 'Організації',
   icon: Building,
   Component: AdminOrganizationsLayout,
+  meta: {
+    showAddButton: true,
+  },
   children: [
     {
       key: 'adminOrganizationsList',
@@ -35,6 +38,9 @@ export const organizationsRoutes: AppRoute = {
       label: 'Деталі',
       icon: Info,
       Component: AdminOrganizationsDetails,
+      meta: {
+        showEditButton: true,
+      },
     },
     {
       key: 'adminOrganizationsUpdate',

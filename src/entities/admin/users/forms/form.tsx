@@ -20,6 +20,7 @@ import type { RoleLookupResponse } from '@/entities/admin/roles/types/response.d
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
+import { FormLayout } from '@/shared/ui/forms/FormLayout'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 import {
@@ -121,7 +122,9 @@ export default function UsersForm<T extends ZodType<any, any>>({
     })) || []
 
   return (
-    <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+      <h4 className="layout-text">Користувач</h4>
+
       {schemaKeys.includes('personId') && (
         <Controller
           name={`personId` as Path<T>}
@@ -220,6 +223,6 @@ export default function UsersForm<T extends ZodType<any, any>>({
       >
         {submitBtnName}
       </ButtonWithError>
-    </form>
+    </FormLayout>
   )
 }

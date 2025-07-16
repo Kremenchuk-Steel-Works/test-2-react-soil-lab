@@ -14,6 +14,9 @@ export const departmentsRoutes: AppRoute = {
   label: 'Відділи',
   icon: Layers,
   Component: AdminDepartmentsLayout,
+  meta: {
+    showAddButton: true,
+  },
   children: [
     {
       key: 'adminDepartmentsList',
@@ -35,6 +38,9 @@ export const departmentsRoutes: AppRoute = {
       label: 'Деталі',
       icon: Info,
       Component: AdminDepartmentsDetails,
+      meta: {
+        showEditButton: true,
+      },
     },
     {
       key: 'adminDepartmentsUpdate',

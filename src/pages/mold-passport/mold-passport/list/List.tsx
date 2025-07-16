@@ -9,7 +9,7 @@ import { DataTable } from '@/widgets/data-table/DataTable'
 
 export default function MoldPassportList() {
   // Состояние из URL
-  const { page, perPage, setSearchParams, isReady } = useUrlPagination()
+  const { page, perPage, setSearchParams } = useUrlPagination()
 
   // Получение данных, usersData
   const {
@@ -21,12 +21,11 @@ export default function MoldPassportList() {
     queryKey: personQueryKeys.list(page, perPage),
     queryFn: () => {
       return personService.getList({
-        page: page,
-        perPage: perPage,
+        page,
+        perPage,
       })
     },
     placeholderData: keepPreviousData,
-    enabled: isReady,
   })
 
   return (

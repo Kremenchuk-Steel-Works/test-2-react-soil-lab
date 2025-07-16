@@ -3,6 +3,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { loginSchema, type LoginFormFields } from '@/entities/auth/forms/schema'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import { FormLayout } from '@/shared/ui/forms/FormLayout'
 import {
   ButtonWithError,
   CheckboxWithError,
@@ -41,7 +42,7 @@ export default function LoginForm({ defaultValues, onSubmit, submitBtnName }: Fo
   }
 
   return (
-    <form className="space-y-3" onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={handleSubmit(submitHandler)}>
       <InputFieldWithError
         label="Email"
         errorMessage={errors.email?.message}
@@ -69,6 +70,6 @@ export default function LoginForm({ defaultValues, onSubmit, submitBtnName }: Fo
       >
         {submitBtnName}
       </ButtonWithError>
-    </form>
+    </FormLayout>
   )
 }

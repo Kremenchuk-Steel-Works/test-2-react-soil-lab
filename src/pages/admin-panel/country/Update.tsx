@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import CountryForm from '@/entities/admin/country/forms/form'
 import type { CountryFormFields } from '@/entities/admin/country/forms/schema'
@@ -7,7 +6,6 @@ import { countryQueryKeys } from '@/entities/admin/country/services/keys'
 import { countryService } from '@/entities/admin/country/services/service'
 import type { CountryDetailResponse } from '@/entities/admin/country/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import Button from '@/shared/ui/button/Button'
 
 export default function AdminCountryUpdate() {
   const navigate = useNavigate()
@@ -32,15 +30,6 @@ export default function AdminCountryUpdate() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <Button
-          className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate('..')}
-        >
-          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
-        </Button>
-      </div>
-
       {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
 
       {!isLoading && !isError && data && (

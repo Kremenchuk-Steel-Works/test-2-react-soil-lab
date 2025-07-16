@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import type { AddressOperationRequest } from '@/entities/admin/address/types/request.dto'
 import type { ContactOperationRequest } from '@/entities/admin/contact/types/request.dto'
@@ -11,7 +10,6 @@ import type { PersonUpdateRequest } from '@/entities/admin/people/types/request.
 import type { PersonDetailResponse } from '@/entities/admin/people/types/response.dto'
 import { createArrayOperations, getLegacySingleObjectOperation } from '@/shared/lib/form-utils'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import Button from '@/shared/ui/button/Button'
 
 export default function AdminPeopleUpdate() {
   const navigate = useNavigate()
@@ -84,15 +82,6 @@ export default function AdminPeopleUpdate() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <Button
-          className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate('..')}
-        >
-          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
-        </Button>
-      </div>
-
       {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
 
       {!isLoading && !isError && data && (

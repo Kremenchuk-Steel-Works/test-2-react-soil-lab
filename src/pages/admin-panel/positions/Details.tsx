@@ -1,14 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { ArrowLeft, Pen } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
 import { positionService } from '@/entities/admin/positions/services/service'
 import type { PositionDetailResponse } from '@/entities/admin/positions/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import Button from '@/shared/ui/button/Button'
 
 export default function AdminPositionsDetails() {
-  const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
 
   const {
@@ -24,15 +21,6 @@ export default function AdminPositionsDetails() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <Button
-          className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate('..')}
-        >
-          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
-        </Button>
-      </div>
-
       <div>
         {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
 
@@ -74,15 +62,6 @@ export default function AdminPositionsDetails() {
                 </dd>
               </div>
             </dl>
-
-            <div className="flex items-center justify-between py-2">
-              <Button
-                className="flex items-center justify-center gap-1 bg-orange-500 whitespace-nowrap hover:bg-orange-600"
-                onClick={() => navigate('update')}
-              >
-                <Pen className="h-5 w-5" /> <span>Редагувати</span>
-              </Button>
-            </div>
           </div>
         )}
       </div>
