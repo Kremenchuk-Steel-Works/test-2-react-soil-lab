@@ -189,6 +189,7 @@ function ReactSelect<
       Control: FloatingLabelControl,
       Menu: AnimatedMenu,
       ...(isVirtualized && { MenuList: VirtualizedMenuList }),
+      Placeholder: () => null,
     },
     classNames: {
       control: (state: { isFocused: boolean; isDisabled: boolean }) =>

@@ -15,7 +15,7 @@ export const organizationsRoutes: AppRoute = {
   icon: Building,
   Component: AdminOrganizationsLayout,
   meta: {
-    showAddButton: true,
+    buttons: ['add'],
   },
   children: [
     {
@@ -39,7 +39,7 @@ export const organizationsRoutes: AppRoute = {
       icon: Info,
       Component: AdminOrganizationsDetails,
       meta: {
-        showEditButton: true,
+        buttons: ['update'],
       },
     },
     {

@@ -15,7 +15,7 @@ export const countryRoutes: AppRoute = {
   icon: Globe,
   Component: AdminCountryLayout,
   meta: {
-    showAddButton: true,
+    buttons: ['add'],
   },
   children: [
     {
@@ -39,7 +39,7 @@ export const countryRoutes: AppRoute = {
       icon: Info,
       Component: AdminCountryDetails,
       meta: {
-        showEditButton: true,
+        buttons: ['update'],
       },
     },
     {

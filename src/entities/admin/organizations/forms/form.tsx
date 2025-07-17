@@ -11,7 +11,7 @@ import {
   type OrganizationsFormFields,
 } from '@/entities/admin/organizations/forms/schema'
 import { logger } from '@/shared/lib/logger'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
 import { FormLayout } from '@/shared/ui/forms/FormLayout'

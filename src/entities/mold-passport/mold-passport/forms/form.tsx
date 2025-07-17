@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQueries, type UseQueryResult } from '@tanstack/react-query'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
@@ -11,14 +12,17 @@ import { genderOptions } from '@/entities/admin/people/types/gender'
 import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
 import { positionService } from '@/entities/admin/positions/services/service'
 import type { PositionLookupResponse } from '@/entities/admin/positions/types/response.dto'
-import { moldPassportDynamicFieldConfig } from '@/entities/mold-passport/mold-passport/forms/config'
+import {
+  moldPassportDynamicFieldConfig,
+  type MoldPassportDynamicFieldOptions,
+} from '@/entities/mold-passport/mold-passport/forms/config'
 import {
   moldPassportSchema,
   type MoldPassportFormFields,
 } from '@/entities/mold-passport/mold-passport/forms/schema'
 import { useDynamicFieldManager } from '@/shared/hooks/useDynamicFieldManager'
 import { logger } from '@/shared/lib/logger'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
 import { DynamicFieldsRenderer } from '@/shared/ui/forms/DynamicFieldsRenderer'
@@ -32,7 +36,9 @@ import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fie
 
 type FormFields = MoldPassportFormFields
 const schema = moldPassportSchema
-const config = moldPassportDynamicFieldConfig
+
+const dynamicFieldConfig = moldPassportDynamicFieldConfig
+type DynamicFieldOptions = MoldPassportDynamicFieldOptions
 
 export interface MoldPassportFormInitialData {
   defaultValues?: Partial<FormFields>
@@ -73,7 +79,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
     }
   }
 
-  useDynamicFieldManager({ control, resetField, config })
+  useDynamicFieldManager({ control, resetField, config: dynamicFieldConfig })
 
   // Queries
   const queries = useQueries({
@@ -89,6 +95,58 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
     ],
   })
 
+  // Queries data
+  const [organizationsQ, positionsQ] = queries as [
+    UseQueryResult<OrganizationLookupResponse[], Error>,
+    UseQueryResult<PositionLookupResponse[], Error>,
+  ]
+
+  // Options
+  const organizationsOptions: Option<string>[] = useMemo(
+    () =>
+      organizationsQ.data?.map((c) => ({
+        value: c.id,
+        label: c.legalName,
+      })) || [],
+    [organizationsQ.data],
+  )
+
+  const positionsOptions: Option<string>[] = useMemo(
+    () =>
+      positionsQ.data?.map((c) => ({
+        value: c.id,
+        label: c.name,
+      })) || [],
+    [positionsQ.data],
+  )
+
+  // Dynamic form options
+  const dynamicFieldOptions: DynamicFieldOptions = {
+    organizationsOptions,
+    positionsOptions,
+  }
+
+  // Зависящие опции
+  // const dependentOptionsConfig = useMemo(
+  //   () =>
+  //     moldPassportDependentOptionsConfig({
+  //       organizationsOptions,
+  //       positionsOptions,
+  //     }),
+  //   [organizationsOptions, positionsOptions],
+  // )
+
+  // const {
+  //   options: testOptions,
+  //   isDisabled: isTestDisabled,
+  //   placeholder: testPlaceholder,
+  // } = useDependentOptions({
+  //   control,
+  //   resetField,
+  //   dependentFieldName: 'test',
+  //   config: dependentOptionsConfig,
+  // })
+
   // Loading || Error
   const isAnyLoading = queries.some((q) => q.isLoading)
   const isAnyError = queries.some((q) => q.isError)
@@ -98,25 +156,6 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
   if (isAnyError && firstError instanceof Error) {
     return <AlertMessage type={AlertType.ERROR} message={firstError.message} />
   }
-
-  // Queries data
-  const [organizationsQ, positionsQ] = queries as [
-    UseQueryResult<OrganizationLookupResponse[], Error>,
-    UseQueryResult<PositionLookupResponse[], Error>,
-  ]
-
-  // Options
-  const organizationsOptions: Option<string>[] =
-    organizationsQ.data?.map((c) => ({
-      value: c.id,
-      label: c.legalName,
-    })) || []
-
-  const positionsOptions: Option<string>[] =
-    positionsQ.data?.map((c) => ({
-      value: c.id,
-      label: c.name,
-    })) || []
 
   // // Загрузчик для организаций
   // const loadAsyncOrganizationOptions = useAsyncOptionsLoader(organizationMockService, {
@@ -135,7 +174,13 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
       />
 
       {/* Динамические поля */}
-      <DynamicFieldsRenderer control={control} triggerFor="firstName" config={config} />
+      <DynamicFieldsRenderer
+        control={control}
+        errors={errors}
+        triggerFor="firstName"
+        config={dynamicFieldConfig}
+        options={dynamicFieldOptions}
+      />
 
       <InputFieldWithError
         label="Прізвище"
@@ -165,8 +210,33 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
         )}
       />
 
+      {/* <Controller
+        name="test"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
+            fieldState={fieldState}
+            options={testOptions}
+            isDisabled={isTestDisabled}
+            isVirtualized
+            isMulti
+            isClearable
+            placeholder={testPlaceholder}
+            errorMessage={getNestedErrorMessage(errors, 'test')}
+          />
+        )}
+      /> */}
+
       {/* Динамические поля */}
-      <DynamicFieldsRenderer control={control} triggerFor="gender" config={config} />
+      <DynamicFieldsRenderer
+        control={control}
+        errors={errors}
+        triggerFor="gender"
+        config={dynamicFieldConfig}
+        options={dynamicFieldOptions}
+      />
+
       <Controller
         name="birthDate"
         control={control}
@@ -216,7 +286,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
         errors={errors}
       />
 
-      <Controller
+      {/* <Controller
         name="organizationIds"
         control={control}
         render={({ field, fieldState }) => (
@@ -231,7 +301,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
             errorMessage={getNestedErrorMessage(errors, 'organizationIds')}
           />
         )}
-      />
+      /> */}
 
       {/* <Controller
         name="organizationIds"
@@ -252,7 +322,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
         )}
       /> */}
 
-      <Controller
+      {/* <Controller
         name="positionIds"
         control={control}
         render={({ field, fieldState }) => (
@@ -267,7 +337,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
             errorMessage={getNestedErrorMessage(errors, 'positionIds')}
           />
         )}
-      />
+      /> */}
 
       <OptionalField
         title="Профіль працівника"

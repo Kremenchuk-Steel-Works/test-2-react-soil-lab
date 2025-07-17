@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { Shield, Users } from 'lucide-react'
+import { Factory, Users } from 'lucide-react'
 import type { AppRoute } from '@/app/routes/types'
 import { moldPassportRoutes } from '@/entities/mold-passport/mold-passport/routes'
 
@@ -9,8 +9,8 @@ const MoldPassportMainLayout = lazy(() => import('@/pages/mold-passport/Layout')
 export const moldPassportMainRoutes: AppRoute = {
   key: 'mold',
   path: '/mold',
-  label: 'Паспорт плавки',
-  icon: Shield,
+  label: 'Ливарний цех',
+  icon: Factory,
   Component: MoldPassportMainLayout,
   requiredPermissions: ['admin'],
   children: [

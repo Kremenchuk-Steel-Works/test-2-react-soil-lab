@@ -5,9 +5,15 @@ import {
   MaleSpecificFields,
 } from '@/entities/mold-passport/mold-passport/forms/components/GenderSpecificFields'
 import { MaksimSpecificFields } from '@/entities/mold-passport/mold-passport/forms/components/NameSpecificFields'
-import type { DynamicFieldConfig } from '@/shared/lib/zod'
+import { createFormConfig } from '@/shared/lib/zod'
+import type { Option } from '@/shared/ui/select/ReactSelect'
 
-export const moldPassportDynamicFieldConfig: DynamicFieldConfig = [
+export interface MoldPassportDynamicFieldOptions {
+  organizationsOptions: Option<string>[]
+  positionsOptions: Option<string>[]
+}
+
+export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynamicFieldOptions>([
   // Для мужчин (gender: 'male')
   {
     conditions: {
@@ -15,6 +21,7 @@ export const moldPassportDynamicFieldConfig: DynamicFieldConfig = [
     },
     schema: z.object({
       militaryId: z.string().nonempty('Вкажіть номер військового квитка'),
+      test: z.array(z.string()).nonempty(),
     }),
     Component: MaleSpecificFields,
   },
@@ -53,4 +60,4 @@ export const moldPassportDynamicFieldConfig: DynamicFieldConfig = [
     }),
     Component: CombinedMaksymFields,
   },
-]
+])

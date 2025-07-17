@@ -15,7 +15,7 @@ export const positionsRoutes: AppRoute = {
   icon: BriefcaseBusiness,
   Component: AdminPositionsLayout,
   meta: {
-    showAddButton: true,
+    buttons: ['add'],
   },
   children: [
     {
@@ -39,7 +39,7 @@ export const positionsRoutes: AppRoute = {
       icon: Info,
       Component: AdminPositionsDetails,
       meta: {
-        showEditButton: true,
+        buttons: ['update'],
       },
     },
     {

@@ -15,7 +15,7 @@ export const permissionsRoutes: AppRoute = {
   icon: Lock,
   Component: AdminPermissionsLayout,
   meta: {
-    showAddButton: true,
+    buttons: ['add'],
   },
   children: [
     {
@@ -39,7 +39,7 @@ export const permissionsRoutes: AppRoute = {
       icon: Info,
       Component: AdminPermissionsDetails,
       meta: {
-        showEditButton: true,
+        buttons: ['update'],
       },
     },
     {

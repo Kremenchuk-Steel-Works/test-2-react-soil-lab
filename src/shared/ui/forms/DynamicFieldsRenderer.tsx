@@ -1,20 +1,36 @@
 import { Fragment } from 'react'
-import { useWatch, type Control, type FieldValues, type Path } from 'react-hook-form'
+import {
+  useWatch,
+  type Control,
+  type FieldErrors,
+  type FieldValues,
+  type Path,
+} from 'react-hook-form'
 import { checkConditions, type DynamicFieldConfig } from '@/shared/lib/zod'
 
-interface DynamicFieldsRendererProps<
-  TFieldValues extends FieldValues,
-  TTrigger extends Path<TFieldValues>,
-> {
-  control: Control<TFieldValues>
-  config: DynamicFieldConfig
-  triggerFor: TTrigger
+/**
+ * Базовые пропсы, которые получает каждый динамический компонент.
+ */
+export interface DynamicFieldsProps {
+  control: Control<any>
+  errors: FieldErrors<any>
 }
 
-export function DynamicFieldsRenderer<
-  TFieldValues extends FieldValues,
-  TTrigger extends Path<TFieldValues>,
->({ control, config, triggerFor }: DynamicFieldsRendererProps<TFieldValues, TTrigger>) {
+interface DynamicFieldsRendererProps<TFieldValues extends FieldValues, TOptions extends object> {
+  control: Control<TFieldValues>
+  errors: FieldErrors<TFieldValues>
+  config: DynamicFieldConfig<TOptions>
+  triggerFor: Path<TFieldValues>
+  options: TOptions
+}
+
+export function DynamicFieldsRenderer<TFieldValues extends FieldValues, TOptions extends object>({
+  control,
+  errors,
+  config,
+  triggerFor,
+  options,
+}: DynamicFieldsRendererProps<TFieldValues, TOptions>) {
   const formValues = useWatch({ control })
 
   const relevantRules = config.filter((rule) => {
@@ -49,7 +65,7 @@ export function DynamicFieldsRenderer<
           const { Component } = rule
           return (
             <Fragment key={index}>
-              <Component control={control} />
+              <Component control={control} errors={errors} options={options} />
             </Fragment>
           )
         }

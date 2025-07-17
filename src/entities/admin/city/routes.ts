@@ -15,7 +15,7 @@ export const cityRoutes: AppRoute = {
   icon: Languages,
   Component: AdminCityLayout,
   meta: {
-    showAddButton: true,
+    buttons: ['add'],
   },
   children: [
     {
@@ -38,9 +38,9 @@ export const cityRoutes: AppRoute = {
       label: 'Деталі',
       icon: Info,
       Component: AdminCityDetails,
-      meta: {
-        showEditButton: true,
-      },
+     meta: {
+     buttons: ['update'],
+  },
     },
     {
       key: 'adminCityUpdate',

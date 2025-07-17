@@ -27,6 +27,13 @@ const colorVariants = {
     'dark:bg-green-600 dark:text-white',
     'dark:hover:bg-green-700',
   ],
+  orange: [
+    'bg-orange-600 text-white',
+    'hover:bg-orange-500',
+
+    'dark:bg-orange-600 dark:text-white',
+    'dark:hover:bg-orange-700',
+  ],
   neutral: [
     'bg-slate-200 text-slate-900',
     'hover:bg-slate-300',

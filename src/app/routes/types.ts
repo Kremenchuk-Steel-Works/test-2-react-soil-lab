@@ -7,9 +7,10 @@ export type Permission =
   | 'library_view'
   | 'library_edit'
 
+export type PageButtonType = 'add' | 'update'
+
 export interface RouteMeta {
-  showAddButton?: boolean
-  showEditButton?: boolean
+  buttons?: PageButtonType[]
 }
 
 export interface AppRoute {

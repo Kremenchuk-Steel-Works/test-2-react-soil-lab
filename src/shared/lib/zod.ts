@@ -1,4 +1,5 @@
 import { z, ZodObject, ZodType, type ZodRawShape, type ZodTypeAny } from 'zod'
+import type { DynamicFieldsProps } from '@/shared/ui/forms/DynamicFieldsRenderer'
 
 export default function optionalObject<T extends ZodTypeAny>(
   schema: T,
@@ -38,10 +39,15 @@ type ConditionValue = string | string[]
  */
 type ConditionsMap = Record<string, ConditionValue>
 
+// TOptions - это объект, описывающий, какие options доступны (например, { organizationsOptions: Option[] })
+export type DynamicComponentProps<TOptions extends object> = DynamicFieldsProps & {
+  options: TOptions
+}
+
 /**
  * Описание одного динамического правила.
  */
-export interface DynamicRule {
+export interface DynamicRule<TOptions extends object> {
   // Условия, при которых правило активно
   conditions: ConditionsMap
   // Исключения, при которых правило НЕ активно, даже если условия совпали (логика "И")
@@ -49,14 +55,14 @@ export interface DynamicRule {
   // Схема для валидации, когда правило активно
   schema: z.ZodObject<any>
   // Компонент для рендеринга, когда правило активно
-  Component: React.ComponentType<{ control: any }> // Уточнили props
+  Component: React.ComponentType<DynamicComponentProps<TOptions>>
   renderTrigger?: string
 }
 
 /**
  * Тип для конфигурации динамических полей.
  */
-export type DynamicFieldConfig = DynamicRule[]
+export type DynamicFieldConfig<TOptions extends object> = DynamicRule<TOptions>[]
 
 /**
  * Проверяет, соответствует ли значение поля указанному условию.
@@ -79,10 +85,13 @@ function valueMatchesCondition(formValue: unknown, conditionValue: string | stri
  * @param rule - правило для проверки
  * @returns boolean
  */
-export function checkConditions(formData: Record<string, unknown>, rule: DynamicRule): boolean {
+export function checkConditions<TOptions extends object>(
+  formData: Record<string, unknown>,
+  rule: DynamicRule<TOptions>,
+): boolean {
   const { conditions, exceptions } = rule
 
-  // 1. Проверяем основные условия (логика "И")
+  // Проверяем основные условия (логика "И")
   // Если хотя бы одно условие не выполнено, правило неактивно.
   for (const fieldName in conditions) {
     if (!valueMatchesCondition(formData[fieldName], conditions[fieldName])) {
@@ -90,7 +99,7 @@ export function checkConditions(formData: Record<string, unknown>, rule: Dynamic
     }
   }
 
-  // 2. Если есть исключения, проверяем их (логика "И")
+  // Если есть исключения, проверяем их (логика "И")
   // Если хотя бы одно исключение сработало, правило неактивно.
   if (exceptions) {
     for (const fieldName in exceptions) {
@@ -108,10 +117,11 @@ export function checkConditions(formData: Record<string, unknown>, rule: Dynamic
 /**
  * Создает Zod-схему с поддержкой сложных динамических правил.
  */
-export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
+export function createDynamicSchema<T extends ZodObject<ZodRawShape>, TOptions extends object>(
   baseSchema: T,
-  dynamicConfig: DynamicFieldConfig,
+  dynamicConfig: DynamicFieldConfig<TOptions>,
 ) {
+  // <- Используем Generic
   const processedSchema = z.preprocess((input, ctx) => {
     if (typeof input !== 'object' || input === null) {
       return input
@@ -135,4 +145,8 @@ export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
   }, baseSchema)
 
   return z.any().pipe(processedSchema)
+}
+
+export function createFormConfig<TOptions extends object>(config: DynamicFieldConfig<TOptions>) {
+  return config
 }

@@ -15,7 +15,7 @@ export const departmentsRoutes: AppRoute = {
   icon: Layers,
   Component: AdminDepartmentsLayout,
   meta: {
-    showAddButton: true,
+    buttons: ['add'],
   },
   children: [
     {
@@ -39,7 +39,7 @@ export const departmentsRoutes: AppRoute = {
       icon: Info,
       Component: AdminDepartmentsDetails,
       meta: {
-        showEditButton: true,
+        buttons: ['update'],
       },
     },
     {

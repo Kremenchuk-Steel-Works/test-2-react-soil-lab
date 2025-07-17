@@ -16,7 +16,7 @@ export const libraryRoutes: AppRoute = {
   Component: LibraryLayout,
   requiredPermissions: ['library_view'],
   meta: {
-    showAddButton: true,
+    buttons: ['add'],
   },
   children: [
     {
@@ -44,7 +44,7 @@ export const libraryRoutes: AppRoute = {
       Component: LibraryDetails,
       inSidebar: false,
       meta: {
-        showEditButton: true,
+        buttons: ['update'],
       },
     },
     {

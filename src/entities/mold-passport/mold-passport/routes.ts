@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { CirclePlus, Database, Info, RefreshCcw, Users } from 'lucide-react'
+import { CirclePlus, Database, File, Info, RefreshCcw } from 'lucide-react'
 import type { AppRoute } from '@/app/routes/types'
 
 const MoldPassportLayout = lazy(() => import('@/pages/mold-passport/mold-passport/Layout'))
@@ -12,10 +12,10 @@ export const moldPassportRoutes: AppRoute = {
   key: 'MoldPassport',
   path: 'mold-passport',
   label: 'Паспорт ливарної форми',
-  icon: Users,
+  icon: File,
   Component: MoldPassportLayout,
   meta: {
-    showAddButton: true,
+    buttons: ['add'],
   },
   children: [
     {
@@ -39,7 +39,7 @@ export const moldPassportRoutes: AppRoute = {
       icon: Info,
       Component: MoldPassportDetails,
       meta: {
-        showEditButton: true,
+        buttons: ['update'],
       },
     },
     {

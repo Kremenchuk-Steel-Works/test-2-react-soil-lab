@@ -16,6 +16,7 @@ const baseSchema = z.object({
   lastName: z.string().nonempty(),
   middleName: z.string().optional(),
   gender: z.enum(toZodEnumValues(genderOptions)),
+  test: z.array(z.string()).optional(),
 
   // Dynamic fields
   militaryId: z.string().optional(),

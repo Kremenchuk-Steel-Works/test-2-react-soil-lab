@@ -1,14 +1,12 @@
-import { useFormState, type Control } from 'react-hook-form'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import type { MoldPassportDynamicFieldOptions } from '@/entities/mold-passport/mold-passport/forms/config'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
+import type { DynamicComponentProps } from '@/shared/lib/zod'
 import { FieldsetWrapper } from '@/shared/ui/forms/FieldsetWrapper'
 import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
-interface SpecificFieldsProps {
-  control: Control<any>
-}
+type DynamicFieldsProps = DynamicComponentProps<MoldPassportDynamicFieldOptions>
 
-export function MaksimSpecificFields({ control }: SpecificFieldsProps) {
-  const { errors } = useFormState({ control })
+export function MaksimSpecificFields({ control, errors }: DynamicFieldsProps) {
   return (
     <FieldsetWrapper title="Поля для Максим" className="rounded-lg">
       <InputFieldWithError

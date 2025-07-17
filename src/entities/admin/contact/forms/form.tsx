@@ -7,11 +7,11 @@ import {
 } from 'react-hook-form'
 import type { ContactFormFields } from '@/entities/admin/contact/forms/schema'
 import { contactOptions } from '@/entities/admin/contact/types/contact'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { CheckboxWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
-export type FormFields = {
+type FormFields = {
   contacts: ContactFormFields[]
 }
 

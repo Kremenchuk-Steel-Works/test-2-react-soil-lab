@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import { countrySchema, type CountryFormFields } from '@/entities/admin/country/forms/schema'
 import { logger } from '@/shared/lib/logger'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import { FormLayout } from '@/shared/ui/forms/FormLayout'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 

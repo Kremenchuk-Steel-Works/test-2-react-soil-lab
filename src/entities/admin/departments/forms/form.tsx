@@ -5,7 +5,7 @@ import {
   type DepartmentsFormFields,
 } from '@/entities/admin/departments/forms/schema'
 import { logger } from '@/shared/lib/logger'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import { FormLayout } from '@/shared/ui/forms/FormLayout'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 

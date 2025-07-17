@@ -16,6 +16,7 @@ export const FloatingLabelControl = <
 
   const placeholderClasses = twMerge(
     'pointer-events-none absolute left-4 transition-all duration-200 ease-in-out',
+    'select-none',
     'text-gray-400 dark:text-gray-400',
     isFloating ? 'top-1 bg-white dark:bg-gray-700 text-sm' : 'top-1/2 -translate-y-1/2 text-base',
     isFocused && isFloating && 'text-blue-500 dark:text-blue-500',

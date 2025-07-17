@@ -23,7 +23,7 @@ export function useUserPermissionsSet(): Set<string> {
  * @param permissions - Set с правами пользователя.
  * @returns {boolean} - true, если доступ разрешен.
  */
-function checkAccessLogic(
+export function checkAccessLogic(
   path: string,
   user: UserResponse | null | undefined,
   permissions: Set<string>,

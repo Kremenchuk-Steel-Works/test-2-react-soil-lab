@@ -15,7 +15,7 @@ export const peopleRoutes: AppRoute = {
   icon: Users,
   Component: AdminPeopleLayout,
   meta: {
-    showAddButton: true,
+    buttons: ['add'],
   },
   children: [
     {
@@ -39,7 +39,7 @@ export const peopleRoutes: AppRoute = {
       icon: Info,
       Component: AdminPeopleDetails,
       meta: {
-        showEditButton: true,
+        buttons: ['update'],
       },
     },
     {

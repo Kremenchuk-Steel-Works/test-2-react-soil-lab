@@ -9,17 +9,17 @@ import {
 import { usePrevious } from '@/shared/hooks/usePrevious'
 import { checkConditions, type DynamicFieldConfig } from '@/shared/lib/zod'
 
-interface UseDynamicFieldManagerProps<TFieldValues extends FieldValues> {
+interface UseDynamicFieldManagerProps<TFieldValues extends FieldValues, TOptions extends object> {
   control: Control<TFieldValues>
   resetField: UseFormResetField<TFieldValues>
-  config: DynamicFieldConfig
+  config: DynamicFieldConfig<TOptions>
 }
 
-export function useDynamicFieldManager<TFieldValues extends FieldValues>({
+export function useDynamicFieldManager<TFieldValues extends FieldValues, TOptions extends object>({
   control,
   resetField,
   config,
-}: UseDynamicFieldManagerProps<TFieldValues>) {
+}: UseDynamicFieldManagerProps<TFieldValues, TOptions>) {
   const formValues = useWatch({ control })
   const prevFormValues = usePrevious(formValues)
 

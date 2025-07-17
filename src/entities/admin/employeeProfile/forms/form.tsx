@@ -7,12 +7,12 @@ import {
 } from 'react-hook-form'
 import type { EmployeeProfileFormFields } from '@/entities/admin/employeeProfile/forms/schema'
 import { employeeProfileOptions } from '@/entities/admin/employeeProfile/types/employmentStatus'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import FormDateTimeField from '@/shared/ui/forms/FormDateTimeField'
 import FormSelectField from '@/shared/ui/forms/FormReactSelect'
 import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
-export type FormFields = {
+type FormFields = {
   employeeProfile?: EmployeeProfileFormFields
 }
 

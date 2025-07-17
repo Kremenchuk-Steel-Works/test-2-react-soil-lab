@@ -1,13 +1,11 @@
-import { useFormState, type Control } from 'react-hook-form'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form'
+import type { MoldPassportDynamicFieldOptions } from '@/entities/mold-passport/mold-passport/forms/config'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
+import type { DynamicComponentProps } from '@/shared/lib/zod'
 import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
-interface SpecificFieldsProps {
-  control: Control<any>
-}
+type DynamicFieldsProps = DynamicComponentProps<MoldPassportDynamicFieldOptions>
 
-export function CombinedMaksymFields({ control }: SpecificFieldsProps) {
-  const { errors } = useFormState({ control })
+export function CombinedMaksymFields({ control, errors }: DynamicFieldsProps) {
   return (
     <div className="space-y-3 rounded-md border border-green-200 bg-green-50 px-4 py-2 pb-4 dark:border-green-900/50 dark:bg-green-950/50">
       <h3 className="font-semibold text-gray-700 dark:text-gray-300">

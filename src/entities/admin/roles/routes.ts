@@ -15,7 +15,7 @@ export const rolesRoutes: AppRoute = {
   icon: ShieldCheck,
   Component: AdminRolesLayout,
   meta: {
-    showAddButton: true,
+    buttons: ['add'],
   },
   children: [
     {
@@ -39,7 +39,7 @@ export const rolesRoutes: AppRoute = {
       icon: Info,
       Component: AdminRolesDetails,
       meta: {
-        showEditButton: true,
+        buttons: ['update'],
       },
     },
     {
