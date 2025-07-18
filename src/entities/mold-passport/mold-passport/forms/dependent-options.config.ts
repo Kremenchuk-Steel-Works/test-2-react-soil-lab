@@ -1,5 +1,5 @@
 import type { DependentOptionsConfig } from '@/shared/hooks/useDependentOptions'
-import type { Option } from '@/shared/ui/select/ReactSelect'
+import type { Option, SelectOptions } from '@/shared/ui/select/ReactSelect'
 import type { MoldPassportFormFields } from './schema'
 
 type FormFields = MoldPassportFormFields
@@ -7,37 +7,43 @@ type FormFields = MoldPassportFormFields
 export interface ConfigDependencies {
   organizationsOptions: Option<string>[]
   positionsOptions: Option<string>[]
+  loadAsyncOrganizationOptions: SelectOptions<Option<string>>
 }
 
 /**
  * Функция-фабрика для создания конфигурации зависимых полей.
- * @param dependencies - Объект с динамическими данными (например, опциями для селектов).
+ * @param options - Объект с динамическими данными (например, опциями для селектов).
  * @returns Конфигурационный объект для useDependentOptions.
  */
 export const moldPassportDependentOptionsConfig = (
-  dependencies: ConfigDependencies,
+  options: ConfigDependencies,
 ): DependentOptionsConfig<FormFields> => {
-  const { organizationsOptions, positionsOptions } = dependencies
-
   return {
     test: {
       rules: [
         {
           conditions: {
             firstName: 'John',
-            gender: 'male',
+            gender: 'female',
           },
           exceptions: {
             lastName: 'Doe',
           },
-          options: organizationsOptions,
+          options: options.organizationsOptions,
           placeholder: 'Оберіть організацію для John',
+        },
+        {
+          conditions: {
+            gender: 'male',
+          },
+          options: options.loadAsyncOrganizationOptions,
+          placeholder: 'Оберіть організацію для чоловіка',
         },
         {
           conditions: {
             gender: 'female',
           },
-          options: positionsOptions,
+          options: options.positionsOptions,
           placeholder: 'Оберіть посаду для жінки',
         },
         {
@@ -49,7 +55,7 @@ export const moldPassportDependentOptionsConfig = (
         },
       ],
       defaultOptions: [],
-      defaultPlaceholder: 'Спочатку оберіть стать',
+      defaultPlaceholder: 'Організація / Посада',
       resetOnChanges: true,
       disableWhenUnmet: true,
     },

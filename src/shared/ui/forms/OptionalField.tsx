@@ -59,7 +59,7 @@ export function OptionalField<T extends FieldValues, K extends Path<T> = Path<T>
     <div className="space-y-3">
       {isVisible ? (
         <FieldsetWrapper
-          title={title ? title : undefined}
+          title={title ? title : ' '}
           className="rounded-lg"
           button={
             removeButton ? (

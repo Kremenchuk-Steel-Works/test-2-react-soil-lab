@@ -8,7 +8,7 @@ import type DatePicker from 'react-datepicker'
  */
 export function useCloseOnScrollOutside(
   isOpen: boolean,
-  // 👇 ИЗМЕНЕНИЕ ЗДЕСЬ: указываем, что ref.current может быть null
+  // Указываем, что ref.current может быть null
   datePickerRef: React.RefObject<DatePicker | null>,
 ) {
   const handleWheel = useCallback(
@@ -19,7 +19,6 @@ export function useCloseOnScrollOutside(
         return
       }
 
-      // Этот код уже был безопасен благодаря `?.`
       if (isOpen) {
         datePickerRef.current?.setOpen(false)
         if (document.activeElement instanceof HTMLElement) {

@@ -39,27 +39,31 @@ export type Option<ValueType = string | number | boolean> = {
   label: string
 }
 
-interface ReactSelectProps<
+// Тип для асинхронной функции загрузки
+export type AsyncOptionsLoader<OptionType extends Option> = (
+  search: string,
+  page: number,
+) => Promise<{
+  options: OptionType[]
+  hasMore: boolean
+}>
+
+export type SelectOptions<OptionType extends Option> = OptionType[] | AsyncOptionsLoader<OptionType>
+
+export interface ReactSelectProps<
   OptionType extends Option,
   IsMulti extends boolean = false,
   Group extends GroupBase<OptionType> = GroupBase<OptionType>,
-> extends Omit<SelectProps<OptionType, IsMulti, Group>, 'loadOptions' | 'onChange'> {
+> extends Omit<SelectProps<OptionType, IsMulti, Group>, 'options' | 'onChange'> {
   onChange?: (
     newValue: OnChangeValue<OptionType, IsMulti>,
     actionMeta: ActionMeta<OptionType>,
   ) => void
+  options?: OptionType[] | AsyncOptionsLoader<OptionType>
   customClassNames?: ClassNamesConfig
   customStyles?: StylesConfig<OptionType, IsMulti, Group>
   isCreatable?: boolean
-  isAsyncPaginate?: boolean
   isVirtualized?: boolean
-  loadOptions?: (
-    search: string,
-    page: number,
-  ) => Promise<{
-    options: OptionType[]
-    hasMore: boolean
-  }>
   debounceTimeout?: number
 }
 
@@ -71,18 +75,20 @@ function ReactSelect<
   customClassNames = {},
   customStyles = {},
   isCreatable = false,
-  isAsyncPaginate = false,
-  isVirtualized = false,
-  loadOptions,
+  isClearable = true,
+  isVirtualized = true,
+  options,
   debounceTimeout = 350,
   ...props
 }: ReactSelectProps<OptionType, IsMulti, Group>): JSX.Element {
+  const isAsync = typeof options === 'function'
+
   const [isLoading, setIsLoading] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
   const [inputValue, setInputValue] = useState('')
 
   useEffect(() => {
-    if (!isAsyncPaginate) {
+    if (!isAsync) {
       setIsTyping(false)
       return
     }
@@ -95,18 +101,18 @@ function ReactSelect<
       setIsTyping(false)
     }, debounceTimeout)
     return () => clearTimeout(typingTimer)
-  }, [inputValue, debounceTimeout, isAsyncPaginate])
+  }, [inputValue, debounceTimeout, isAsync])
 
   const loadOptionsAdapter: LoadOptions<OptionType, Group, { page: number }> = useCallback(
     async (search, _loadedOptions, additional) => {
-      if (!loadOptions) {
+      if (typeof options !== 'function') {
         logger.error('`loadOptions` prop is required when `isAsyncPaginate` is true.')
         return { options: [], hasMore: false }
       }
       setIsLoading(true)
       try {
         const page = additional?.page || 1
-        const result = await loadOptions(search, page)
+        const result = await options(search, page)
         return {
           options: result.options,
           hasMore: result.hasMore,
@@ -116,7 +122,7 @@ function ReactSelect<
         setIsLoading(false)
       }
     },
-    [loadOptions],
+    [options],
   )
 
   const handleInputChange = (value: string, actionMeta: InputActionMeta) => {
@@ -154,14 +160,15 @@ function ReactSelect<
   }
 
   const SelectComponent = useMemo(() => {
-    if (isAsyncPaginate) {
+    if (isAsync) {
       return isCreatable ? CreatableAsyncPaginate : AsyncPaginate
     }
     return isCreatable ? CreatableSelect : Select
-  }, [isCreatable, isAsyncPaginate]) as ElementType
+  }, [isCreatable, isAsync]) as ElementType
 
   const finalProps = {
     ...props,
+    isClearable,
     unstyled: true,
     noOptionsMessage: ({ inputValue }: { inputValue: string }) => {
       if (isTyping) return '' // Search
@@ -213,13 +220,19 @@ function ReactSelect<
     onBlur: handleBlur,
     inputValue,
 
-    ...(isAsyncPaginate && {
-      loadOptions: loadOptionsAdapter,
-      debounceTimeout,
-      additional: { page: 1 },
-      loadingMessage: () => 'Завантаження...',
-      isLoading,
-    }),
+    ...(isAsync
+      ? {
+          // Пропсы для асинхронного режима
+          loadOptions: loadOptionsAdapter,
+          debounceTimeout,
+          additional: { page: 1 },
+          loadingMessage: () => 'Завантаження...',
+          isLoading,
+        }
+      : {
+          // Пропсы для обычного режима
+          options: options,
+        }),
   }
 
   return <SelectComponent {...finalProps} />

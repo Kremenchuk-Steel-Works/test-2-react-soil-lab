@@ -68,17 +68,24 @@ export const baseClassNames: ClassNamesConfig = {
     ),
 }
 
-// Объект с кастомными компонентами для стилизации
-export const customComponents = {
-  IndicatorSeparator: () => <span className="mx-[3px] h-5 w-px bg-gray-300 dark:bg-gray-600" />,
-  ClearIndicator: <OptionType extends Option>(props: ClearIndicatorProps<OptionType, false>) => (
-    <components.ClearIndicator {...props}>
-      <X className="h-4 w-4 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200" />
-    </components.ClearIndicator>
-  ),
-  DropdownIndicator: <OptionType extends Option>(
-    props: DropdownIndicatorProps<OptionType, false>,
-  ) => (
+/**
+ * @description Кастомный индикатор, который отображает либо спиннер загрузки, либо стрелку.
+ * Это решает проблему смещения контента, так как оба состояния рендерятся в одном и том же месте.
+ */
+const CustomDropdownIndicator = <OptionType extends Option, IsMulti extends boolean>(
+  props: DropdownIndicatorProps<OptionType, IsMulti>,
+) => {
+  const {
+    selectProps: { isLoading },
+  } = props
+
+  if (isLoading) {
+    return (
+      <div className="mx-[2px] h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+    )
+  }
+
+  return (
     <components.DropdownIndicator {...props}>
       <ChevronDown
         className={twMerge(
@@ -87,5 +94,34 @@ export const customComponents = {
         )}
       />
     </components.DropdownIndicator>
-  ),
+  )
+}
+
+// Объект с кастомными компонентами для стилизации
+export const customComponents = {
+  LoadingIndicator: () => null,
+
+  IndicatorSeparator: () => <span className="mx-[3px] h-5 w-px bg-gray-300 dark:bg-gray-600" />,
+
+  ClearIndicator: <OptionType extends Option>(props: ClearIndicatorProps<OptionType, false>) => {
+    // Получаем проп isClearable из пропсов всего селекта
+    const {
+      selectProps: { isClearable },
+      hasValue,
+    } = props
+
+    // Не рендерим индикатор, если очистка запрещена или нет значения
+    if (!isClearable || !hasValue) {
+      return null
+    }
+
+    // Если всё в порядке, рендерим наш кастомный индикатор
+    return (
+      <components.ClearIndicator {...props}>
+        <X className="h-4 w-4 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200" />
+      </components.ClearIndicator>
+    )
+  },
+
+  DropdownIndicator: CustomDropdownIndicator,
 }

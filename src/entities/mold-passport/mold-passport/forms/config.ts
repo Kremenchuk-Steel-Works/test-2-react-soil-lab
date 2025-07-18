@@ -6,11 +6,12 @@ import {
 } from '@/entities/mold-passport/mold-passport/forms/components/GenderSpecificFields'
 import { MaksimSpecificFields } from '@/entities/mold-passport/mold-passport/forms/components/NameSpecificFields'
 import { createFormConfig } from '@/shared/lib/zod'
-import type { Option } from '@/shared/ui/select/ReactSelect'
+import type { Option, SelectOptions } from '@/shared/ui/select/ReactSelect'
 
 export interface MoldPassportDynamicFieldOptions {
   organizationsOptions: Option<string>[]
   positionsOptions: Option<string>[]
+  loadAsyncOrganizationOptions: SelectOptions<Option<string>>
 }
 
 export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynamicFieldOptions>([
@@ -33,6 +34,7 @@ export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynam
     schema: z.object({
       militaryId: z.string().optional(),
       maidenName: z.string().optional(),
+      test: z.array(z.string()).nonempty(),
     }),
     Component: FemaleSpecificFields,
   },

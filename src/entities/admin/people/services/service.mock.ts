@@ -4,11 +4,12 @@ import type {
   PersonListResponse,
   PersonLookupResponse,
 } from '@/entities/admin/people/types/response.dto'
+import { logger } from '@/shared/lib/logger'
 import type { PageParams } from '@/types/pagination'
 
 const mockData = mockPeople
 
-export const peopleService = {
+export const peopleMockService = {
   async getList(params?: PageParams): Promise<PersonListResponse> {
     console.log(params)
     const newData = mockData.map((item) => ({
@@ -54,5 +55,31 @@ export const peopleService = {
       fullName: `${item.lastName} ${item.firstName}${item.middleName ? ' ' + item.middleName : ''}`,
     }))
     return newData
+  },
+
+  async isUsernameAvailable(username: string, signal: AbortSignal): Promise<boolean> {
+    logger.debug(`Checking username: "${username}"...`)
+
+    // Имитация сетевой задержки
+    await new Promise((resolve) => setTimeout(resolve, 300))
+
+    // Проверяем, не был ли запрос отменен ПОСЛЕ задержки
+    if (signal.aborted) {
+      logger.debug(`Проверка имени "${username}" была отменена.`)
+      // Выбрасываем стандартную ошибку отмены.
+      // Это позволит вызывающему коду (нашему хуку) поймать ее в catch-блоке.
+      throw new DOMException('Aborted', 'AbortError')
+    }
+
+    const takenUsernames = ['максим', 'john'] // Имена в нижнем регистре
+    const isTaken = takenUsernames.includes(username.toLowerCase())
+
+    if (isTaken) {
+      logger.debug(`Имя "${username}" занято.`)
+      return false
+    }
+
+    logger.debug(`Имя "${username}" доступно.`)
+    return true
   },
 }

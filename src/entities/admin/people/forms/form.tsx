@@ -256,6 +256,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
       />
 
       <OptionalField
+        title="Профіль працівника"
         label="профіль працівника"
         name="employeeProfile"
         form={EmployeeProfileForm}

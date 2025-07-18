@@ -48,13 +48,9 @@ export type DynamicComponentProps<TOptions extends object> = DynamicFieldsProps 
  * Описание одного динамического правила.
  */
 export interface DynamicRule<TOptions extends object> {
-  // Условия, при которых правило активно
   conditions: ConditionsMap
-  // Исключения, при которых правило НЕ активно, даже если условия совпали (логика "И")
   exceptions?: ConditionsMap
-  // Схема для валидации, когда правило активно
   schema: z.ZodObject<any>
-  // Компонент для рендеринга, когда правило активно
   Component: React.ComponentType<DynamicComponentProps<TOptions>>
   renderTrigger?: string
 }

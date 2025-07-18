@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import {
   useWatch,
   type Control,
@@ -11,56 +11,55 @@ import {
   areConditionsMet,
   type ConditionsMap,
 } from '@/shared/lib/react-hook-form/condition-checker'
-import type { Option } from '@/shared/ui/select/ReactSelect'
+import type { Option, SelectOptions } from '@/shared/ui/select/ReactSelect'
 
-/**
- * Правило, которое определяет, какой набор опций и placeholder'а
- * будет активен при выполнении условий.
- */
-export interface OptionsRule {
+export interface OptionsRule<T extends Option> {
   conditions: ConditionsMap
   exceptions?: ConditionsMap
-  options: Option<string>[]
+  options: SelectOptions<T>
   placeholder?: string
 }
 
-/**
- * Конфигурация для одного зависимого поля.
- */
-export interface DependentFieldConfig {
-  rules: OptionsRule[]
-  defaultOptions?: Option<string>[]
+export interface DependentFieldConfig<T extends Option> {
+  rules: OptionsRule<T>[]
+  defaultOptions?: SelectOptions<T>
   defaultPlaceholder?: string
   resetOnChanges?: boolean
   disableWhenUnmet?: boolean
 }
 
-/**
- * Глобальный конфиг для всех зависимых полей формы.
- */
-export type DependentOptionsConfig<TFieldValues extends FieldValues> = {
-  [K in Path<TFieldValues>]?: DependentFieldConfig
+export type DependentOptionsConfig<
+  TFieldValues extends FieldValues,
+  T extends Option = Option<string>,
+> = {
+  [K in Path<TFieldValues>]?: DependentFieldConfig<T>
 }
 
-interface UseDependentOptionsProps<TFieldValues extends FieldValues> {
+interface UseDependentOptionsProps<
+  TFieldValues extends FieldValues,
+  T extends Option = Option<string>,
+> {
   control: Control<TFieldValues>
   resetField: UseFormResetField<TFieldValues>
   dependentFieldName: Path<TFieldValues>
-  config: DependentOptionsConfig<TFieldValues>
+  config: DependentOptionsConfig<TFieldValues, T>
 }
 
-interface UseDependentOptionsReturn {
-  options: Option<string>[]
+interface UseDependentOptionsReturn<T extends Option> {
+  options: SelectOptions<T>
   isDisabled: boolean
   placeholder?: string
 }
 
-export function useDependentOptions<TFieldValues extends FieldValues>({
+export function useDependentOptions<
+  TFieldValues extends FieldValues,
+  T extends Option = Option<string>,
+>({
   control,
   resetField,
   dependentFieldName,
   config,
-}: UseDependentOptionsProps<TFieldValues>): UseDependentOptionsReturn {
+}: UseDependentOptionsProps<TFieldValues, T>): UseDependentOptionsReturn<T> {
   const fieldConfig = config[dependentFieldName]
 
   if (!fieldConfig) {
@@ -76,7 +75,6 @@ export function useDependentOptions<TFieldValues extends FieldValues>({
     disableWhenUnmet = true,
   } = fieldConfig
 
-  // Собираем все поля, от которых зависят правила для данного поля, чтобы следить только за ними.
   const triggerFieldNames = useMemo(() => {
     const fieldSet = new Set<string>()
     rules.forEach((rule) => {
@@ -88,10 +86,8 @@ export function useDependentOptions<TFieldValues extends FieldValues>({
     return Array.from(fieldSet) as Path<TFieldValues>[]
   }, [rules])
 
-  // Следим за изменениями всех нужных полей
   const watchedValues = useWatch({ control, name: triggerFieldNames })
 
-  // Создаем актуальный объект со значениями для проверки
   const currentValues = useMemo(() => {
     return triggerFieldNames.reduce<FieldValues>((acc, key, index) => {
       acc[key] = watchedValues[index]
@@ -99,36 +95,47 @@ export function useDependentOptions<TFieldValues extends FieldValues>({
     }, {})
   }, [triggerFieldNames, watchedValues])
 
-  // Вычисляем активное правило
-  const activeState = useMemo(() => {
-    const activeRule = rules.find(
+  const activeRuleIndex = useMemo(() => {
+    return rules.findIndex(
       (rule) =>
         areConditionsMet(rule.conditions, currentValues) &&
         (!rule.exceptions || !areConditionsMet(rule.exceptions, currentValues)),
     )
+  }, [rules, currentValues])
 
-    if (activeRule) {
+  const activeState = useMemo(() => {
+    if (activeRuleIndex !== -1) {
+      const activeRule = rules[activeRuleIndex]
       return {
         options: activeRule.options,
         placeholder: activeRule.placeholder ?? defaultPlaceholder,
         isMet: true,
+        activeIndex: activeRuleIndex,
       }
     }
 
-    // Если ни одно правило не подошло, используем значения по умолчанию
     return {
       options: defaultOptions,
       placeholder: defaultPlaceholder,
       isMet: false,
+      activeIndex: -1,
     }
-  }, [rules, currentValues, defaultOptions, defaultPlaceholder])
+  }, [activeRuleIndex, rules, defaultOptions, defaultPlaceholder])
 
-  // Сбрасываем значение зависимого поля при изменении триггеров
+  const prevActiveStateRef = useRef(activeState)
+
   useEffect(() => {
-    if (resetOnChanges) {
+    const previousState = prevActiveStateRef.current
+    const currentState = activeState
+
+    const hasRuleChanged = previousState.activeIndex !== currentState.activeIndex
+
+    if (resetOnChanges && hasRuleChanged) {
       resetField(dependentFieldName)
     }
-  }, [watchedValues, resetOnChanges, resetField, dependentFieldName])
+
+    prevActiveStateRef.current = currentState
+  }, [activeState, resetOnChanges, resetField, dependentFieldName])
 
   const isDisabled = disableWhenUnmet ? !activeState.isMet : false
 

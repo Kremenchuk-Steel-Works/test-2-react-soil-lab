@@ -36,7 +36,7 @@ export function FemaleSpecificFields({ control, errors, options }: DynamicFields
         <FormSelectField
           field={field}
           fieldState={fieldState}
-          options={options.positionsOptions}
+          options={options.loadAsyncOrganizationOptions}
           isVirtualized
           isMulti
           isClearable
