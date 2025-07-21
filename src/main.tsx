@@ -10,7 +10,7 @@ import { initApp } from '@/init.ts'
 import { ModalProvider } from '@/shared/ui/modal/ModalContext.tsx'
 import { SidebarProvider } from '@/widgets/sidebar/SidebarProvider.tsx'
 
-const queryClient = new QueryClient()
+export const queryClient = new QueryClient()
 initApp()
 
 createRoot(document.getElementById('root')!).render(

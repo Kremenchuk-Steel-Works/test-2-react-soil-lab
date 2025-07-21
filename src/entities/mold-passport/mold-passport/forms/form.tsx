@@ -9,6 +9,7 @@ import { organizationQueryKeys } from '@/entities/admin/organizations/services/k
 import { organizationService } from '@/entities/admin/organizations/services/service'
 import { organizationMockService } from '@/entities/admin/organizations/services/service.mock'
 import type { OrganizationLookupResponse } from '@/entities/admin/organizations/types/response.dto'
+import { personQueryKeys } from '@/entities/admin/people/services/keys'
 import { peopleMockService } from '@/entities/admin/people/services/service.mock'
 import { genderOptions } from '@/entities/admin/people/types/gender'
 import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
@@ -22,7 +23,7 @@ import {
   moldPassportSchema,
   type MoldPassportFormFields,
 } from '@/entities/mold-passport/mold-passport/forms/schema'
-import { useDebouncedAsyncValidation } from '@/shared/hooks/react-hook-form/useDebouncedAsyncValidation'
+import { useAsyncFormValidators } from '@/shared/hooks/react-hook-form/useAsyncFormValidators'
 import { useAsyncOptionsLoader } from '@/shared/hooks/useAsyncOptionsLoader'
 import { useDynamicFieldManager } from '@/shared/hooks/useDynamicFieldManager'
 import { logger } from '@/shared/lib/logger'
@@ -67,38 +68,40 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
     control,
     register,
     resetField,
-    watch,
     handleSubmit,
     setError,
     setValue,
     formState: { errors, isSubmitting },
   } = form
 
-  const submitHandler: SubmitHandler<FormFields> = async (data) => {
-    try {
-      const response = await onSubmit(data)
-      logger.debug('Форма успешно выполнена', response)
-    } catch (err) {
-      const error = err as Error
-      setError('root', { message: error.message })
-      logger.error(err, data)
-    }
-  }
-
   // Reset dynamic fields after change options
   useDynamicFieldManager({ control, resetField, config: dynamicFieldConfig })
 
-  const firstNameValue = watch('firstName')
+  // Async validations
+  // const asyncValidatorsConfig = useMemo(
+  //   () => ({
+  //     firstName: {
+  //       validationFn: peopleMockService.isUsernameAvailable,
+  //       queryKeyFn: personQueryKeys.uniqueness,
+  //       errorMessage: "Це ім'я вже використовується",
+  //     },
+  //     lastName: {
+  //       validationFn: peopleMockService.isUsernameAvailable,
+  //       queryKeyFn: personQueryKeys.uniqueness,
+  //       errorMessage: 'Це прізвище вже використовується',
+  //     },
+  //   }),
+  //   [],
+  // )
 
-  // Проверка
-  useDebouncedAsyncValidation({
-    form,
-    value: firstNameValue,
-    fieldName: 'firstName',
-    validationFn: peopleMockService.isUsernameAvailable,
-    errorMessage: `Дане ім'я вже використовується`,
-    debounceMs: 1000,
-  })
+  // const {
+  //   isChecking: isValidations,
+  //   isAnyFieldChecking: isAnyValidations,
+  //   triggerAllValidations,
+  // } = useAsyncFormValidators({
+  //   form,
+  //   config: asyncValidatorsConfig,
+  // })
 
   // Queries
   const queries = useQueries({
@@ -187,12 +190,31 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
     return <AlertMessage type={AlertType.ERROR} message={firstError.message} />
   }
 
+  const submitHandler: SubmitHandler<FormFields> = async (data) => {
+    // Async validations
+    // const isAsyncValid = await triggerAllValidations()
+    // if (!isAsyncValid) {
+    //   return
+    // }
+
+    // Submit
+    try {
+      const response = await onSubmit(data)
+      logger.debug('Форма успешно выполнена', response)
+    } catch (err) {
+      const error = err as Error
+      setError('root', { message: error.message })
+      logger.error('Ошибка при отправке формы:', err, data)
+    }
+  }
+
   return (
     <FormLayout onSubmit={handleSubmit(submitHandler)}>
       <h4 className="layout-text">Паспорт ливарної форми</h4>
 
       <InputFieldWithError
         label="Ім'я"
+        // isLoading={isValidations.firstName}
         {...register('firstName', formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, 'firstName')}
       />
@@ -208,6 +230,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
 
       <InputFieldWithError
         label="Прізвище"
+        // isLoading={isValidations.lastName}
         {...register('lastName', formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, 'lastName')}
       />
@@ -398,6 +421,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
         className="w-full"
         type="submit"
         errorMessage={errors.root?.message}
+        // disabled={isSubmitting || isAnyValidations}
         disabled={isSubmitting}
       >
         {submitBtnName}

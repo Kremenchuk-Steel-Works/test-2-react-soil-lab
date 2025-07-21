@@ -57,19 +57,11 @@ export const peopleMockService = {
     return newData
   },
 
-  async isUsernameAvailable(username: string, signal: AbortSignal): Promise<boolean> {
+  async isUsernameAvailable(username: string): Promise<boolean> {
     logger.debug(`Checking username: "${username}"...`)
 
     // Имитация сетевой задержки
-    await new Promise((resolve) => setTimeout(resolve, 300))
-
-    // Проверяем, не был ли запрос отменен ПОСЛЕ задержки
-    if (signal.aborted) {
-      logger.debug(`Проверка имени "${username}" была отменена.`)
-      // Выбрасываем стандартную ошибку отмены.
-      // Это позволит вызывающему коду (нашему хуку) поймать ее в catch-блоке.
-      throw new DOMException('Aborted', 'AbortError')
-    }
+    await new Promise((resolve) => setTimeout(resolve, 3000))
 
     const takenUsernames = ['максим', 'john'] // Имена в нижнем регистре
     const isTaken = takenUsernames.includes(username.toLowerCase())
