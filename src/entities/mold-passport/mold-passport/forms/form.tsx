@@ -24,6 +24,7 @@ import {
   type MoldPassportFormFields,
 } from '@/entities/mold-passport/mold-passport/forms/schema'
 import { useAsyncFormValidators } from '@/shared/hooks/react-hook-form/useAsyncFormValidators'
+import { useAsyncFormValidators2 } from '@/shared/hooks/react-hook-form/useAsyncValidation2'
 import { useAsyncOptionsLoader } from '@/shared/hooks/useAsyncOptionsLoader'
 import { useDynamicFieldManager } from '@/shared/hooks/useDynamicFieldManager'
 import { logger } from '@/shared/lib/logger'
@@ -62,6 +63,8 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: initialData?.defaultValues,
+    mode: 'all',
+    reValidateMode: 'onChange',
   })
 
   const {
@@ -71,37 +74,47 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
     handleSubmit,
     setError,
     setValue,
+    clearErrors,
+    getValues,
+    watch,
+    getFieldState,
+    formState,
     formState: { errors, isSubmitting },
   } = form
 
   // Reset dynamic fields after change options
-  useDynamicFieldManager({ control, resetField, config: dynamicFieldConfig })
+  // useDynamicFieldManager({ control, resetField, config: dynamicFieldConfig })
 
   // Async validations
-  // const asyncValidatorsConfig = useMemo(
-  //   () => ({
-  //     firstName: {
-  //       validationFn: peopleMockService.isUsernameAvailable,
-  //       queryKeyFn: personQueryKeys.uniqueness,
-  //       errorMessage: "Це ім'я вже використовується",
-  //     },
-  //     lastName: {
-  //       validationFn: peopleMockService.isUsernameAvailable,
-  //       queryKeyFn: personQueryKeys.uniqueness,
-  //       errorMessage: 'Це прізвище вже використовується',
-  //     },
-  //   }),
-  //   [],
-  // )
+  const asyncValidatorsConfig = useMemo(
+    () => ({
+      firstName: {
+        validationFn: peopleMockService.isUsernameAvailable,
+        queryKeyFn: personQueryKeys.uniqueness,
+        errorMessage: "Це ім'я вже використовується",
+      },
+      lastName: {
+        validationFn: peopleMockService.isUsernameAvailable,
+        queryKeyFn: personQueryKeys.uniqueness,
+        errorMessage: 'Це прізвище вже використовується',
+      },
+    }),
+    [],
+  )
 
-  // const {
-  //   isChecking: isValidations,
-  //   isAnyFieldChecking: isAnyValidations,
-  //   triggerAllValidations,
-  // } = useAsyncFormValidators({
-  //   form,
-  //   config: asyncValidatorsConfig,
-  // })
+  const {
+    isChecking: isValidations,
+    isAnyFieldChecking: isAnyValidations,
+    triggerAllValidations,
+  } = useAsyncFormValidators2({
+    setError,
+    clearErrors,
+    getValues,
+    watch,
+    getFieldState,
+    formState,
+    config: asyncValidatorsConfig,
+  })
 
   // Queries
   const queries = useQueries({
@@ -192,10 +205,10 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
 
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     // Async validations
-    // const isAsyncValid = await triggerAllValidations()
-    // if (!isAsyncValid) {
-    //   return
-    // }
+    const isAsyncValid = await triggerAllValidations()
+    if (!isAsyncValid) {
+      return
+    }
 
     // Submit
     try {
@@ -214,23 +227,23 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
 
       <InputFieldWithError
         label="Ім'я"
-        // isLoading={isValidations.firstName}
+        isLoading={isValidations.firstName}
         {...register('firstName', formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, 'firstName')}
       />
 
       {/* Динамические поля */}
       {/* <DynamicFieldsRenderer
-        control={control}
-        errors={errors}
-        config={dynamicFieldConfig}
-        options={dynamicFieldOptions}
-        triggerFor="firstName"
-      /> */}
+          control={control}
+          errors={errors}
+          config={dynamicFieldConfig}
+          options={dynamicFieldOptions}
+          triggerFor="firstName"
+        /> */}
 
       <InputFieldWithError
         label="Прізвище"
-        // isLoading={isValidations.lastName}
+        isLoading={isValidations.lastName}
         {...register('lastName', formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, 'lastName')}
       />
@@ -258,40 +271,40 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
 
       {/* Dependent options */}
       {/* <Controller
-        name="test"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormSelectField
-            field={field}
-            fieldState={fieldState}
-            options={testOptions}
-            isDisabled={isTestDisabled}
-            isVirtualized
-            isMulti
-            isClearable
-            placeholder={testPlaceholder}
-            errorMessage={getNestedErrorMessage(errors, 'test')}
-          />
-        )}
-      /> */}
+          name="test"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormSelectField
+              field={field}
+              fieldState={fieldState}
+              options={testOptions}
+              isDisabled={isTestDisabled}
+              isVirtualized
+              isMulti
+              isClearable
+              placeholder={testPlaceholder}
+              errorMessage={getNestedErrorMessage(errors, 'test')}
+            />
+          )}
+        /> */}
 
       {/* <Controller
-        name="test"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormSelectField
-            field={field}
-            fieldState={fieldState}
-            options={testOptions}
-            defaultOptions={initialData?.options?.organizations}
-            isDisabled={isTestDisabled}
-            isClearable={false}
-            isMulti
-            placeholder={testPlaceholder}
-            errorMessage={getNestedErrorMessage(errors, 'test')}
-          />
-        )}
-      /> */}
+          name="test"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormSelectField
+              field={field}
+              fieldState={fieldState}
+              options={testOptions}
+              defaultOptions={initialData?.options?.organizations}
+              isDisabled={isTestDisabled}
+              isClearable={false}
+              isMulti
+              placeholder={testPlaceholder}
+              errorMessage={getNestedErrorMessage(errors, 'test')}
+            />
+          )}
+        /> */}
 
       {/* Dynamic fields */}
       <DynamicFieldsRenderer
@@ -369,23 +382,23 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
       />
 
       {/* <Controller
-        name="organizationIds"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormSelectField
-            field={field}
-            fieldState={fieldState}
-            loadOptions={loadAsyncOrganizationOptions}
-            defaultOptions={initialData.options.organizations}
-            isMulti
-            isClearable
-            isAsyncPaginate
-            isVirtualized
-            placeholder="Оберіть організацію 2"
-            errorMessage={getNestedErrorMessage(errors, 'organizationIds')}
-          />
-        )}
-      /> */}
+          name="organizationIds"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormSelectField
+              field={field}
+              fieldState={fieldState}
+              loadOptions={loadAsyncOrganizationOptions}
+              defaultOptions={initialData.options.organizations}
+              isMulti
+              isClearable
+              isAsyncPaginate
+              isVirtualized
+              placeholder="Оберіть організацію 2"
+              errorMessage={getNestedErrorMessage(errors, 'organizationIds')}
+            />
+          )}
+        /> */}
 
       <Controller
         name="positionIds"
@@ -421,8 +434,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
         className="w-full"
         type="submit"
         errorMessage={errors.root?.message}
-        // disabled={isSubmitting || isAnyValidations}
-        disabled={isSubmitting}
+        disabled={isSubmitting || isAnyValidations}
       >
         {submitBtnName}
       </ButtonWithError>

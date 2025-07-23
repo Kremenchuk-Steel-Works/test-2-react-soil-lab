@@ -10,7 +10,16 @@ import { initApp } from '@/init.ts'
 import { ModalProvider } from '@/shared/ui/modal/ModalContext.tsx'
 import { SidebarProvider } from '@/widgets/sidebar/SidebarProvider.tsx'
 
-export const queryClient = new QueryClient()
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Время, в течение которого данные считаются свежими.
+      staleTime: 1000 * 60 * 5,
+      // Количество повторных попыток запросов
+      retry: 1,
+    },
+  },
+})
 initApp()
 
 createRoot(document.getElementById('root')!).render(

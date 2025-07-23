@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react'
-import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import { AnimatePresence, motion, type Transition, type Variants } from 'framer-motion'
 import { type GroupBase, type MenuProps } from 'react-select'
 
 const menuVariants: Variants = {
@@ -13,7 +13,7 @@ const menuVariants: Variants = {
   },
 }
 
-const menuTransition = {
+const menuTransition: Transition = {
   duration: 0.2,
   ease: 'easeOut',
 }
