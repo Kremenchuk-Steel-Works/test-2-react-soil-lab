@@ -63,7 +63,7 @@ export const peopleMockService = {
     // Имитация сетевой задержки
     await new Promise((resolve) => setTimeout(resolve, 100))
 
-    const takenUsernames = ['максим', 'john'] // Имена в нижнем регистре
+    const takenUsernames = ['максим', 'john', 'john1'] // Имена в нижнем регистре
     const isTaken = takenUsernames.includes(username.toLowerCase())
 
     if (isTaken) {

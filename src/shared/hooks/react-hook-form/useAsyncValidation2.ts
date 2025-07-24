@@ -30,7 +30,9 @@ interface UseAsyncFormValidatorsReturn {
   triggerAllValidations: () => Promise<boolean>
 }
 
-const safeDeepCloneErrors = <T extends FieldValues>(errors: FieldErrors<T>): FieldErrors<T> => {
+export const safeDeepCloneErrors = <T extends FieldValues>(
+  errors: FieldErrors<T>,
+): FieldErrors<T> => {
   try {
     return JSON.parse(
       JSON.stringify(errors, (key, value) => {
@@ -54,7 +56,7 @@ export function useAsyncFormValidators2<T extends FieldValues>({
   config,
   debounceMs = 1000,
 }: UseAsyncFormValidatorsProps<T>): UseAsyncFormValidatorsReturn {
-  logger.log('hook')
+  logger.log('useAsyncFormValidators2')
   const queryClient = useQueryClient()
   const [isChecking, setIsChecking] = useState<Record<string, boolean>>({})
 
@@ -155,7 +157,9 @@ export function useAsyncFormValidators2<T extends FieldValues>({
     fieldsToWatch.forEach((fieldName, index) => {
       const currentValue = watchedValues[index]
       const previousValue = prevValuesRef.current[index]
+
       logger.log(`values`, currentValue, previousValue)
+
       // Если значение поля изменилось, запускаем логику с debounce
       if (currentValue !== previousValue) {
         // logger.log(`Value for ${fieldName} changed from "${previousValue}" to "${currentValue}"`)
@@ -180,9 +184,12 @@ export function useAsyncFormValidators2<T extends FieldValues>({
       } else {
         const currentError = get(formState.errors, fieldName)
         const previousError = get(prevErrorsRef.current, fieldName)
-        // console.log('errors', previousError, currentError)
-        // Если раньше ошибка была, а сейчас ее нет (и значение то же)
-        if (previousError && !currentError) {
+
+        console.log('errors', previousError, currentError)
+
+        // Запускаем повторную валидацию, только если была снята ошибка,
+        // установленная именно этим хуком (type === 'manual'), а не допустим zod.
+        if (previousError && previousError.type === 'manual' && !currentError) {
           // Запускаем валидацию немедленно, без debounce, чтобы восстановить состояние
           logger.log(`reuse`, currentError, previousError)
           runValidation(fieldName, currentValue)

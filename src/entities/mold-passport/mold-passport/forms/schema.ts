@@ -7,7 +7,7 @@ import { moldPassportDynamicFieldConfig } from '@/entities/mold-passport/mold-pa
 import { createDynamicSchema, toZodEnumValues } from '@/shared/lib/zod'
 
 const baseSchema = z.object({
-  firstName: z.string().nonempty().length(4),
+  firstName: z.string().nonempty(),
 
   // Dynamic fields
   identifier: z.string().optional(),
