@@ -8,8 +8,8 @@ import {
 import type { EmployeeProfileFormFields } from '@/entities/admin/employeeProfile/forms/schema'
 import { employeeProfileOptions } from '@/entities/admin/employeeProfile/types/employmentStatus'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import FormDateTimeField from '@/shared/ui/forms/FormDateTimeField'
-import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
+import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormFields = {

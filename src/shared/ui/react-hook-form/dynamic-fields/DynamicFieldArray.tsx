@@ -11,7 +11,7 @@ import {
   type UseFormRegister,
 } from 'react-hook-form'
 import Button from '@/shared/ui/button/Button'
-import { FieldsetWrapper } from '@/shared/ui/forms/FieldsetWrapper'
+import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
 
 interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> = ArrayPath<T>> {
   control: Control<T>

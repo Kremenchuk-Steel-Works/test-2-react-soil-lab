@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import type { FieldValues, Path } from 'react-hook-form'
-import { AsyncValidators } from '@/shared/hooks/react-hook-form/AsyncValidators3'
+import { AsyncValidators } from '@/shared/ui/react-hook-form/async-validation/AsyncValidators'
 
 // Тип конфига выносим для переиспользования
 export type AsyncValidatorConfigSet<T extends FieldValues> = Parameters<
@@ -32,7 +32,7 @@ export function useAsyncValidators<T extends FieldValues>({ config }: UseAsyncVa
   }, [])
 
   // Вычисляем итоговые флаги
-  const isChecking = useMemo(
+  const isAsyncValidating = useMemo(
     () => Object.values(validationStates).some((state) => state.isChecking),
     [validationStates],
   )
@@ -42,7 +42,7 @@ export function useAsyncValidators<T extends FieldValues>({ config }: UseAsyncVa
     [validationStates],
   )
 
-  const checkingFields = useMemo(
+  const asyncCheckingFields = useMemo(
     () =>
       Object.entries(validationStates).reduce(
         (acc, [fieldName, state]) => {
@@ -55,7 +55,7 @@ export function useAsyncValidators<T extends FieldValues>({ config }: UseAsyncVa
   )
 
   // Создаем компонент для рендеринга "на лету"
-  const ValidatorsComponent = useCallback(
+  const AsyncValidatorsComponent = useCallback(
     () => (
       <AsyncValidators<T>
         config={config}
@@ -67,5 +67,5 @@ export function useAsyncValidators<T extends FieldValues>({ config }: UseAsyncVa
     [config, handleStatusChange, handleErrorChange],
   )
 
-  return { isChecking, hasAsyncErrors, checkingFields, ValidatorsComponent }
+  return { isAsyncValidating, hasAsyncErrors, asyncCheckingFields, AsyncValidatorsComponent }
 }

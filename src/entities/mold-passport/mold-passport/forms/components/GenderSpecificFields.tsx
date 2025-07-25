@@ -1,8 +1,8 @@
 import { Controller } from 'react-hook-form'
-import type { MoldPassportDynamicFieldOptions } from '@/entities/mold-passport/mold-passport/forms/config'
+import type { MoldPassportDynamicFieldOptions } from '@/entities/mold-passport/mold-passport/forms/configs/dynamic-fields'
 import { getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import type { DynamicComponentProps } from '@/shared/lib/zod'
-import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 
 type DynamicFieldsProps = DynamicComponentProps<MoldPassportDynamicFieldOptions>
 

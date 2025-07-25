@@ -1,5 +1,5 @@
 import { z, ZodObject, ZodType, type ZodRawShape, type ZodTypeAny } from 'zod'
-import type { DynamicFieldsProps } from '@/shared/ui/forms/DynamicFieldsRenderer'
+import type { DynamicFieldsProps } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 
 export default function optionalObject<T extends ZodTypeAny>(
   schema: T,

@@ -1,7 +1,5 @@
-// FieldsetWrapper.tsx
-
 import type { ReactNode } from 'react'
-import clsx from 'clsx' // Импортируем clsx
+import clsx from 'clsx'
 
 interface FieldsetWrapperProps {
   title?: string

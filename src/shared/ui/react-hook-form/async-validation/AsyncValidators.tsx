@@ -1,6 +1,6 @@
 import type { QueryKey } from '@tanstack/react-query'
 import type { FieldValues, Path } from 'react-hook-form'
-import { AsyncFieldValidator } from './AsyncFieldValidator'
+import { AsyncFieldValidator } from '@/shared/ui/react-hook-form/async-validation/AsyncFieldValidator'
 
 export type AsyncValidatorConfig<T extends FieldValues> = {
   validationFn: (value: string, signal: AbortSignal) => Promise<boolean>

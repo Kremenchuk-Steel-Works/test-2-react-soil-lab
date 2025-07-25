@@ -45,7 +45,7 @@ export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynam
     },
     schema: z.object({
       identifier: z.string().nonempty(),
-      letterCount: z.number(),
+      letterCount: z.number().optional(),
     }),
     Component: MaksimSpecificFields,
   },

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { personService } from '@/entities/admin/people/services/service'
 import MoldPassportForm from '@/entities/mold-passport/mold-passport/forms/form'
 import type { MoldPassportFormFields } from '@/entities/mold-passport/mold-passport/forms/schema'
-import { useFormCache } from '@/shared/hooks/useFormCache'
+import { useFormCache } from '@/shared/hooks/react-hook-form/useFormCache'
 
 // Уникальный ключ для кэша этой формы
 const FORM_CACHE_KEY = 'formCache:moldPassport'

@@ -13,7 +13,7 @@ import { cityService } from '@/entities/admin/city/services/service'
 import type { CityLookupResponse } from '@/entities/admin/city/types/response.dto'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 import { CheckboxWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 

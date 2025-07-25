@@ -3,7 +3,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form'
 import { loginSchema, type LoginFormFields } from '@/entities/auth/forms/schema'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import { FormLayout } from '@/shared/ui/forms/FormLayout'
+import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import {
   ButtonWithError,
   CheckboxWithError,

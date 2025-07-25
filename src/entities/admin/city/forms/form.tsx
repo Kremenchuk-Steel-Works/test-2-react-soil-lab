@@ -8,8 +8,8 @@ import type { CountryLookupResponse } from '@/entities/admin/country/types/respo
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import { FormLayout } from '@/shared/ui/forms/FormLayout'
-import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
+import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 

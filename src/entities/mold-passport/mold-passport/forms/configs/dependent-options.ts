@@ -1,6 +1,6 @@
-import type { DependentOptionsConfig } from '@/shared/hooks/useDependentOptions'
+import type { DependentOptionsConfig } from '@/shared/hooks/react-hook-form/options/useDependentOptions'
 import type { Option, SelectOptions } from '@/shared/ui/select/ReactSelect'
-import type { MoldPassportFormFields } from './schema'
+import type { MoldPassportFormFields } from '../schema'
 
 type FormFields = MoldPassportFormFields
 

@@ -1,7 +1,6 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueries, type UseQueryResult } from '@tanstack/react-query'
-import { Controller, FormProvider, useForm, type Path, type SubmitHandler } from 'react-hook-form'
+import { Controller, FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
 import { AddressForm } from '@/entities/admin/address/forms/form'
 import { ContactForm } from '@/entities/admin/contact/forms/form'
 import { EmployeeProfileForm } from '@/entities/admin/employeeProfile/forms/form'
@@ -14,33 +13,31 @@ import { peopleMockService } from '@/entities/admin/people/services/service.mock
 import { genderOptions } from '@/entities/admin/people/types/gender'
 import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
 import { positionService } from '@/entities/admin/positions/services/service'
-import type { PositionLookupResponse } from '@/entities/admin/positions/types/response.dto'
 import {
   moldPassportDynamicFieldConfig,
   type MoldPassportDynamicFieldOptions,
-} from '@/entities/mold-passport/mold-passport/forms/config'
+} from '@/entities/mold-passport/mold-passport/forms/configs/dynamic-fields'
 import {
   moldPassportSchema,
   type MoldPassportFormFields,
 } from '@/entities/mold-passport/mold-passport/forms/schema'
-import { AsyncValidators } from '@/shared/hooks/react-hook-form/AsyncValidators3'
-import { useAsyncFormValidators } from '@/shared/hooks/react-hook-form/useAsyncFormValidators'
-import { useAsyncFormValidators2 } from '@/shared/hooks/react-hook-form/useAsyncValidation2'
-import { useAsyncValidators } from '@/shared/hooks/react-hook-form/useAsyncValidators'
-import { useAsyncOptionsLoader } from '@/shared/hooks/useAsyncOptionsLoader'
-import { useDynamicFieldManager } from '@/shared/hooks/useDynamicFieldManager'
+import { useAsyncValidators } from '@/shared/hooks/react-hook-form/async-validation/useAsyncValidators'
+import { useAsyncOptionsLoader } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsLoader'
+import { useParallelQueries } from '@/shared/hooks/react-query/useParallelQueries'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import { DynamicFieldArray } from '@/shared/ui/forms/DynamicFieldArray'
-import { DynamicFieldsRenderer } from '@/shared/ui/forms/DynamicFieldsRenderer'
-import FormDateTimeField from '@/shared/ui/forms/FormDateTimeField'
-import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
-import { FormLayout } from '@/shared/ui/forms/FormLayout'
-import FormSelectField from '@/shared/ui/forms/FormReactSelect'
-import { OptionalField } from '@/shared/ui/forms/OptionalField'
+import { DynamicFieldArea } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArea'
+import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
+import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
+import { OptionalField } from '@/shared/ui/react-hook-form/dynamic-fields/OptionalField'
+import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
+import FormFileUpload from '@/shared/ui/react-hook-form/fields/FormFileUpload'
+import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
+import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
+import type { FormInitialData, FormProps } from '@/types/react-hook-form'
 
 type FormFields = MoldPassportFormFields
 const schema = moldPassportSchema
@@ -48,25 +45,20 @@ const schema = moldPassportSchema
 const dynamicFieldConfig = moldPassportDynamicFieldConfig
 type DynamicFieldOptions = MoldPassportDynamicFieldOptions
 
-export interface MoldPassportFormInitialData {
-  defaultValues?: Partial<FormFields>
-  options?: {
-    organizations?: Option<string>[]
-  }
+interface MoldPassportFormOptions {
+  organizations: Option<string>[]
 }
 
-interface FormProps {
-  initialData?: MoldPassportFormInitialData
-  onSubmit: SubmitHandler<FormFields>
-  submitBtnName: string
-}
+export type MoldPassportFormInitialData = FormInitialData<FormFields, MoldPassportFormOptions>
 
-export default function MoldPassportForm({ initialData, onSubmit, submitBtnName }: FormProps) {
+export default function MoldPassportForm({
+  initialData,
+  onSubmit,
+  submitBtnName,
+}: FormProps<MoldPassportFormFields, MoldPassportFormOptions>) {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: initialData?.defaultValues,
-    mode: 'all',
-    reValidateMode: 'onChange',
   })
 
   const {
@@ -76,25 +68,13 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
     handleSubmit,
     setError,
     setValue,
-    clearErrors,
     getValues,
-    watch,
-    getFieldState,
-    formState,
     formState: { errors, isSubmitting },
   } = form
-
-  // Reset dynamic fields after change options
-  // useDynamicFieldManager({ control, resetField, config: dynamicFieldConfig })
 
   // Async validations
   const asyncValidatorsConfig = useMemo(
     () => ({
-      firstName: {
-        validationFn: peopleMockService.isUsernameAvailable,
-        queryKeyFn: personQueryKeys.uniqueness,
-        errorMessage: "Це ім'я вже використовується",
-      },
       lastName: {
         validationFn: peopleMockService.isUsernameAvailable,
         queryKeyFn: personQueryKeys.uniqueness,
@@ -104,65 +84,47 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
     [],
   )
 
-  const { isChecking, checkingFields, hasAsyncErrors, ValidatorsComponent } =
+  const { isAsyncValidating, hasAsyncErrors, asyncCheckingFields, AsyncValidatorsComponent } =
     useAsyncValidators<FormFields>({
       config: asyncValidatorsConfig,
     })
 
-  // const {
-  //   isChecking: isValidations,
-  //   isAnyFieldChecking: isAnyValidations,
-  //   triggerAllValidations,
-  // } = useAsyncFormValidators2({
-  //   setError,
-  //   clearErrors,
-  //   getValues,
-  //   watch,
-  //   getFieldState,
-  //   formState,
-  //   config: asyncValidatorsConfig,
-  // })
-
   // Queries
-  const queries = useQueries({
-    queries: [
-      {
-        queryKey: organizationQueryKeys.lookups(),
-        queryFn: () => organizationService.getLookup(),
-      },
-      {
-        queryKey: positionQueryKeys.lookups(),
-        queryFn: () => positionService.getLookup(),
-      },
-    ],
+  const {
+    data: queriesData,
+    isLoading: isQueriesLoading,
+    error: queriesError,
+  } = useParallelQueries({
+    organizations: {
+      queryKey: organizationQueryKeys.lookups(),
+      queryFn: () => organizationService.getLookup(),
+    },
+    positions: {
+      queryKey: positionQueryKeys.lookups(),
+      queryFn: () => positionService.getLookup(),
+    },
   })
-
-  // Queries data
-  const [organizationsQ, positionsQ] = queries as [
-    UseQueryResult<OrganizationLookupResponse[], Error>,
-    UseQueryResult<PositionLookupResponse[], Error>,
-  ]
 
   // Options
   const organizationsOptions: Option<string>[] = useMemo(
     () =>
-      organizationsQ.data?.map((c) => ({
+      queriesData.organizations?.map((c) => ({
         value: c.id,
         label: c.legalName,
       })) || [],
-    [organizationsQ.data],
+    [queriesData.organizations],
   )
 
   const positionsOptions: Option<string>[] = useMemo(
     () =>
-      positionsQ.data?.map((c) => ({
+      queriesData.positions?.map((c) => ({
         value: c.id,
         label: c.name,
       })) || [],
-    [positionsQ.data],
+    [queriesData.positions],
   )
 
-  // Async загрузчик для организаций
+  // Async options
   const loadAsyncOrganizationOptions = useAsyncOptionsLoader<OrganizationLookupResponse, string>(
     organizationMockService.getPaginatedLookup,
     {
@@ -201,21 +163,13 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
   // })
 
   // Loading || Error
-  const isAnyLoading = queries.some((q) => q.isLoading)
-  const isAnyError = queries.some((q) => q.isError)
-  const firstError = queries.find((q) => q.error)?.error
-
-  if (isAnyLoading) return
-  if (isAnyError && firstError instanceof Error) {
-    return <AlertMessage type={AlertType.ERROR} message={firstError.message} />
+  if (isQueriesLoading) return
+  if (queriesError) {
+    return <AlertMessage type={AlertType.ERROR} message={queriesError.message} />
   }
 
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     // Async validations
-    // const isAsyncValid = await triggerAllValidations()
-    // if (!isAsyncValid) {
-    //   return
-    // }
     if (hasAsyncErrors) return
 
     // Submit
@@ -230,58 +184,62 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
   }
 
   return (
+    // FormProvider for async validators
     <FormProvider {...form}>
-      <FormLayout onSubmit={handleSubmit(submitHandler)}>
-        <h4 className="layout-text">Паспорт ливарної форми</h4>
+      <DynamicFieldsProvider
+        control={control}
+        getValues={getValues}
+        resetField={resetField}
+        errors={errors}
+        config={dynamicFieldConfig}
+        options={dynamicFieldOptions}
+      >
+        <FormLayout onSubmit={handleSubmit(submitHandler)}>
+          <h4 className="layout-text">Паспорт ливарної форми</h4>
 
-        <ValidatorsComponent />
+          {/* Async validators */}
+          <AsyncValidatorsComponent />
 
-        <InputFieldWithError
-          label="Ім'я"
-          isLoading={checkingFields.firstName}
-          {...register('firstName', formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, 'firstName')}
-        />
+          <InputFieldWithError
+            label="Ім'я"
+            isLoading={asyncCheckingFields.firstName}
+            {...register('firstName', formTransformers.string)}
+            errorMessage={getNestedErrorMessage(errors, 'firstName')}
+          />
 
-        {/* Динамические поля */}
-        {/* <DynamicFieldsRenderer
-          control={control}
-          errors={errors}
-          config={dynamicFieldConfig}
-          options={dynamicFieldOptions}
-          triggerFor="firstName"
-        /> */}
+          {/* DynamicFields */}
+          <DynamicFieldArea triggerFor="firstName" />
 
-        <InputFieldWithError
-          label="Прізвище"
-          isLoading={checkingFields.lastName}
-          {...register('lastName', formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, 'lastName')}
-        />
+          <InputFieldWithError
+            label="Прізвище"
+            isLoading={asyncCheckingFields.lastName}
+            {...register('lastName', formTransformers.string)}
+            errorMessage={getNestedErrorMessage(errors, 'lastName')}
+          />
 
-        <InputFieldWithError
-          label="По батькові"
-          {...register('middleName', formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, 'middleName')}
-        />
+          <InputFieldWithError
+            label="По батькові"
+            {...register('middleName', formTransformers.string)}
+            errorMessage={getNestedErrorMessage(errors, 'middleName')}
+          />
 
-        <Controller
-          name="gender"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormSelectField
-              field={field}
-              fieldState={fieldState}
-              options={genderOptions}
-              isVirtualized
-              placeholder="Оберіть стать"
-              errorMessage={getNestedErrorMessage(errors, 'gender')}
-            />
-          )}
-        />
+          <Controller
+            name="gender"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormSelectField
+                field={field}
+                fieldState={fieldState}
+                options={genderOptions}
+                isVirtualized
+                placeholder="Оберіть стать"
+                errorMessage={getNestedErrorMessage(errors, 'gender')}
+              />
+            )}
+          />
 
-        {/* Dependent options */}
-        {/* <Controller
+          {/* Dependent options */}
+          {/* <Controller
           name="test"
           control={control}
           render={({ field, fieldState }) => (
@@ -299,7 +257,7 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
           )}
         /> */}
 
-        {/* <Controller
+          {/* <Controller
           name="test"
           control={control}
           render={({ field, fieldState }) => (
@@ -317,82 +275,76 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
           )}
         /> */}
 
-        {/* Dynamic fields */}
-        <DynamicFieldsRenderer
-          control={control}
-          errors={errors}
-          triggerFor="gender"
-          config={dynamicFieldConfig}
-          options={dynamicFieldOptions}
-        />
+          {/* Dynamic fields */}
+          <DynamicFieldArea triggerFor="gender" />
 
-        <Controller
-          name="birthDate"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormDateTimeField
-              field={field}
-              fieldState={fieldState}
-              label="Дата народження"
-              errorMessage={getNestedErrorMessage(errors, 'birthDate')}
-            />
-          )}
-        />
+          <Controller
+            name="birthDate"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormDateTimeField
+                field={field}
+                fieldState={fieldState}
+                label="Дата народження"
+                errorMessage={getNestedErrorMessage(errors, 'birthDate')}
+              />
+            )}
+          />
 
-        <Controller
-          name="photoUrl"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormFileUpload
-              field={field}
-              fieldState={fieldState}
-              label="Фото профілю"
-              fileType="image"
-              errorMessage={getNestedErrorMessage(errors, 'photoUrl')}
-            />
-          )}
-        />
+          <Controller
+            name="photoUrl"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormFileUpload
+                field={field}
+                fieldState={fieldState}
+                label="Фото профілю"
+                fileType="image"
+                errorMessage={getNestedErrorMessage(errors, 'photoUrl')}
+              />
+            )}
+          />
 
-        {/* Contacts */}
-        <DynamicFieldArray
-          title="Контактні дані"
-          label="контактні дані"
-          name="contacts"
-          form={ContactForm}
-          control={control}
-          register={register}
-          errors={errors}
-        />
+          {/* Contacts */}
+          <DynamicFieldArray
+            title="Контактні дані"
+            label="контактні дані"
+            name="contacts"
+            form={ContactForm}
+            control={control}
+            register={register}
+            errors={errors}
+          />
 
-        {/* Address */}
-        <DynamicFieldArray
-          title="Адреса"
-          label="адресу"
-          name="addresses"
-          form={AddressForm}
-          control={control}
-          register={register}
-          errors={errors}
-        />
+          {/* Address */}
+          <DynamicFieldArray
+            title="Адреса"
+            label="адресу"
+            name="addresses"
+            form={AddressForm}
+            control={control}
+            register={register}
+            errors={errors}
+          />
 
-        <Controller
-          name="organizationIds"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormSelectField
-              field={field}
-              fieldState={fieldState}
-              options={organizationsOptions}
-              isVirtualized
-              isMulti
-              isClearable
-              placeholder="Оберіть організацію"
-              errorMessage={getNestedErrorMessage(errors, 'organizationIds')}
-            />
-          )}
-        />
+          <Controller
+            name="organizationIds"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormSelectField
+                field={field}
+                fieldState={fieldState}
+                options={organizationsOptions}
+                isVirtualized
+                isMulti
+                isClearable
+                placeholder="Оберіть організацію"
+                errorMessage={getNestedErrorMessage(errors, 'organizationIds')}
+              />
+            )}
+          />
 
-        {/* <Controller
+          {/* <Controller
           name="organizationIds"
           control={control}
           render={({ field, fieldState }) => (
@@ -411,46 +363,46 @@ export default function MoldPassportForm({ initialData, onSubmit, submitBtnName 
           )}
         /> */}
 
-        <Controller
-          name="positionIds"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormSelectField
-              field={field}
-              fieldState={fieldState}
-              options={positionsOptions}
-              isVirtualized
-              isMulti
-              isClearable
-              placeholder="Оберіть посаду"
-              errorMessage={getNestedErrorMessage(errors, 'positionIds')}
-            />
-          )}
-        />
+          <Controller
+            name="positionIds"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormSelectField
+                field={field}
+                fieldState={fieldState}
+                options={positionsOptions}
+                isVirtualized
+                isMulti
+                isClearable
+                placeholder="Оберіть посаду"
+                errorMessage={getNestedErrorMessage(errors, 'positionIds')}
+              />
+            )}
+          />
 
-        <OptionalField
-          title="Профіль працівника"
-          label="профіль працівника"
-          name="employeeProfile"
-          form={EmployeeProfileForm}
-          control={control}
-          register={register}
-          errors={errors}
-          resetField={resetField}
-          setValue={setValue}
-          defaultItem={{}}
-        />
+          <OptionalField
+            title="Профіль працівника"
+            label="профіль працівника"
+            name="employeeProfile"
+            form={EmployeeProfileForm}
+            control={control}
+            register={register}
+            errors={errors}
+            resetField={resetField}
+            setValue={setValue}
+            defaultItem={{}}
+          />
 
-        <ButtonWithError
-          className="w-full"
-          type="submit"
-          errorMessage={errors.root?.message}
-          // disabled={isSubmitting || isAnyValidations}
-          disabled={isSubmitting || isChecking}
-        >
-          {submitBtnName}
-        </ButtonWithError>
-      </FormLayout>
+          <ButtonWithError
+            className="w-full"
+            type="submit"
+            errorMessage={errors.root?.message}
+            disabled={isSubmitting || isAsyncValidating}
+          >
+            {submitBtnName}
+          </ButtonWithError>
+        </FormLayout>
+      </DynamicFieldsProvider>
     </FormProvider>
   )
 }

@@ -3,9 +3,9 @@ import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { librarySchema, type LibraryFormFields } from '@/entities/library/forms/schema'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import FormFileUpload from '@/shared/ui/forms/FormFileUpload'
-import { FormLayout } from '@/shared/ui/forms/FormLayout'
-import FormSelectField from '@/shared/ui/forms/FormReactSelect'
+import FormFileUpload from '@/shared/ui/react-hook-form/fields/FormFileUpload'
+import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
+import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormFields = LibraryFormFields
