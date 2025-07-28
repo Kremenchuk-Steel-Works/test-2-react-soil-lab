@@ -6,7 +6,7 @@ import {
   type FieldValues,
   type UseFormGetValues,
 } from 'react-hook-form'
-import { checkConditions, type DynamicFieldConfig } from '@/shared/lib/zod'
+import { checkConditions, type DynamicFieldConfig } from '@/shared/lib/zod/dynamic-schema'
 
 interface UseDynamicFieldManagerProps<TFieldValues extends FieldValues, TOptions extends object> {
   control: Control<TFieldValues>

@@ -4,7 +4,8 @@ import { contactSchema } from '@/entities/admin/contact/forms/schema'
 import { employeeProfileSchema } from '@/entities/admin/employeeProfile/forms/schema'
 import { genderOptions } from '@/entities/admin/people/types/gender'
 import { moldPassportDynamicFieldConfig } from '@/entities/mold-passport/mold-passport/forms/configs/dynamic-fields'
-import { createDynamicSchema, toZodEnumValues } from '@/shared/lib/zod'
+import { createDynamicSchema } from '@/shared/lib/zod/dynamic-schema'
+import { toZodEnumValues } from '@/shared/lib/zod/utils'
 
 const baseSchema = z.object({
   firstName: z.string().nonempty(),

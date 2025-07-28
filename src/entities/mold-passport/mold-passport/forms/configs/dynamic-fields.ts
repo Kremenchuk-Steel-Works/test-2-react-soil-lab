@@ -5,7 +5,7 @@ import {
   MaleSpecificFields,
 } from '@/entities/mold-passport/mold-passport/forms/components/GenderSpecificFields'
 import { MaksimSpecificFields } from '@/entities/mold-passport/mold-passport/forms/components/NameSpecificFields'
-import { createFormConfig } from '@/shared/lib/zod'
+import { createFormConfig } from '@/shared/lib/zod/dynamic-schema'
 import type { Option, SelectOptions } from '@/shared/ui/select/ReactSelect'
 
 export interface MoldPassportDynamicFieldOptions {

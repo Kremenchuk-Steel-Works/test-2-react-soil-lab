@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { contactOptions } from '@/entities/admin/contact/types/contact'
-import { toZodEnumValues } from '@/shared/lib/zod'
+import { toZodEnumValues } from '@/shared/lib/zod/utils'
 
 export const contactSchema = z.object({
   id: z.string().optional(),

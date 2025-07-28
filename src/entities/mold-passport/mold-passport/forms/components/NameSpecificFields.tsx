@@ -1,6 +1,6 @@
 import type { MoldPassportDynamicFieldOptions } from '@/entities/mold-passport/mold-passport/forms/configs/dynamic-fields'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import type { DynamicComponentProps } from '@/shared/lib/zod'
+import type { DynamicComponentProps } from '@/shared/lib/zod/dynamic-schema'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
 import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 

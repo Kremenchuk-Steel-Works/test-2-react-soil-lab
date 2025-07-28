@@ -9,7 +9,7 @@ import {
 } from 'react-hook-form'
 import { useDynamicFieldsManager } from '@/shared/hooks/react-hook-form/dynamic-fields/useDynamicFieldsManager'
 import { logger } from '@/shared/lib/logger'
-import { type DynamicFieldConfig } from '@/shared/lib/zod'
+import { type DynamicFieldConfig } from '@/shared/lib/zod/dynamic-schema'
 
 export interface DynamicFieldsProps {
   control: Control<any>

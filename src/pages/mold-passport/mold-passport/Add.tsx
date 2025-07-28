@@ -28,10 +28,6 @@ export default function MoldPassportAdd() {
     return data
   }
 
-  // const handleLogout = () => {
-  //   clearCache()
-  // }
-
   return (
     <>
       <div className="flex flex-wrap gap-x-2 gap-y-2">
