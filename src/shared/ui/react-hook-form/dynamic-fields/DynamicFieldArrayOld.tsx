@@ -20,7 +20,6 @@ interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> =
   name: N
   form: ComponentType<{
     index: number
-    name: N
     control: Control<T>
     register: UseFormRegister<T>
     errors: FieldErrors<T>
@@ -59,7 +58,7 @@ interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> =
  * label="контакт"
  * />
  */
-export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>({
+export function DynamicFieldArrayOld<T extends FieldValues, N extends ArrayPath<T>>({
   control,
   register,
   errors,
@@ -112,13 +111,7 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>
               )
             }
           >
-            <FormComponent
-              index={index}
-              name={name}
-              control={control}
-              register={register}
-              errors={errors}
-            />
+            <FormComponent index={index} control={control} register={register} errors={errors} />
           </FieldsetWrapper>
         ))}
       </div>

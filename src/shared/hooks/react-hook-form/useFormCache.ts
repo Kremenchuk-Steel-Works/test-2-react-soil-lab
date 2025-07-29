@@ -9,7 +9,7 @@ interface CachedFormData<T> {
 // TTL по умолчанию: 1 час
 const DEFAULT_TTL_MS = 1 * 60 * 60 * 1000
 
-interface UseFormCacheOptions {
+export interface UseFormCacheOptions {
   /** Время жизни кэша в миллисекундах */
   ttl?: number
 }

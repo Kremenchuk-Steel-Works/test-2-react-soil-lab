@@ -15,7 +15,7 @@ import type { PositionLookupResponse } from '@/entities/admin/positions/types/re
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
+import { DynamicFieldArrayOld } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArrayOld'
 import { OptionalField } from '@/shared/ui/react-hook-form/dynamic-fields/OptionalField'
 import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
 import FormFileUpload from '@/shared/ui/react-hook-form/fields/FormFileUpload'
@@ -181,7 +181,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
       />
 
       {/* Contacts */}
-      <DynamicFieldArray
+      <DynamicFieldArrayOld
         title="Контактні дані"
         label="контактні дані"
         name="contacts"
@@ -192,7 +192,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
       />
 
       {/* Address */}
-      <DynamicFieldArray
+      <DynamicFieldArrayOld
         title="Адреса"
         label="адресу"
         name="addresses"

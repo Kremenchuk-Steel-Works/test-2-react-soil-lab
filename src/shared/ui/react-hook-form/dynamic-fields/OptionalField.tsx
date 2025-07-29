@@ -60,7 +60,6 @@ export function OptionalField<T extends FieldValues, K extends Path<T> = Path<T>
       {isVisible ? (
         <FieldsetWrapper
           title={title ? title : ' '}
-          className="rounded-lg"
           button={
             removeButton ? (
               removeButton(handleRemove)

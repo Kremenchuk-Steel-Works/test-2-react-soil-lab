@@ -4,7 +4,8 @@ import { PATHS } from '@/app/routes/paths'
 import type { AppRoute } from '@/app/routes/types'
 import { adminRoutes } from '@/entities/admin/routes'
 import { libraryRoutes } from '@/entities/library/routes'
-import { moldPassportMainRoutes } from '@/entities/mold-passport/routes'
+import { moldPassportMainRoutes } from '@/entities/mold-passport (old)/routes'
+import { moldingShopRoutes } from '@/entities/molding-shop/routes'
 
 const MainPage = lazy(() => import('@/pages/MainPage'))
 const StreamlitDashboard = lazy(() => import('@/pages/StreamlitDashboard'))
@@ -20,7 +21,8 @@ export const APP_ROUTES: AppRoute[] = [
     inSidebar: false,
   },
   adminRoutes,
-  moldPassportMainRoutes,
+  // moldPassportMainRoutes,
+  moldingShopRoutes,
   {
     key: 'streamlitDashboard',
     path: '/streamlit-dashboard',

@@ -13,7 +13,7 @@ import {
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
+import { DynamicFieldArrayOld } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArrayOld'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import type { Option } from '@/shared/ui/select/ReactSelect'
@@ -114,7 +114,7 @@ export default function OrganizationsForm({ defaultValues, onSubmit, submitBtnNa
       />
 
       {/* Contacts */}
-      <DynamicFieldArray
+      <DynamicFieldArrayOld
         title="Контактні дані"
         label="контактні дані"
         name="contacts"
@@ -125,7 +125,7 @@ export default function OrganizationsForm({ defaultValues, onSubmit, submitBtnNa
       />
 
       {/* Address */}
-      <DynamicFieldArray
+      <DynamicFieldArrayOld
         title="Адреса"
         label="адресу"
         name="addresses"
