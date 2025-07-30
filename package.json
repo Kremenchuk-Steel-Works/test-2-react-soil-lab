@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "spellcheck": "cspell \"**/*.{ts,tsx,md,json}\" --show-context",
-    "barrels": "ctix create"
+    "index": "node scripts/generate-explicit-api.mjs"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.8",

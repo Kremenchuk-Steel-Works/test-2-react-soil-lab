@@ -12,9 +12,7 @@ const EXCLUDED_PATTERNS = [
   '.story.tsx',
 ]
 const TARGET_FILE_NAME = 'index.ts'
-// --- Конец конфигурации ---
 
-// Рекурсивно получаем все файлы в директории
 async function getFiles(dir) {
   const dirents = await fs.readdir(dir, { withFileTypes: true })
   const files = await Promise.all(
@@ -30,49 +28,41 @@ function isFileExcluded(filePath) {
   return EXCLUDED_PATTERNS.some((pattern) => filePath.endsWith(pattern))
 }
 
-// Главная функция, которая парсит файл и находит экспорты
-function findExportsInFile(filePath) {
-  const fileContent = fs.readFileSync(filePath, 'utf8')
+async function findExportsInFile(filePath) {
+  const fileContent = await fs.readFile(filePath, 'utf8')
   const sourceFile = ts.createSourceFile(filePath, fileContent, ts.ScriptTarget.ESNext, true)
 
   const valueExports = new Set()
   const typeExports = new Set()
+  let defaultExportName = null
 
   ts.forEachChild(sourceFile, (node) => {
-    // Проверяем, есть ли у узла модификатор 'export'
-    if (
-      !ts.canHaveModifiers(node) ||
-      !ts.getModifiers(node)?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)
-    ) {
-      return
+    const hasExportModifier = node.modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)
+    const hasDefaultModifier = node.modifiers?.some((m) => m.kind === ts.SyntaxKind.DefaultKeyword)
+
+    // Обработка 'export default function MyComponent() {}'
+    if (hasExportModifier && hasDefaultModifier) {
+      if ((ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node)) && node.name) {
+        defaultExportName = node.name.text
+      }
     }
 
-    // export const moldPassportSchema = ...
+    if (!hasExportModifier) return
+
+    // Обработка именованных экспортов
     if (ts.isVariableStatement(node)) {
       node.declarationList.declarations.forEach((declaration) => {
-        if (ts.isIdentifier(declaration.name)) {
-          valueExports.add(declaration.name.text)
-        }
+        if (ts.isIdentifier(declaration.name)) valueExports.add(declaration.name.text)
       })
-    }
-    // export function myFunction() { ... }
-    else if (ts.isFunctionDeclaration(node) && node.name) {
+    } else if (ts.isFunctionDeclaration(node) && node.name && !hasDefaultModifier) {
       valueExports.add(node.name.text)
-    }
-    // export class MyClass { ... }
-    else if (ts.isClassDeclaration(node) && node.name) {
+    } else if (ts.isClassDeclaration(node) && node.name && !hasDefaultModifier) {
       valueExports.add(node.name.text)
-    }
-    // export type MyType = ...
-    else if (ts.isTypeAliasDeclaration(node)) {
+    } else if (ts.isTypeAliasDeclaration(node)) {
       typeExports.add(node.name.text)
-    }
-    // export interface MyInterface { ... }
-    else if (ts.isInterfaceDeclaration(node)) {
+    } else if (ts.isInterfaceDeclaration(node)) {
       typeExports.add(node.name.text)
-    }
-    // export { name1, name2 }
-    else if (
+    } else if (
       ts.isExportDeclaration(node) &&
       node.exportClause &&
       ts.isNamedExports(node.exportClause)
@@ -90,6 +80,7 @@ function findExportsInFile(filePath) {
   return {
     values: Array.from(valueExports),
     types: Array.from(typeExports),
+    defaultExport: defaultExportName,
   }
 }
 
@@ -97,7 +88,6 @@ async function main() {
   const targetDir = process.argv[2]
   if (!targetDir) {
     console.error('Ошибка: Укажи целевую директорию!')
-    console.log('Пример: node scripts/generate-explicit-api.mjs src/entities/some-entity')
     process.exit(1)
   }
 
@@ -108,23 +98,27 @@ async function main() {
     const tsFiles = allFiles.filter(
       (file) => (file.endsWith('.ts') || file.endsWith('.tsx')) && !isFileExcluded(file),
     )
-
     const allExportLines = []
 
-    for (const file of tsFiles) {
-      const { values, types } = findExportsInFile(file)
-      if (values.length === 0 && types.length === 0) continue
+    await Promise.all(
+      tsFiles.map(async (file) => {
+        const { values, types, defaultExport } = await findExportsInFile(file)
+        if (values.length === 0 && types.length === 0 && !defaultExport) return
 
-      const relativePath = path.relative(absoluteTargetDir, file).replace(/\\/g, '/')
-      const importPath = `./${relativePath.replace(/\.tsx?$/, '')}`
+        const relativePath = path.relative(absoluteTargetDir, file).replace(/\\/g, '/')
+        const importPath = `./${relativePath.replace(/\.tsx?$/, '')}`
 
-      if (values.length > 0) {
-        allExportLines.push(`export { ${values.join(', ')} } from '${importPath}';`)
-      }
-      if (types.length > 0) {
-        allExportLines.push(`export type { ${types.join(', ')} } from '${importPath}';`)
-      }
-    }
+        if (defaultExport) {
+          allExportLines.push(`export { default as ${defaultExport} } from '${importPath}';`)
+        }
+        if (values.length > 0) {
+          allExportLines.push(`export { ${values.join(', ')} } from '${importPath}';`)
+        }
+        if (types.length > 0) {
+          allExportLines.push(`export type { ${types.join(', ')} } from '${importPath}';`)
+        }
+      }),
+    )
 
     if (allExportLines.length === 0) {
       console.log(`В директории ${targetDir} не найдено файлов с экспортами.`)
@@ -133,17 +127,13 @@ async function main() {
 
     const fileContent = `/**
  * @file Automatically generated by 'scripts/generate-explicit-api.mjs'.
- *
- * ⚠️ ВНИМАНИЕ! Этот файл был сгенерирован автоматически.
- * Ваша задача — просмотреть его и удалить те экспорты,
- * которые не должны быть частью публичного API этого модуля.
- */\n\n${allExportLines.join('\n')}\n`
+ */\n\n${allExportLines.sort().join('\n')}\n`
 
     const outputPath = path.join(absoluteTargetDir, TARGET_FILE_NAME)
     await fs.writeFile(outputPath, fileContent)
 
     console.log(`✅ Явный публичный API сгенерирован: ${outputPath}`)
-    console.log('下一步 (Next step): Просто взгляни на файл и удали лишние строки!')
+    console.log('Просто взгляни на файл и удали лишние строки!')
   } catch (error) {
     console.error('Произошла ошибка:', error)
     process.exit(1)

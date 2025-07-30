@@ -11,7 +11,7 @@ import {
 
 const columnHelper = createColumnHelper<PersonListItemResponse>()
 
-export const moldPassportColumns = [
+export const moldingAreaColumns = [
   columnHelper.accessor('id', {
     header: 'ID',
     ...idColumn(),

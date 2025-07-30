@@ -42,15 +42,16 @@ const schema = moldPassportSchema
 const dynamicFieldConfig = moldPassportDynamicFieldConfig
 type DynamicFieldOptions = MoldPassportDynamicFieldOptions
 
-interface MoldPassportFormOptions {}
+type MoldPassportFormOptions = {}
+type FormOptions = MoldPassportFormOptions
 
-export type MoldPassportFormInitialData = FormInitialData<FormFields, MoldPassportFormOptions>
+export type MoldPassportFormInitialData = FormInitialData<FormFields, FormOptions>
 
 export default function MoldPassportForm({
   initialData,
   onSubmit,
   submitBtnName,
-}: FormProps<FormFields, MoldPassportFormOptions>) {
+}: FormProps<FormFields, FormOptions>) {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: initialData?.defaultValues,
@@ -126,8 +127,6 @@ export default function MoldPassportForm({
       logger.error('Ошибка при отправке формы:', err, data)
     }
   }
-  console.log('data', form.getValues())
-  console.log('errors', errors)
 
   return (
     <DynamicFieldsProvider

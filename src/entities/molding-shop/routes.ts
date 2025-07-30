@@ -1,7 +1,8 @@
 import { lazy } from 'react'
 import { Factory, Users } from 'lucide-react'
 import type { AppRoute } from '@/app/routes/types'
-import { moldPassportRoutes } from '@/entities/molding-shop/mold-passport/routes'
+import { moldPassportRoutes } from '@/entities/molding-shop/mold-passport'
+import { MoldingAreaRoutes } from '@/entities/molding-shop/molding-area'
 
 const MoldingShopLayout = lazy(() => import('@/pages/molding-shop/Layout'))
 const MoldingShopMain = lazy(() => import('@/pages/molding-shop/Main'))
@@ -23,5 +24,6 @@ export const moldingShopRoutes: AppRoute = {
       inSidebar: false,
     },
     moldPassportRoutes,
+    MoldingAreaRoutes,
   ],
 }

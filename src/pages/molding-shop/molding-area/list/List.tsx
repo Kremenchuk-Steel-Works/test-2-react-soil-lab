@@ -2,12 +2,12 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { personQueryKeys } from '@/entities/admin/people/services/keys'
 import { personService } from '@/entities/admin/people/services/service'
 import type { PersonListResponse } from '@/entities/admin/people/types/response.dto'
-import { moldPassportColumns } from '@/pages/molding-shop/mold-passport/list/columns'
+import { moldingAreaColumns } from '@/pages/molding-shop/molding-area/list/columns'
 import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DataTable } from '@/widgets/data-table'
 
-export default function MoldPassportList() {
+export default function MoldingAreaList() {
   // Состояние из URL
   const { page, perPage, setSearchParams } = useUrlPagination()
 
@@ -35,7 +35,7 @@ export default function MoldPassportList() {
       {!isLoading && !isError && data && (
         <DataTable
           data={data?.data ?? []}
-          columns={moldPassportColumns}
+          columns={moldingAreaColumns}
           setSearchParams={setSearchParams}
           page={page}
           perPage={perPage}
