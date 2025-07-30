@@ -1,0 +1,10 @@
+{
+  "options": {
+    "project": "tsconfig.json",
+    "mode": "create",
+    "noBackup": true
+  },
+  "patterns": [
+    "src/entities/molding-shop/mold-passport/*"
+  ]
+}

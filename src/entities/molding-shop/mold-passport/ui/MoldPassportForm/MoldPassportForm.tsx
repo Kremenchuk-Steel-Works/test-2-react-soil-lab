@@ -19,7 +19,7 @@ import {
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/schema'
 import { useParallelQueries } from '@/shared/hooks/react-query/useParallelQueries'
 import { logger } from '@/shared/lib/logger'
-import { getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
+import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DynamicFieldArea } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArea'
 import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
@@ -28,7 +28,12 @@ import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeFi
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import type { Option } from '@/shared/ui/select/ReactSelect'
-import { ButtonWithError } from '@/shared/ui/with-error/fieldsWithError'
+import {
+  ButtonWithError,
+  CheckboxWithError,
+  InputFieldWithError,
+  TextAreaFieldWithError,
+} from '@/shared/ui/with-error/fieldsWithError'
 import type { FormInitialData, FormProps } from '@/types/react-hook-form'
 
 type FormFields = MoldPassportFormFields
@@ -121,6 +126,8 @@ export default function MoldPassportForm({
       logger.error('Ошибка при отправке формы:', err, data)
     }
   }
+  console.log('data', form.getValues())
+  console.log('errors', errors)
 
   return (
     <DynamicFieldsProvider
@@ -154,22 +161,6 @@ export default function MoldPassportForm({
 
         {/* DynamicFields */}
         <DynamicFieldArea triggerFor="moldingAreaId" />
-
-        {/* <Controller
-        name="castingTechnologyId"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormSelectField
-            field={field}
-            fieldState={fieldState}
-            options={organizationsOptions}
-            isVirtualized
-            isClearable
-            placeholder="Технологія формовки"
-            errorMessage={getNestedErrorMessage(errors, 'castingTechnologyId')}
-          />
-        )}
-      /> */}
 
         <Controller
           name="patternPlateFrameId"
@@ -232,6 +223,67 @@ export default function MoldPassportForm({
           control={control}
           register={register}
           errors={errors}
+        />
+
+        <InputFieldWithError
+          label="Тиск, од."
+          {...register('pressingPressure', formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, 'pressingPressure')}
+        />
+
+        <InputFieldWithError
+          label="Температура в цеху, °C"
+          {...register('workshopTemperatureCelsius', formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, 'workshopTemperatureCelsius')}
+        />
+
+        <InputFieldWithError
+          label="Порядковий номер форми за зміну"
+          {...register('moldSequenceInShift', formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, 'moldSequenceInShift')}
+        />
+
+        <Controller
+          name="moldAssemblyTimestamp"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormDateTimeField
+              field={field}
+              fieldState={fieldState}
+              type="time"
+              label="Час збирання форми"
+              errorMessage={getNestedErrorMessage(errors, 'moldAssemblyTimestamp')}
+            />
+          )}
+        />
+
+        <Controller
+          name="experimentIds"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormSelectField
+              field={field}
+              fieldState={fieldState}
+              options={organizationsOptions}
+              isMulti
+              isVirtualized
+              isClearable
+              placeholder="Експеримент"
+              errorMessage={getNestedErrorMessage(errors, 'experimentIds')}
+            />
+          )}
+        />
+
+        <CheckboxWithError
+          label="Форма справна"
+          {...register(`status`, formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, 'status')}
+        />
+
+        <TextAreaFieldWithError
+          label="Нотатка"
+          {...register('notes', formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, 'notes')}
         />
 
         <ButtonWithError

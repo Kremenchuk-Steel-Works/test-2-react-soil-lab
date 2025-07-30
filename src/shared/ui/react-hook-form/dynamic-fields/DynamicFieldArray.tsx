@@ -90,7 +90,7 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>
 
   return (
     <div className="space-y-0">
-      <div className="space-y-0 divide-y-2 divide-gray-300 dark:divide-gray-950/20">
+      <div className="space-y-0 divide-y-2 divide-gray-500/20 dark:divide-gray-950/20">
         {fields.map((field, index) => (
           <FieldsetWrapper
             key={field.id}
@@ -128,7 +128,7 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>
         <div
           className={clsx({
             // если есть хотя бы один элемент
-            'rounded-b-lg bg-gray-200 px-4 pb-4 dark:bg-gray-950/20': fields.length > 0,
+            'rounded-b-lg bg-gray-400/20 px-4 pb-4 dark:bg-gray-950/20': fields.length > 0,
           })}
         >
           <Button

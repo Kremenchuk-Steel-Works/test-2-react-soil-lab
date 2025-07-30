@@ -17,6 +17,20 @@ export interface MoldPassportDynamicFieldOptions {
   genderOptions: Option<string>[]
 }
 
+export const greenSandSchema = z.object({
+  moldingSandType: z.string().optional(),
+  moldingSandSubType: z.string().nonempty(),
+  moldingSandNumber: z.string().optional(),
+  moldHorizontalDensity: z.string().optional(),
+  moldVerticalDensity: z.string().optional(),
+})
+
+export const airSetCastingSchema = z.object({
+  moldingSandType: z.string().optional(),
+  moldHardness: z.string().nonempty(),
+  resinId: z.string().optional(),
+})
+
 export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynamicFieldOptions>([
   // Для участков Green Sand Casting Песчано-Глинистая
   {
@@ -44,13 +58,7 @@ export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynam
     conditions: {
       castingTechnologyId: ['male', 'female', 'other'],
     },
-    schema: z.object({
-      moldingSandType: z.string().optional(),
-      moldingSandSubType: z.string().optional(),
-      moldingSandNumber: z.string().optional(),
-      moldHorizontalDensity: z.string().optional(),
-      moldVerticalDensity: z.string().optional(),
-    }),
+    schema: greenSandSchema,
     Component: PassportDataGscSpecificFields,
   },
   // Для технологии Air Set Casting Холодно-Твердеющая
@@ -58,11 +66,7 @@ export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynam
     conditions: {
       castingTechnologyId: ['billing', 'shipping', 'warehouse', 'plant', 'office', 'home'],
     },
-    schema: z.object({
-      moldingSandType: z.string().optional(),
-      moldHardness: z.string().optional(),
-      resinId: z.string().optional(),
-    }),
+    schema: airSetCastingSchema,
     Component: PassportDataAscSpecificFields,
   },
 ])

@@ -6,6 +6,7 @@ export const moldCavitySchema = z.object({
   serialNumber: z.string().optional(),
   isFunctional: z.boolean().optional(),
   moldCores: z.array(moldCoreSchema),
+  experimentIds: z.array(z.string()).optional(),
 })
 
 export type MoldCavityFormFields = z.infer<typeof moldCavitySchema>
@@ -16,4 +17,5 @@ export const moldCavityDefault: MoldCavityFormFields = {
   serialNumber: '',
   isFunctional: true,
   moldCores: [],
+  experimentIds: [],
 }

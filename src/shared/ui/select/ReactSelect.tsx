@@ -13,6 +13,7 @@ import Select, {
   type CSSObjectWithLabel,
   type GroupBase,
   type InputActionMeta,
+  type MenuProps,
   type OnChangeValue,
   type OptionProps,
   type Props as SelectProps,
@@ -178,6 +179,12 @@ function ReactSelect<
     formatCreateLabel: (inputValue: string) => `Додати: "${inputValue}"`,
     styles: {
       ...customStyles,
+      menu: (base: CSSObjectWithLabel, props: MenuProps<OptionType, IsMulti, Group>) => ({
+        ...base,
+        // Меню должно быть поверх других элементов
+        zIndex: 50,
+        ...(customStyles.menu ? customStyles.menu(base, props) : {}),
+      }),
       control: (base: CSSObjectWithLabel, state: ControlProps<OptionType, IsMulti, Group>) => {
         const custom = customStyles.control ? customStyles.control(base, state) : {}
         return { ...base, ...custom, minHeight: '54px' }

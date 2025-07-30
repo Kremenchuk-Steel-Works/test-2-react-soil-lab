@@ -58,7 +58,7 @@ const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
 
         <label
           htmlFor={finalId}
-          className={`pointer-events-none absolute top-1 left-4 z-10 inline-block w-full truncate pr-5 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-sm peer-focus:text-blue-500 dark:text-gray-400`}
+          className={`pointer-events-none absolute top-1 left-4 inline-block w-full truncate pr-5 text-sm text-gray-500 transition-all peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-sm peer-focus:text-blue-500 dark:text-gray-400`}
         >
           {label}
         </label>

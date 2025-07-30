@@ -110,6 +110,23 @@ export function MoldCavityForm<T extends FieldValues>({
         register={register}
         errors={errors}
       />
+
+      <Controller
+        name={fieldName('experimentIds')}
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormSelectField
+            field={field}
+            fieldState={fieldState}
+            options={citiesOptions}
+            isMulti
+            isVirtualized
+            isClearable
+            placeholder="Експеримент"
+            errorMessage={getNestedErrorMessage(errors, fieldName('experimentIds'))}
+          />
+        )}
+      />
     </>
   )
 }

@@ -12,7 +12,7 @@ export function FieldsetWrapper({ title, button, children, className }: Fieldset
   return (
     <div
       className={clsx(
-        'space-y-3 rounded-lg bg-gray-200 px-4 py-3 pb-4 dark:bg-gray-950/20',
+        'space-y-3 rounded-lg bg-gray-400/20 px-4 py-3 pb-4 dark:bg-gray-950/20',
         className,
       )}
     >

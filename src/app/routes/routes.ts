@@ -4,7 +4,6 @@ import { PATHS } from '@/app/routes/paths'
 import type { AppRoute } from '@/app/routes/types'
 import { adminRoutes } from '@/entities/admin/routes'
 import { libraryRoutes } from '@/entities/library/routes'
-import { moldPassportMainRoutes } from '@/entities/mold-passport (old)/routes'
 import { moldingShopRoutes } from '@/entities/molding-shop/routes'
 
 const MainPage = lazy(() => import('@/pages/MainPage'))
