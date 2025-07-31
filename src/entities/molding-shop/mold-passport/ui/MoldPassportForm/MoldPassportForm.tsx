@@ -8,13 +8,13 @@ import { genderOptions } from '@/entities/admin/people/types/gender'
 import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
 import { positionService } from '@/entities/admin/positions/services/service'
 import { MoldCavityForm } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/MoldCavityForm'
-import { moldCavityDefault } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
+import { moldCavityFormDefaultValues } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
 import {
   moldPassportDynamicFieldConfig,
   type MoldPassportDynamicFieldOptions,
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
 import {
-  moldPassportSchema,
+  moldPassportFormSchema,
   type MoldPassportFormFields,
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/schema'
 import { useParallelQueries } from '@/shared/hooks/react-query/useParallelQueries'
@@ -37,7 +37,7 @@ import {
 import type { FormInitialData, FormProps } from '@/types/react-hook-form'
 
 type FormFields = MoldPassportFormFields
-const schema = moldPassportSchema
+const schema = moldPassportFormSchema
 
 const dynamicFieldConfig = moldPassportDynamicFieldConfig
 type DynamicFieldOptions = MoldPassportDynamicFieldOptions
@@ -218,7 +218,7 @@ export default function MoldPassportForm({
           label="відбиток деталі у формі"
           name="moldCavities"
           form={MoldCavityForm}
-          defaultItem={moldCavityDefault}
+          defaultItem={moldCavityFormDefaultValues}
           control={control}
           register={register}
           errors={errors}
@@ -228,12 +228,6 @@ export default function MoldPassportForm({
           label="Тиск, од."
           {...register('pressingPressure', formTransformers.string)}
           errorMessage={getNestedErrorMessage(errors, 'pressingPressure')}
-        />
-
-        <InputFieldWithError
-          label="Температура в цеху, °C"
-          {...register('workshopTemperatureCelsius', formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, 'workshopTemperatureCelsius')}
         />
 
         <InputFieldWithError
@@ -249,8 +243,8 @@ export default function MoldPassportForm({
             <FormDateTimeField
               field={field}
               fieldState={fieldState}
-              type="time"
-              label="Час збирання форми"
+              type="datetime"
+              label="Час складання півформ"
               errorMessage={getNestedErrorMessage(errors, 'moldAssemblyTimestamp')}
             />
           )}

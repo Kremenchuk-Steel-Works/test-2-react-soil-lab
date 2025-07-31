@@ -1,13 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import { genderOptions } from '@/entities/admin/people/types/gender'
 import type { PersonListItemResponse } from '@/entities/admin/people/types/response.dto'
-import {
-  booleanColumn,
-  displayColumn,
-  idColumn,
-  listColumn,
-  optionColumn,
-} from '@/widgets/data-table'
+import { booleanColumn, displayColumn, idColumn, optionColumn } from '@/widgets/data-table'
 
 const columnHelper = createColumnHelper<PersonListItemResponse>()
 
@@ -18,67 +12,25 @@ export const moldingAreaColumns = [
   }),
 
   columnHelper.accessor('fullName', {
-    header: "Повне ім'я",
+    header: 'Назва',
     size: 145,
     ...displayColumn(),
   }),
 
-  columnHelper.accessor('gender', {
-    header: 'Стать',
+  columnHelper.accessor('organizationNames', {
+    header: 'Опис',
     size: 100,
-    ...optionColumn(genderOptions),
+    ...displayColumn(),
   }),
-
-  columnHelper.accessor('photoUrl', {
-    header: 'Фото',
-    size: 100,
-    cell: (info) => {
-      const file = info.getValue()
-      return file instanceof File ? (
-        <img
-          src={URL.createObjectURL(file)}
-          alt="Photo"
-          className="h-10 w-10 rounded-full object-cover"
-        />
-      ) : (
-        '—'
-      )
-    },
-  }),
-
   columnHelper.accessor('isUser', {
-    header: 'Користувач?',
+    header: 'Одиниці тиску',
     size: 155,
     ...booleanColumn(),
   }),
 
-  columnHelper.accessor('isEmployee', {
-    header: 'Робітник?',
-    size: 135,
-    ...booleanColumn(),
-  }),
-
-  columnHelper.accessor('contactsCount', {
-    header: 'К-сть контактів',
-    size: 180,
-    ...displayColumn(),
-  }),
-
-  columnHelper.accessor('addressesCount', {
-    header: 'К-сть адрес',
-    size: 150,
-    ...displayColumn(),
-  }),
-
-  columnHelper.accessor('organizationNames', {
-    header: 'Організація',
-    size: 150,
-    ...listColumn(),
-  }),
-
-  columnHelper.accessor('positionNames', {
-    header: 'Посада',
-    size: 115,
-    ...listColumn(),
+  columnHelper.accessor('gender', {
+    header: 'Додаткові опції',
+    size: 100,
+    ...optionColumn(genderOptions),
   }),
 ]

@@ -133,7 +133,6 @@ async function main() {
     await fs.writeFile(outputPath, fileContent)
 
     console.log(`✅ Явный публичный API сгенерирован: ${outputPath}`)
-    console.log('Просто взгляни на файл и удали лишние строки!')
   } catch (error) {
     console.error('Произошла ошибка:', error)
     process.exit(1)

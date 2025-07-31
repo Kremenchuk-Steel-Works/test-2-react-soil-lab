@@ -8,7 +8,7 @@ const MoldingAreaAdd = lazy(() => import('@/pages/molding-shop/molding-area/Add'
 const MoldingAreaDetails = lazy(() => import('@/pages/molding-shop/molding-area/Details'))
 const MoldingAreaUpdate = lazy(() => import('@/pages/molding-shop/molding-area/Update'))
 
-export const MoldingAreaRoutes: AppRoute = {
+export const moldingAreaRoutes: AppRoute = {
   key: 'MoldingArea',
   path: 'molding-area',
   label: 'Ділянка формовки',

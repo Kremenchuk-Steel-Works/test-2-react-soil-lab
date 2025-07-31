@@ -5,7 +5,7 @@
 export type { MoldingAreaAdditionalOptions } from './model/additionalOptions';
 export type { MoldingAreaFormFields } from './ui/MoldingAreaForm/schema';
 export type { MoldingAreaFormOptions, MoldingAreaFormInitialData } from './ui/MoldingAreaForm/MoldingAreaForm';
-export { MoldingAreaRoutes } from './routes';
 export { default as MoldingAreaForm } from './ui/MoldingAreaForm/MoldingAreaForm';
 export { moldingAreaAdditionalOptions } from './model/additionalOptions';
 export { moldingAreaFormSchema } from './ui/MoldingAreaForm/schema';
+export { moldingAreaRoutes } from './routes';

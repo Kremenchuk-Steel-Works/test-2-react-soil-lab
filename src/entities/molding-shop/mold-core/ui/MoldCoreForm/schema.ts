@@ -1,14 +1,9 @@
 import { z } from 'zod'
 
-export const moldCoreSchema = z.object({
+export const moldCoreFormSchema = z.object({
   coreBatchId: z.string().optional(),
   hardness: z.number().optional(),
 })
 
-export type MoldCoreFormFields = z.infer<typeof moldCoreSchema>
-
-// Default value
-export const moldCoreDefault: MoldCoreFormFields = {
-  coreBatchId: undefined,
-  hardness: undefined,
-}
+export type MoldCoreFormFields = z.infer<typeof moldCoreFormSchema>
+export const moldCoreFormDefaultValues: MoldCoreFormFields = moldCoreFormSchema.parse({})

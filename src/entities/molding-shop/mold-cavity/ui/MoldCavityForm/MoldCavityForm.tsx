@@ -14,7 +14,7 @@ import { cityService } from '@/entities/admin/city/services/service'
 import type { CityLookupResponse } from '@/entities/admin/city/types/response.dto'
 import type { MoldCavityFormFields } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
 import { MoldCoreForm } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/MoldCoreForm'
-import { moldCoreDefault } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/schema'
+import { moldCoreFormDefaultValues } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/schema'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
@@ -105,7 +105,7 @@ export function MoldCavityForm<T extends FieldValues>({
         label="стрижень"
         name={coresFieldName as ArrayPath<T>}
         form={MoldCoreForm}
-        defaultItem={moldCoreDefault as FieldArray<T, ArrayPath<T>>}
+        defaultItem={moldCoreFormDefaultValues as FieldArray<T, ArrayPath<T>>}
         control={control}
         register={register}
         errors={errors}

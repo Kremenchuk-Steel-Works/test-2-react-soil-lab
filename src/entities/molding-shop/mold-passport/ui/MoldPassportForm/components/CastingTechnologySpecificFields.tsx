@@ -1,5 +1,6 @@
 import { Controller } from 'react-hook-form'
 import type { MoldPassportDynamicFieldOptions } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
+import { moldingSandSubTypeOptions } from '@/entities/molding-shop/molding-sand-type/model/subType'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import type { DynamicComponentProps } from '@/shared/lib/zod/dynamic-schema'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
@@ -35,7 +36,7 @@ export function PassportDataGscSpecificFields({ control, errors, options }: Dyna
           <FormSelectField
             field={field}
             fieldState={fieldState}
-            options={options.organizationsOptions}
+            options={moldingSandSubTypeOptions}
             isVirtualized
             isClearable
             placeholder="Підтип суміші"
