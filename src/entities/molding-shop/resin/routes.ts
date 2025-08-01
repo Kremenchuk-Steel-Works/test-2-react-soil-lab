@@ -2,52 +2,52 @@ import { lazy } from 'react'
 import { Beaker, CirclePlus, Database, Info, RefreshCcw } from 'lucide-react'
 import type { AppRoute } from '@/app/routes/types'
 
-const ResinFrameLayout = lazy(() => import('@/pages/molding-shop/resin/Layout'))
-const ResinFrameList = lazy(() => import('@/pages/molding-shop/resin/list/List'))
-const ResinFrameAdd = lazy(() => import('@/pages/molding-shop/resin/Add'))
-const ResinFrameDetails = lazy(() => import('@/pages/molding-shop/resin/Details'))
-const ResinFrameUpdate = lazy(() => import('@/pages/molding-shop/resin/Update'))
+const ResinLayout = lazy(() => import('@/pages/molding-shop/resin/Layout'))
+const ResinList = lazy(() => import('@/pages/molding-shop/resin/list/List'))
+const ResinAdd = lazy(() => import('@/pages/molding-shop/resin/Add'))
+const ResinDetails = lazy(() => import('@/pages/molding-shop/resin/Details'))
+const ResinUpdate = lazy(() => import('@/pages/molding-shop/resin/Update'))
 
-export const resinFrameRoutes: AppRoute = {
-  key: 'ResinFrame',
+export const resinRoutes: AppRoute = {
+  key: 'Resin',
   path: 'resin',
   label: 'Смола',
   icon: Beaker,
-  Component: ResinFrameLayout,
+  Component: ResinLayout,
   meta: {
     buttons: ['add'],
   },
   children: [
     {
-      key: 'ResinFrameList',
+      key: 'ResinList',
       path: '',
       label: 'Список',
       icon: Database,
-      Component: ResinFrameList,
+      Component: ResinList,
     },
     {
-      key: 'ResinFrameAdd',
+      key: 'ResinAdd',
       path: 'add',
       label: 'Додати',
       icon: CirclePlus,
-      Component: ResinFrameAdd,
+      Component: ResinAdd,
     },
     {
-      key: 'ResinFrameDetail',
+      key: 'ResinDetail',
       path: ':id',
       label: 'Деталі',
       icon: Info,
-      Component: ResinFrameDetails,
+      Component: ResinDetails,
       meta: {
         buttons: ['update'],
       },
     },
     {
-      key: 'ResinFrameUpdate',
+      key: 'ResinUpdate',
       path: ':id/update',
       label: 'Оновити',
       icon: RefreshCcw,
-      Component: ResinFrameUpdate,
+      Component: ResinUpdate,
     },
   ],
 }

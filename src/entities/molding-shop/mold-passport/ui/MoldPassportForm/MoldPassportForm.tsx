@@ -244,7 +244,7 @@ export default function MoldPassportForm({
               field={field}
               fieldState={fieldState}
               type="datetime"
-              label="Час складання півформ"
+              label="Дата та час складання півформ"
               errorMessage={getNestedErrorMessage(errors, 'moldAssemblyTimestamp')}
             />
           )}

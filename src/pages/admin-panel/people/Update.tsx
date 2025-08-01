@@ -2,13 +2,14 @@ import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import type { AddressOperationRequest } from '@/entities/admin/address/types/request.dto'
 import type { ContactOperationRequest } from '@/entities/admin/contact/types/request.dto'
+import type { EmployeeProfileOperationRequest } from '@/entities/admin/employeeProfile/types/request.dto'
 import PeopleForm, { type PeopleFormInitialData } from '@/entities/admin/people/forms/form'
 import type { PeopleFormFields } from '@/entities/admin/people/forms/schema'
 import { personQueryKeys } from '@/entities/admin/people/services/keys'
 import { personService } from '@/entities/admin/people/services/service'
 import type { PersonUpdateRequest } from '@/entities/admin/people/types/request.dto'
 import type { PersonDetailResponse } from '@/entities/admin/people/types/response.dto'
-import { createArrayOperations, getLegacySingleObjectOperation } from '@/shared/lib/form-utils'
+import { createArrayOperations, createSingleObjectOperation } from '@/shared/lib/form-utils'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminPeopleUpdate() {
@@ -31,14 +32,21 @@ export default function AdminPeopleUpdate() {
     if (!data) {
       return
     }
+
+    // Адаптируем данные с запроса под форму
+    const originalAddresses = data.addresses.map((addr) => ({
+      ...addr,
+      cityId: addr.city.id,
+    }))
+
     const payload: PersonUpdateRequest = {
       ...formData,
     }
 
-    ;[payload.employeeProfileAction, payload.employeeProfileData] = getLegacySingleObjectOperation(
+    payload.employeeProfileOperation = createSingleObjectOperation(
       data.employeeProfile,
       formData.employeeProfile,
-    )
+    ) as EmployeeProfileOperationRequest
 
     payload.contactOperations = createArrayOperations(
       data.contacts,
@@ -46,7 +54,7 @@ export default function AdminPeopleUpdate() {
     ) as ContactOperationRequest[]
 
     payload.addressOperations = createArrayOperations(
-      data.addresses,
+      originalAddresses,
       formData.addresses,
     ) as AddressOperationRequest[]
 
@@ -68,7 +76,7 @@ export default function AdminPeopleUpdate() {
         addresses:
           obj.addresses?.map((addr) => ({
             ...addr,
-            cityId: addr.cityId,
+            cityId: addr.city.id,
           })) || [],
       },
       options: {

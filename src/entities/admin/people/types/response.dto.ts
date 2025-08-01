@@ -10,12 +10,23 @@ import type {
   EmployeeProfileDetailResponse,
   EmployeeProfileResponse,
 } from '@/entities/admin/employeeProfile/types/response.dto'
-import type { OrganizationShortResponse } from '@/entities/admin/organizations/types/response.dto'
+import type {
+  OrganizationLookupResponse,
+  OrganizationShortResponse,
+} from '@/entities/admin/organizations/types/response.dto'
 import type { PersonBase } from '@/entities/admin/people/types/base.model'
 import type { Gender } from '@/entities/admin/people/types/gender'
-import type { PositionShortResponse } from '@/entities/admin/positions/types/response.dto'
-import type { Timestamps } from '@/types/common'
+import type {
+  PositionLookupResponse,
+  PositionShortResponse,
+} from '@/entities/admin/positions/types/response.dto'
+import type { SoftDeleteStatusMixin, Timestamps } from '@/types/common'
 import type { PaginatedListResponse } from '@/types/pagination'
+
+export interface PersonLookupResponse {
+  id: string
+  fullName: string
+}
 
 export interface PersonShortResponse {
   id: string
@@ -24,25 +35,22 @@ export interface PersonShortResponse {
   photoUrl?: File
 }
 
-export interface PersonLookupResponse {
-  id: string
-  fullName: string
-}
-
-export interface PersonResponse extends PersonShortResponse {
+export interface PersonResponse extends PersonBase {
   employeeProfile?: EmployeeProfileResponse
+
   contacts?: ContactResponse[]
   addresses?: AddressResponse[]
 
-  organizationNames: string[]
-  positionNames: string[]
+  organizations: OrganizationLookupResponse[]
+  positions: PositionLookupResponse[]
 }
 
-export interface PersonDetailResponse extends PersonBase, Timestamps {
+export interface PersonDetailResponse extends PersonBase, Timestamps, SoftDeleteStatusMixin {
   id: string
   isUser: boolean
 
   employeeProfile?: EmployeeProfileDetailResponse
+
   contacts: ContactDetailResponse[]
   addresses: AddressDetailResponse[]
 
@@ -50,9 +58,11 @@ export interface PersonDetailResponse extends PersonBase, Timestamps {
   positions: PositionShortResponse[]
 }
 
-export interface PersonListItemResponse extends PersonShortResponse {
-  isUser: boolean
+export interface PersonListItemResponse extends PersonShortResponse, SoftDeleteStatusMixin {
+  employeeProfile?: EmployeeProfileDetailResponse
+
   isEmployee: boolean
+  isUser: boolean
 
   contactsCount: number
   addressesCount: number

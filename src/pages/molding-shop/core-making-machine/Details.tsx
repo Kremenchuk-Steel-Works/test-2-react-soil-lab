@@ -150,7 +150,7 @@ export default function CoreMakingMachineDetails() {
                   Адреса {index + 1}
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  <div>Вулиця: {addr.street}</div>
+                  <div>Вулиця: {addr.fullAddress}</div>
                   <div>Поштовий код: {addr.postalCode}</div>
                   <div>Тип: {addr.type}</div>
                   {addr.note && <div>Примітка: {addr.note}</div>}

@@ -48,27 +48,21 @@ export default function CountryForm({ defaultValues, onSubmit, submitBtnName }: 
       />
 
       <InputFieldWithError
-        label="Локальна назва"
-        {...register('nameLocal', formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, 'nameLocal')}
-      />
-
-      <InputFieldWithError
         label="Код 2"
-        {...register('code', formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, 'code')}
+        {...register('isoAlpha2', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'isoAlpha2')}
       />
 
       <InputFieldWithError
         label="Код 3"
-        {...register('code3', formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, 'code3')}
+        {...register('isoAlpha3', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'isoAlpha3')}
       />
 
       <InputFieldWithError
         label="Номер"
-        {...register('numericCode', formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, 'numericCode')}
+        {...register('isoNumeric', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'isoNumeric')}
       />
 
       <ButtonWithError

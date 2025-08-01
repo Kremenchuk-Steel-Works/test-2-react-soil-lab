@@ -1,7 +1,7 @@
 export interface CountryBase {
-  code: string
-  code3?: string
-  numericCode?: string
+  isoAlpha2: string
+  isoAlpha3: string
+  isoNumeric: string
+
   name: string
-  nameLocal: string
 }

@@ -33,23 +33,23 @@ export default function AdminCountryDetails() {
 
             <div>
               <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Код 2</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.code}</dd>
+              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.isoAlpha2}</dd>
             </div>
 
-            {data.code3 && (
+            {data.isoAlpha3 && (
               <div>
                 <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Код 3</dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.code3}</dd>
+                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.isoAlpha3}</dd>
               </div>
             )}
 
-            {data.numericCode && (
+            {data.isoNumeric && (
               <div>
                 <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
                   Номерний код
                 </dt>
                 <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {data.numericCode}
+                  {data.isoNumeric}
                 </dd>
               </div>
             )}
@@ -57,13 +57,6 @@ export default function AdminCountryDetails() {
             <div>
               <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Назва</dt>
               <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.name}</dd>
-            </div>
-
-            <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                Локальна назва
-              </dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.nameLocal}</dd>
             </div>
 
             <div>
@@ -86,7 +79,7 @@ export default function AdminCountryDetails() {
                 <dd className="mt-1 space-y-1 text-sm text-gray-900 dark:text-slate-300">
                   {data.cities.map((city) => (
                     <div key={city.id}>
-                      <strong>{city.name}</strong> ({city.nameLocal})
+                      <strong>{city.name}</strong>
                     </div>
                   ))}
                 </dd>

@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import type { AddressOperationRequest } from '@/entities/admin/address/types/request.dto'
 import type { ContactOperationRequest } from '@/entities/admin/contact/types/request.dto'
+import type { EmployeeProfileOperationRequest } from '@/entities/admin/employeeProfile/types/request.dto'
 import { personQueryKeys } from '@/entities/admin/people/services/keys'
 import { personService } from '@/entities/admin/people/services/service'
 import type { PersonUpdateRequest } from '@/entities/admin/people/types/request.dto'
@@ -11,7 +12,7 @@ import MoldPassportForm, {
   type MoldPassportFormInitialDataOld,
 } from '@/entities/mold-passport (old)/mold-passport/forms/form'
 import type { MoldPassportFormFieldsOld } from '@/entities/mold-passport (old)/mold-passport/forms/schema'
-import { createArrayOperations, getLegacySingleObjectOperation } from '@/shared/lib/form-utils'
+import { createArrayOperations, createSingleObjectOperation } from '@/shared/lib/form-utils'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 
@@ -35,14 +36,21 @@ export default function MoldPassportUpdateOld() {
     if (!data) {
       return
     }
+
+    // Адаптируем данные с запроса под форму
+    const originalAddresses = data.addresses.map((addr) => ({
+      ...addr,
+      cityId: addr.city.id,
+    }))
+
     const payload: PersonUpdateRequest = {
       ...formData,
     }
 
-    ;[payload.employeeProfileAction, payload.employeeProfileData] = getLegacySingleObjectOperation(
+    payload.employeeProfileOperation = createSingleObjectOperation(
       data.employeeProfile,
       formData.employeeProfile,
-    )
+    ) as EmployeeProfileOperationRequest
 
     payload.contactOperations = createArrayOperations(
       data.contacts,
@@ -50,7 +58,7 @@ export default function MoldPassportUpdateOld() {
     ) as ContactOperationRequest[]
 
     payload.addressOperations = createArrayOperations(
-      data.addresses,
+      originalAddresses,
       formData.addresses,
     ) as AddressOperationRequest[]
 
@@ -72,7 +80,7 @@ export default function MoldPassportUpdateOld() {
         addresses:
           obj.addresses?.map((addr) => ({
             ...addr,
-            cityId: addr.cityId,
+            cityId: addr.city.id,
           })) || [],
       },
       options: {

@@ -1,9 +1,10 @@
 import type { Address } from '@/entities/admin/address/types/address'
 
 export interface AddressBase {
-  street: string
-  postalCode?: string
   type: Address
-  isPrimary: boolean
+  fullAddress: string
+  postalCode?: string
   note?: string
+
+  isPrimary: boolean
 }

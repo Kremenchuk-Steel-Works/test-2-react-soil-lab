@@ -8,8 +8,18 @@ import type {
 } from '@/entities/admin/contact/types/response.dto'
 import type { CountryShortResponse } from '@/entities/admin/country/types/response.dto'
 import type { OrganizationBase } from '@/entities/admin/organizations/types/base.model'
-import type { Timestamps } from '@/types/common'
+import type { SoftArchiveStatusMixin, Timestamps } from '@/types/common'
 import type { PaginatedListResponse } from '@/types/pagination'
+
+export interface OrganizationLookupResponse {
+  id: string
+  legalName: string
+  registrationNumber?: string
+}
+
+export interface OrganizationShortResponse extends OrganizationBase {
+  id: string
+}
 
 export interface OrganizationResponse extends OrganizationBase {
   id: string
@@ -20,20 +30,17 @@ export interface OrganizationResponse extends OrganizationBase {
 
 export interface OrganizationDetailResponse
   extends Omit<OrganizationResponse, 'contacts' | 'addresses'>,
-    Timestamps {
+    Timestamps,
+    SoftArchiveStatusMixin {
   contacts: ContactDetailResponse[]
   addresses: AddressDetailResponse[]
 }
 
-export interface OrganizationShortResponse extends OrganizationBase {
-  id: string
+export interface OrganizationListItemResponse
+  extends OrganizationBase,
+    Timestamps,
+    SoftArchiveStatusMixin {
   countryName: string
 }
 
-export interface OrganizationLookupResponse {
-  id: string
-  legalName: string
-  registrationNumber?: string
-}
-
-export type OrganizationListResponse = PaginatedListResponse<OrganizationShortResponse>
+export type OrganizationListResponse = PaginatedListResponse<OrganizationListItemResponse>

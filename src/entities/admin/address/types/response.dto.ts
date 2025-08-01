@@ -1,15 +1,13 @@
-import type { Address } from '@/entities/admin/address/types/address'
 import type { AddressBase } from '@/entities/admin/address/types/base.model'
 import type { Timestamps } from '@/types/common'
+import type { CityListItemResponse } from '../../city/types/response.dto'
 
-export interface AddressResponse {
+export interface AddressResponse extends AddressBase {
   id: string
   cityId: number
-  type: Address
-  isPrimary: boolean
 }
 
 export interface AddressDetailResponse extends AddressBase, Timestamps {
   id: string
-  cityId: number
+  city: CityListItemResponse
 }

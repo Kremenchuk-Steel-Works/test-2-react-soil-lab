@@ -84,8 +84,8 @@ export function AddressForm<T extends FormFields>({
 
       <InputFieldWithError
         label="Вулиця"
-        {...register(`addresses.${index}.street` as Path<T>, formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, `addresses.${index}.street` as Path<T>)}
+        {...register(`addresses.${index}.fullAddress` as Path<T>, formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, `addresses.${index}.fullAddress` as Path<T>)}
       />
 
       <InputFieldWithError

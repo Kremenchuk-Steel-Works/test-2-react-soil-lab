@@ -5,6 +5,7 @@ export interface PersonBase {
   middleName?: string
   lastName: string
   gender: Gender
+
   birthDate?: string
   photoUrl?: File
 }

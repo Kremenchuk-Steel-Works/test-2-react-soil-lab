@@ -47,17 +47,12 @@ export default function AdminOrganizationsDetails() {
 
             <div>
               <dt>Країна (код)</dt>
-              <dd>{data.country.code}</dd>
+              <dd>{data.country.isoAlpha2}</dd>
             </div>
 
             <div>
               <dt>Країна (назва)</dt>
               <dd>{data.country.name}</dd>
-            </div>
-
-            <div>
-              <dt>Країна (локалізовано)</dt>
-              <dd>{data.country.nameLocal}</dd>
             </div>
 
             <div>
@@ -94,7 +89,7 @@ export default function AdminOrganizationsDetails() {
                 {(() => {
                   const addr = data.addresses.find((a) => a.isPrimary)
                   return addr
-                    ? `${addr.street}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
+                    ? `${addr.fullAddress}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
                     : '—'
                 })()}
               </dd>
@@ -106,7 +101,7 @@ export default function AdminOrganizationsDetails() {
                 {(() => {
                   const addr = data.addresses.find((a) => !a.isPrimary)
                   return addr
-                    ? `${addr.street}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
+                    ? `${addr.fullAddress}, ${addr.postalCode} (${addr.type}) - ${addr.note}`
                     : '—'
                 })()}
               </dd>

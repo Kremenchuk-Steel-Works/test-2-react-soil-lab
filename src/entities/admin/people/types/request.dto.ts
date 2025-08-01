@@ -8,7 +8,7 @@ import type {
 } from '@/entities/admin/contact/types/request.dto'
 import type {
   EmployeeProfileCreateRequest,
-  EmployeeProfileUpdateRequest,
+  EmployeeProfileOperationRequest,
 } from '@/entities/admin/employeeProfile/types/request.dto'
 import type { PersonBase } from '@/entities/admin/people/types/base.model'
 
@@ -23,8 +23,7 @@ export interface PersonCreateRequest extends PersonBase {
 }
 
 export interface PersonUpdateRequest extends Partial<PersonBase> {
-  employeeProfileAction?: 'create' | 'update' | 'delete'
-  employeeProfileData?: EmployeeProfileCreateRequest | EmployeeProfileUpdateRequest
+  employeeProfileOperation?: EmployeeProfileOperationRequest
   contactOperations?: ContactOperationRequest[]
   addressOperations?: AddressOperationRequest[]
   organizationIds?: string[]

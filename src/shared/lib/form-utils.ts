@@ -78,36 +78,3 @@ export function createSingleObjectOperation<T>(
 
   return undefined
 }
-
-/**
- * ВРЕМЕННАЯ УТИЛИТА для существующего API.
- * Сравнивает два состояния объекта и возвращает кортеж [action, data],
- * соответствующий формату "employeeProfileAction" и "employeeProfileData".
- * @param originalItem - Исходный объект с сервера.
- * @param currentItem - Текущий объект из формы.
- * @returns Кортеж `[Action | undefined, Data | undefined]`
- */
-type Action = 'create' | 'update' | 'delete'
-
-export function getLegacySingleObjectOperation<T>(
-  originalItem: T | undefined,
-  currentItem: T | undefined,
-): [Action | undefined, T | undefined] {
-  const hasOriginal = originalItem !== null && originalItem !== undefined
-  const hasCurrent = currentItem !== null && currentItem !== undefined
-
-  if (hasCurrent && !hasOriginal) {
-    return ['create', currentItem]
-  }
-
-  if (hasCurrent && hasOriginal) {
-    return ['update', currentItem]
-  }
-
-  if (!hasCurrent && hasOriginal) {
-    return ['delete', undefined] // Для delete данные не нужны
-  }
-
-  // Если изменений не было, возвращаем undefined для обоих значений
-  return [undefined, undefined]
-}

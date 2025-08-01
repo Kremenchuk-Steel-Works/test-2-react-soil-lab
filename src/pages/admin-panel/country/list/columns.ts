@@ -15,12 +15,7 @@ export const adminCountryColumns = [
     size: 100,
     ...displayColumn(),
   }),
-  columnHelper.accessor('nameLocal', {
-    header: 'Локальна назва',
-    size: 110,
-    ...displayColumn(),
-  }),
-  columnHelper.accessor('code', {
+  columnHelper.accessor('isoAlpha2', {
     header: 'Код-2',
     size: 100,
     ...displayColumn(),

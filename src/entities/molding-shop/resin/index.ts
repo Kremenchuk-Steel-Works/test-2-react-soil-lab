@@ -9,5 +9,5 @@ export type { ResinType } from './model/type';
 export { default as ResinForm } from './ui/MoldingFlaskForm/MoldingFlaskForm';
 export { resinComponentOptions } from './model/component';
 export { resinFormSchema } from './ui/MoldingFlaskForm/schema';
-export { resinFrameRoutes } from './routes';
+export { resinRoutes } from './routes';
 export { resinTypeOptions } from './model/type';

@@ -1,11 +1,10 @@
 import { z } from 'zod'
 
 export const countrySchema = z.object({
-  code: z.string().length(2).nonempty(),
-  code3: z.string().length(3).optional(),
-  numericCode: z.string().length(3).optional(),
+  isoAlpha2: z.string().length(2).nonempty(),
+  isoAlpha3: z.string().length(3).nonempty(),
+  isoNumeric: z.string().length(3).nonempty(),
   name: z.string().nonempty(),
-  nameLocal: z.string().nonempty(),
 })
 
 export type CountryFormFields = z.infer<typeof countrySchema>
