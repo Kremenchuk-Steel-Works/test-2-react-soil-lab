@@ -10,8 +10,8 @@
     "preview": "vite preview",
     "spellcheck": "cspell \"**/*.{ts,tsx,md,json}\" --show-context",
     "index": "node scripts/generate-explicit-api.mjs",
-    "gen:api-types:main": "openapi-typescript http://195.189.63.125:8002/openapi.json --output ./src/shared/api/schema.d.ts",
-    "format:api": "openapi-format http://195.189.63.125:8002/openapi.json -o openapi.camel.json --casingFile casing.yaml"
+    "api": "node ./scripts/generateApi.mjs",
+    "api:main": "npm run api main"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.8",

@@ -1,0 +1,6 @@
+properties: camelCase
+componentsSchemas: PascalCase
+componentsRequestBodies: camelCase
+parametersQuery: camelCase
+parametersPath: camelCase
+parametersHeader: camelCase
