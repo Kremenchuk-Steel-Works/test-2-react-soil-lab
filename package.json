@@ -10,8 +10,12 @@
     "preview": "vite preview",
     "spellcheck": "cspell \"**/*.{ts,tsx,md,json}\" --show-context",
     "index": "node scripts/generate-explicit-api.mjs",
+    "dto": "node scripts/generateDto.mjs",
+    "dto:schema": "node scripts/generateDtoSchema.mjs",
     "api": "node ./scripts/generateApi.mjs",
-    "api:main": "npm run api main"
+    "schema": "node ./scripts/generateApiSchema.mjs",
+    "api:main": "npm run api main",
+    "schema:main": "npm run schema main"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.8",
