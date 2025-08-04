@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "spellcheck": "cspell \"**/*.{ts,tsx,md,json}\" --show-context",
     "index": "node scripts/generate-explicit-api.mjs",
-    "gen:api-types:main": "openapi-typescript http://195.189.63.125:8002/openapi.json --output ./src/shared/api/schema.d.ts --transform camelCase --verbose"
+    "gen:api-types:main": "openapi-typescript http://195.189.63.125:8002/openapi.json --output ./src/shared/api/schema.d.ts",
+    "format:api": "openapi-format http://195.189.63.125:8002/openapi.json -o openapi.camel.json --casingFile casing.yaml"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.8",
@@ -63,6 +64,7 @@
   "devDependencies": {
     "@cspell/dict-ru_ru": "^2.3.0",
     "@eslint/js": "^9.25.0",
+    "@hey-api/openapi-ts": "^0.80.2",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
     "@tailwindcss/postcss": "^4.1.5",
     "@types/node": "^22.15.32",
@@ -79,6 +81,8 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "jscodeshift": "^17.3.0",
+    "openapi-format": "^1.27.3",
+    "openapi-generator-cli": "^1.0.0",
     "openapi-typescript": "^7.8.0",
     "postcss": "^8.5.3",
     "postcss-nesting": "^13.0.2",

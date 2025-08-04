@@ -34,7 +34,7 @@ export default function AdminCityDetails() {
             <div>
               <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Країна</dt>
               <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                {data.country.nameLocal} ({data.country.name})
+                {data.country.name}
               </dd>
             </div>
 
@@ -47,7 +47,6 @@ export default function AdminCityDetails() {
               <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
                 Локальна назва
               </dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.nameLocal}</dd>
             </div>
 
             <div>

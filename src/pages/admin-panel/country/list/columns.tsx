@@ -1,11 +1,12 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import type { PositionShortResponse } from '@/entities/admin/positions/types/response.dto'
+import type { CountryListResponse } from '@/entities/admin/country/types/response.dto'
+import type { ListDataType } from '@/types/pagination'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
 import { idColumn } from '@/widgets/data-table/columns/idColumn'
 
-const columnHelper = createColumnHelper<PositionShortResponse>()
+const columnHelper = createColumnHelper<ListDataType<CountryListResponse>>()
 
-export const adminPositionsColumns = [
+export const adminCountryColumns = [
   columnHelper.accessor('id', {
     header: 'ID',
     ...idColumn(),
@@ -15,8 +16,8 @@ export const adminPositionsColumns = [
     size: 100,
     ...displayColumn(),
   }),
-  columnHelper.accessor('description', {
-    header: 'Опис',
+  columnHelper.accessor('isoAlpha2', {
+    header: 'Код-2',
     size: 100,
     ...displayColumn(),
   }),

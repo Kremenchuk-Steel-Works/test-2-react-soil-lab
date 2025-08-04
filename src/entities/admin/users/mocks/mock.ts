@@ -1,208 +1,31 @@
+import { mockPermissions } from '@/entities/admin/permissions/mocks/mock'
+import { mockRoles } from '@/entities/admin/roles/mocks/mock'
 import type { UserDetailResponse } from '@/entities/admin/users/types/response.dto'
 
-export const mockUsers: UserDetailResponse[] = [
-  {
-    id: '1',
-    email: 'john.doe@example.com',
-    isActive: true,
-    isSuperuser: false,
-    createdAt: '2025-01-01T10:00:00Z',
-    updatedAt: '2025-05-01T10:00:00Z',
-    lastLoginAt: '2025-05-20T12:00:00Z',
-    // person: {
-    //   id: "p1",
-    //   fullName: "John Doe",
-    //   gender: "male",
-    //   photoUrl: "https://example.com/photos/john.jpg",
-    // },
-    roles: [{ id: 1, name: 'User', description: 'Regular user role' }],
-    permissions: [
-      {
-        id: 101,
-        name: 'view_dashboard',
-        description: 'Access to dashboard',
-        department: { id: 'd1', name: 'IT', description: 'IT Department' },
-      },
-    ],
-  },
-  {
-    id: '2',
-    email: 'jane.smith@example.com',
-    isActive: true,
-    isSuperuser: true,
-    createdAt: '2024-12-01T09:00:00Z',
-    updatedAt: '2025-04-15T11:00:00Z',
-    // person: {
-    //   id: "p2",
-    //   fullName: "Jane Smith",
-    //   gender: "female",
-    // },
-    roles: [{ id: 2, name: 'Admin' }],
-    permissions: [
-      {
-        id: 102,
-        name: 'manage_users',
-        description: 'Can manage users',
-        department: { id: 'd2', name: 'HR' },
-      },
-    ],
-  },
-  {
-    id: '3',
-    email: 'mark.jones@example.com',
-    isActive: false,
-    isSuperuser: false,
-    createdAt: '2023-05-21T13:00:00Z',
-    updatedAt: '2024-11-25T15:30:00Z',
-    // person: {
-    //   id: "p3",
-    //   fullName: "Mark Jones",
-    //   gender: "male",
-    // },
-    roles: [{ id: 3, name: 'Viewer' }],
-    permissions: [],
-  },
-  {
-    id: '4',
-    email: 'lisa.brown@example.com',
-    isActive: true,
-    isSuperuser: false,
-    createdAt: '2024-08-18T16:40:00Z',
-    updatedAt: '2025-02-22T14:20:00Z',
-    // person: {
-    //   id: "p4",
-    //   fullName: "Lisa Brown",
-    //   gender: "female",
-    //   photoUrl: "https://example.com/photos/lisa.png",
-    // },
-    roles: [{ id: 4, name: 'Editor', description: 'Content editor' }],
-    permissions: [
-      {
-        id: 103,
-        name: 'edit_content',
-        description: 'Edit website content',
-        department: { id: 'd3', name: 'Content', description: 'Content Team' },
-      },
-    ],
-  },
-  {
-    id: '5',
-    email: 'paul.adams@example.com',
-    isActive: true,
-    isSuperuser: true,
-    createdAt: '2024-01-01T08:00:00Z',
-    updatedAt: '2025-05-01T09:00:00Z',
-    // person: {
-    //   id: "p5",
-    //   fullName: "Paul Adams",
-    //   gender: "male",
-    // },
-    roles: [{ id: 5, name: 'Manager' }],
-    permissions: [
-      {
-        id: 104,
-        name: 'approve_requests',
-        description: 'Approve internal requests',
-        department: { id: 'd4', name: 'Operations' },
-      },
-    ],
-  },
-  {
-    id: '6',
-    email: 'emily.watson@example.com',
-    isActive: false,
-    isSuperuser: false,
-    createdAt: '2023-03-01T10:10:00Z',
-    updatedAt: '2025-01-01T12:00:00Z',
-    // person: {
-    //   id: "p6",
-    //   fullName: "Emily Watson",
-    //   gender: "female",
-    // },
-    roles: [],
-    permissions: [],
-  },
-  {
-    id: '7',
-    email: 'michael.green@example.com',
-    isActive: true,
-    isSuperuser: false,
-    createdAt: '2022-07-11T08:30:00Z',
-    updatedAt: '2025-03-05T10:00:00Z',
-    // person: {
-    //   id: "p7",
-    //   fullName: "Michael Green",
-    //   gender: "male",
-    //   photoUrl: "https://example.com/photos/michael.png",
-    // },
-    roles: [{ id: 6, name: 'Support' }],
-    permissions: [
-      {
-        id: 105,
-        name: 'respond_tickets',
-        description: 'Respond to support tickets',
-        department: { id: 'd5', name: 'Support' },
-      },
-    ],
-  },
-  {
-    id: '8',
-    email: 'sara.white@example.com',
-    isActive: true,
-    isSuperuser: false,
-    createdAt: '2023-06-06T12:00:00Z',
-    updatedAt: '2025-04-01T12:30:00Z',
-    // person: {
-    //   id: "p8",
-    //   fullName: "Sara White",
-    //   gender: "female",
-    // },
-    roles: [{ id: 7, name: 'Contributor' }],
-    permissions: [],
-  },
-  {
-    id: '9',
-    email: 'alex.turner@example.com',
-    isActive: true,
-    isSuperuser: false,
-    createdAt: '2024-09-10T14:00:00Z',
-    updatedAt: '2025-05-10T14:30:00Z',
-    // person: {
-    //   id: "p9",
-    //   fullName: "Alex Turner",
-    //   gender: "male",
-    // },
-    roles: [{ id: 8, name: 'Coordinator' }],
-    permissions: [
-      {
-        id: 106,
-        name: 'schedule_meetings',
-        description: 'Can schedule meetings',
-        department: { id: 'd6', name: 'Admin' },
-      },
-    ],
-  },
-  {
-    id: '10',
-    email: 'nina.thomas@example.com',
-    isActive: true,
-    isSuperuser: true,
-    createdAt: '2022-11-11T09:30:00Z',
-    updatedAt: '2025-01-15T10:15:00Z',
-    // person: {
-    //   id: "p10",
-    //   fullName: "Nina Thomas",
-    //   gender: "female",
-    //   photoUrl: "https://example.com/photos/nina.jpg",
-    // },
-    roles: [{ id: 9, name: 'Director', description: 'Executive director' }],
-    permissions: [
-      {
-        id: 107,
-        name: 'access_financials',
-        description: 'Access to financial data',
-        department: { id: 'd7', name: 'Finance', description: 'Finance Dept.' },
-      },
-    ],
-  },
-]
+export const mockUsers: UserDetailResponse[] = Array.from({ length: 10 }, (_, i) => {
+  const creationDate = new Date()
+  creationDate.setDate(creationDate.getDate() - i * 3) // Даты создания "в прошлом"
+
+  const lastLogin = new Date()
+  lastLogin.setHours(lastLogin.getHours() - i * 5)
+
+  const isDeleted = i === 9 // Сделаем последнего пользователя "удаленным" для примера
+
+  return {
+    id: `user-id-${i + 1}`,
+    fullName: `User Name ${i + 1}`,
+    email: `user${i + 1}@example.com`,
+    isActive: !isDeleted && i % 2 === 0, // Каждый второй активен (кроме удаленного)
+    isSuperuser: i === 0, // Только первый пользователь — суперадмин
+
+    // Для суперадмина дадим все права, для остальных — часть
+    roles: i === 0 ? [mockRoles[0]] : [mockRoles[2]],
+    permissions: i === 0 ? mockPermissions : mockPermissions.slice(1, 3),
+
+    lastLoginAt: i % 3 === 0 ? undefined : lastLogin.toISOString(), // У каждого третьего нет даты входа
+
+    createdAt: creationDate.toISOString(),
+    updatedAt: creationDate.toISOString(),
+    deletedAt: isDeleted ? new Date().toISOString() : '',
+  }
+})

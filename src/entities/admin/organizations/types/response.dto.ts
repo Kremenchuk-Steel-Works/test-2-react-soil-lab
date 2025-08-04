@@ -40,6 +40,7 @@ export interface OrganizationListItemResponse
   extends OrganizationBase,
     Timestamps,
     SoftArchiveStatusMixin {
+  id: string
   countryName: string
 }
 

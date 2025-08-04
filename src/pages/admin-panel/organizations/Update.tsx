@@ -30,6 +30,13 @@ export default function AdminOrganizationsUpdate() {
     if (!data) {
       return
     }
+
+    // Адаптируем данные с запроса под форму
+    const originalAddresses = data.addresses.map((addr) => ({
+      ...addr,
+      cityId: addr.city.id,
+    }))
+
     const payload: OrganizationUpdateRequest = {
       ...formData,
     }
@@ -40,7 +47,7 @@ export default function AdminOrganizationsUpdate() {
     ) as ContactOperationRequest[]
 
     payload.addressOperations = createArrayOperations(
-      data.addresses,
+      originalAddresses,
       formData.addresses,
     ) as AddressOperationRequest[]
 
@@ -57,7 +64,7 @@ export default function AdminOrganizationsUpdate() {
       addresses:
         obj.addresses?.map((addr) => ({
           ...addr,
-          cityId: addr.cityId,
+          cityId: addr.city.id,
         })) || [],
     }
   }

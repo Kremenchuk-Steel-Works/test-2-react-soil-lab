@@ -1,11 +1,12 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import type { DepartmentShortResponse } from '@/entities/admin/departments/types/response.dto'
+import type { PermissionListResponse } from '@/entities/admin/permissions/types/response.dto'
+import type { ListDataType } from '@/types/pagination'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
 import { idColumn } from '@/widgets/data-table/columns/idColumn'
 
-const columnHelper = createColumnHelper<DepartmentShortResponse>()
+const columnHelper = createColumnHelper<ListDataType<PermissionListResponse>>()
 
-export const adminDepartmentsColumns = [
+export const adminPermissionsColumns = [
   columnHelper.accessor('id', {
     header: 'ID',
     ...idColumn(),
@@ -15,8 +16,8 @@ export const adminDepartmentsColumns = [
     size: 100,
     ...displayColumn(),
   }),
-  columnHelper.accessor('description', {
-    header: 'Опис',
+  columnHelper.accessor('departmentName', {
+    header: 'Назва відділу',
     size: 100,
     ...displayColumn(),
   }),

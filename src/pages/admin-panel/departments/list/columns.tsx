@@ -1,11 +1,12 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import type { CityShortResponse } from '@/entities/admin/city/types/response.dto'
+import type { DepartmentListResponse } from '@/entities/admin/departments/types/response.dto'
+import type { ListDataType } from '@/types/pagination'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
 import { idColumn } from '@/widgets/data-table/columns/idColumn'
 
-const columnHelper = createColumnHelper<CityShortResponse>()
+const columnHelper = createColumnHelper<ListDataType<DepartmentListResponse>>()
 
-export const adminCityColumns = [
+export const adminDepartmentsColumns = [
   columnHelper.accessor('id', {
     header: 'ID',
     ...idColumn(),
@@ -15,9 +16,9 @@ export const adminCityColumns = [
     size: 100,
     ...displayColumn(),
   }),
-  columnHelper.accessor('nameLocal', {
-    header: 'Локальна назва',
-    size: 110,
+  columnHelper.accessor('description', {
+    header: 'Опис',
+    size: 100,
     ...displayColumn(),
   }),
 ]
