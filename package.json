@@ -15,7 +15,9 @@
     "api": "node ./scripts/generateApi.mjs",
     "schema": "node ./scripts/generateApiSchema.mjs",
     "api:main": "npm run api main",
-    "schema:main": "npm run schema main"
+    "schema:main": "npm run schema main",
+    "openapi": "node scripts/generateCamelOpenapi.mjs",
+    "generate:api": "tsx scripts/generate-api-orval.ts"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.8",
@@ -61,6 +63,7 @@
     "tailwind-scrollbar": "^4.0.2",
     "tailwind-scrollbar-hide": "^2.0.0",
     "ts-case-convert": "^2.1.0",
+    "tsx": "^4.20.3",
     "use-debounce": "^10.0.5",
     "zod": "^3.24.4",
     "zod-i18n-map": "^2.27.0"
@@ -68,6 +71,7 @@
   "devDependencies": {
     "@cspell/dict-ru_ru": "^2.3.0",
     "@eslint/js": "^9.25.0",
+    "@faker-js/faker": "^9.9.0",
     "@hey-api/openapi-ts": "^0.80.2",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.2",
     "@tailwindcss/postcss": "^4.1.5",
@@ -85,6 +89,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "jscodeshift": "^17.3.0",
+    "msw": "^2.10.4",
     "openapi-format": "^1.27.3",
     "openapi-generator-cli": "^1.0.0",
     "openapi-typescript": "^7.8.0",
@@ -92,7 +97,7 @@
     "postcss": "^8.5.3",
     "postcss-nesting": "^13.0.2",
     "postcss-preset-env": "^10.2.3",
-    "prettier": "^3.5.3",
+    "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "rollup-plugin-visualizer": "^6.0.3",
     "tailwindcss": "^4.1.5",
@@ -107,5 +112,10 @@
     "Firefox ESR",
     "not dead",
     "Chrome >= 109"
-  ]
+  ],
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
 }

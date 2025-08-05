@@ -1,0 +1,2095 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Molding Shop Service",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/mold-passports/": {
+      "get": {
+        "operationId": "get_mold_passports_list_api_v1_mold_passports__get",
+        "summary": "Get Mold Passports List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "default": 1,
+              "ge": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "default": 10,
+              "ge": 1,
+              "le": 20,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "active",
+                    "deleted",
+                    "all"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldPassportListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "mold-passports"
+        ]
+      },
+      "post": {
+        "operationId": "create_mold_passport_api_v1_mold_passports__post",
+        "summary": "Create Mold Passport",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoldPassportCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldPassportDetailResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "mold-passports"
+        ]
+      }
+    },
+    "/api/v1/mold-passports/{mold_passport_id}": {
+      "get": {
+        "operationId": "get_mold_passport_api_v1_mold_passports__mold_passport_id__get",
+        "summary": "Get Mold Passport",
+        "parameters": [
+          {
+            "name": "moldPassportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mold Passport Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldPassportDetailResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "mold-passports"
+        ]
+      },
+      "put": {
+        "operationId": "update_mold_passport_api_v1_mold_passports__mold_passport_id__put",
+        "summary": "Update Mold Passport",
+        "parameters": [
+          {
+            "name": "moldPassportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mold Passport Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoldPassportUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldPassportDetailResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "mold-passports"
+        ]
+      },
+      "delete": {
+        "operationId": "delete_mold_passport_api_v1_mold_passports__mold_passport_id__delete",
+        "summary": "Delete Mold Passport",
+        "parameters": [
+          {
+            "name": "moldPassportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mold Passport Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldPassportShortResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "mold-passports"
+        ]
+      }
+    },
+    "/api/v1/mold-passports/{mold_passport_id}/restore": {
+      "post": {
+        "operationId": "restore_mold_passport_api_v1_mold_passports__mold_passport_id__restore_post",
+        "summary": "Restore Mold Passport",
+        "parameters": [
+          {
+            "name": "moldPassportId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mold Passport Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldPassportShortResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "mold-passports"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AssetStatus": {
+        "type": "string",
+        "enum": [
+          "available",
+          "under_maintenance",
+          "dismissed"
+        ],
+        "title": "AssetStatus"
+      },
+      "CastingPatternLookupResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "castingProduct": {
+            "$ref": "#/components/schemas/CastingProductLookupResponse"
+          },
+          "serialNumber": {
+            "type": "string",
+            "title": "Serial Number"
+          }
+        },
+        "required": [
+          "id",
+          "castingProduct",
+          "serialNumber"
+        ],
+        "title": "CastingPatternLookupResponse"
+      },
+      "CastingProductLookupResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "type": {
+            "$ref": "#/components/schemas/CastingProductType"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "name"
+        ],
+        "title": "CastingProductLookupResponse"
+      },
+      "CastingProductType": {
+        "type": "string",
+        "enum": [
+          "primary",
+          "auxiliary",
+          "heavy_section"
+        ],
+        "title": "CastingProductType"
+      },
+      "CastingTechnologyShortResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "abbreviation": {
+            "type": "string",
+            "title": "Abbreviation"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "abbreviation"
+        ],
+        "title": "CastingTechnologyShortResponse"
+      },
+      "ConsumableStatus": {
+        "type": "string",
+        "enum": [
+          "available",
+          "used",
+          "defective"
+        ],
+        "title": "ConsumableStatus"
+      },
+      "HttpValidationError": {
+        "type": "object",
+        "properties": {
+          "detail": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail"
+          }
+        },
+        "title": "HTTPValidationError"
+      },
+      "MoldCavityCreate": {
+        "type": "object",
+        "properties": {
+          "castingPatternId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Casting Pattern Id"
+          },
+          "serialNumber": {
+            "type": "string",
+            "title": "Serial Number"
+          },
+          "moldCores": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldCoreCreate"
+            },
+            "title": "Mold Cores"
+          },
+          "isFunctional": {
+            "type": "boolean",
+            "title": "Is Functional"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "castingPatternId",
+          "serialNumber",
+          "moldCores",
+          "isFunctional"
+        ],
+        "title": "MoldCavityCreate"
+      },
+      "MoldCavityCreateOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "create",
+            "title": "Action"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MoldCavityCreate"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "data"
+        ],
+        "title": "MoldCavityCreateOperation"
+      },
+      "MoldCavityDeleteOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "delete",
+            "title": "Action"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "id"
+        ],
+        "title": "MoldCavityDeleteOperation"
+      },
+      "MoldCavityDetailResponse": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "castingPattern": {
+            "$ref": "#/components/schemas/CastingPatternLookupResponse"
+          },
+          "serialNumber": {
+            "type": "string",
+            "title": "Serial Number"
+          },
+          "moldCores": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldCoreDetailResponse"
+            },
+            "title": "Mold Cores"
+          },
+          "isFunctional": {
+            "type": "boolean",
+            "title": "Is Functional"
+          }
+        },
+        "required": [
+          "createdAt",
+          "updatedAt",
+          "id",
+          "castingPattern",
+          "serialNumber",
+          "moldCores",
+          "isFunctional"
+        ],
+        "title": "MoldCavityDetailResponse"
+      },
+      "MoldCavityUpdate": {
+        "type": "object",
+        "properties": {
+          "castingPatternId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Casting Pattern Id"
+          },
+          "serialNumber": {
+            "type": "string",
+            "title": "Serial Number"
+          },
+          "moldCoreOperations": {
+            "anyOf": [
+              {
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/MoldCoreCreateOperation"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MoldCoreUpdateOperation"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MoldCoreDeleteOperation"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "action",
+                    "mapping": {
+                      "create": "#/components/schemas/MoldCoreCreateOperation",
+                      "delete": "#/components/schemas/MoldCoreDeleteOperation",
+                      "update": "#/components/schemas/MoldCoreUpdateOperation"
+                    }
+                  }
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mold Core Operations"
+          },
+          "isFunctional": {
+            "type": "boolean",
+            "title": "Is Functional"
+          }
+        },
+        "additionalProperties": false,
+        "title": "MoldCavityUpdate"
+      },
+      "MoldCavityUpdateOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "update",
+            "title": "Action"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MoldCavityUpdate"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "data",
+          "id"
+        ],
+        "title": "MoldCavityUpdateOperation"
+      },
+      "MoldCoreBatchLookupResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "moldingSandType": {
+            "$ref": "#/components/schemas/MoldingSandTypeLookupResponse"
+          },
+          "moldCoreType": {
+            "$ref": "#/components/schemas/MoldCoreTypeLookupResponse"
+          },
+          "machine": {
+            "$ref": "#/components/schemas/MoldCoreMakingMachineLookupResponse"
+          },
+          "manufacturingTimestamp": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Manufacturing Timestamp"
+          },
+          "batchExpiryDate": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Batch Expiry Date"
+          },
+          "status": {
+            "$ref": "#/components/schemas/ConsumableStatus"
+          }
+        },
+        "required": [
+          "id",
+          "moldingSandType",
+          "moldCoreType",
+          "machine",
+          "manufacturingTimestamp",
+          "batchExpiryDate",
+          "status"
+        ],
+        "title": "MoldCoreBatchLookupResponse"
+      },
+      "MoldCoreCreate": {
+        "type": "object",
+        "properties": {
+          "coreBatchId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Core Batch Id"
+          },
+          "hardness": {
+            "type": "number",
+            "title": "Hardness"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "coreBatchId",
+          "hardness"
+        ],
+        "title": "MoldCoreCreate"
+      },
+      "MoldCoreCreateOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "create",
+            "title": "Action"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MoldCoreCreate"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "data"
+        ],
+        "title": "MoldCoreCreateOperation"
+      },
+      "MoldCoreDeleteOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "delete",
+            "title": "Action"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "id"
+        ],
+        "title": "MoldCoreDeleteOperation"
+      },
+      "MoldCoreDetailResponse": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "coreBatch": {
+            "$ref": "#/components/schemas/MoldCoreBatchLookupResponse"
+          },
+          "hardness": {
+            "type": "number",
+            "title": "Hardness"
+          }
+        },
+        "required": [
+          "createdAt",
+          "updatedAt",
+          "id",
+          "coreBatch",
+          "hardness"
+        ],
+        "title": "MoldCoreDetailResponse"
+      },
+      "MoldCoreMakingMachineLookupResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "brand": {
+            "type": "string",
+            "title": "Brand"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          }
+        },
+        "required": [
+          "id",
+          "brand",
+          "model"
+        ],
+        "title": "MoldCoreMakingMachineLookupResponse"
+      },
+      "MoldCoreTypeLookupResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "castingProduct": {
+            "$ref": "#/components/schemas/CastingProductLookupResponse"
+          },
+          "modelNumber": {
+            "type": "string",
+            "title": "Model Number"
+          }
+        },
+        "required": [
+          "id",
+          "castingProduct",
+          "modelNumber"
+        ],
+        "title": "MoldCoreTypeLookupResponse"
+      },
+      "MoldCoreUpdate": {
+        "type": "object",
+        "properties": {
+          "coreBatchId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Core Batch Id"
+          },
+          "hardness": {
+            "type": "number",
+            "title": "Hardness"
+          }
+        },
+        "additionalProperties": false,
+        "title": "MoldCoreUpdate"
+      },
+      "MoldCoreUpdateOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "update",
+            "title": "Action"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MoldCoreUpdate"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "data",
+          "id"
+        ],
+        "title": "MoldCoreUpdateOperation"
+      },
+      "MoldPassportCreate": {
+        "type": "object",
+        "properties": {
+          "moldingAreaId": {
+            "type": "integer",
+            "title": "Molding Area Id"
+          },
+          "castingTechnologyId": {
+            "type": "integer",
+            "title": "Casting Technology Id"
+          },
+          "patternPlateFrameId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pattern Plate Frame Id"
+          },
+          "moldingFlaskId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Molding Flask Id"
+          },
+          "dataGsc": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MoldPassportDataGscCreate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dataAsc": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MoldPassportDataAscCreate"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "moldCavities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldCavityCreate"
+            },
+            "title": "Mold Cavities"
+          },
+          "pressingPressure": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pressing Pressure"
+          },
+          "sequenceInShift": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sequence In Shift"
+          },
+          "markingYear": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marking Year"
+          },
+          "assemblyTimestamp": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assembly Timestamp"
+          },
+          "isDefective": {
+            "default": false,
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Defective"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "moldingAreaId",
+          "castingTechnologyId",
+          "moldCavities",
+          "assemblyTimestamp"
+        ],
+        "title": "MoldPassportCreate"
+      },
+      "MoldPassportDataAscCreate": {
+        "type": "object",
+        "properties": {
+          "moldHardness": {
+            "type": "number",
+            "title": "Mold Hardness"
+          },
+          "resinId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resin Id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "moldHardness"
+        ],
+        "title": "MoldPassportDataASCCreate"
+      },
+      "MoldPassportDataAscCreateOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "create",
+            "title": "Action"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MoldPassportDataAscCreate"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "data"
+        ],
+        "title": "MoldPassportDataASCCreateOperation"
+      },
+      "MoldPassportDataAscDeleteOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "delete",
+            "title": "Action"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "id"
+        ],
+        "title": "MoldPassportDataASCDeleteOperation"
+      },
+      "MoldPassportDataAscDetailResponse": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "moldPassportId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Mold Passport Id"
+          },
+          "moldingSandType": {
+            "$ref": "#/components/schemas/MoldingSandTypeLookupResponse"
+          },
+          "moldHardness": {
+            "type": "number",
+            "title": "Mold Hardness"
+          },
+          "resin": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResinShortResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "createdAt",
+          "updatedAt",
+          "moldPassportId",
+          "moldingSandType",
+          "moldHardness"
+        ],
+        "title": "MoldPassportDataASCDetailResponse"
+      },
+      "MoldPassportDataAscUpdate": {
+        "type": "object",
+        "properties": {
+          "moldHardness": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mold Hardness"
+          },
+          "resinId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Resin Id"
+          }
+        },
+        "additionalProperties": false,
+        "title": "MoldPassportDataASCUpdate"
+      },
+      "MoldPassportDataAscUpdateOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "update",
+            "title": "Action"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MoldPassportDataAscUpdate"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "data",
+          "id"
+        ],
+        "title": "MoldPassportDataASCUpdateOperation"
+      },
+      "MoldPassportDataGscCreate": {
+        "type": "object",
+        "properties": {
+          "moldingSandSystem": {
+            "$ref": "#/components/schemas/MoldingSandSystem"
+          },
+          "moldingSandNumber": {
+            "type": "string",
+            "title": "Molding Sand Number"
+          },
+          "moldHorizontalDensity": {
+            "type": "number",
+            "title": "Mold Horizontal Density"
+          },
+          "moldVerticalDensity": {
+            "type": "number",
+            "title": "Mold Vertical Density"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "moldingSandSystem",
+          "moldingSandNumber",
+          "moldHorizontalDensity",
+          "moldVerticalDensity"
+        ],
+        "title": "MoldPassportDataGSCCreate"
+      },
+      "MoldPassportDataGscCreateOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "create",
+            "title": "Action"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MoldPassportDataGscCreate"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "data"
+        ],
+        "title": "MoldPassportDataGSCCreateOperation"
+      },
+      "MoldPassportDataGscDeleteOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "delete",
+            "title": "Action"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "id"
+        ],
+        "title": "MoldPassportDataGSCDeleteOperation"
+      },
+      "MoldPassportDataGscDetailResponse": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "moldPassportId": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Mold Passport Id"
+          },
+          "moldingSandType": {
+            "$ref": "#/components/schemas/MoldingSandTypeLookupResponse"
+          },
+          "moldingSandSystem": {
+            "$ref": "#/components/schemas/MoldingSandSystem"
+          },
+          "moldingSandNumber": {
+            "type": "string",
+            "title": "Molding Sand Number"
+          },
+          "moldHorizontalDensity": {
+            "type": "number",
+            "title": "Mold Horizontal Density"
+          },
+          "moldVerticalDensity": {
+            "type": "number",
+            "title": "Mold Vertical Density"
+          }
+        },
+        "required": [
+          "createdAt",
+          "updatedAt",
+          "moldPassportId",
+          "moldingSandType",
+          "moldingSandSystem",
+          "moldingSandNumber",
+          "moldHorizontalDensity",
+          "moldVerticalDensity"
+        ],
+        "title": "MoldPassportDataGSCDetailResponse"
+      },
+      "MoldPassportDataGscUpdate": {
+        "type": "object",
+        "properties": {
+          "moldingSandSystem": {
+            "$ref": "#/components/schemas/MoldingSandSystem"
+          },
+          "moldingSandNumber": {
+            "type": "string",
+            "title": "Molding Sand Number"
+          },
+          "moldHorizontalDensity": {
+            "type": "number",
+            "title": "Mold Horizontal Density"
+          },
+          "moldVerticalDensity": {
+            "type": "number",
+            "title": "Mold Vertical Density"
+          }
+        },
+        "additionalProperties": false,
+        "title": "MoldPassportDataGSCUpdate"
+      },
+      "MoldPassportDataGscUpdateOperation": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "const": "update",
+            "title": "Action"
+          },
+          "data": {
+            "$ref": "#/components/schemas/MoldPassportDataGscUpdate"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "action",
+          "data",
+          "id"
+        ],
+        "title": "MoldPassportDataGSCUpdateOperation"
+      },
+      "MoldPassportDetailResponse": {
+        "type": "object",
+        "properties": {
+          "deletedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deleted At"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "createdById": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created By Id"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Updated At"
+          },
+          "updatedById": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated By Id"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "isComplete": {
+            "type": "boolean",
+            "title": "Is Complete"
+          },
+          "primaryCastingProductName": {
+            "type": "string",
+            "title": "Primary Casting Product Name"
+          },
+          "referenceCode": {
+            "type": "string",
+            "title": "Reference Code"
+          },
+          "moldingArea": {
+            "$ref": "#/components/schemas/MoldingAreaShortResponse"
+          },
+          "castingTechnology": {
+            "$ref": "#/components/schemas/CastingTechnologyShortResponse"
+          },
+          "patternPlateFrame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PatternPlateFrameShortResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "moldingFlask": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MoldingFlaskShortResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dataGsc": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MoldPassportDataGscDetailResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "dataAsc": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MoldPassportDataAscDetailResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "moldCavities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldCavityDetailResponse"
+            },
+            "title": "Mold Cavities"
+          },
+          "pressingPressure": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pressing Pressure"
+          },
+          "moldSequenceInShift": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mold Sequence In Shift"
+          },
+          "moldAssemblyTimestamp": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mold Assembly Timestamp"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AssetStatus"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "readOnly": true,
+            "title": "Is Deleted"
+          }
+        },
+        "required": [
+          "createdAt",
+          "updatedAt",
+          "id",
+          "isComplete",
+          "primaryCastingProductName",
+          "referenceCode",
+          "moldingArea",
+          "castingTechnology",
+          "moldCavities",
+          "status",
+          "isDeleted"
+        ],
+        "title": "MoldPassportDetailResponse"
+      },
+      "MoldPassportListItemResponse": {
+        "type": "object",
+        "properties": {
+          "deletedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deleted At"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "isComplete": {
+            "type": "boolean",
+            "title": "Is Complete"
+          },
+          "primaryCastingProductName": {
+            "type": "string",
+            "title": "Primary Casting Product Name"
+          },
+          "referenceCode": {
+            "type": "string",
+            "title": "Reference Code"
+          },
+          "markingYear": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marking Year"
+          },
+          "moldingArea": {
+            "$ref": "#/components/schemas/MoldingAreaShortResponse"
+          },
+          "castingTechnology": {
+            "$ref": "#/components/schemas/CastingTechnologyShortResponse"
+          },
+          "patternPlateFrame": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PatternPlateFrameShortResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "moldingFlask": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MoldingFlaskShortResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "moldSequenceInShift": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mold Sequence In Shift"
+          },
+          "moldAssemblyTimestamp": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mold Assembly Timestamp"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AssetStatus"
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "readOnly": true,
+            "title": "Is Deleted"
+          }
+        },
+        "required": [
+          "id",
+          "isComplete",
+          "primaryCastingProductName",
+          "referenceCode",
+          "moldingArea",
+          "castingTechnology",
+          "status",
+          "isDeleted"
+        ],
+        "title": "MoldPassportListItemResponse"
+      },
+      "MoldPassportListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldPassportListItemResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "MoldPassportListResponse"
+      },
+      "MoldPassportShortResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "primaryCastingProductName": {
+            "type": "string",
+            "title": "Primary Casting Product Name"
+          },
+          "referenceCode": {
+            "type": "string",
+            "title": "Reference Code"
+          },
+          "markingYear": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marking Year"
+          }
+        },
+        "required": [
+          "id",
+          "primaryCastingProductName",
+          "referenceCode"
+        ],
+        "title": "MoldPassportShortResponse"
+      },
+      "MoldPassportUpdate": {
+        "type": "object",
+        "properties": {
+          "moldingAreaId": {
+            "type": "integer",
+            "title": "Molding Area Id"
+          },
+          "castingTechnologyId": {
+            "type": "integer",
+            "title": "Casting Technology Id"
+          },
+          "patternPlateFrameId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pattern Plate Frame Id"
+          },
+          "moldingFlaskId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Molding Flask Id"
+          },
+          "dataGscOperation": {
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MoldPassportDataGscCreateOperation"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MoldPassportDataGscUpdateOperation"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MoldPassportDataGscDeleteOperation"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "action",
+                  "mapping": {
+                    "create": "#/components/schemas/MoldPassportDataGSCCreateOperation",
+                    "delete": "#/components/schemas/MoldPassportDataGSCDeleteOperation",
+                    "update": "#/components/schemas/MoldPassportDataGSCUpdateOperation"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Gsc Operation"
+          },
+          "dataAscOperation": {
+            "anyOf": [
+              {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/MoldPassportDataAscCreateOperation"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MoldPassportDataAscUpdateOperation"
+                  },
+                  {
+                    "$ref": "#/components/schemas/MoldPassportDataAscDeleteOperation"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "action",
+                  "mapping": {
+                    "create": "#/components/schemas/MoldPassportDataASCCreateOperation",
+                    "delete": "#/components/schemas/MoldPassportDataASCDeleteOperation",
+                    "update": "#/components/schemas/MoldPassportDataASCUpdateOperation"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Asc Operation"
+          },
+          "moldCavityOperations": {
+            "anyOf": [
+              {
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/MoldCavityCreateOperation"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MoldCavityUpdateOperation"
+                    },
+                    {
+                      "$ref": "#/components/schemas/MoldCavityDeleteOperation"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "action",
+                    "mapping": {
+                      "create": "#/components/schemas/MoldCavityCreateOperation",
+                      "delete": "#/components/schemas/MoldCavityDeleteOperation",
+                      "update": "#/components/schemas/MoldCavityUpdateOperation"
+                    }
+                  }
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mold Cavity Operations"
+          },
+          "pressingPressure": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pressing Pressure"
+          },
+          "sequenceInShift": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sequence In Shift"
+          },
+          "markingYear": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marking Year"
+          },
+          "assemblyTimestamp": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assembly Timestamp"
+          },
+          "isDefective": {
+            "type": "boolean",
+            "default": false,
+            "title": "Is Defective"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "additionalProperties": false,
+        "title": "MoldPassportUpdate"
+      },
+      "MoldingAreaShortResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "pressureUnits": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pressure Units"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "MoldingAreaShortResponse"
+      },
+      "MoldingFlaskShortResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "serialNumber": {
+            "type": "string",
+            "title": "Serial Number"
+          },
+          "blueprintNumber": {
+            "type": "string",
+            "title": "Blueprint Number"
+          },
+          "moldingAreas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldingAreaShortResponse"
+            },
+            "title": "Molding Areas"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AssetStatus"
+          }
+        },
+        "required": [
+          "id",
+          "serialNumber",
+          "blueprintNumber",
+          "moldingAreas",
+          "status"
+        ],
+        "title": "MoldingFlaskShortResponse"
+      },
+      "MoldingSandSystem": {
+        "description": "Defines the sand system strategy used for creating a mold. This determines the composition and\nlayering of the molding sand.\n\nLAYERED: A composite system using two types of sand. A high-quality 'Facing Sand' is applied\nto the pattern surface, and the rest of the flask is filled with 'Backing Sand'. Used for high\nsurface quality requirements.\n\nUNITARY: A single, homogenous sand system (typically 'System Sand') is used for the entire mold.\nCommon in automated foundries where sand is continuously reclaimed and conditioned.",
+        "type": "string",
+        "enum": [
+          "layered",
+          "unitary"
+        ],
+        "title": "MoldingSandSystem"
+      },
+      "MoldingSandTypeLookupResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "abbreviation": {
+            "type": "string",
+            "title": "Abbreviation"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "abbreviation"
+        ],
+        "title": "MoldingSandTypeLookupResponse"
+      },
+      "PatternPlateFrameShortResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "serialNumber": {
+            "type": "string",
+            "title": "Serial Number"
+          },
+          "blueprintNumber": {
+            "type": "string",
+            "title": "Blueprint Number"
+          },
+          "moldingAreas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldingAreaShortResponse"
+            },
+            "title": "Molding Areas"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AssetStatus"
+          }
+        },
+        "required": [
+          "id",
+          "serialNumber",
+          "blueprintNumber",
+          "moldingAreas",
+          "status"
+        ],
+        "title": "PatternPlateFrameShortResponse"
+      },
+      "ResinComponent": {
+        "type": "string",
+        "enum": [
+          "A",
+          "B"
+        ],
+        "title": "ResinComponent"
+      },
+      "ResinShortResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ResinType"
+          },
+          "brand": {
+            "type": "string",
+            "title": "Brand"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "component": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ResinComponent"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "serialNumber": {
+            "type": "string",
+            "title": "Serial Number"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "brand",
+          "name",
+          "serialNumber"
+        ],
+        "title": "ResinShortResponse"
+      },
+      "ResinType": {
+        "type": "string",
+        "enum": [
+          "mold_core",
+          "universal"
+        ],
+        "title": "ResinType"
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "loc": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

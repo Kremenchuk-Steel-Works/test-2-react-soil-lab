@@ -13,30 +13,47 @@ import { SidebarProvider } from '@/widgets/sidebar/SidebarProvider.tsx'
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // Время, в течение которого данные считаются свежими.
       staleTime: 1000 * 60 * 5,
-      // Количество повторных попыток запросов
       retry: 1,
     },
   },
 })
-initApp()
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <SidebarProvider>
-          <ModalProvider>
-            <RouterProvider router={router} />
-            <ReactQueryDevtools
-              initialIsOpen={false}
-              buttonPosition="bottom-right"
-              position="bottom"
-            />
-          </ModalProvider>
-        </SidebarProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  </StrictMode>,
-)
+// Создаем асинхронную функцию для условного запуска моков
+async function enableMocking() {
+  if (import.meta.env.VITE_APP_MOCKING !== 'true') {
+    return
+  }
+
+  // Динамически импортируем наш воркер, чтобы он не попадал в продакшен-сборку
+  const { worker } = await import('./mocks/browser') // Убедись, что путь к твоему `browser.ts` верный
+
+  // 'bypass' означает, что если запрос не найден в моках, он пойдет дальше в сеть.
+  return worker.start({
+    onUnhandledRequest: 'bypass',
+  })
+}
+
+// Вызываем функцию и рендерим приложение ТОЛЬКО ПОСЛЕ того, как она отработает.
+enableMocking().then(() => {
+  initApp()
+
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <SidebarProvider>
+            <ModalProvider>
+              <RouterProvider router={router} />
+              <ReactQueryDevtools
+                initialIsOpen={false}
+                buttonPosition="bottom-right"
+                position="bottom"
+              />
+            </ModalProvider>
+          </SidebarProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </StrictMode>,
+  )
+})

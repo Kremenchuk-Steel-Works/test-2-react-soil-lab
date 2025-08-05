@@ -38,9 +38,9 @@ export const cityRoutes: AppRoute = {
       label: 'Деталі',
       icon: Info,
       Component: AdminCityDetails,
-     meta: {
-     buttons: ['update'],
-  },
+      meta: {
+        buttons: ['update'],
+      },
     },
     {
       key: 'adminCityUpdate',

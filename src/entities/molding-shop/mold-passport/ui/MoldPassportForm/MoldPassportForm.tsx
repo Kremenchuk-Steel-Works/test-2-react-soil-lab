@@ -2,13 +2,10 @@ import { useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { addressOptions } from '@/entities/admin/address/types/address'
-import { organizationQueryKeys } from '@/entities/admin/organizations/services/keys'
-import { organizationService } from '@/entities/admin/organizations/services/service'
 import { genderOptions } from '@/entities/admin/people/types/gender'
-import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
-import { positionService } from '@/entities/admin/positions/services/service'
 import { MoldCavityForm } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/MoldCavityForm'
 import { moldCavityFormDefaultValues } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
+import { moldPassportService } from '@/entities/molding-shop/mold-passport/api/service'
 import {
   moldPassportDynamicFieldConfig,
   type MoldPassportDynamicFieldOptions,
@@ -73,32 +70,32 @@ export default function MoldPassportForm({
     isLoading: isQueriesLoading,
     error: queriesError,
   } = useParallelQueries({
-    organizations: {
-      queryKey: organizationQueryKeys.lookups(),
-      queryFn: () => organizationService.getLookup(),
-    },
-    positions: {
-      queryKey: positionQueryKeys.lookups(),
-      queryFn: () => positionService.getLookup(),
-    },
+    organizations: moldPassportService.lookupOrganization(),
+    positions: moldPassportService.lookupPosition(),
   })
+
+  console.log(queriesData)
 
   // Options
   const organizationsOptions: Option<string>[] = useMemo(
     () =>
-      queriesData.organizations?.map((c) => ({
-        value: c.id,
-        label: c.legalName,
-      })) || [],
+      Array.isArray(queriesData.organizations)
+        ? queriesData.organizations.map((c) => ({
+            value: c.id,
+            label: c.legalName,
+          }))
+        : [],
     [queriesData.organizations],
   )
 
   const positionsOptions: Option<string>[] = useMemo(
     () =>
-      queriesData.positions?.map((c) => ({
-        value: c.id,
-        label: c.name,
-      })) || [],
+      Array.isArray(queriesData.positions)
+        ? queriesData.positions.map((c) => ({
+            value: c.id,
+            label: c.name,
+          }))
+        : [],
     [queriesData.positions],
   )
 
@@ -184,7 +181,7 @@ export default function MoldPassportForm({
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              options={organizationsOptions}
+              options={positionsOptions}
               isVirtualized
               isClearable
               placeholder="Опока"

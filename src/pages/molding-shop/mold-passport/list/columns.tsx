@@ -1,7 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import { genderOptions } from '@/entities/admin/people/types/gender'
-import type { PersonListResponse } from '@/entities/admin/people/types/response.dto'
-import type { ListDataType } from '@/types/pagination'
+import type { MoldPassportListItemResponse } from '@/shared/api/mold-passport/model'
 import {
   booleanColumn,
   displayColumn,
@@ -10,7 +9,7 @@ import {
   optionColumn,
 } from '@/widgets/data-table'
 
-const columnHelper = createColumnHelper<ListDataType<PersonListResponse>>()
+const columnHelper = createColumnHelper<MoldPassportListItemResponse>()
 
 export const moldPassportColumns = [
   columnHelper.accessor('id', {
@@ -18,8 +17,14 @@ export const moldPassportColumns = [
     ...idColumn(),
   }),
 
-  columnHelper.accessor('fullName', {
-    header: "Повне ім'я",
+  columnHelper.accessor('isComplete', {
+    header: 'Заповнена?',
+    size: 145,
+    ...booleanColumn(),
+  }),
+
+  columnHelper.accessor('primaryCastingProductName', {
+    header: 'primaryCastingProductName',
     size: 145,
     ...displayColumn(),
   }),
@@ -28,23 +33,6 @@ export const moldPassportColumns = [
     header: 'Стать',
     size: 100,
     ...optionColumn(genderOptions),
-  }),
-
-  columnHelper.accessor('photoUrl', {
-    header: 'Фото',
-    size: 100,
-    cell: (info) => {
-      const file = info.getValue()
-      return file instanceof File ? (
-        <img
-          src={URL.createObjectURL(file)}
-          alt="Photo"
-          className="h-10 w-10 rounded-full object-cover"
-        />
-      ) : (
-        '—'
-      )
-    },
   }),
 
   columnHelper.accessor('isUser', {

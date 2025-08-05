@@ -42,7 +42,9 @@
             }
           }
         },
-        "tags": ["auth"]
+        "tags": [
+          "auth"
+        ]
       }
     },
     "/api/v1/auth/refresh": {
@@ -82,7 +84,9 @@
             }
           }
         },
-        "tags": ["auth"]
+        "tags": [
+          "auth"
+        ]
       }
     },
     "/api/v1/auth/logout": {
@@ -115,7 +119,9 @@
             }
           }
         },
-        "tags": ["auth"]
+        "tags": [
+          "auth"
+        ]
       }
     },
     "/api/v1/cities/": {
@@ -201,7 +207,9 @@
             }
           }
         },
-        "tags": ["cities"]
+        "tags": [
+          "cities"
+        ]
       },
       "post": {
         "operationId": "create_city_api_v1_cities__post",
@@ -272,7 +280,9 @@
             }
           }
         },
-        "tags": ["cities"]
+        "tags": [
+          "cities"
+        ]
       }
     },
     "/api/v1/cities/{city_id}": {
@@ -344,7 +354,9 @@
             }
           }
         },
-        "tags": ["cities"]
+        "tags": [
+          "cities"
+        ]
       },
       "put": {
         "operationId": "update_city_api_v1_cities__city_id__put",
@@ -424,7 +436,9 @@
             }
           }
         },
-        "tags": ["cities"]
+        "tags": [
+          "cities"
+        ]
       },
       "delete": {
         "operationId": "delete_city_api_v1_cities__city_id__delete",
@@ -492,7 +506,9 @@
             }
           }
         },
-        "tags": ["cities"]
+        "tags": [
+          "cities"
+        ]
       }
     },
     "/api/v1/counties/": {
@@ -578,7 +594,9 @@
             }
           }
         },
-        "tags": ["counties"]
+        "tags": [
+          "counties"
+        ]
       },
       "post": {
         "operationId": "create_country_api_v1_counties__post",
@@ -649,7 +667,9 @@
             }
           }
         },
-        "tags": ["counties"]
+        "tags": [
+          "counties"
+        ]
       }
     },
     "/api/v1/counties/{country_id}": {
@@ -721,7 +741,9 @@
             }
           }
         },
-        "tags": ["counties"]
+        "tags": [
+          "counties"
+        ]
       },
       "put": {
         "operationId": "update_country_api_v1_counties__country_id__put",
@@ -801,7 +823,9 @@
             }
           }
         },
-        "tags": ["counties"]
+        "tags": [
+          "counties"
+        ]
       },
       "delete": {
         "operationId": "delete_country_api_v1_counties__country_id__delete",
@@ -869,7 +893,9 @@
             }
           }
         },
-        "tags": ["counties"]
+        "tags": [
+          "counties"
+        ]
       }
     },
     "/api/v1/departments/": {
@@ -955,7 +981,9 @@
             }
           }
         },
-        "tags": ["departments"]
+        "tags": [
+          "departments"
+        ]
       },
       "post": {
         "operationId": "create_department_api_v1_departments__post",
@@ -1026,7 +1054,9 @@
             }
           }
         },
-        "tags": ["departments"]
+        "tags": [
+          "departments"
+        ]
       }
     },
     "/api/v1/departments/{department_id}": {
@@ -1099,7 +1129,9 @@
             }
           }
         },
-        "tags": ["departments"]
+        "tags": [
+          "departments"
+        ]
       },
       "put": {
         "operationId": "update_department_api_v1_departments__department_id__put",
@@ -1180,7 +1212,9 @@
             }
           }
         },
-        "tags": ["departments"]
+        "tags": [
+          "departments"
+        ]
       },
       "delete": {
         "operationId": "delete_department_api_v1_departments__department_id__delete",
@@ -1249,7 +1283,9 @@
             }
           }
         },
-        "tags": ["departments"]
+        "tags": [
+          "departments"
+        ]
       }
     },
     "/api/v1/lookups/cities": {
@@ -1352,7 +1388,9 @@
             }
           }
         },
-        "tags": ["lookups"]
+        "tags": [
+          "lookups"
+        ]
       }
     },
     "/api/v1/lookups/countries": {
@@ -1455,7 +1493,9 @@
             }
           }
         },
-        "tags": ["lookups"]
+        "tags": [
+          "lookups"
+        ]
       }
     },
     "/api/v1/lookups/departments": {
@@ -1558,7 +1598,9 @@
             }
           }
         },
-        "tags": ["lookups"]
+        "tags": [
+          "lookups"
+        ]
       }
     },
     "/api/v1/lookups/organizations": {
@@ -1661,7 +1703,9 @@
             }
           }
         },
-        "tags": ["lookups"]
+        "tags": [
+          "lookups"
+        ]
       }
     },
     "/api/v1/lookups/people": {
@@ -1764,7 +1808,9 @@
             }
           }
         },
-        "tags": ["lookups"]
+        "tags": [
+          "lookups"
+        ]
       }
     },
     "/api/v1/lookups/positions": {
@@ -1867,7 +1913,9 @@
             }
           }
         },
-        "tags": ["lookups"]
+        "tags": [
+          "lookups"
+        ]
       }
     },
     "/api/v1/lookups/permissions": {
@@ -1970,7 +2018,9 @@
             }
           }
         },
-        "tags": ["lookups"]
+        "tags": [
+          "lookups"
+        ]
       }
     },
     "/api/v1/lookups/roles": {
@@ -2073,7 +2123,9 @@
             }
           }
         },
-        "tags": ["lookups"]
+        "tags": [
+          "lookups"
+        ]
       }
     },
     "/api/v1/organizations/": {
@@ -2159,7 +2211,9 @@
             }
           }
         },
-        "tags": ["organizations"]
+        "tags": [
+          "organizations"
+        ]
       },
       "post": {
         "operationId": "create_organization_api_v1_organizations__post",
@@ -2230,7 +2284,9 @@
             }
           }
         },
-        "tags": ["organizations"]
+        "tags": [
+          "organizations"
+        ]
       }
     },
     "/api/v1/organizations/{organization_id}": {
@@ -2303,7 +2359,9 @@
             }
           }
         },
-        "tags": ["organizations"]
+        "tags": [
+          "organizations"
+        ]
       },
       "put": {
         "operationId": "update_organization_api_v1_organizations__organization_id__put",
@@ -2384,7 +2442,9 @@
             }
           }
         },
-        "tags": ["organizations"]
+        "tags": [
+          "organizations"
+        ]
       },
       "delete": {
         "operationId": "delete_organization_api_v1_organizations__organization_id__delete",
@@ -2453,7 +2513,9 @@
             }
           }
         },
-        "tags": ["organizations"]
+        "tags": [
+          "organizations"
+        ]
       }
     },
     "/api/v1/people/": {
@@ -2539,7 +2601,9 @@
             }
           }
         },
-        "tags": ["people"]
+        "tags": [
+          "people"
+        ]
       },
       "post": {
         "operationId": "create_person_api_v1_people__post",
@@ -2610,7 +2674,9 @@
             }
           }
         },
-        "tags": ["people"]
+        "tags": [
+          "people"
+        ]
       }
     },
     "/api/v1/people/{person_id}": {
@@ -2683,7 +2749,9 @@
             }
           }
         },
-        "tags": ["people"]
+        "tags": [
+          "people"
+        ]
       },
       "put": {
         "operationId": "update_person_api_v1_people__person_id__put",
@@ -2764,7 +2832,9 @@
             }
           }
         },
-        "tags": ["people"]
+        "tags": [
+          "people"
+        ]
       },
       "delete": {
         "operationId": "delete_person_api_v1_people__person_id__delete",
@@ -2833,7 +2903,9 @@
             }
           }
         },
-        "tags": ["people"]
+        "tags": [
+          "people"
+        ]
       }
     },
     "/api/v1/permissions/": {
@@ -2919,7 +2991,9 @@
             }
           }
         },
-        "tags": ["permissions"]
+        "tags": [
+          "permissions"
+        ]
       },
       "post": {
         "operationId": "create_permission_api_v1_permissions__post",
@@ -2990,7 +3064,9 @@
             }
           }
         },
-        "tags": ["permissions"]
+        "tags": [
+          "permissions"
+        ]
       }
     },
     "/api/v1/permissions/{permission_id}": {
@@ -3062,7 +3138,9 @@
             }
           }
         },
-        "tags": ["permissions"]
+        "tags": [
+          "permissions"
+        ]
       },
       "put": {
         "operationId": "update_permission_api_v1_permissions__permission_id__put",
@@ -3142,7 +3220,9 @@
             }
           }
         },
-        "tags": ["permissions"]
+        "tags": [
+          "permissions"
+        ]
       },
       "delete": {
         "operationId": "delete_permission_api_v1_permissions__permission_id__delete",
@@ -3210,7 +3290,9 @@
             }
           }
         },
-        "tags": ["permissions"]
+        "tags": [
+          "permissions"
+        ]
       }
     },
     "/api/v1/positions/": {
@@ -3296,7 +3378,9 @@
             }
           }
         },
-        "tags": ["positions"]
+        "tags": [
+          "positions"
+        ]
       },
       "post": {
         "operationId": "create_position_api_v1_positions__post",
@@ -3367,7 +3451,9 @@
             }
           }
         },
-        "tags": ["positions"]
+        "tags": [
+          "positions"
+        ]
       }
     },
     "/api/v1/positions/{position_id}": {
@@ -3440,7 +3526,9 @@
             }
           }
         },
-        "tags": ["positions"]
+        "tags": [
+          "positions"
+        ]
       },
       "put": {
         "operationId": "update_position_api_v1_positions__position_id__put",
@@ -3521,7 +3609,9 @@
             }
           }
         },
-        "tags": ["positions"]
+        "tags": [
+          "positions"
+        ]
       },
       "delete": {
         "operationId": "delete_position_api_v1_positions__position_id__delete",
@@ -3590,7 +3680,9 @@
             }
           }
         },
-        "tags": ["positions"]
+        "tags": [
+          "positions"
+        ]
       }
     },
     "/api/v1/roles/": {
@@ -3676,7 +3768,9 @@
             }
           }
         },
-        "tags": ["roles"]
+        "tags": [
+          "roles"
+        ]
       },
       "post": {
         "operationId": "create_role_api_v1_roles__post",
@@ -3747,7 +3841,9 @@
             }
           }
         },
-        "tags": ["roles"]
+        "tags": [
+          "roles"
+        ]
       }
     },
     "/api/v1/roles/{role_id}": {
@@ -3819,7 +3915,9 @@
             }
           }
         },
-        "tags": ["roles"]
+        "tags": [
+          "roles"
+        ]
       },
       "put": {
         "operationId": "update_role_api_v1_roles__role_id__put",
@@ -3899,7 +3997,9 @@
             }
           }
         },
-        "tags": ["roles"]
+        "tags": [
+          "roles"
+        ]
       },
       "delete": {
         "operationId": "delete_role_api_v1_roles__role_id__delete",
@@ -3967,7 +4067,9 @@
             }
           }
         },
-        "tags": ["roles"]
+        "tags": [
+          "roles"
+        ]
       }
     },
     "/api/v1/users/": {
@@ -4053,7 +4155,9 @@
             }
           }
         },
-        "tags": ["users"]
+        "tags": [
+          "users"
+        ]
       },
       "post": {
         "operationId": "create_user_api_v1_users__post",
@@ -4124,7 +4228,9 @@
             }
           }
         },
-        "tags": ["users"]
+        "tags": [
+          "users"
+        ]
       }
     },
     "/api/v1/users/me": {
@@ -4187,7 +4293,9 @@
             }
           }
         },
-        "tags": ["users"]
+        "tags": [
+          "users"
+        ]
       }
     },
     "/api/v1/users/{user_id}": {
@@ -4260,7 +4368,9 @@
             }
           }
         },
-        "tags": ["users"]
+        "tags": [
+          "users"
+        ]
       },
       "put": {
         "operationId": "update_user_api_v1_users__user_id__put",
@@ -4341,7 +4451,9 @@
             }
           }
         },
-        "tags": ["users"]
+        "tags": [
+          "users"
+        ]
       },
       "delete": {
         "operationId": "delete_user_api_v1_users__user_id__delete",
@@ -4410,7 +4522,9 @@
             }
           }
         },
-        "tags": ["users"]
+        "tags": [
+          "users"
+        ]
       }
     }
   },
@@ -4458,7 +4572,12 @@
             "title": "City Id"
           }
         },
-        "required": ["street", "type", "isPrimary", "cityId"],
+        "required": [
+          "street",
+          "type",
+          "isPrimary",
+          "cityId"
+        ],
         "title": "AddressCreate"
       },
       "AddressDetailResponse": {
@@ -4518,7 +4637,15 @@
             "title": "Updated At"
           }
         },
-        "required": ["street", "type", "isPrimary", "id", "cityId", "createdAt", "updatedAt"],
+        "required": [
+          "street",
+          "type",
+          "isPrimary",
+          "id",
+          "cityId",
+          "createdAt",
+          "updatedAt"
+        ],
         "title": "AddressDetailResponse"
       },
       "AddressOperation": {
@@ -4526,7 +4653,11 @@
         "properties": {
           "action": {
             "type": "string",
-            "enum": ["create", "update", "delete"],
+            "enum": [
+              "create",
+              "update",
+              "delete"
+            ],
             "title": "Action"
           },
           "data": {
@@ -4556,7 +4687,9 @@
             "title": "Id"
           }
         },
-        "required": ["action"],
+        "required": [
+          "action"
+        ],
         "title": "AddressOperation"
       },
       "AddressResponse": {
@@ -4580,13 +4713,25 @@
             "title": "Is Primary"
           }
         },
-        "required": ["id", "cityId", "type", "isPrimary"],
+        "required": [
+          "id",
+          "cityId",
+          "type",
+          "isPrimary"
+        ],
         "title": "AddressResponse"
       },
       "AddressType": {
         "description": "Enumerates the functional purpose of an address",
         "type": "string",
-        "enum": ["billing", "shipping", "warehouse", "plant", "office", "home"],
+        "enum": [
+          "billing",
+          "shipping",
+          "warehouse",
+          "plant",
+          "office",
+          "home"
+        ],
         "title": "AddressType"
       },
       "AddressUpdate": {
@@ -4677,7 +4822,11 @@
             "title": "Country Id"
           }
         },
-        "required": ["name", "nameLocal", "countryId"],
+        "required": [
+          "name",
+          "nameLocal",
+          "countryId"
+        ],
         "title": "CityCreate"
       },
       "CityDetailResponse": {
@@ -4709,7 +4858,14 @@
             "title": "Updated At"
           }
         },
-        "required": ["name", "nameLocal", "id", "country", "createdAt", "updatedAt"],
+        "required": [
+          "name",
+          "nameLocal",
+          "id",
+          "country",
+          "createdAt",
+          "updatedAt"
+        ],
         "title": "CityDetailResponse"
       },
       "CityListResponse": {
@@ -4735,7 +4891,12 @@
             "title": "Data"
           }
         },
-        "required": ["page", "totalPages", "totalItems", "data"],
+        "required": [
+          "page",
+          "totalPages",
+          "totalItems",
+          "data"
+        ],
         "title": "CityListResponse"
       },
       "CityLookupResponse": {
@@ -4758,7 +4919,12 @@
             "title": "Country Id"
           }
         },
-        "required": ["name", "nameLocal", "id", "countryId"],
+        "required": [
+          "name",
+          "nameLocal",
+          "id",
+          "countryId"
+        ],
         "title": "CityLookupResponse"
       },
       "CityResponse": {
@@ -4781,7 +4947,12 @@
             "title": "Country Id"
           }
         },
-        "required": ["name", "nameLocal", "id", "countryId"],
+        "required": [
+          "name",
+          "nameLocal",
+          "id",
+          "countryId"
+        ],
         "title": "CityResponse"
       },
       "CityShortResponse": {
@@ -4800,7 +4971,11 @@
             "title": "Id"
           }
         },
-        "required": ["name", "nameLocal", "id"],
+        "required": [
+          "name",
+          "nameLocal",
+          "id"
+        ],
         "title": "CityShortResponse"
       },
       "CityUpdate": {
@@ -4869,7 +5044,11 @@
             "title": "Note"
           }
         },
-        "required": ["type", "value", "isPrimary"],
+        "required": [
+          "type",
+          "value",
+          "isPrimary"
+        ],
         "title": "ContactCreate"
       },
       "ContactDetailResponse": {
@@ -4914,7 +5093,14 @@
             "title": "Updated At"
           }
         },
-        "required": ["type", "value", "isPrimary", "id", "createdAt", "updatedAt"],
+        "required": [
+          "type",
+          "value",
+          "isPrimary",
+          "id",
+          "createdAt",
+          "updatedAt"
+        ],
         "title": "ContactDetailResponse"
       },
       "ContactOperation": {
@@ -4922,7 +5108,11 @@
         "properties": {
           "action": {
             "type": "string",
-            "enum": ["create", "update", "delete"],
+            "enum": [
+              "create",
+              "update",
+              "delete"
+            ],
             "title": "Action"
           },
           "data": {
@@ -4952,7 +5142,9 @@
             "title": "Id"
           }
         },
-        "required": ["action"],
+        "required": [
+          "action"
+        ],
         "title": "ContactOperation"
       },
       "ContactResponse": {
@@ -4987,13 +5179,24 @@
             "title": "Id"
           }
         },
-        "required": ["type", "value", "isPrimary", "id"],
+        "required": [
+          "type",
+          "value",
+          "isPrimary",
+          "id"
+        ],
         "title": "ContactResponse"
       },
       "ContactType": {
         "description": "Enumerates contact methods used in the system",
         "type": "string",
-        "enum": ["email", "phone", "telegram", "linkedin", "website"],
+        "enum": [
+          "email",
+          "phone",
+          "telegram",
+          "linkedin",
+          "website"
+        ],
         "title": "ContactType"
       },
       "ContactUpdate": {
@@ -5084,7 +5287,11 @@
             "title": "Name Local"
           }
         },
-        "required": ["code", "name", "nameLocal"],
+        "required": [
+          "code",
+          "name",
+          "nameLocal"
+        ],
         "title": "CountryCreate"
       },
       "CountryDetailResponse": {
@@ -5146,7 +5353,15 @@
             "title": "Updated At"
           }
         },
-        "required": ["code", "name", "nameLocal", "id", "cities", "createdAt", "updatedAt"],
+        "required": [
+          "code",
+          "name",
+          "nameLocal",
+          "id",
+          "cities",
+          "createdAt",
+          "updatedAt"
+        ],
         "title": "CountryDetailResponse"
       },
       "CountryListResponse": {
@@ -5172,7 +5387,12 @@
             "title": "Data"
           }
         },
-        "required": ["page", "totalPages", "totalItems", "data"],
+        "required": [
+          "page",
+          "totalPages",
+          "totalItems",
+          "data"
+        ],
         "title": "CountryListResponse"
       },
       "CountryLookupResponse": {
@@ -5195,7 +5415,12 @@
             "title": "Name Local"
           }
         },
-        "required": ["id", "code", "name", "nameLocal"],
+        "required": [
+          "id",
+          "code",
+          "name",
+          "nameLocal"
+        ],
         "title": "CountryLookupResponse"
       },
       "CountryResponse": {
@@ -5240,7 +5465,12 @@
             "title": "Id"
           }
         },
-        "required": ["code", "name", "nameLocal", "id"],
+        "required": [
+          "code",
+          "name",
+          "nameLocal",
+          "id"
+        ],
         "title": "CountryResponse"
       },
       "CountryShortResponse": {
@@ -5263,7 +5493,12 @@
             "title": "Name Local"
           }
         },
-        "required": ["id", "code", "name", "nameLocal"],
+        "required": [
+          "id",
+          "code",
+          "name",
+          "nameLocal"
+        ],
         "title": "CountryShortResponse"
       },
       "CountryUpdate": {
@@ -5346,7 +5581,9 @@
             "title": "Description"
           }
         },
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "title": "DepartmentCreate"
       },
       "DepartmentDetailResponse": {
@@ -5390,7 +5627,13 @@
             "title": "Updated At"
           }
         },
-        "required": ["name", "id", "permissions", "createdAt", "updatedAt"],
+        "required": [
+          "name",
+          "id",
+          "permissions",
+          "createdAt",
+          "updatedAt"
+        ],
         "title": "DepartmentDetailResponse"
       },
       "DepartmentListResponse": {
@@ -5416,7 +5659,12 @@
             "title": "Data"
           }
         },
-        "required": ["page", "totalPages", "totalItems", "data"],
+        "required": [
+          "page",
+          "totalPages",
+          "totalItems",
+          "data"
+        ],
         "title": "DepartmentListResponse"
       },
       "DepartmentLookupResponse": {
@@ -5432,7 +5680,10 @@
             "title": "Name"
           }
         },
-        "required": ["id", "name"],
+        "required": [
+          "id",
+          "name"
+        ],
         "title": "DepartmentLookupResponse"
       },
       "DepartmentResponse": {
@@ -5459,7 +5710,10 @@
             "title": "Id"
           }
         },
-        "required": ["name", "id"],
+        "required": [
+          "name",
+          "id"
+        ],
         "title": "DepartmentResponse"
       },
       "DepartmentShortResponse": {
@@ -5486,7 +5740,10 @@
             "title": "Id"
           }
         },
-        "required": ["name", "id"],
+        "required": [
+          "name",
+          "id"
+        ],
         "title": "DepartmentShortResponse"
       },
       "DepartmentUpdate": {
@@ -5541,7 +5798,10 @@
             "$ref": "#/components/schemas/EmploymentStatus"
           }
         },
-        "required": ["hiredAt", "employmentStatus"],
+        "required": [
+          "hiredAt",
+          "employmentStatus"
+        ],
         "title": "EmployeeProfileCreate"
       },
       "EmployeeProfileDetailResponse": {
@@ -5578,7 +5838,12 @@
             "title": "Updated At"
           }
         },
-        "required": ["hiredAt", "employmentStatus", "createdAt", "updatedAt"],
+        "required": [
+          "hiredAt",
+          "employmentStatus",
+          "createdAt",
+          "updatedAt"
+        ],
         "title": "EmployeeProfileDetailResponse"
       },
       "EmployeeProfileResponse": {
@@ -5604,7 +5869,10 @@
             "$ref": "#/components/schemas/EmploymentStatus"
           }
         },
-        "required": ["hiredAt", "employmentStatus"],
+        "required": [
+          "hiredAt",
+          "employmentStatus"
+        ],
         "title": "EmployeeProfileResponse"
       },
       "EmployeeProfileUpdate": {
@@ -5665,7 +5933,11 @@
       "Gender": {
         "description": "Enumerates gender options for Person model",
         "type": "string",
-        "enum": ["male", "female", "other"],
+        "enum": [
+          "male",
+          "female",
+          "other"
+        ],
         "title": "Gender"
       },
       "HttpValidationError": {
@@ -5694,7 +5966,10 @@
             "title": "Password"
           }
         },
-        "required": ["email", "password"],
+        "required": [
+          "email",
+          "password"
+        ],
         "title": "LoginRequest"
       },
       "LogoutRequest": {
@@ -5705,7 +5980,9 @@
             "title": "Refresh Token"
           }
         },
-        "required": ["refreshToken"],
+        "required": [
+          "refreshToken"
+        ],
         "title": "LogoutRequest"
       },
       "OrganizationCreate": {
@@ -5770,7 +6047,10 @@
             "title": "Addresses"
           }
         },
-        "required": ["legalName", "countryId"],
+        "required": [
+          "legalName",
+          "countryId"
+        ],
         "title": "OrganizationCreate"
       },
       "OrganizationDetailResponse": {
@@ -5869,7 +6149,12 @@
             "title": "Data"
           }
         },
-        "required": ["page", "totalPages", "totalItems", "data"],
+        "required": [
+          "page",
+          "totalPages",
+          "totalItems",
+          "data"
+        ],
         "title": "OrganizationListResponse"
       },
       "OrganizationLookupResponse": {
@@ -5896,7 +6181,11 @@
             "title": "Registration Number"
           }
         },
-        "required": ["id", "legalName", "registrationNumber"],
+        "required": [
+          "id",
+          "legalName",
+          "registrationNumber"
+        ],
         "title": "OrganizationLookupResponse"
       },
       "OrganizationResponse": {
@@ -5951,7 +6240,13 @@
             "title": "Addresses"
           }
         },
-        "required": ["legalName", "id", "country", "contacts", "addresses"],
+        "required": [
+          "legalName",
+          "id",
+          "country",
+          "contacts",
+          "addresses"
+        ],
         "title": "OrganizationResponse"
       },
       "OrganizationShortResponse": {
@@ -5993,7 +6288,11 @@
             "title": "Country Name"
           }
         },
-        "required": ["legalName", "id", "countryName"],
+        "required": [
+          "legalName",
+          "id",
+          "countryName"
+        ],
         "title": "OrganizationShortResponse"
       },
       "OrganizationUpdate": {
@@ -6098,7 +6397,10 @@
             "title": "Department Id"
           }
         },
-        "required": ["name", "departmentId"],
+        "required": [
+          "name",
+          "departmentId"
+        ],
         "title": "PermissionCreate"
       },
       "PermissionDetailResponse": {
@@ -6137,7 +6439,13 @@
             "title": "Updated At"
           }
         },
-        "required": ["name", "id", "department", "createdAt", "updatedAt"],
+        "required": [
+          "name",
+          "id",
+          "department",
+          "createdAt",
+          "updatedAt"
+        ],
         "title": "PermissionDetailResponse"
       },
       "PermissionListItemResponse": {
@@ -6156,7 +6464,11 @@
             "title": "Department Name"
           }
         },
-        "required": ["id", "name", "departmentName"],
+        "required": [
+          "id",
+          "name",
+          "departmentName"
+        ],
         "title": "PermissionListItemResponse"
       },
       "PermissionListResponse": {
@@ -6182,7 +6494,12 @@
             "title": "Data"
           }
         },
-        "required": ["page", "totalPages", "totalItems", "data"],
+        "required": [
+          "page",
+          "totalPages",
+          "totalItems",
+          "data"
+        ],
         "title": "PermissionListResponse"
       },
       "PermissionLookupResponse": {
@@ -6201,7 +6518,11 @@
             "title": "Department Name"
           }
         },
-        "required": ["id", "name", "departmentName"],
+        "required": [
+          "id",
+          "name",
+          "departmentName"
+        ],
         "title": "PermissionLookupResponse"
       },
       "PermissionResponse": {
@@ -6230,7 +6551,11 @@
             "$ref": "#/components/schemas/DepartmentShortResponse"
           }
         },
-        "required": ["name", "id", "department"],
+        "required": [
+          "name",
+          "id",
+          "department"
+        ],
         "title": "PermissionResponse"
       },
       "PermissionShortResponse": {
@@ -6256,7 +6581,10 @@
             "title": "Id"
           }
         },
-        "required": ["name", "id"],
+        "required": [
+          "name",
+          "id"
+        ],
         "title": "PermissionShortResponse"
       },
       "PermissionUpdate": {
@@ -6417,7 +6745,11 @@
             "title": "Position Ids"
           }
         },
-        "required": ["firstName", "lastName", "gender"],
+        "required": [
+          "firstName",
+          "lastName",
+          "gender"
+        ],
         "title": "PersonCreate"
       },
       "PersonDetailResponse": {
@@ -6638,7 +6970,12 @@
             "title": "Data"
           }
         },
-        "required": ["page", "totalPages", "totalItems", "data"],
+        "required": [
+          "page",
+          "totalPages",
+          "totalItems",
+          "data"
+        ],
         "title": "PersonListResponse"
       },
       "PersonLookupResponse": {
@@ -6654,7 +6991,10 @@
             "title": "Full Name"
           }
         },
-        "required": ["id", "fullName"],
+        "required": [
+          "id",
+          "fullName"
+        ],
         "title": "PersonLookupResponse"
       },
       "PersonResponse": {
@@ -6809,7 +7149,11 @@
             "anyOf": [
               {
                 "type": "string",
-                "enum": ["create", "update", "delete"]
+                "enum": [
+                  "create",
+                  "update",
+                  "delete"
+                ]
               },
               {
                 "type": "null"
@@ -6912,7 +7256,9 @@
             "title": "Description"
           }
         },
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "title": "PositionCreate"
       },
       "PositionDetailResponse": {
@@ -6950,7 +7296,12 @@
             "title": "Updated At"
           }
         },
-        "required": ["name", "id", "createdAt", "updatedAt"],
+        "required": [
+          "name",
+          "id",
+          "createdAt",
+          "updatedAt"
+        ],
         "title": "PositionDetailResponse"
       },
       "PositionListResponse": {
@@ -6977,7 +7328,12 @@
             "title": "Data"
           }
         },
-        "required": ["page", "totalPages", "totalItems", "data"],
+        "required": [
+          "page",
+          "totalPages",
+          "totalItems",
+          "data"
+        ],
         "title": "PositionListResponse"
       },
       "PositionLookupResponse": {
@@ -6993,7 +7349,10 @@
             "title": "Name"
           }
         },
-        "required": ["id", "name"],
+        "required": [
+          "id",
+          "name"
+        ],
         "title": "PositionLookupResponse"
       },
       "PositionResponse": {
@@ -7021,7 +7380,10 @@
             "title": "Id"
           }
         },
-        "required": ["name", "id"],
+        "required": [
+          "name",
+          "id"
+        ],
         "title": "PositionResponse"
       },
       "PositionShortResponse": {
@@ -7049,7 +7411,10 @@
             "title": "Id"
           }
         },
-        "required": ["name", "id"],
+        "required": [
+          "name",
+          "id"
+        ],
         "title": "PositionShortResponse"
       },
       "PositionUpdate": {
@@ -7114,7 +7479,9 @@
             "title": "Permission Ids"
           }
         },
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "title": "RoleCreate"
       },
       "RoleDetailResponse": {
@@ -7157,7 +7524,13 @@
             "title": "Updated At"
           }
         },
-        "required": ["name", "id", "permissions", "createdAt", "updatedAt"],
+        "required": [
+          "name",
+          "id",
+          "permissions",
+          "createdAt",
+          "updatedAt"
+        ],
         "title": "RoleDetailResponse"
       },
       "RoleListResponse": {
@@ -7183,7 +7556,12 @@
             "title": "Data"
           }
         },
-        "required": ["page", "totalPages", "totalItems", "data"],
+        "required": [
+          "page",
+          "totalPages",
+          "totalItems",
+          "data"
+        ],
         "title": "RoleListResponse"
       },
       "RoleLookupResponse": {
@@ -7198,7 +7576,10 @@
             "title": "Name"
           }
         },
-        "required": ["id", "name"],
+        "required": [
+          "id",
+          "name"
+        ],
         "title": "RoleLookupResponse"
       },
       "RoleResponse": {
@@ -7224,7 +7605,10 @@
             "title": "Id"
           }
         },
-        "required": ["name", "id"],
+        "required": [
+          "name",
+          "id"
+        ],
         "title": "RoleResponse"
       },
       "RoleShortResponse": {
@@ -7246,7 +7630,11 @@
             "title": "Permissions"
           }
         },
-        "required": ["id", "name", "permissions"],
+        "required": [
+          "id",
+          "name",
+          "permissions"
+        ],
         "title": "RoleShortResponse"
       },
       "RoleUpdate": {
@@ -7315,7 +7703,9 @@
             "title": "Token Type"
           }
         },
-        "required": ["accessToken"],
+        "required": [
+          "accessToken"
+        ],
         "title": "TokenPairResponse"
       },
       "TokenRefreshRequest": {
@@ -7326,7 +7716,9 @@
             "title": "Refresh Token"
           }
         },
-        "required": ["refreshToken"],
+        "required": [
+          "refreshToken"
+        ],
         "title": "TokenRefreshRequest"
       },
       "TokenRefreshResponse": {
@@ -7342,7 +7734,9 @@
             "title": "Token Type"
           }
         },
-        "required": ["accessToken"],
+        "required": [
+          "accessToken"
+        ],
         "title": "TokenRefreshResponse"
       },
       "UserCreate": {
@@ -7401,7 +7795,11 @@
             "title": "Permissions Ids"
           }
         },
-        "required": ["email", "personId", "rawPassword"],
+        "required": [
+          "email",
+          "personId",
+          "rawPassword"
+        ],
         "title": "UserCreate"
       },
       "UserDetailResponse": {
@@ -7497,7 +7895,12 @@
             "title": "Data"
           }
         },
-        "required": ["page", "totalPages", "totalItems", "data"],
+        "required": [
+          "page",
+          "totalPages",
+          "totalItems",
+          "data"
+        ],
         "title": "UserListResponse"
       },
       "UserResponse": {
@@ -7548,7 +7951,14 @@
             "title": "Permissions"
           }
         },
-        "required": ["email", "id", "isActive", "isSuperuser", "roles", "permissions"],
+        "required": [
+          "email",
+          "id",
+          "isActive",
+          "isSuperuser",
+          "roles",
+          "permissions"
+        ],
         "title": "UserResponse"
       },
       "UserShortResponse": {
@@ -7708,7 +8118,11 @@
             "title": "Error Type"
           }
         },
-        "required": ["loc", "msg", "type"],
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
         "title": "ValidationError"
       }
     }

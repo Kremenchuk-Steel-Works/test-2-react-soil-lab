@@ -1,8 +1,7 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { personQueryKeys } from '@/entities/admin/people/services/keys'
-import { personService } from '@/entities/admin/people/services/service'
-import type { PersonListResponse } from '@/entities/admin/people/types/response.dto'
+import { moldPassportService } from '@/entities/molding-shop/mold-passport/api/service'
 import { moldPassportColumns } from '@/pages/molding-shop/mold-passport/list/columns'
+import type { PersonListResponse } from '@/shared/api/main-service/model'
 import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DataTable } from '@/widgets/data-table'
@@ -17,16 +16,15 @@ export default function MoldPassportList() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<PersonListResponse, Error>({
-    queryKey: personQueryKeys.list(page, perPage),
-    queryFn: () => {
-      return personService.getList({
+  } = useQuery<PersonListResponse, Error>(
+    moldPassportService.getList(
+      {
         page,
         perPage,
-      })
-    },
-    placeholderData: keepPreviousData,
-  })
+      },
+      { query: { placeholderData: keepPreviousData } },
+    ),
+  )
 
   return (
     <>

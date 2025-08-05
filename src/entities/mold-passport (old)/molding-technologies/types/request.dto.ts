@@ -1,5 +1,5 @@
-import type { MoldingTechnologyBase } from '@/entities/mold-passport (old)/molding-technologies/types/base.model'
+// import type { MoldingTechnologyBase } from '@/entities/mold-passport (old)/molding-technologies/types/base.model'
 
-export interface MoldingTechnologyCreateRequest extends MoldingTechnologyBase {}
+// export interface MoldingTechnologyCreateRequest extends MoldingTechnologyBase {}
 
-export interface MoldingTechnologyUpdateRequest extends Partial<MoldingTechnologyBase> {}
+// export interface MoldingTechnologyUpdateRequest extends Partial<MoldingTechnologyBase> {}

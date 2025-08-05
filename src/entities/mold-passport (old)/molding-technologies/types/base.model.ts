@@ -1,4 +1,4 @@
-export interface MoldingTechnologyBase {
-  abbreviation: string
-  name: string
-}
+// export interface MoldingTechnologyBase {
+//   abbreviation: string
+//   name: string
+// }
