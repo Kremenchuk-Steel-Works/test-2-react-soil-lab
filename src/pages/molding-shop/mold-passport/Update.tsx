@@ -1,9 +1,25 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { personQueryKeys } from '@/entities/admin/people/services/keys'
-import { personService } from '@/entities/admin/people/services/service'
-import type { PersonDetailResponse } from '@/entities/admin/people/types/response.dto'
+import {
+  MoldPassportForm,
+  moldPassportService,
+  type MoldPassportFormFields,
+  type MoldPassportFormInitialData,
+} from '@/entities/molding-shop/mold-passport'
+import type {
+  MoldPassportDetailResponse,
+  MoldPassportUpdate,
+  MoldPassportUpdateDataAscOperation,
+  MoldPassportUpdateDataGscOperation,
+  MoldPassportUpdateMoldCavityOperations,
+} from '@/shared/api/mold-passport/model'
+import { getErrorMessage } from '@/shared/lib/axios'
+import {
+  createApiArrayOperations,
+  createApiObjectOperation,
+  createUpdatePayload,
+} from '@/shared/lib/react-hook-form/api-operations'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 
@@ -12,69 +28,73 @@ export default function MoldPassportUpdate() {
   const { id } = useParams<{ id: string }>()
 
   const {
-    data,
+    data: initialData,
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<PersonDetailResponse, Error>({
-    queryKey: personQueryKeys.detail(id!),
-    queryFn: () => personService.getById(id!),
+  } = useQuery({
+    ...moldPassportService.getById(id!),
+    placeholderData: keepPreviousData,
     enabled: !!id,
   })
 
-  // // Запрос на обновление
-  // const handleSubmit = async (formData: MoldPassportFormFields) => {
-  //   if (!data) {
-  //     return
-  //   }
-  //   const payload: PersonUpdateRequest = {
-  //     ...formData,
-  //   }
+  // Запрос на обновление
+  const handleSubmit = async (formData: MoldPassportFormFields) => {
+    if (!initialData) {
+      return
+    }
 
-  //   ;[payload.employeeProfileAction, payload.employeeProfileData] = getLegacySingleObjectOperation(
-  //     data.employeeProfile,
-  //     formData.employeeProfile,
-  //   )
+    // Определяем правила трансформации
+    const transformations = {
+      dataGsc: {
+        targetKey: 'dataGscOperation',
+        transformer: (initial: any, form: any) =>
+          createApiObjectOperation(initial, form) as MoldPassportUpdateDataGscOperation,
+      },
+      dataAsc: {
+        targetKey: 'dataAscOperation',
+        transformer: (initial: any, form: any) =>
+          createApiObjectOperation(initial, form) as MoldPassportUpdateDataAscOperation,
+      },
+      moldCavities: {
+        targetKey: 'moldCavityOperations',
+        transformer: (initial: any, form: any) =>
+          createApiArrayOperations(initial, form) as MoldPassportUpdateMoldCavityOperations,
+      },
+    }
 
-  //   payload.contactOperations = createArrayOperations(
-  //     data.contacts,
-  //     formData.contacts,
-  //   ) as ContactOperationRequest[]
+    const payload = createUpdatePayload(
+      initialData,
+      formData,
+      transformations,
+    ) as MoldPassportUpdate
 
-  //   payload.addressOperations = createArrayOperations(
-  //     data.addresses,
-  //     formData.addresses,
-  //   ) as AddressOperationRequest[]
+    await moldPassportService.update(id!, payload)
+    navigate('..')
+    return payload
+  }
 
-  //   await personService.update(id!, payload)
-  //   navigate('..')
-  //   return payload
-  // }
-
-  // // Адаптируем данные с запроса под форму
-  // function mapResponseToInitialData(obj: PersonDetailResponse): MoldPassportFormInitialData {
-  //   const orgIds = obj.organizations.map((org) => org.id)
-  //   const posIds = obj.positions.map((pos) => pos.id)
-
-  //   return {
-  //     defaultValues: {
-  //       ...obj,
-  //       organizationIds: orgIds.length > 0 ? (orgIds as [string, ...string[]]) : undefined,
-  //       positionIds: posIds.length > 0 ? (posIds as [string, ...string[]]) : undefined,
-  //       addresses:
-  //         obj.addresses?.map((addr) => ({
-  //           ...addr,
-  //           cityId: addr.cityId,
-  //         })) || [],
-  //     },
-  //     options: {
-  //       organizations: obj.organizations.map((org) => ({
-  //         value: org.id,
-  //         label: org.legalName,
-  //       })),
-  //     },
-  //   }
-  // }
+  // Адаптируем данные с запроса под форму
+  function mapResponseToInitialData(
+    response: MoldPassportDetailResponse,
+  ): MoldPassportFormInitialData {
+    return {
+      defaultValues: {
+        ...response,
+        moldCavities:
+          response.moldCavities?.map((cavity) => ({
+            ...cavity,
+            castingPatternId: cavity.castingPattern.id,
+            moldCores:
+              cavity.moldCores?.map((core) => ({
+                ...core,
+                coreBatchId: core.coreBatch.id,
+              })) ?? [],
+          })) ?? [],
+      },
+      options: {},
+    }
+  }
 
   return (
     <>
@@ -87,17 +107,17 @@ export default function MoldPassportUpdate() {
         </Button>
       </div>
 
-      {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
+      {isError && <AlertMessage type={AlertType.ERROR} message={getErrorMessage(queryError)} />}
 
-      {!isLoading && !isError && data && (
+      {!isLoading && !isError && initialData && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
-          {/* <div className="w-full">
+          <div className="w-full">
             <MoldPassportForm
               onSubmit={handleSubmit}
-              initialData={mapResponseToInitialData(data)}
+              initialData={mapResponseToInitialData(initialData)}
               submitBtnName="Оновити"
             />
-          </div> */}
+          </div>
         </div>
       )}
     </>

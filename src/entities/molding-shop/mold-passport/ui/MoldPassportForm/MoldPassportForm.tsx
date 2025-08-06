@@ -1,11 +1,10 @@
-import { useMemo } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
-import { addressOptions } from '@/entities/admin/address/types/address'
-import { genderOptions } from '@/entities/admin/people/types/gender'
+import { castingPatternService } from '@/entities/molding-shop/casting-pattern/api/service'
+import { castingTechnologyService } from '@/entities/molding-shop/casting-technology/api/service'
+import { coreBatchService } from '@/entities/molding-shop/core-batch/api/service'
 import { MoldCavityForm } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/MoldCavityForm'
 import { moldCavityFormDefaultValues } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
-import { moldPassportService } from '@/entities/molding-shop/mold-passport/api/service'
 import {
   moldPassportDynamicFieldConfig,
   type MoldPassportDynamicFieldOptions,
@@ -14,6 +13,12 @@ import {
   moldPassportFormSchema,
   type MoldPassportFormFields,
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/schema'
+import { moldingAreaService } from '@/entities/molding-shop/molding-area/api/service'
+import { moldingFlaskService } from '@/entities/molding-shop/molding-flask/api/service'
+import { patternPlateFrameService } from '@/entities/molding-shop/pattern-plate-frame/api/service'
+import { resinService } from '@/entities/molding-shop/resin/api/service'
+import type { CountryLookupResponse } from '@/shared/api/main-service/model'
+import { useSelectOptions } from '@/shared/hooks/react-hook-form/options/useSelectOptions'
 import { useParallelQueries } from '@/shared/hooks/react-query/useParallelQueries'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
@@ -24,7 +29,6 @@ import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-field
 import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
-import type { Option } from '@/shared/ui/select/ReactSelect'
 import {
   ButtonWithError,
   CheckboxWithError,
@@ -70,41 +74,62 @@ export default function MoldPassportForm({
     isLoading: isQueriesLoading,
     error: queriesError,
   } = useParallelQueries({
-    organizations: moldPassportService.lookupOrganization(),
-    positions: moldPassportService.lookupPosition(),
+    castingTechnologies: castingTechnologyService.getLookup(),
+    moldingAreas: moldingAreaService.getLookup(),
+    patternPlateFrames: patternPlateFrameService.getLookup(),
+    moldingFlasks: moldingFlaskService.getLookup(),
+    resins: resinService.getLookup(),
+    castingPatterns: castingPatternService.getLookup(),
+    coreBatches: coreBatchService.getLookup(),
   })
 
   console.log(queriesData)
 
   // Options
-  const organizationsOptions: Option<string>[] = useMemo(
-    () =>
-      Array.isArray(queriesData.organizations)
-        ? queriesData.organizations.map((c) => ({
-            value: c.id,
-            label: c.legalName,
-          }))
-        : [],
-    [queriesData.organizations],
+  const castingTechnologiesOptions = useSelectOptions(
+    queriesData?.castingTechnologies as CountryLookupResponse[] | undefined,
+    {
+      getValue: (c) => c.id,
+      getLabel: (c) => c.name,
+    },
   )
 
-  const positionsOptions: Option<string>[] = useMemo(
-    () =>
-      Array.isArray(queriesData.positions)
-        ? queriesData.positions.map((c) => ({
-            value: c.id,
-            label: c.name,
-          }))
-        : [],
-    [queriesData.positions],
+  const moldingAreasOptions = useSelectOptions(
+    queriesData?.moldingAreas as CountryLookupResponse[] | undefined,
+    {
+      getValue: (c) => c.id,
+      getLabel: (c) => c.name,
+    },
+  )
+
+  const patternPlateFramesOptions = useSelectOptions(
+    queriesData?.patternPlateFrames as CountryLookupResponse[] | undefined,
+    {
+      getValue: (c) => c.id,
+      getLabel: (c) => c.name,
+    },
+  )
+
+  const moldingFlasksOptions = useSelectOptions(
+    queriesData?.moldingFlasks as CountryLookupResponse[] | undefined,
+    {
+      getValue: (c) => c.id,
+      getLabel: (c) => c.name,
+    },
+  )
+
+  const resinsOptions = useSelectOptions(
+    queriesData?.resins as CountryLookupResponse[] | undefined,
+    {
+      getValue: (c) => c.id,
+      getLabel: (c) => c.name,
+    },
   )
 
   // Dynamic form options
   const dynamicFieldOptions: DynamicFieldOptions = {
-    organizationsOptions,
-    positionsOptions,
-    addressOptions,
-    genderOptions,
+    resinsOptions,
+    castingTechnologiesOptions,
   }
 
   // Loading || Error
@@ -137,7 +162,7 @@ export default function MoldPassportForm({
       <FormLayout onSubmit={handleSubmit(submitHandler)}>
         <h4 className="layout-text">Паспорт ливарної форми</h4>
 
-        <AlertMessage type={AlertType.WARNING} message={`Попередній стан форми: Не заповнено`} />
+        {/* <AlertMessage type={AlertType.WARNING} message={`Попередній стан форми: Не заповнено`} /> */}
 
         <Controller
           name="moldingAreaId"
@@ -146,7 +171,7 @@ export default function MoldPassportForm({
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              options={genderOptions}
+              options={moldingAreasOptions}
               isVirtualized
               isClearable
               placeholder="Ділянка формовки"
@@ -165,7 +190,7 @@ export default function MoldPassportForm({
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              options={organizationsOptions}
+              options={patternPlateFramesOptions}
               isVirtualized
               isClearable
               placeholder="Модельна рамка"
@@ -181,7 +206,7 @@ export default function MoldPassportForm({
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              options={positionsOptions}
+              options={moldingFlasksOptions}
               isVirtualized
               isClearable
               placeholder="Опока"
@@ -223,18 +248,18 @@ export default function MoldPassportForm({
 
         <InputFieldWithError
           label="Тиск, од."
-          {...register('pressingPressure', formTransformers.string)}
+          {...register('pressingPressure', formTransformers.number)}
           errorMessage={getNestedErrorMessage(errors, 'pressingPressure')}
         />
 
         <InputFieldWithError
           label="Порядковий номер форми за зміну"
-          {...register('moldSequenceInShift', formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, 'moldSequenceInShift')}
+          {...register('sequenceInShift', formTransformers.number)}
+          errorMessage={getNestedErrorMessage(errors, 'sequenceInShift')}
         />
 
         <Controller
-          name="moldAssemblyTimestamp"
+          name="assemblyTimestamp"
           control={control}
           render={({ field, fieldState }) => (
             <FormDateTimeField
@@ -242,32 +267,15 @@ export default function MoldPassportForm({
               fieldState={fieldState}
               type="datetime"
               label="Дата та час складання півформ"
-              errorMessage={getNestedErrorMessage(errors, 'moldAssemblyTimestamp')}
-            />
-          )}
-        />
-
-        <Controller
-          name="experimentIds"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormSelectField
-              field={field}
-              fieldState={fieldState}
-              options={organizationsOptions}
-              isMulti
-              isVirtualized
-              isClearable
-              placeholder="Експеримент"
-              errorMessage={getNestedErrorMessage(errors, 'experimentIds')}
+              errorMessage={getNestedErrorMessage(errors, 'assemblyTimestamp')}
             />
           )}
         />
 
         <CheckboxWithError
-          label="Форма справна"
-          {...register(`status`, formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, 'status')}
+          label="Наявність дефектів"
+          {...register(`isDefective`, formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, 'isDefective')}
         />
 
         <TextAreaFieldWithError

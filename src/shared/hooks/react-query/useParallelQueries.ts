@@ -46,11 +46,11 @@ export function useParallelQueries<T extends ParallelQueriesConfig>(
   const error = (results.find((r) => r.error)?.error as Error) ?? null
 
   const data = useMemo(() => {
-    return queryKeys.reduce((acc, key, index) => {
-      // The data for each query is correctly associated using its original key
-      acc[key as keyof T] = results[index]?.data
-      return acc
-    }, {} as ParallelQueriesData<T>)
+    const entries = queryKeys.map((key, index) => {
+      const resultData = results[index]?.data
+      return [key, resultData]
+    })
+    return Object.fromEntries(entries) as ParallelQueriesData<T>
   }, [queryKeys, results])
 
   return { data, isLoading, isError, error }

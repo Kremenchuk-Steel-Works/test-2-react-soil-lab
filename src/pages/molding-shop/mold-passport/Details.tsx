@@ -1,8 +1,10 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
-import { personQueryKeys } from '@/entities/admin/people/services/keys'
-import { personService } from '@/entities/admin/people/services/service'
-import type { PersonDetailResponse } from '@/entities/admin/people/types/response.dto'
+import {
+  moldPassportService,
+  moldPassportStatusOptions,
+} from '@/entities/molding-shop/mold-passport'
+import { getErrorMessage } from '@/shared/lib/axios'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function MoldPassportDetails() {
@@ -13,151 +15,199 @@ export default function MoldPassportDetails() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<PersonDetailResponse, Error>({
-    queryKey: personQueryKeys.detail(id!),
-    queryFn: () => personService.getById(id!),
+  } = useQuery({
+    ...moldPassportService.getById(id!),
+    placeholderData: keepPreviousData,
     enabled: !!id,
   })
 
   return (
     <>
-      {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
+      {isError && <AlertMessage type={AlertType.ERROR} message={getErrorMessage(queryError)} />}
       {!isLoading && !isError && data && (
         <>
           <h4 className="layout-text">Деталі</h4>
 
-          <dl className="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2">
+          <dl className="grid grid-cols-1 gap-x-6 gap-y-4 text-sm md:grid-cols-2">
+            {/* --- Основна інформація --- */}
             <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">ID</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.id}</dd>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">ID</dt>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">{data.id}</dd>
+            </div>
+
+            <div>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Референс-код</dt>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">{data.referenceCode}</dd>
             </div>
 
             <div className="md:col-span-2">
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Повне ім'я</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                {data.lastName} {data.firstName} {data.middleName ?? ''}
-              </dd>
-            </div>
-
-            <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Стать</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.gender}</dd>
-            </div>
-
-            <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Користувач</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                {data.isUser ? 'Так' : 'Ні'}
-              </dd>
-            </div>
-
-            <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Працівник</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                {data.employeeProfile ? 'Так' : 'Ні'}
-              </dd>
-            </div>
-
-            <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                Кількість контактів
+              <dt className="font-medium text-gray-500 dark:text-slate-400">
+                Основна назва виливка
               </dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                {data.contacts.length}
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                {data.primaryCastingProductName}
               </dd>
             </div>
 
             <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                Кількість адрес
-              </dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                {data.addresses.length}
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Статус</dt>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                {moldPassportStatusOptions.find((option) => option.value === data.status)?.label ??
+                  data.status}
               </dd>
             </div>
 
-            <div className="md:col-span-2">
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Організації</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                {data.organizations.map((org) => org.legalName).join(', ')}
+            <div>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Паспорт завершено</dt>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                {data.isComplete ? 'Так' : 'Ні'}
               </dd>
             </div>
 
-            <div className="md:col-span-2">
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Посади</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                {data.positions.map((pos) => pos.name).join(', ')}
+            {/* --- Технологія та дільниця --- */}
+            <div>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Дільниця формування</dt>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">{data.moldingArea.name}</dd>
+            </div>
+
+            <div>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Технологія лиття</dt>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                {data.castingTechnology.name} ({data.castingTechnology.abbreviation})
               </dd>
             </div>
 
-            {data.birthDate && (
+            {/* --- Обладнання --- */}
+            {data.patternPlateFrame && (
               <div>
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Дата народження
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  {new Date(data.birthDate).toLocaleDateString()}
+                <dt className="font-medium text-gray-500 dark:text-slate-400">Модельна плита</dt>
+                <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                  {data.patternPlateFrame.serialNumber} (креслення:{' '}
+                  {data.patternPlateFrame.blueprintNumber})
                 </dd>
               </div>
             )}
 
+            {data.moldingFlask && (
+              <div>
+                <dt className="font-medium text-gray-500 dark:text-slate-400">Опока</dt>
+                <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                  {data.moldingFlask.serialNumber} (креслення: {data.moldingFlask.blueprintNumber})
+                </dd>
+              </div>
+            )}
+
+            {/* --- Технологічні дані ПГС (якщо є) --- */}
+            {data.dataGsc && (
+              <div className="mt-4 border-t border-gray-200 pt-4 md:col-span-2 dark:border-slate-700">
+                <dt className="font-medium text-gray-500 dark:text-slate-400">Дані ПГС</dt>
+                <dd className="mt-2 space-y-2 text-gray-900 dark:text-slate-300">
+                  <div>Тип суміші: {data.dataGsc.moldingSandType.name}</div>
+                  <div>
+                    Система суміші:{' '}
+                    {data.dataGsc.moldingSandSystem === 'layered' ? 'Двошарова' : 'Єдина'}
+                  </div>
+                  <div>
+                    Щільність (гориз./верт.): {data.dataGsc.moldHorizontalDensity} /{' '}
+                    {data.dataGsc.moldVerticalDensity}
+                  </div>
+                </dd>
+              </div>
+            )}
+
+            {/* --- Технологічні дані ХТС (якщо є) --- */}
+            {data.dataAsc && (
+              <div className="mt-4 border-t border-gray-200 pt-4 md:col-span-2 dark:border-slate-700">
+                <dt className="font-medium text-gray-500 dark:text-slate-400">Дані ХТС</dt>
+                <dd className="mt-2 space-y-2 text-gray-900 dark:text-slate-300">
+                  <div>Тип суміші: {data.dataAsc.moldingSandType.name}</div>
+                  <div>Твердість форми: {data.dataAsc.moldHardness}</div>
+                  {data.dataAsc.resin && <div>Смола: {data.dataAsc.resin.name}</div>}
+                </dd>
+              </div>
+            )}
+
+            {/* --- Додаткові параметри --- */}
+            {data.pressingPressure !== null && (
+              <div>
+                <dt className="font-medium text-gray-500 dark:text-slate-400">Тиск пресування</dt>
+                <dd className="mt-1 text-gray-900 dark:text-slate-300">{data.pressingPressure}</dd>
+              </div>
+            )}
+
+            {data.moldSequenceInShift !== null && (
+              <div>
+                <dt className="font-medium text-gray-500 dark:text-slate-400">
+                  Номер форми у зміні
+                </dt>
+                <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                  {data.moldSequenceInShift}
+                </dd>
+              </div>
+            )}
+
+            {data.moldAssemblyTimestamp && (
+              <div>
+                <dt className="font-medium text-gray-500 dark:text-slate-400">
+                  Час збирання форми
+                </dt>
+                <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                  {new Date(data.moldAssemblyTimestamp).toLocaleString()}
+                </dd>
+              </div>
+            )}
+
+            {data.notes && (
+              <div className="md:col-span-2">
+                <dt className="font-medium text-gray-500 dark:text-slate-400">Примітки</dt>
+                <dd className="mt-1 text-gray-900 dark:text-slate-300">{data.notes}</dd>
+              </div>
+            )}
+
+            {/* --- Порожнини форми --- */}
+            {data.moldCavities.map((cavity, index) => (
+              <div
+                key={cavity.id}
+                className="mt-4 border-t border-gray-200 pt-4 md:col-span-2 dark:border-slate-700"
+              >
+                <dt className="font-medium text-gray-900 dark:text-slate-200">
+                  Порожнина форми #{index + 1} (SN: {cavity.serialNumber})
+                </dt>
+                <dd className="mt-2 space-y-2 text-gray-900 dark:text-slate-300">
+                  <div>Виливок: {cavity.castingPattern.castingProduct.name}</div>
+                  <div>Функціональна: {cavity.isFunctional ? 'Так' : 'Ні'}</div>
+                  {cavity.moldCores.length > 0 && (
+                    <div className="pl-4">
+                      <p className="font-medium text-gray-600 dark:text-slate-400">Стержні:</p>
+                      <ul className="mt-1 list-inside list-disc space-y-1">
+                        {cavity.moldCores.map((core) => (
+                          <li key={core.id}>
+                            Партія: {core.coreBatch.moldCoreType.modelNumber}, Твердість:{' '}
+                            {core.hardness}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </dd>
+              </div>
+            ))}
+
+            {/* --- Службова інформація --- */}
+            <div className="mt-4 border-t border-gray-200 pt-4 md:col-span-2 dark:border-slate-700" />
             <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Створено</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Створено</dt>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">
                 {new Date(data.createdAt).toLocaleString()}
               </dd>
             </div>
 
             <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Оновлено</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Оновлено</dt>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">
                 {new Date(data.updatedAt).toLocaleString()}
               </dd>
             </div>
-
-            {data.photoUrl && (
-              <div className="md:col-span-2">
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Фото</dt>
-                <dd className="mt-1">
-                  <img
-                    src={URL.createObjectURL(data.photoUrl)}
-                    alt="Фото користувача"
-                    className="h-10 w-10 rounded object-cover"
-                  />
-                </dd>
-              </div>
-            )}
-
-            {/* Контакти */}
-            {data.contacts.map((contact, index) => (
-              <div key={`contact-${index}`} className="pt-4 md:col-span-2">
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Контакт {index + 1}
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  <div>Тип: {contact.type}</div>
-                  <div>Значення: {contact.value}</div>
-                  {contact.note && <div>Примітка: {contact.note}</div>}
-                  <div>Основний: {contact.isPrimary ? 'Так' : 'Ні'}</div>
-                </dd>
-              </div>
-            ))}
-
-            {/* Адреси */}
-            {data.addresses.map((addr, index) => (
-              <div key={`address-${index}`} className="border-t pt-4 md:col-span-2">
-                <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                  Адреса {index + 1}
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                  <div>Вулиця: {addr.fullAddress}</div>
-                  <div>Поштовий код: {addr.postalCode}</div>
-                  <div>Тип: {addr.type}</div>
-                  {addr.note && <div>Примітка: {addr.note}</div>}
-                  <div>Основна: {addr.isPrimary ? 'Так' : 'Ні'}</div>
-                </dd>
-              </div>
-            ))}
           </dl>
         </>
       )}

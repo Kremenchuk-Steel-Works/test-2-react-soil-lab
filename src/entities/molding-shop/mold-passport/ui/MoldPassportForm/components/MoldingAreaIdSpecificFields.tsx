@@ -6,7 +6,7 @@ import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 
 type DynamicFieldsProps = DynamicComponentProps<MoldPassportDynamicFieldOptions>
 
-export function GreenSandCastingSpecificFields({ control, errors, options }: DynamicFieldsProps) {
+export function MoldingAreaDataGscDynamicForm({ control, errors, options }: DynamicFieldsProps) {
   return (
     <Controller
       name="castingTechnologyId"
@@ -15,7 +15,7 @@ export function GreenSandCastingSpecificFields({ control, errors, options }: Dyn
         <FormSelectField
           field={field}
           fieldState={fieldState}
-          options={options.addressOptions}
+          options={options.castingTechnologiesOptions}
           isVirtualized
           isClearable
           placeholder="Технологія формовки"
@@ -26,7 +26,7 @@ export function GreenSandCastingSpecificFields({ control, errors, options }: Dyn
   )
 }
 
-export function AirSetCastingSpecificFields({ control, errors, options }: DynamicFieldsProps) {
+export function MoldingAreaDataAscDynamicForm({ control, errors, options }: DynamicFieldsProps) {
   return (
     <Controller
       name="castingTechnologyId"
@@ -35,7 +35,7 @@ export function AirSetCastingSpecificFields({ control, errors, options }: Dynami
         <FormSelectField
           field={field}
           fieldState={fieldState}
-          options={options.genderOptions}
+          options={options.castingTechnologiesOptions}
           isVirtualized
           isClearable
           placeholder="Технологія формовки"

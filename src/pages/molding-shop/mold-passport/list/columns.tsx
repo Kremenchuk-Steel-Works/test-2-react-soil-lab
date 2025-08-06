@@ -1,11 +1,17 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import { genderOptions } from '@/entities/admin/people/types/gender'
-import type { MoldPassportListItemResponse } from '@/shared/api/mold-passport/model'
+import { moldPassportStatusOptions } from '@/entities/molding-shop/mold-passport'
+import type {
+  CastingTechnologyShortResponse,
+  MoldingAreaShortResponse,
+  MoldPassportListItemResponse,
+  MoldPassportListItemResponseMoldingFlask,
+  MoldPassportListItemResponsePatternPlateFrame,
+} from '@/shared/api/mold-passport/model'
 import {
   booleanColumn,
+  dateColumn,
   displayColumn,
   idColumn,
-  listColumn,
   optionColumn,
 } from '@/widgets/data-table'
 
@@ -29,45 +35,65 @@ export const moldPassportColumns = [
     ...displayColumn(),
   }),
 
-  columnHelper.accessor('gender', {
-    header: 'Стать',
+  columnHelper.accessor('referenceCode', {
+    header: 'referenceCode',
     size: 100,
-    ...optionColumn(genderOptions),
+    ...displayColumn(),
   }),
 
-  columnHelper.accessor('isUser', {
-    header: 'Користувач?',
+  columnHelper.accessor('markingYear', {
+    header: 'Рік маркування',
     size: 155,
-    ...booleanColumn(),
+    ...displayColumn(),
   }),
 
-  columnHelper.accessor('isEmployee', {
-    header: 'Робітник?',
+  columnHelper.accessor('moldingArea', {
+    header: 'Ділянка формовки',
     size: 135,
-    ...booleanColumn(),
+    ...displayColumn<MoldPassportListItemResponse, MoldingAreaShortResponse>({
+      formatter: (cell) => cell.name,
+    }),
   }),
 
-  columnHelper.accessor('contactsCount', {
-    header: 'К-сть контактів',
+  columnHelper.accessor('castingTechnology', {
+    header: 'Технологія формовки',
     size: 180,
-    ...displayColumn(),
+    ...displayColumn<MoldPassportListItemResponse, CastingTechnologyShortResponse>({
+      formatter: (cell) => cell.name,
+    }),
   }),
 
-  columnHelper.accessor('addressesCount', {
-    header: 'К-сть адрес',
+  columnHelper.accessor('patternPlateFrame', {
+    header: 'Модельна рамка',
     size: 150,
-    ...displayColumn(),
+    ...displayColumn<MoldPassportListItemResponse, MoldPassportListItemResponsePatternPlateFrame>({
+      formatter: (cell) => cell?.serialNumber,
+    }),
   }),
 
-  columnHelper.accessor('organizationNames', {
-    header: 'Організація',
+  columnHelper.accessor('moldingFlask', {
+    header: 'Опока',
     size: 150,
-    ...listColumn(),
+    ...displayColumn<MoldPassportListItemResponse, MoldPassportListItemResponseMoldingFlask>({
+      formatter: (cell) => cell?.serialNumber,
+    }),
   }),
 
-  columnHelper.accessor('positionNames', {
-    header: 'Посада',
+  columnHelper.accessor('moldSequenceInShift', {
+    header: 'Номер за зміну',
     size: 115,
-    ...listColumn(),
+    ...displayColumn(),
+  }),
+
+  columnHelper.accessor('moldAssemblyTimestamp', {
+    header: 'Час складання півформ',
+    size: 115,
+    ...dateColumn(),
+  }),
+
+  columnHelper.accessor('status', {
+    header: 'Статус',
+    size: 115,
+    ...optionColumn(moldPassportStatusOptions),
   }),
 ]

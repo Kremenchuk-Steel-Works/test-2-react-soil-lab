@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import {
   moldPassportFormDefaultValues,
+  moldPassportService,
   type MoldPassportFormFields,
 } from '@/entities/molding-shop/mold-passport'
 import MoldPassportForm from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/MoldPassportForm'
@@ -9,7 +10,7 @@ export default function MoldPassportAdd() {
   const navigate = useNavigate()
 
   const handleSubmit = async (data: MoldPassportFormFields) => {
-    // await personService.create(data)
+    await moldPassportService.create(data)
     navigate('..')
     return data
   }

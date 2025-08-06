@@ -1,35 +1,39 @@
 import { z } from 'zod'
 import {
-  PassportDataAscSpecificFields,
-  PassportDataGscSpecificFields,
+  CastingTechnologyDataGscDynamicForm,
+  CastingTechnologyPassportDataAscDynamicForm,
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/components/CastingTechnologySpecificFields'
 import {
-  AirSetCastingSpecificFields,
-  GreenSandCastingSpecificFields,
+  MoldingAreaDataAscDynamicForm,
+  MoldingAreaDataGscDynamicForm,
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/components/MoldingAreaIdSpecificFields'
+import { MoldingSandSystem } from '@/shared/api/mold-passport/model'
 import { createFormConfig } from '@/shared/lib/zod/dynamic-schema'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 
 export interface MoldPassportDynamicFieldOptions {
-  organizationsOptions: Option<string>[]
-  positionsOptions: Option<string>[]
-  addressOptions: Option<string>[]
-  genderOptions: Option<string>[]
+  resinsOptions: Option<number>[]
+  castingTechnologiesOptions: Option<number>[]
+  // positionsOptions: Option<string>[]
+  // addressOptions: Option<string>[]
+  // genderOptions: Option<string>[]
 }
 
-export const greenSandFormSchema = z.object({
-  moldingSandType: z.string().optional(),
-  moldingSandSubType: z.string().nonempty(),
-  moldingSandNumber: z.string().optional(),
-  moldHorizontalDensity: z.string().optional(),
-  moldVerticalDensity: z.string().optional(),
+export const dataGscFormSchema = z.object({
+  moldingSandSystem: z.nativeEnum(MoldingSandSystem),
+  moldingSandNumber: z.string().nonempty(),
+  moldHorizontalDensity: z.number().positive(),
+  moldVerticalDensity: z.number().positive(),
 })
 
-export const airSetCastingFormSchema = z.object({
-  moldingSandType: z.string().optional(),
-  moldHardness: z.string().nonempty(),
-  resinId: z.string().optional(),
+export type MoldPassportDataGsc = z.infer<typeof dataGscFormSchema>
+
+export const dataAscFormSchema = z.object({
+  moldHardness: z.number().positive(),
+  resinId: z.string().nullable().optional(),
 })
+
+export type MoldPassportDataAsc = z.infer<typeof dataAscFormSchema>
 
 export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynamicFieldOptions>([
   // Для участков Green Sand Casting Песчано-Глинистая
@@ -38,9 +42,9 @@ export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynam
       moldingAreaId: ['male', 'female'],
     },
     schema: z.object({
-      castingTechnologyId: z.string().optional(),
+      castingTechnologyId: z.number(),
     }),
-    Component: GreenSandCastingSpecificFields,
+    Component: MoldingAreaDataGscDynamicForm,
   },
   // Для участков Air Set Casting Холодно-Твердеющая
   {
@@ -48,9 +52,9 @@ export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynam
       moldingAreaId: 'other',
     },
     schema: z.object({
-      castingTechnologyId: z.string().optional(),
+      castingTechnologyId: z.number(),
     }),
-    Component: AirSetCastingSpecificFields,
+    Component: MoldingAreaDataAscDynamicForm,
   },
 
   // Для технологии Green Sand Casting Песчано-Глинистая
@@ -58,15 +62,15 @@ export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynam
     conditions: {
       castingTechnologyId: ['male', 'female', 'other'],
     },
-    schema: greenSandFormSchema,
-    Component: PassportDataGscSpecificFields,
+    schema: z.object({ dataGsc: dataGscFormSchema.nullable().optional() }),
+    Component: CastingTechnologyDataGscDynamicForm,
   },
   // Для технологии Air Set Casting Холодно-Твердеющая
   {
     conditions: {
       castingTechnologyId: ['billing', 'shipping', 'warehouse', 'plant', 'office', 'home'],
     },
-    schema: airSetCastingFormSchema,
-    Component: PassportDataAscSpecificFields,
+    schema: z.object({ dataAsc: dataAscFormSchema.nullable().optional() }),
+    Component: CastingTechnologyPassportDataAscDynamicForm,
   },
 ])

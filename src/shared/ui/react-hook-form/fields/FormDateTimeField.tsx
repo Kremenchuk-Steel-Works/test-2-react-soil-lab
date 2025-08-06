@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { addYears, format, isValid, parse, subYears } from 'date-fns'
+import { addYears, format, getYear, isValid, parse, subYears } from 'date-fns'
 import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
 import type {
   DateTimePickerProps,
@@ -39,6 +39,8 @@ const FormDateTimeField = ({
         return "yyyy-MM-dd'T'HH:mm"
       case 'date':
         return 'yyyy-MM-dd'
+      case 'year':
+        return 'yyyy'
       default:
         return 'yyyy-MM-dd'
     }
@@ -47,16 +49,33 @@ const FormDateTimeField = ({
   const finalFormat = getFormat()
 
   const handleChange = (date: Date | null) => {
+    // Если тип - год, то работаем с ним как с числом
+    if (type === 'year') {
+      const yearValue = date ? getYear(date) : null
+      field.onChange(yearValue)
+      return
+    }
+
+    // Для всех остальных типов
     const formattedDate = date ? format(date, finalFormat) : null
     field.onChange(formattedDate)
   }
 
-  const parseValue = (value: string | undefined): Date | undefined => {
-    if (!value) return undefined
+  const parseValue = (value: string | number | undefined): Date | undefined => {
+    if (value === undefined || value === null) return undefined
 
-    const parsedDate = parse(value, finalFormat, new Date())
+    // Если из формы пришло число
+    if (typeof value === 'number') {
+      return new Date(value, 0, 1)
+    }
 
-    return isValid(parsedDate) ? parsedDate : undefined
+    // Если строка
+    if (typeof value === 'string') {
+      const parsedDate = parse(value, finalFormat, new Date())
+      return isValid(parsedDate) ? parsedDate : undefined
+    }
+
+    return undefined
   }
 
   const { minDate, maxDate } = useMemo(() => {

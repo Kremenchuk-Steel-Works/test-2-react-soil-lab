@@ -1,8 +1,8 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { moldPassportService } from '@/entities/molding-shop/mold-passport/api/service'
+import { moldPassportService } from '@/entities/molding-shop/mold-passport'
 import { moldPassportColumns } from '@/pages/molding-shop/mold-passport/list/columns'
-import type { PersonListResponse } from '@/shared/api/main-service/model'
 import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
+import { getErrorMessage } from '@/shared/lib/axios'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DataTable } from '@/widgets/data-table'
 
@@ -16,19 +16,17 @@ export default function MoldPassportList() {
     isLoading,
     isError,
     error: queryError,
-  } = useQuery<PersonListResponse, Error>(
-    moldPassportService.getList(
-      {
-        page,
-        perPage,
-      },
-      { query: { placeholderData: keepPreviousData } },
-    ),
-  )
+  } = useQuery({
+    ...moldPassportService.getList({
+      page: String(page),
+      perPage: String(perPage),
+    }),
+    placeholderData: keepPreviousData,
+  })
 
   return (
     <>
-      {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
+      {isError && <AlertMessage type={AlertType.ERROR} message={getErrorMessage(queryError)} />}
 
       {!isLoading && !isError && data && (
         <DataTable
