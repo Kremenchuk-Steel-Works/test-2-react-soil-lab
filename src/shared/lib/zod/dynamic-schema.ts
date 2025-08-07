@@ -1,6 +1,8 @@
 import { z, ZodObject, type ZodRawShape } from 'zod'
 import type { DynamicFieldsProps } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 
+export const ANY_VALUE = '__ANY__'
+
 /**
  * Условие для активации правила.
  * Может быть строкой (точное совпадение) или массивом строк (любое из значений).
@@ -41,6 +43,11 @@ export type DynamicFieldConfig<TOptions extends object> = DynamicRule<TOptions>[
  * @returns boolean
  */
 function valueMatchesCondition(formValue: unknown, conditionValue: string | string[]): boolean {
+  if (conditionValue === ANY_VALUE) {
+    // Считаем условие выполненным, если значение не null, не undefined и не пустая строка
+    return formValue !== null && formValue !== undefined && formValue !== ''
+  }
+
   if (Array.isArray(conditionValue)) {
     // Для массива проверяем вхождение
     return typeof formValue === 'string' && conditionValue.includes(formValue)
@@ -64,6 +71,11 @@ export function checkConditions<TOptions extends object>(
   // Проверяем основные условия (логика "И")
   // Если хотя бы одно условие не выполнено, правило неактивно.
   for (const fieldName in conditions) {
+    console.log(
+      `[Debug] Checking field: '${fieldName}'. Form value is:`,
+      formData[fieldName],
+      `Type: ${typeof formData[fieldName]}`,
+    )
     if (!valueMatchesCondition(formData[fieldName], conditions[fieldName])) {
       return false
     }

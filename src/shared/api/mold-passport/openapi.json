@@ -5,6 +5,632 @@
     "version": "0.1.0"
   },
   "paths": {
+    "/api/v1/casting-patterns/lookups": {
+      "get": {
+        "operationId": "get_casting_pattern_lookups_list_api_v1_casting_patterns_lookups_get",
+        "summary": "Get Casting Pattern Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "castingProductId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "casting-product-id"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CastingPatternLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "casting-patterns"
+        ]
+      }
+    },
+    "/api/v1/casting-products/lookups": {
+      "get": {
+        "operationId": "get_casting_product_lookups_list_api_v1_casting_products_lookups_get",
+        "summary": "Get Casting Product Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CastingProductLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "casting-products"
+        ]
+      }
+    },
+    "/api/v1/casting-technologies/lookups": {
+      "get": {
+        "operationId": "get_casting_technology_lookups_list_api_v1_casting_technologies_lookups_get",
+        "summary": "Get Casting Technology Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CastingTechnologyLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "casting-technologies"
+        ]
+      }
+    },
+    "/api/v1/iron-oxides/lookups": {
+      "get": {
+        "operationId": "get_iron_oxide_lookups_list_api_v1_iron_oxides_lookups_get",
+        "summary": "Get Iron Oxide Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IronOxideLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "iron-oxides"
+        ]
+      }
+    },
+    "/api/v1/mold-core-batches/lookups": {
+      "get": {
+        "operationId": "get_mold_core_batch_lookups_list_api_v1_mold_core_batches_lookups_get",
+        "summary": "Get Mold Core Batch Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldCoreBatchLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "mold-core-batches"
+        ]
+      }
+    },
+    "/api/v1/mold-core-making-machines/lookups": {
+      "get": {
+        "operationId": "get_mold_core_making_machine_lookups_list_api_v1_mold_core_making_machines_lookups_get",
+        "summary": "Get Mold Core Making Machine Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldCoreMakingMachineLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "mold-core-making-machines"
+        ]
+      }
+    },
+    "/api/v1/mold-core-types/lookups": {
+      "get": {
+        "operationId": "get_mold_core_type_lookups_list_api_v1_mold_core_types_lookups_get",
+        "summary": "Get Mold Core Type Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldCoreTypeLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "mold-core-types"
+        ]
+      }
+    },
     "/api/v1/mold-passports/": {
       "get": {
         "operationId": "get_mold_passports_list_api_v1_mold_passports__get",
@@ -55,6 +681,38 @@
               ],
               "title": "status"
             }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
           }
         ],
         "responses": {
@@ -86,6 +744,40 @@
       "post": {
         "operationId": "create_mold_passport_api_v1_mold_passports__post",
         "summary": "Create Mold Passport",
+        "parameters": [
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -137,6 +829,38 @@
               "format": "uuid",
               "title": "Mold Passport Id"
             }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
           }
         ],
         "responses": {
@@ -177,6 +901,38 @@
               "type": "string",
               "format": "uuid",
               "title": "Mold Passport Id"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
             }
           }
         ],
@@ -229,6 +985,38 @@
               "format": "uuid",
               "title": "Mold Passport Id"
             }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
           }
         ],
         "responses": {
@@ -237,7 +1025,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MoldPassportShortResponse"
+                  "$ref": "#/components/schemas/MoldPassportDetailResponse"
                 }
               }
             }
@@ -272,6 +1060,38 @@
               "format": "uuid",
               "title": "Mold Passport Id"
             }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
           }
         ],
         "responses": {
@@ -280,7 +1100,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MoldPassportShortResponse"
+                  "$ref": "#/components/schemas/MoldPassportDetailResponse"
                 }
               }
             }
@@ -298,6 +1118,534 @@
         },
         "tags": [
           "mold-passports"
+        ]
+      }
+    },
+    "/api/v1/molding-areas/lookups": {
+      "get": {
+        "operationId": "get_molding_area_lookups_list_api_v1_molding_areas_lookups_get",
+        "summary": "Get Molding Area Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldingAreaLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "molding-areas"
+        ]
+      }
+    },
+    "/api/v1/molding-flasks/lookups": {
+      "get": {
+        "operationId": "get_molding_flask_lookups_list_api_v1_molding_flasks_lookups_get",
+        "summary": "Get Molding Flask Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldingFlaskLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "molding-flasks"
+        ]
+      }
+    },
+    "/api/v1/molding-sand-types/lookups": {
+      "get": {
+        "operationId": "get_molding_sand_type_lookups_list_api_v1_molding_sand_types_lookups_get",
+        "summary": "Get Molding Sand Type Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoldingSandTypeLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "molding-sand-types"
+        ]
+      }
+    },
+    "/api/v1/pattern-plate-frames/lookups": {
+      "get": {
+        "operationId": "get_pattern_plate_frame_lookups_list_api_v1_pattern_plate_frames_lookups_get",
+        "summary": "Get Pattern Plate Frame Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatternPlateFrameLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "pattern-plate-frames"
+        ]
+      }
+    },
+    "/api/v1/resins/lookups": {
+      "get": {
+        "operationId": "get_resin_lookups_list_api_v1_resins_lookups_get",
+        "summary": "Get Resin Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResinLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "resins"
+        ]
+      }
+    },
+    "/api/v1/triethylamines/lookups": {
+      "get": {
+        "operationId": "get_triethylamine_lookups_list_api_v1_triethylamines_lookups_get",
+        "summary": "Get Triethylamine Lookups List",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "minimum": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "perPage",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "maximum": 20,
+              "minimum": 1,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "xUserId",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Id"
+            }
+          },
+          {
+            "name": "xUserEmail",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-User-Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TriethylamineLookupsListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "triethylamines"
         ]
       }
     }
@@ -336,6 +1684,37 @@
         ],
         "title": "CastingPatternLookupResponse"
       },
+      "CastingPatternLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CastingPatternLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "CastingPatternLookupsListResponse"
+      },
       "CastingProductLookupResponse": {
         "type": "object",
         "properties": {
@@ -359,6 +1738,37 @@
         ],
         "title": "CastingProductLookupResponse"
       },
+      "CastingProductLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CastingProductLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "CastingProductLookupsListResponse"
+      },
       "CastingProductType": {
         "type": "string",
         "enum": [
@@ -367,6 +1777,60 @@
           "heavy_section"
         ],
         "title": "CastingProductType"
+      },
+      "CastingTechnologyLookupResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "abbreviation": {
+            "type": "string",
+            "title": "Abbreviation"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "abbreviation"
+        ],
+        "title": "CastingTechnologyLookupResponse"
+      },
+      "CastingTechnologyLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CastingTechnologyLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "CastingTechnologyLookupsListResponse"
       },
       "CastingTechnologyShortResponse": {
         "type": "object",
@@ -412,6 +1876,61 @@
           }
         },
         "title": "HTTPValidationError"
+      },
+      "IronOxideLookupResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "brand": {
+            "type": "string",
+            "title": "Brand"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "required": [
+          "id",
+          "brand",
+          "name"
+        ],
+        "title": "IronOxideLookupResponse"
+      },
+      "IronOxideLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IronOxideLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "IronOxideLookupsListResponse"
       },
       "MoldCavityCreate": {
         "type": "object",
@@ -653,6 +2172,37 @@
         ],
         "title": "MoldCoreBatchLookupResponse"
       },
+      "MoldCoreBatchLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldCoreBatchLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "MoldCoreBatchLookupsListResponse"
+      },
       "MoldCoreCreate": {
         "type": "object",
         "properties": {
@@ -772,6 +2322,37 @@
         ],
         "title": "MoldCoreMakingMachineLookupResponse"
       },
+      "MoldCoreMakingMachineLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldCoreMakingMachineLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "MoldCoreMakingMachineLookupsListResponse"
+      },
       "MoldCoreTypeLookupResponse": {
         "type": "object",
         "properties": {
@@ -794,6 +2375,37 @@
           "modelNumber"
         ],
         "title": "MoldCoreTypeLookupResponse"
+      },
+      "MoldCoreTypeLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldCoreTypeLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "MoldCoreTypeLookupsListResponse"
       },
       "MoldCoreUpdate": {
         "type": "object",
@@ -1382,7 +2994,7 @@
           "patternPlateFrame": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/PatternPlateFrameShortResponse"
+                "$ref": "#/components/schemas/PatternPlateFrameLookupResponse"
               },
               {
                 "type": "null"
@@ -1392,7 +3004,7 @@
           "moldingFlask": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/MoldingFlaskShortResponse"
+                "$ref": "#/components/schemas/MoldingFlaskLookupResponse"
               },
               {
                 "type": "null"
@@ -1547,7 +3159,7 @@
           "patternPlateFrame": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/PatternPlateFrameShortResponse"
+                "$ref": "#/components/schemas/PatternPlateFrameLookupResponse"
               },
               {
                 "type": "null"
@@ -1557,7 +3169,7 @@
           "moldingFlask": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/MoldingFlaskShortResponse"
+                "$ref": "#/components/schemas/MoldingFlaskLookupResponse"
               },
               {
                 "type": "null"
@@ -1638,41 +3250,6 @@
           "totalItems"
         ],
         "title": "MoldPassportListResponse"
-      },
-      "MoldPassportShortResponse": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid",
-            "title": "Id"
-          },
-          "primaryCastingProductName": {
-            "type": "string",
-            "title": "Primary Casting Product Name"
-          },
-          "referenceCode": {
-            "type": "string",
-            "title": "Reference Code"
-          },
-          "markingYear": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Marking Year"
-          }
-        },
-        "required": [
-          "id",
-          "primaryCastingProductName",
-          "referenceCode"
-        ],
-        "title": "MoldPassportShortResponse"
       },
       "MoldPassportUpdate": {
         "type": "object",
@@ -1865,6 +3442,66 @@
         "additionalProperties": false,
         "title": "MoldPassportUpdate"
       },
+      "MoldingAreaLookupResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "pressureUnits": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pressure Units"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "MoldingAreaLookupResponse"
+      },
+      "MoldingAreaLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldingAreaLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "MoldingAreaLookupsListResponse"
+      },
       "MoldingAreaShortResponse": {
         "type": "object",
         "properties": {
@@ -1894,7 +3531,7 @@
         ],
         "title": "MoldingAreaShortResponse"
       },
-      "MoldingFlaskShortResponse": {
+      "MoldingFlaskLookupResponse": {
         "type": "object",
         "properties": {
           "id": {
@@ -1909,26 +3546,45 @@
           "blueprintNumber": {
             "type": "string",
             "title": "Blueprint Number"
-          },
-          "moldingAreas": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MoldingAreaShortResponse"
-            },
-            "title": "Molding Areas"
-          },
-          "status": {
-            "$ref": "#/components/schemas/AssetStatus"
           }
         },
         "required": [
           "id",
           "serialNumber",
-          "blueprintNumber",
-          "moldingAreas",
-          "status"
+          "blueprintNumber"
         ],
-        "title": "MoldingFlaskShortResponse"
+        "title": "MoldingFlaskLookupResponse"
+      },
+      "MoldingFlaskLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldingFlaskLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "MoldingFlaskLookupsListResponse"
       },
       "MoldingSandSystem": {
         "description": "Defines the sand system strategy used for creating a mold. This determines the composition and\nlayering of the molding sand.\n\nLAYERED: A composite system using two types of sand. A high-quality 'Facing Sand' is applied\nto the pattern surface, and the rest of the flask is filled with 'Backing Sand'. Used for high\nsurface quality requirements.\n\nUNITARY: A single, homogenous sand system (typically 'System Sand') is used for the entire mold.\nCommon in automated foundries where sand is continuously reclaimed and conditioned.",
@@ -1962,7 +3618,38 @@
         ],
         "title": "MoldingSandTypeLookupResponse"
       },
-      "PatternPlateFrameShortResponse": {
+      "MoldingSandTypeLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MoldingSandTypeLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "MoldingSandTypeLookupsListResponse"
+      },
+      "PatternPlateFrameLookupResponse": {
         "type": "object",
         "properties": {
           "id": {
@@ -1977,26 +3664,45 @@
           "blueprintNumber": {
             "type": "string",
             "title": "Blueprint Number"
-          },
-          "moldingAreas": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MoldingAreaShortResponse"
-            },
-            "title": "Molding Areas"
-          },
-          "status": {
-            "$ref": "#/components/schemas/AssetStatus"
           }
         },
         "required": [
           "id",
           "serialNumber",
-          "blueprintNumber",
-          "moldingAreas",
-          "status"
+          "blueprintNumber"
         ],
-        "title": "PatternPlateFrameShortResponse"
+        "title": "PatternPlateFrameLookupResponse"
+      },
+      "PatternPlateFrameLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PatternPlateFrameLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "PatternPlateFrameLookupsListResponse"
       },
       "ResinComponent": {
         "type": "string",
@@ -2005,6 +3711,66 @@
           "B"
         ],
         "title": "ResinComponent"
+      },
+      "ResinLookupResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "brand": {
+            "type": "string",
+            "title": "Brand"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "serialNumber": {
+            "type": "string",
+            "title": "Serial Number"
+          }
+        },
+        "required": [
+          "id",
+          "brand",
+          "name",
+          "serialNumber"
+        ],
+        "title": "ResinLookupResponse"
+      },
+      "ResinLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResinLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "ResinLookupsListResponse"
       },
       "ResinShortResponse": {
         "type": "object",
@@ -2056,6 +3822,61 @@
           "universal"
         ],
         "title": "ResinType"
+      },
+      "TriethylamineLookupResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "brand": {
+            "type": "string",
+            "title": "Brand"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "required": [
+          "id",
+          "brand",
+          "name"
+        ],
+        "title": "TriethylamineLookupResponse"
+      },
+      "TriethylamineLookupsListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TriethylamineLookupResponse"
+            },
+            "title": "Data"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "totalPages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "totalItems": {
+            "type": "integer",
+            "title": "Total Items"
+          }
+        },
+        "required": [
+          "data",
+          "page",
+          "totalPages",
+          "totalItems"
+        ],
+        "title": "TriethylamineLookupsListResponse"
       },
       "ValidationError": {
         "type": "object",

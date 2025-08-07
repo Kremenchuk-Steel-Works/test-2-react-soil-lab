@@ -1,5 +1,5 @@
-import { getGetCountriesListApiV1LookupsCountriesGetQueryOptions } from '@/shared/api/main-service/endpoints/lookups/lookups'
+import { getGetCastingPatternLookupsListApiV1CastingPatternsLookupsGetQueryOptions } from '@/shared/api/mold-passport/endpoints/casting-patterns/casting-patterns'
 
 export const castingPatternService = {
-  getLookup: getGetCountriesListApiV1LookupsCountriesGetQueryOptions,
+  getLookup: getGetCastingPatternLookupsListApiV1CastingPatternsLookupsGetQueryOptions,
 }

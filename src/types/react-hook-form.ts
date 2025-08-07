@@ -1,4 +1,4 @@
-import type { SubmitHandler } from 'react-hook-form'
+import type { DeepPartial, SubmitHandler } from 'react-hook-form'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 
 /**
@@ -11,7 +11,7 @@ export interface FormInitialData<TFormFields, TOptions extends object = {}> {
   /**
    * Начальные значения для полей формы.
    */
-  defaultValues?: Partial<TFormFields>
+  defaultValues?: DeepPartial<TFormFields>
 
   /**
    * Предустановленные опции для select-полей.

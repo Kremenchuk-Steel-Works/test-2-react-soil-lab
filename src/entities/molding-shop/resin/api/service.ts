@@ -1,5 +1,5 @@
-import { getGetCountriesListApiV1LookupsCountriesGetQueryOptions } from '@/shared/api/main-service/endpoints/lookups/lookups'
+import { getGetResinLookupsListApiV1ResinsLookupsGetQueryOptions } from '@/shared/api/mold-passport/endpoints/resins/resins'
 
 export const resinService = {
-  getLookup: getGetCountriesListApiV1LookupsCountriesGetQueryOptions,
+  getLookup: getGetResinLookupsListApiV1ResinsLookupsGetQueryOptions,
 }

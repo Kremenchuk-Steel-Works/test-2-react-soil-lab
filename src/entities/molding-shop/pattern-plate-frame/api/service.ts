@@ -1,5 +1,5 @@
-import { getGetCountriesListApiV1LookupsCountriesGetQueryOptions } from '@/shared/api/main-service/endpoints/lookups/lookups'
+import { getGetPatternPlateFrameLookupsListApiV1PatternPlateFramesLookupsGetQueryOptions } from '@/shared/api/mold-passport/endpoints/pattern-plate-frames/pattern-plate-frames'
 
 export const patternPlateFrameService = {
-  getLookup: getGetCountriesListApiV1LookupsCountriesGetQueryOptions,
+  getLookup: getGetPatternPlateFrameLookupsListApiV1PatternPlateFramesLookupsGetQueryOptions,
 }

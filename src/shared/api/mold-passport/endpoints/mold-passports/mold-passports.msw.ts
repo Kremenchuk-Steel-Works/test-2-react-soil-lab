@@ -15,7 +15,6 @@ import {
   ResinType,
   type MoldPassportDetailResponse,
   type MoldPassportListResponse,
-  type MoldPassportShortResponse,
 } from '../../model'
 
 export const getGetMoldPassportsListApiV1MoldPassportsGetResponseMock = (
@@ -56,21 +55,6 @@ export const getGetMoldPassportsListApiV1MoldPassportsGetResponseMock = (
           id: faker.string.uuid(),
           serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
           blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
-          moldingAreas: Array.from(
-            { length: faker.number.int({ min: 1, max: 10 }) },
-            (_, i) => i + 1,
-          ).map(() => ({
-            id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
-            name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-            pressureUnits: faker.helpers.arrayElement([
-              faker.helpers.arrayElement([
-                faker.string.alpha({ length: { min: 10, max: 20 } }),
-                null,
-              ]),
-              undefined,
-            ]),
-          })),
-          status: faker.helpers.arrayElement(Object.values(AssetStatus)),
         },
         null,
       ]),
@@ -82,21 +66,6 @@ export const getGetMoldPassportsListApiV1MoldPassportsGetResponseMock = (
           id: faker.string.uuid(),
           serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
           blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
-          moldingAreas: Array.from(
-            { length: faker.number.int({ min: 1, max: 10 }) },
-            (_, i) => i + 1,
-          ).map(() => ({
-            id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
-            name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-            pressureUnits: faker.helpers.arrayElement([
-              faker.helpers.arrayElement([
-                faker.string.alpha({ length: { min: 10, max: 20 } }),
-                null,
-              ]),
-              undefined,
-            ]),
-          })),
-          status: faker.helpers.arrayElement(Object.values(AssetStatus)),
         },
         null,
       ]),
@@ -162,21 +131,6 @@ export const getCreateMoldPassportApiV1MoldPassportsPostResponseMock = (
         id: faker.string.uuid(),
         serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
         blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
-        moldingAreas: Array.from(
-          { length: faker.number.int({ min: 1, max: 10 }) },
-          (_, i) => i + 1,
-        ).map(() => ({
-          id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
-          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-          pressureUnits: faker.helpers.arrayElement([
-            faker.helpers.arrayElement([
-              faker.string.alpha({ length: { min: 10, max: 20 } }),
-              null,
-            ]),
-            undefined,
-          ]),
-        })),
-        status: faker.helpers.arrayElement(Object.values(AssetStatus)),
       },
       null,
     ]),
@@ -188,21 +142,6 @@ export const getCreateMoldPassportApiV1MoldPassportsPostResponseMock = (
         id: faker.string.uuid(),
         serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
         blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
-        moldingAreas: Array.from(
-          { length: faker.number.int({ min: 1, max: 10 }) },
-          (_, i) => i + 1,
-        ).map(() => ({
-          id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
-          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-          pressureUnits: faker.helpers.arrayElement([
-            faker.helpers.arrayElement([
-              faker.string.alpha({ length: { min: 10, max: 20 } }),
-              null,
-            ]),
-            undefined,
-          ]),
-        })),
-        status: faker.helpers.arrayElement(Object.values(AssetStatus)),
       },
       null,
     ]),
@@ -391,21 +330,6 @@ export const getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetResponseMock =
         id: faker.string.uuid(),
         serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
         blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
-        moldingAreas: Array.from(
-          { length: faker.number.int({ min: 1, max: 10 }) },
-          (_, i) => i + 1,
-        ).map(() => ({
-          id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
-          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-          pressureUnits: faker.helpers.arrayElement([
-            faker.helpers.arrayElement([
-              faker.string.alpha({ length: { min: 10, max: 20 } }),
-              null,
-            ]),
-            undefined,
-          ]),
-        })),
-        status: faker.helpers.arrayElement(Object.values(AssetStatus)),
       },
       null,
     ]),
@@ -417,21 +341,6 @@ export const getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetResponseMock =
         id: faker.string.uuid(),
         serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
         blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
-        moldingAreas: Array.from(
-          { length: faker.number.int({ min: 1, max: 10 }) },
-          (_, i) => i + 1,
-        ).map(() => ({
-          id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
-          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-          pressureUnits: faker.helpers.arrayElement([
-            faker.helpers.arrayElement([
-              faker.string.alpha({ length: { min: 10, max: 20 } }),
-              null,
-            ]),
-            undefined,
-          ]),
-        })),
-        status: faker.helpers.arrayElement(Object.values(AssetStatus)),
       },
       null,
     ]),
@@ -620,21 +529,6 @@ export const getUpdateMoldPassportApiV1MoldPassportsMoldPassportIdPutResponseMoc
         id: faker.string.uuid(),
         serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
         blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
-        moldingAreas: Array.from(
-          { length: faker.number.int({ min: 1, max: 10 }) },
-          (_, i) => i + 1,
-        ).map(() => ({
-          id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
-          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-          pressureUnits: faker.helpers.arrayElement([
-            faker.helpers.arrayElement([
-              faker.string.alpha({ length: { min: 10, max: 20 } }),
-              null,
-            ]),
-            undefined,
-          ]),
-        })),
-        status: faker.helpers.arrayElement(Object.values(AssetStatus)),
       },
       null,
     ]),
@@ -646,21 +540,6 @@ export const getUpdateMoldPassportApiV1MoldPassportsMoldPassportIdPutResponseMoc
         id: faker.string.uuid(),
         serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
         blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
-        moldingAreas: Array.from(
-          { length: faker.number.int({ min: 1, max: 10 }) },
-          (_, i) => i + 1,
-        ).map(() => ({
-          id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
-          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
-          pressureUnits: faker.helpers.arrayElement([
-            faker.helpers.arrayElement([
-              faker.string.alpha({ length: { min: 10, max: 20 } }),
-              null,
-            ]),
-            undefined,
-          ]),
-        })),
-        status: faker.helpers.arrayElement(Object.values(AssetStatus)),
       },
       null,
     ]),
@@ -810,34 +689,400 @@ export const getUpdateMoldPassportApiV1MoldPassportsMoldPassportIdPutResponseMoc
 })
 
 export const getDeleteMoldPassportApiV1MoldPassportsMoldPassportIdDeleteResponseMock = (
-  overrideResponse: Partial<MoldPassportShortResponse> = {},
-): MoldPassportShortResponse => ({
+  overrideResponse: Partial<MoldPassportDetailResponse> = {},
+): MoldPassportDetailResponse => ({
+  deletedAt: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]),
+    undefined,
+  ]),
+  createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+  createdById: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([faker.string.uuid(), null]),
+    undefined,
+  ]),
+  updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+  updatedById: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([faker.string.uuid(), null]),
+    undefined,
+  ]),
   id: faker.string.uuid(),
+  isComplete: faker.datatype.boolean(),
   primaryCastingProductName: faker.string.alpha({ length: { min: 10, max: 20 } }),
   referenceCode: faker.string.alpha({ length: { min: 10, max: 20 } }),
-  markingYear: faker.helpers.arrayElement([
+  moldingArea: {
+    id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    pressureUnits: faker.helpers.arrayElement([
+      faker.helpers.arrayElement([faker.string.alpha({ length: { min: 10, max: 20 } }), null]),
+      undefined,
+    ]),
+  },
+  castingTechnology: {
+    id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    abbreviation: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  },
+  patternPlateFrame: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([
+      {
+        id: faker.string.uuid(),
+        serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      },
+      null,
+    ]),
+    undefined,
+  ]),
+  moldingFlask: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([
+      {
+        id: faker.string.uuid(),
+        serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      },
+      null,
+    ]),
+    undefined,
+  ]),
+  dataGsc: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([
+      {
+        createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+        updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+        moldPassportId: faker.string.uuid(),
+        moldingSandType: {
+          id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          abbreviation: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        },
+        moldingSandSystem: faker.helpers.arrayElement(Object.values(MoldingSandSystem)),
+        moldingSandNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        moldHorizontalDensity: faker.number.float({
+          min: undefined,
+          max: undefined,
+          fractionDigits: 2,
+        }),
+        moldVerticalDensity: faker.number.float({
+          min: undefined,
+          max: undefined,
+          fractionDigits: 2,
+        }),
+      },
+      null,
+    ]),
+    undefined,
+  ]),
+  dataAsc: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([
+      {
+        createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+        updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+        moldPassportId: faker.string.uuid(),
+        moldingSandType: {
+          id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          abbreviation: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        },
+        moldHardness: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+        resin: faker.helpers.arrayElement([
+          faker.helpers.arrayElement([
+            {
+              id: faker.string.uuid(),
+              type: faker.helpers.arrayElement(Object.values(ResinType)),
+              brand: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              component: faker.helpers.arrayElement([
+                faker.helpers.arrayElement([
+                  faker.helpers.arrayElement(Object.values(ResinComponent)),
+                  null,
+                ]),
+                undefined,
+              ]),
+              serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+            },
+            null,
+          ]),
+          undefined,
+        ]),
+      },
+      null,
+    ]),
+    undefined,
+  ]),
+  moldCavities: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+    () => ({
+      createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+      updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+      id: faker.string.uuid(),
+      castingPattern: {
+        id: faker.string.uuid(),
+        castingProduct: {
+          id: faker.string.uuid(),
+          type: faker.helpers.arrayElement(Object.values(CastingProductType)),
+          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        },
+        serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      },
+      serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      moldCores: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+        () => ({
+          createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+          updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+          id: faker.string.uuid(),
+          coreBatch: {
+            id: faker.string.uuid(),
+            moldingSandType: {
+              id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+              name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              abbreviation: faker.string.alpha({ length: { min: 10, max: 20 } }),
+            },
+            moldCoreType: {
+              id: faker.string.uuid(),
+              castingProduct: {
+                id: faker.string.uuid(),
+                type: faker.helpers.arrayElement(Object.values(CastingProductType)),
+                name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              },
+              modelNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+            },
+            machine: {
+              id: faker.string.uuid(),
+              brand: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              model: faker.string.alpha({ length: { min: 10, max: 20 } }),
+            },
+            manufacturingTimestamp: `${faker.date.past().toISOString().split('.')[0]}Z`,
+            batchExpiryDate: `${faker.date.past().toISOString().split('.')[0]}Z`,
+            status: faker.helpers.arrayElement(Object.values(ConsumableStatus)),
+          },
+          hardness: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+        }),
+      ),
+      isFunctional: faker.datatype.boolean(),
+    }),
+  ),
+  pressingPressure: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([
+      faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+      null,
+    ]),
+    undefined,
+  ]),
+  moldSequenceInShift: faker.helpers.arrayElement([
     faker.helpers.arrayElement([
       faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
       null,
     ]),
     undefined,
   ]),
+  moldAssemblyTimestamp: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]),
+    undefined,
+  ]),
+  status: faker.helpers.arrayElement(Object.values(AssetStatus)),
+  notes: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([faker.string.alpha({ length: { min: 10, max: 20 } }), null]),
+    undefined,
+  ]),
+  isDeleted: faker.datatype.boolean(),
   ...overrideResponse,
 })
 
 export const getRestoreMoldPassportApiV1MoldPassportsMoldPassportIdRestorePostResponseMock = (
-  overrideResponse: Partial<MoldPassportShortResponse> = {},
-): MoldPassportShortResponse => ({
+  overrideResponse: Partial<MoldPassportDetailResponse> = {},
+): MoldPassportDetailResponse => ({
+  deletedAt: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]),
+    undefined,
+  ]),
+  createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+  createdById: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([faker.string.uuid(), null]),
+    undefined,
+  ]),
+  updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+  updatedById: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([faker.string.uuid(), null]),
+    undefined,
+  ]),
   id: faker.string.uuid(),
+  isComplete: faker.datatype.boolean(),
   primaryCastingProductName: faker.string.alpha({ length: { min: 10, max: 20 } }),
   referenceCode: faker.string.alpha({ length: { min: 10, max: 20 } }),
-  markingYear: faker.helpers.arrayElement([
+  moldingArea: {
+    id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    pressureUnits: faker.helpers.arrayElement([
+      faker.helpers.arrayElement([faker.string.alpha({ length: { min: 10, max: 20 } }), null]),
+      undefined,
+    ]),
+  },
+  castingTechnology: {
+    id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+    name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    abbreviation: faker.string.alpha({ length: { min: 10, max: 20 } }),
+  },
+  patternPlateFrame: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([
+      {
+        id: faker.string.uuid(),
+        serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      },
+      null,
+    ]),
+    undefined,
+  ]),
+  moldingFlask: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([
+      {
+        id: faker.string.uuid(),
+        serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      },
+      null,
+    ]),
+    undefined,
+  ]),
+  dataGsc: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([
+      {
+        createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+        updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+        moldPassportId: faker.string.uuid(),
+        moldingSandType: {
+          id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          abbreviation: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        },
+        moldingSandSystem: faker.helpers.arrayElement(Object.values(MoldingSandSystem)),
+        moldingSandNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        moldHorizontalDensity: faker.number.float({
+          min: undefined,
+          max: undefined,
+          fractionDigits: 2,
+        }),
+        moldVerticalDensity: faker.number.float({
+          min: undefined,
+          max: undefined,
+          fractionDigits: 2,
+        }),
+      },
+      null,
+    ]),
+    undefined,
+  ]),
+  dataAsc: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([
+      {
+        createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+        updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+        moldPassportId: faker.string.uuid(),
+        moldingSandType: {
+          id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          abbreviation: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        },
+        moldHardness: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+        resin: faker.helpers.arrayElement([
+          faker.helpers.arrayElement([
+            {
+              id: faker.string.uuid(),
+              type: faker.helpers.arrayElement(Object.values(ResinType)),
+              brand: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              component: faker.helpers.arrayElement([
+                faker.helpers.arrayElement([
+                  faker.helpers.arrayElement(Object.values(ResinComponent)),
+                  null,
+                ]),
+                undefined,
+              ]),
+              serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+            },
+            null,
+          ]),
+          undefined,
+        ]),
+      },
+      null,
+    ]),
+    undefined,
+  ]),
+  moldCavities: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+    () => ({
+      createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+      updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+      id: faker.string.uuid(),
+      castingPattern: {
+        id: faker.string.uuid(),
+        castingProduct: {
+          id: faker.string.uuid(),
+          type: faker.helpers.arrayElement(Object.values(CastingProductType)),
+          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        },
+        serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      },
+      serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      moldCores: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+        () => ({
+          createdAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+          updatedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+          id: faker.string.uuid(),
+          coreBatch: {
+            id: faker.string.uuid(),
+            moldingSandType: {
+              id: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+              name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              abbreviation: faker.string.alpha({ length: { min: 10, max: 20 } }),
+            },
+            moldCoreType: {
+              id: faker.string.uuid(),
+              castingProduct: {
+                id: faker.string.uuid(),
+                type: faker.helpers.arrayElement(Object.values(CastingProductType)),
+                name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              },
+              modelNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+            },
+            machine: {
+              id: faker.string.uuid(),
+              brand: faker.string.alpha({ length: { min: 10, max: 20 } }),
+              model: faker.string.alpha({ length: { min: 10, max: 20 } }),
+            },
+            manufacturingTimestamp: `${faker.date.past().toISOString().split('.')[0]}Z`,
+            batchExpiryDate: `${faker.date.past().toISOString().split('.')[0]}Z`,
+            status: faker.helpers.arrayElement(Object.values(ConsumableStatus)),
+          },
+          hardness: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+        }),
+      ),
+      isFunctional: faker.datatype.boolean(),
+    }),
+  ),
+  pressingPressure: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([
+      faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+      null,
+    ]),
+    undefined,
+  ]),
+  moldSequenceInShift: faker.helpers.arrayElement([
     faker.helpers.arrayElement([
       faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
       null,
     ]),
     undefined,
   ]),
+  moldAssemblyTimestamp: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]),
+    undefined,
+  ]),
+  status: faker.helpers.arrayElement(Object.values(AssetStatus)),
+  notes: faker.helpers.arrayElement([
+    faker.helpers.arrayElement([faker.string.alpha({ length: { min: 10, max: 20 } }), null]),
+    undefined,
+  ]),
+  isDeleted: faker.datatype.boolean(),
   ...overrideResponse,
 })
 
@@ -935,10 +1180,10 @@ export const getUpdateMoldPassportApiV1MoldPassportsMoldPassportIdPutMockHandler
 
 export const getDeleteMoldPassportApiV1MoldPassportsMoldPassportIdDeleteMockHandler = (
   overrideResponse?:
-    | MoldPassportShortResponse
+    | MoldPassportDetailResponse
     | ((
         info: Parameters<Parameters<typeof http.delete>[1]>[0],
-      ) => Promise<MoldPassportShortResponse> | MoldPassportShortResponse),
+      ) => Promise<MoldPassportDetailResponse> | MoldPassportDetailResponse),
 ) => {
   return http.delete('*/api/v1/mold-passports/:moldPassportId', async (info) => {
     await delay(1000)
@@ -958,10 +1203,10 @@ export const getDeleteMoldPassportApiV1MoldPassportsMoldPassportIdDeleteMockHand
 
 export const getRestoreMoldPassportApiV1MoldPassportsMoldPassportIdRestorePostMockHandler = (
   overrideResponse?:
-    | MoldPassportShortResponse
+    | MoldPassportDetailResponse
     | ((
         info: Parameters<Parameters<typeof http.post>[1]>[0],
-      ) => Promise<MoldPassportShortResponse> | MoldPassportShortResponse),
+      ) => Promise<MoldPassportDetailResponse> | MoldPassportDetailResponse),
 ) => {
   return http.post('*/api/v1/mold-passports/:moldPassportId/restore', async (info) => {
     await delay(1000)

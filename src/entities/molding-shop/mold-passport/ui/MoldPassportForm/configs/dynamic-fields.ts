@@ -3,20 +3,14 @@ import {
   CastingTechnologyDataGscDynamicForm,
   CastingTechnologyPassportDataAscDynamicForm,
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/components/CastingTechnologySpecificFields'
-import {
-  MoldingAreaDataAscDynamicForm,
-  MoldingAreaDataGscDynamicForm,
-} from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/components/MoldingAreaIdSpecificFields'
+import { MoldingAreaDataDynamicForm } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/components/MoldingAreaIdSpecificFields'
 import { MoldingSandSystem } from '@/shared/api/mold-passport/model'
-import { createFormConfig } from '@/shared/lib/zod/dynamic-schema'
-import type { Option } from '@/shared/ui/select/ReactSelect'
+import { ANY_VALUE, createFormConfig } from '@/shared/lib/zod/dynamic-schema'
+import type { AsyncOptionsLoader, Option } from '@/shared/ui/select/ReactSelect'
 
 export interface MoldPassportDynamicFieldOptions {
-  resinsOptions: Option<number>[]
-  castingTechnologiesOptions: Option<number>[]
-  // positionsOptions: Option<string>[]
-  // addressOptions: Option<string>[]
-  // genderOptions: Option<string>[]
+  loadResinsOptions: AsyncOptionsLoader<Option>
+  loadCastingTechnologiesOptions: AsyncOptionsLoader<Option>
 }
 
 export const dataGscFormSchema = z.object({
@@ -36,31 +30,21 @@ export const dataAscFormSchema = z.object({
 export type MoldPassportDataAsc = z.infer<typeof dataAscFormSchema>
 
 export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynamicFieldOptions>([
-  // Для участков Green Sand Casting Песчано-Глинистая
+  // Для участков
   {
     conditions: {
-      moldingAreaId: ['male', 'female'],
+      moldingAreaId: [ANY_VALUE],
     },
     schema: z.object({
       castingTechnologyId: z.number(),
     }),
-    Component: MoldingAreaDataGscDynamicForm,
-  },
-  // Для участков Air Set Casting Холодно-Твердеющая
-  {
-    conditions: {
-      moldingAreaId: 'other',
-    },
-    schema: z.object({
-      castingTechnologyId: z.number(),
-    }),
-    Component: MoldingAreaDataAscDynamicForm,
+    Component: MoldingAreaDataDynamicForm,
   },
 
   // Для технологии Green Sand Casting Песчано-Глинистая
   {
     conditions: {
-      castingTechnologyId: ['male', 'female', 'other'],
+      castingTechnologyId: '1',
     },
     schema: z.object({ dataGsc: dataGscFormSchema.nullable().optional() }),
     Component: CastingTechnologyDataGscDynamicForm,
@@ -68,7 +52,7 @@ export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynam
   // Для технологии Air Set Casting Холодно-Твердеющая
   {
     conditions: {
-      castingTechnologyId: ['billing', 'shipping', 'warehouse', 'plant', 'office', 'home'],
+      castingTechnologyId: '2',
     },
     schema: z.object({ dataAsc: dataAscFormSchema.nullable().optional() }),
     Component: CastingTechnologyPassportDataAscDynamicForm,

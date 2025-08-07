@@ -5,4 +5,4 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type MoldPassportShortResponseMarkingYear = number | null
+export type MoldingAreaLookupResponsePressureUnits = string | null

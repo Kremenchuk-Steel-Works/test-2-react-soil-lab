@@ -4,6 +4,6 @@
  * Molding Shop Service
  * OpenAPI spec version: 0.1.0
  */
-import type { PatternPlateFrameShortResponse } from './patternPlateFrameShortResponse'
+import type { PatternPlateFrameLookupResponse } from './patternPlateFrameLookupResponse'
 
-export type MoldPassportDetailResponsePatternPlateFrame = PatternPlateFrameShortResponse | null
+export type MoldPassportDetailResponsePatternPlateFrame = PatternPlateFrameLookupResponse | null

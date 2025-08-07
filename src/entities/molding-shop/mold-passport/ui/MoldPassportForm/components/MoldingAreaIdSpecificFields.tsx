@@ -6,7 +6,7 @@ import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 
 type DynamicFieldsProps = DynamicComponentProps<MoldPassportDynamicFieldOptions>
 
-export function MoldingAreaDataGscDynamicForm({ control, errors, options }: DynamicFieldsProps) {
+export function MoldingAreaDataDynamicForm({ control, errors, options }: DynamicFieldsProps) {
   return (
     <Controller
       name="castingTechnologyId"
@@ -15,27 +15,7 @@ export function MoldingAreaDataGscDynamicForm({ control, errors, options }: Dyna
         <FormSelectField
           field={field}
           fieldState={fieldState}
-          options={options.castingTechnologiesOptions}
-          isVirtualized
-          isClearable
-          placeholder="Технологія формовки"
-          errorMessage={getNestedErrorMessage(errors, 'castingTechnologyId')}
-        />
-      )}
-    />
-  )
-}
-
-export function MoldingAreaDataAscDynamicForm({ control, errors, options }: DynamicFieldsProps) {
-  return (
-    <Controller
-      name="castingTechnologyId"
-      control={control}
-      render={({ field, fieldState }) => (
-        <FormSelectField
-          field={field}
-          fieldState={fieldState}
-          options={options.castingTechnologiesOptions}
+          options={options.loadCastingTechnologiesOptions}
           isVirtualized
           isClearable
           placeholder="Технологія формовки"

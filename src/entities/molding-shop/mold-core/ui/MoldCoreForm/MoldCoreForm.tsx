@@ -9,12 +9,12 @@ import {
 } from 'react-hook-form'
 import { coreBatchService } from '@/entities/molding-shop/core-batch/api/service'
 import type { MoldCoreFormFields } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/schema'
-import type { CountryLookupResponse } from '@/shared/api/main-service/model'
-import { useSelectOptions } from '@/shared/hooks/react-hook-form/options/useSelectOptions'
-import { useParallelQueries } from '@/shared/hooks/react-query/useParallelQueries'
-import { getErrorMessage } from '@/shared/lib/axios'
+import type {
+  MoldCoreBatchLookupResponse,
+  MoldCoreBatchLookupsListResponse,
+} from '@/shared/api/mold-passport/model'
+import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
@@ -35,27 +35,22 @@ export function MoldCoreForm<T extends FieldValues>({
   register,
   errors,
 }: FormProps<T>) {
-  // Queries
-  const {
-    data: queriesData,
-    isLoading: isQueriesLoading,
-    error: queriesError,
-  } = useParallelQueries({
-    coreBatches: coreBatchService.getLookup(),
-  })
-
-  // Loading || Error
-  if (isQueriesLoading) return
-  if (queriesError) {
-    return <AlertMessage type={AlertType.ERROR} message={getErrorMessage(queriesError)} />
-  }
-
-  // Options
-  const coreBatchesOptions = useSelectOptions(
-    queriesData?.coreBatches as CountryLookupResponse[] | undefined,
+  const loadCoreBatchesOptions = useAsyncOptionsNew<MoldCoreBatchLookupResponse, string>(
+    coreBatchService.getLookup,
     {
-      getValue: (c) => c.id,
-      getLabel: (c) => c.name,
+      paramsBuilder: (search, page) => ({
+        search,
+        page,
+        pageSize: 20,
+      }),
+      responseAdapter: (data: MoldCoreBatchLookupsListResponse) => ({
+        items: data.data,
+        hasMore: data.data.length < data.totalItems,
+      }),
+      mapper: (item) => ({
+        value: item.id,
+        label: `${item.moldingSandType.name} ${item.moldCoreType.modelNumber} ${item.machine.brand} ${item.machine.model} ${item.manufacturingTimestamp} ${item.batchExpiryDate}`,
+      }),
     },
   )
 
@@ -71,7 +66,7 @@ export function MoldCoreForm<T extends FieldValues>({
           <FormSelectField
             field={field}
             fieldState={fieldState}
-            options={coreBatchesOptions}
+            options={loadCoreBatchesOptions}
             isVirtualized
             isClearable
             placeholder="Партія"

@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -23,6 +24,56 @@ import {
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 
+// Адаптируем данные с запроса под форму
+function mapResponseToInitialData(
+  response: MoldPassportDetailResponse,
+): MoldPassportFormInitialData {
+  return {
+    defaultValues: {
+      ...response,
+      moldingAreaId: response.moldingArea.id,
+      castingTechnologyId: response.castingTechnology.id,
+      dataAsc: { ...response.dataAsc, resinId: response.dataAsc?.resin?.id },
+      patternPlateFrameId: response.patternPlateFrame?.id,
+      moldingFlaskId: response.moldingFlask?.id,
+
+      moldCavities:
+        response.moldCavities?.map((cavity) => ({
+          ...cavity,
+          castingPatternId: cavity.castingPattern.id,
+          moldCores:
+            cavity.moldCores?.map((core) => ({
+              ...core,
+              coreBatchId: core.coreBatch.id,
+            })) ?? [],
+        })) ?? [],
+    },
+    options: {
+      moldingArea: [
+        {
+          value: response.moldingArea.id,
+          label: response.moldingArea.name,
+        },
+      ],
+      castingTechnology: [
+        {
+          value: response.castingTechnology.id,
+          label: response.castingTechnology.name,
+        },
+      ],
+      resin: response.dataAsc?.resin
+        ? [{ value: response.dataAsc.resin.id, label: response.dataAsc.resin.serialNumber }]
+        : [],
+      patternPlateFrame: response.patternPlateFrame
+        ? [{ value: response.patternPlateFrame.id, label: response.patternPlateFrame.serialNumber }]
+        : [],
+      moldingFlask: response.moldingFlask
+        ? [{ value: response.moldingFlask.id, label: response.moldingFlask.serialNumber }]
+        : [],
+    },
+  }
+}
+
 export default function MoldPassportUpdate() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
@@ -37,6 +88,13 @@ export default function MoldPassportUpdate() {
     placeholderData: keepPreviousData,
     enabled: !!id,
   })
+
+  const formInitialData = useMemo(() => {
+    if (!initialData) {
+      return null // Возвращаем null, пока данные не загружены
+    }
+    return mapResponseToInitialData(initialData)
+  }, [initialData])
 
   // Запрос на обновление
   const handleSubmit = async (formData: MoldPassportFormFields) => {
@@ -74,28 +132,6 @@ export default function MoldPassportUpdate() {
     return payload
   }
 
-  // Адаптируем данные с запроса под форму
-  function mapResponseToInitialData(
-    response: MoldPassportDetailResponse,
-  ): MoldPassportFormInitialData {
-    return {
-      defaultValues: {
-        ...response,
-        moldCavities:
-          response.moldCavities?.map((cavity) => ({
-            ...cavity,
-            castingPatternId: cavity.castingPattern.id,
-            moldCores:
-              cavity.moldCores?.map((core) => ({
-                ...core,
-                coreBatchId: core.coreBatch.id,
-              })) ?? [],
-          })) ?? [],
-      },
-      options: {},
-    }
-  }
-
   return (
     <>
       <div className="flex items-center justify-between">
@@ -109,12 +145,12 @@ export default function MoldPassportUpdate() {
 
       {isError && <AlertMessage type={AlertType.ERROR} message={getErrorMessage(queryError)} />}
 
-      {!isLoading && !isError && initialData && (
+      {!isLoading && formInitialData && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
             <MoldPassportForm
               onSubmit={handleSubmit}
-              initialData={mapResponseToInitialData(initialData)}
+              initialData={formInitialData}
               submitBtnName="Оновити"
             />
           </div>

@@ -1,5 +1,5 @@
-import { getGetCountriesListApiV1LookupsCountriesGetQueryOptions } from '@/shared/api/main-service/endpoints/lookups/lookups'
+import { getGetMoldCoreBatchLookupsListApiV1MoldCoreBatchesLookupsGetQueryOptions } from '@/shared/api/mold-passport/endpoints/mold-core-batches/mold-core-batches'
 
 export const coreBatchService = {
-  getLookup: getGetCountriesListApiV1LookupsCountriesGetQueryOptions,
+  getLookup: getGetMoldCoreBatchLookupsListApiV1MoldCoreBatchesLookupsGetQueryOptions,
 }

@@ -4,6 +4,6 @@
  * Molding Shop Service
  * OpenAPI spec version: 0.1.0
  */
-import type { MoldingFlaskShortResponse } from './moldingFlaskShortResponse'
+import type { MoldingFlaskLookupResponse } from './moldingFlaskLookupResponse'
 
-export type MoldPassportListItemResponseMoldingFlask = MoldingFlaskShortResponse | null
+export type MoldPassportListItemResponseMoldingFlask = MoldingFlaskLookupResponse | null

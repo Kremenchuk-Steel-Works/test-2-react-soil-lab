@@ -1,5 +1,5 @@
-import { getGetCountriesListApiV1LookupsCountriesGetQueryOptions } from '@/shared/api/main-service/endpoints/lookups/lookups'
+import { getGetCastingTechnologyLookupsListApiV1CastingTechnologiesLookupsGetQueryOptions } from '@/shared/api/mold-passport/endpoints/casting-technologies/casting-technologies'
 
 export const castingTechnologyService = {
-  getLookup: getGetCountriesListApiV1LookupsCountriesGetQueryOptions,
+  getLookup: getGetCastingTechnologyLookupsListApiV1CastingTechnologiesLookupsGetQueryOptions,
 }

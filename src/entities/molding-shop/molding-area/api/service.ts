@@ -1,5 +1,5 @@
-import { getGetCountriesListApiV1LookupsCountriesGetQueryOptions } from '@/shared/api/main-service/endpoints/lookups/lookups'
+import { getGetMoldingAreaLookupsListApiV1MoldingAreasLookupsGetQueryOptions } from '@/shared/api/mold-passport/endpoints/molding-areas/molding-areas'
 
 export const moldingAreaService = {
-  getLookup: getGetCountriesListApiV1LookupsCountriesGetQueryOptions,
+  getLookup: getGetMoldingAreaLookupsListApiV1MoldingAreasLookupsGetQueryOptions,
 }

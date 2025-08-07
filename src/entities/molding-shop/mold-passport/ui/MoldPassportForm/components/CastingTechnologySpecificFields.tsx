@@ -70,7 +70,7 @@ export function CastingTechnologyPassportDataAscDynamicForm({
           <FormSelectField
             field={field}
             fieldState={fieldState}
-            options={options.resinsOptions}
+            options={options.loadResinsOptions}
             isVirtualized
             isClearable
             placeholder="Смола"

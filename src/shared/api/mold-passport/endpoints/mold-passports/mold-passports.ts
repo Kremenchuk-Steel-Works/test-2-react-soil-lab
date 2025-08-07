@@ -27,7 +27,6 @@ import type {
   MoldPassportCreate,
   MoldPassportDetailResponse,
   MoldPassportListResponse,
-  MoldPassportShortResponse,
   MoldPassportUpdate,
 } from '../../model'
 
@@ -510,7 +509,7 @@ export const useUpdateMoldPassportApiV1MoldPassportsMoldPassportIdPut = <
 export const deleteMoldPassportApiV1MoldPassportsMoldPassportIdDelete = (
   moldPassportId: string,
 ) => {
-  return customMutator<MoldPassportShortResponse>({
+  return customMutator<MoldPassportDetailResponse>({
     url: `/api/v1/mold-passports/${moldPassportId}`,
     method: 'DELETE',
   })
@@ -592,7 +591,7 @@ export const restoreMoldPassportApiV1MoldPassportsMoldPassportIdRestorePost = (
   moldPassportId: string,
   signal?: AbortSignal,
 ) => {
-  return customMutator<MoldPassportShortResponse>({
+  return customMutator<MoldPassportDetailResponse>({
     url: `/api/v1/mold-passports/${moldPassportId}/restore`,
     method: 'POST',
     signal,

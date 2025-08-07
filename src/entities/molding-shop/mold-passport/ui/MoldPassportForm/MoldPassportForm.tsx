@@ -1,8 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
-import { castingPatternService } from '@/entities/molding-shop/casting-pattern/api/service'
 import { castingTechnologyService } from '@/entities/molding-shop/casting-technology/api/service'
-import { coreBatchService } from '@/entities/molding-shop/core-batch/api/service'
 import { MoldCavityForm } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/MoldCavityForm'
 import { moldCavityFormDefaultValues } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
 import {
@@ -13,22 +11,30 @@ import {
   moldPassportFormSchema,
   type MoldPassportFormFields,
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/schema'
-import { moldingAreaService } from '@/entities/molding-shop/molding-area/api/service'
 import { moldingFlaskService } from '@/entities/molding-shop/molding-flask/api/service'
 import { patternPlateFrameService } from '@/entities/molding-shop/pattern-plate-frame/api/service'
-import { resinService } from '@/entities/molding-shop/resin/api/service'
-import type { CountryLookupResponse } from '@/shared/api/main-service/model'
-import { useSelectOptions } from '@/shared/hooks/react-hook-form/options/useSelectOptions'
-import { useParallelQueries } from '@/shared/hooks/react-query/useParallelQueries'
+import type {
+  CastingTechnologyLookupResponse,
+  CastingTechnologyLookupsListResponse,
+  MoldingAreaLookupResponse,
+  MoldingAreaLookupsListResponse,
+  MoldingFlaskLookupResponse,
+  MoldingFlaskLookupsListResponse,
+  PatternPlateFrameLookupResponse,
+  PatternPlateFrameLookupsListResponse,
+  ResinLookupResponse,
+  ResinLookupsListResponse,
+} from '@/shared/api/mold-passport/model'
+import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DynamicFieldArea } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArea'
 import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
 import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
+import type { Option } from '@/shared/ui/select/ReactSelect'
 import {
   ButtonWithError,
   CheckboxWithError,
@@ -43,7 +49,13 @@ const schema = moldPassportFormSchema
 const dynamicFieldConfig = moldPassportDynamicFieldConfig
 type DynamicFieldOptions = MoldPassportDynamicFieldOptions
 
-type MoldPassportFormOptions = {}
+type MoldPassportFormOptions = {
+  moldingArea: Option[]
+  castingTechnology: Option[]
+  resin: Option[]
+  patternPlateFrame: Option[]
+  moldingFlask: Option[]
+}
 type FormOptions = MoldPassportFormOptions
 
 export type MoldPassportFormInitialData = FormInitialData<FormFields, FormOptions>
@@ -67,75 +79,106 @@ export default function MoldPassportForm({
     setError,
     formState: { errors, isSubmitting },
   } = form
+  const loadMoldingAreasOptions = useAsyncOptionsNew<MoldingAreaLookupResponse, number>(
+    castingTechnologyService.getLookup,
+    {
+      paramsBuilder: (search, page) => ({
+        search,
+        page,
+        pageSize: 20,
+      }),
+      responseAdapter: (data: MoldingAreaLookupsListResponse) => ({
+        items: data.data,
+        hasMore: data.data.length < data.totalItems,
+      }),
+      mapper: (item) => ({
+        value: item.id,
+        label: item.name,
+      }),
+    },
+  )
 
-  // Queries
-  const {
-    data: queriesData,
-    isLoading: isQueriesLoading,
-    error: queriesError,
-  } = useParallelQueries({
-    castingTechnologies: castingTechnologyService.getLookup(),
-    moldingAreas: moldingAreaService.getLookup(),
-    patternPlateFrames: patternPlateFrameService.getLookup(),
-    moldingFlasks: moldingFlaskService.getLookup(),
-    resins: resinService.getLookup(),
-    castingPatterns: castingPatternService.getLookup(),
-    coreBatches: coreBatchService.getLookup(),
+  const loadCastingTechnologiesOptions = useAsyncOptionsNew<
+    CastingTechnologyLookupResponse,
+    number
+  >(castingTechnologyService.getLookup, {
+    paramsBuilder: (search, page) => ({
+      search,
+      page,
+      pageSize: 20,
+      // moldingAreaId: moldingAreaId,
+    }),
+    responseAdapter: (data: CastingTechnologyLookupsListResponse) => ({
+      items: data.data,
+      hasMore: data.data.length < data.totalItems,
+    }),
+    mapper: (item) => ({
+      value: item.id,
+      label: item.name,
+    }),
   })
 
-  console.log(queriesData)
-
-  // Options
-  const castingTechnologiesOptions = useSelectOptions(
-    queriesData?.castingTechnologies as CountryLookupResponse[] | undefined,
+  const loadResinsOptions = useAsyncOptionsNew<ResinLookupResponse, string>(
+    castingTechnologyService.getLookup,
     {
-      getValue: (c) => c.id,
-      getLabel: (c) => c.name,
+      paramsBuilder: (search, page) => ({
+        search,
+        page,
+        pageSize: 20,
+      }),
+      responseAdapter: (data: ResinLookupsListResponse) => ({
+        items: data.data,
+        hasMore: data.data.length < data.totalItems,
+      }),
+      mapper: (item) => ({
+        value: item.id,
+        label: item.name,
+      }),
     },
   )
 
-  const moldingAreasOptions = useSelectOptions(
-    queriesData?.moldingAreas as CountryLookupResponse[] | undefined,
+  const loadPatternPlateFramesOptions = useAsyncOptionsNew<PatternPlateFrameLookupResponse, string>(
+    patternPlateFrameService.getLookup,
     {
-      getValue: (c) => c.id,
-      getLabel: (c) => c.name,
+      paramsBuilder: (search, page) => ({
+        search,
+        page,
+        pageSize: 20,
+      }),
+      responseAdapter: (data: PatternPlateFrameLookupsListResponse) => ({
+        items: data.data,
+        hasMore: data.data.length < data.totalItems,
+      }),
+      mapper: (item) => ({
+        value: item.id,
+        label: item.serialNumber,
+      }),
     },
   )
 
-  const patternPlateFramesOptions = useSelectOptions(
-    queriesData?.patternPlateFrames as CountryLookupResponse[] | undefined,
+  const loadMoldingFlasksOptions = useAsyncOptionsNew<MoldingFlaskLookupResponse, string>(
+    moldingFlaskService.getLookup,
     {
-      getValue: (c) => c.id,
-      getLabel: (c) => c.name,
-    },
-  )
-
-  const moldingFlasksOptions = useSelectOptions(
-    queriesData?.moldingFlasks as CountryLookupResponse[] | undefined,
-    {
-      getValue: (c) => c.id,
-      getLabel: (c) => c.name,
-    },
-  )
-
-  const resinsOptions = useSelectOptions(
-    queriesData?.resins as CountryLookupResponse[] | undefined,
-    {
-      getValue: (c) => c.id,
-      getLabel: (c) => c.name,
+      paramsBuilder: (search, page) => ({
+        search,
+        page,
+        pageSize: 20,
+      }),
+      responseAdapter: (data: MoldingFlaskLookupsListResponse) => ({
+        items: data.data,
+        hasMore: data.data.length < data.totalItems,
+      }),
+      mapper: (item) => ({
+        value: item.id,
+        label: item.serialNumber,
+      }),
     },
   )
 
   // Dynamic form options
   const dynamicFieldOptions: DynamicFieldOptions = {
-    resinsOptions,
-    castingTechnologiesOptions,
-  }
-
-  // Loading || Error
-  if (isQueriesLoading) return
-  if (queriesError) {
-    return <AlertMessage type={AlertType.ERROR} message={queriesError.message} />
+    loadResinsOptions,
+    loadCastingTechnologiesOptions,
   }
 
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
@@ -171,7 +214,8 @@ export default function MoldPassportForm({
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              options={moldingAreasOptions}
+              options={loadMoldingAreasOptions}
+              defaultOptions={initialData?.options?.moldingArea}
               isVirtualized
               isClearable
               placeholder="Ділянка формовки"
@@ -190,7 +234,8 @@ export default function MoldPassportForm({
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              options={patternPlateFramesOptions}
+              options={loadPatternPlateFramesOptions}
+              defaultOptions={initialData?.options?.patternPlateFrame}
               isVirtualized
               isClearable
               placeholder="Модельна рамка"
@@ -206,7 +251,8 @@ export default function MoldPassportForm({
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              options={moldingFlasksOptions}
+              options={loadMoldingFlasksOptions}
+              defaultOptions={initialData?.options?.moldingFlask}
               isVirtualized
               isClearable
               placeholder="Опока"

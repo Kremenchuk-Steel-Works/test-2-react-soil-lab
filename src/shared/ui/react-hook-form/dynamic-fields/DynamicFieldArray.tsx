@@ -5,6 +5,7 @@ import {
   useFieldArray,
   type ArrayPath,
   type Control,
+  type DeepPartial,
   type FieldArray,
   type FieldErrors,
   type FieldValues,
@@ -25,7 +26,7 @@ interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> =
     register: UseFormRegister<T>
     errors: FieldErrors<T>
   }>
-  defaultItem?: FieldArray<T, N>
+  defaultItem?: DeepPartial<FieldArray<T, N>>
   title?: string
   label?: string
   addButton?: React.ReactNode

@@ -7,7 +7,7 @@ export type { MoldPassportFormFields } from './ui/MoldPassportForm/schema';
 export type { MoldPassportFormInitialData } from './ui/MoldPassportForm/MoldPassportForm';
 export type { MoldPassportStatus } from './model/status';
 export { CastingTechnologyDataGscDynamicForm, CastingTechnologyPassportDataAscDynamicForm } from './ui/MoldPassportForm/components/CastingTechnologySpecificFields';
-export { MoldingAreaDataGscDynamicForm, MoldingAreaDataAscDynamicForm } from './ui/MoldPassportForm/components/MoldingAreaIdSpecificFields';
+export { MoldingAreaDataDynamicForm } from './ui/MoldPassportForm/components/MoldingAreaIdSpecificFields';
 export { dataGscFormSchema, dataAscFormSchema, moldPassportDynamicFieldConfig } from './ui/MoldPassportForm/configs/dynamic-fields';
 export { default as MoldPassportForm } from './ui/MoldPassportForm/MoldPassportForm';
 export { moldPassportFormSchema, moldPassportFormDefaultValues } from './ui/MoldPassportForm/schema';
