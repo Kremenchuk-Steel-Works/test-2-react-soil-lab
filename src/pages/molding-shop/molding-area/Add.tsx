@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { MoldingAreaForm, type MoldingAreaFormFields } from '@/entities/molding-shop/molding-area'
+import MoldingAreaForm from '@/entities/molding-shop/molding-area/ui/MoldingAreaForm/MoldingAreaForm'
+import type { MoldingAreaFormFields } from '@/entities/molding-shop/molding-area/ui/MoldingAreaForm/schema'
 
 export default function MoldingAreaAdd() {
   const navigate = useNavigate()

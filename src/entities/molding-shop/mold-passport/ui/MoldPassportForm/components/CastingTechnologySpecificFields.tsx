@@ -20,7 +20,6 @@ export function CastingTechnologyDataGscDynamicForm({ control, errors }: Dynamic
             field={field}
             fieldState={fieldState}
             options={moldingSandSystemOptions}
-            isDisabled
             isVirtualized
             isClearable
             placeholder="Підтип суміші"

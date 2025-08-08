@@ -7,7 +7,7 @@ export function PageHeader() {
   const buttons = usePageHeaderButtons()
 
   return (
-    <div className="flex justify-between">
+    <div className="flex flex-wrap items-center justify-between gap-4">
       <Breadcrumbs />
       {buttons.length > 0 && (
         <div className="flex items-center gap-x-2">
@@ -15,7 +15,7 @@ export function PageHeader() {
             <Button key={key} {...buttonProps}>
               <Icon className="h-5 w-5" />
               {/* Для мобильных устройств оставляем только иконку */}
-              <span className="hidden sm:inline">{label}</span>
+              <span className="hidden md:inline">{label}</span>
             </Button>
           ))}
         </div>

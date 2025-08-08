@@ -7,7 +7,8 @@ export const ANY_VALUE = '__ANY__'
  * Условие для активации правила.
  * Может быть строкой (точное совпадение) или массивом строк (любое из значений).
  */
-type ConditionValue = string | string[]
+type ConditionPrimitive = string | number
+type ConditionValue = ConditionPrimitive | ConditionPrimitive[]
 
 /**
  * Карта условий, где ключ - имя поля, а значение - требуемое значение или массив значений.
@@ -39,20 +40,30 @@ export type DynamicFieldConfig<TOptions extends object> = DynamicRule<TOptions>[
 /**
  * Проверяет, соответствует ли значение поля указанному условию.
  * @param formValue - Значение из формы.
- * @param conditionValue - Условие из конфига (строка или массив строк).
+ * @param conditionValue - Условие из конфига (строка, число или массив).
  * @returns boolean
  */
-function valueMatchesCondition(formValue: unknown, conditionValue: string | string[]): boolean {
+function valueMatchesCondition(formValue: unknown, conditionValue: ConditionValue): boolean {
   if (conditionValue === ANY_VALUE) {
     // Считаем условие выполненным, если значение не null, не undefined и не пустая строка
     return formValue !== null && formValue !== undefined && formValue !== ''
   }
 
   if (Array.isArray(conditionValue)) {
-    // Для массива проверяем вхождение
-    return typeof formValue === 'string' && conditionValue.includes(formValue)
+    // Проверяем, есть ли у поля в форме значение (не null, не undefined, не пустая строка)
+    const formHasValue = formValue !== null && formValue !== undefined && formValue !== ''
+
+    // Условие считается выполненным, если:
+    // Массив содержит ANY_VALUE и в поле формы есть какое-либо значение.
+    // ИЛИ
+    // Массив содержит точное значение из поля формы.
+    return (
+      (conditionValue.includes(ANY_VALUE) && formHasValue) ||
+      conditionValue.includes(formValue as ConditionPrimitive)
+    )
   }
-  // Для строки проверяем точное совпадение
+
+  // Прямое строгое сравнение (===) отлично работает и для чисел, и для строк
   return formValue === conditionValue
 }
 

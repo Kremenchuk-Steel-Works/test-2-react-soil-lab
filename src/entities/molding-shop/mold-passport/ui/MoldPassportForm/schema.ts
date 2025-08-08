@@ -39,4 +39,5 @@ export const moldPassportFormSchema = createDynamicSchema(
 export type MoldPassportFormFields = z.infer<typeof moldPassportFormSchema>
 export const moldPassportFormDefaultValues: DeepPartial<MoldPassportFormFields> = {
   moldCavities: [],
+  assemblyTimestamp: null,
 }

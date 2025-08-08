@@ -33,7 +33,7 @@ export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynam
   // Для участков
   {
     conditions: {
-      moldingAreaId: [ANY_VALUE],
+      moldingAreaId: ANY_VALUE,
     },
     schema: z.object({
       castingTechnologyId: z.number(),
@@ -44,7 +44,7 @@ export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynam
   // Для технологии Green Sand Casting Песчано-Глинистая
   {
     conditions: {
-      castingTechnologyId: '1',
+      castingTechnologyId: ANY_VALUE,
     },
     schema: z.object({ dataGsc: dataGscFormSchema.nullable().optional() }),
     Component: CastingTechnologyDataGscDynamicForm,
@@ -52,7 +52,7 @@ export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynam
   // Для технологии Air Set Casting Холодно-Твердеющая
   {
     conditions: {
-      castingTechnologyId: '2',
+      castingTechnologyId: ANY_VALUE,
     },
     schema: z.object({ dataAsc: dataAscFormSchema.nullable().optional() }),
     Component: CastingTechnologyPassportDataAscDynamicForm,

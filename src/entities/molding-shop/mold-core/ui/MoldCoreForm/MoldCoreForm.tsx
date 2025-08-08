@@ -77,7 +77,7 @@ export function MoldCoreForm<T extends FieldValues>({
 
       <InputFieldWithError
         label="Твердість, од."
-        {...register(fieldName('hardness'), formTransformers.string)}
+        {...register(fieldName('hardness'), formTransformers.number)}
         errorMessage={getNestedErrorMessage(errors, fieldName('hardness'))}
       />
     </>
