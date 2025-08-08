@@ -8,19 +8,19 @@ import {
 } from 'react-hook-form'
 import { checkConditions, type DynamicFieldConfig } from '@/shared/lib/zod/dynamic-schema'
 
-interface UseDynamicFieldManagerProps<TFieldValues extends FieldValues, TOptions extends object> {
+interface UseDynamicFieldManagerProps<TFieldValues extends FieldValues> {
   control: Control<TFieldValues>
   getValues: UseFormGetValues<TFieldValues>
-  config: DynamicFieldConfig<TOptions>
+  config: DynamicFieldConfig
 }
 
 type ActiveRulesState = Record<string, boolean>
 
-export function useDynamicFieldsManager<TFieldValues extends FieldValues, TOptions extends object>({
+export function useDynamicFieldsManager<TFieldValues extends FieldValues>({
   control,
   getValues,
   config,
-}: UseDynamicFieldManagerProps<TFieldValues, TOptions>): ActiveRulesState {
+}: UseDynamicFieldManagerProps<TFieldValues>): ActiveRulesState {
   const fieldsToWatch = useMemo(() => {
     const fieldSet = new Set<string>()
     config.forEach((rule) => {

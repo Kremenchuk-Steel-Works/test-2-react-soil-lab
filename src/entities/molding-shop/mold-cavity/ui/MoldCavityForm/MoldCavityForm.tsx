@@ -1,45 +1,33 @@
-import {
-  Controller,
-  type ArrayPath,
-  type Control,
-  type DeepPartial,
-  type FieldArray,
-  type FieldErrors,
-  type FieldValues,
-  type Path,
-  type UseFormRegister,
-} from 'react-hook-form'
+import { useCallback } from 'react'
+import { Controller, useFormContext, type Path } from 'react-hook-form'
 import { castingPatternService } from '@/entities/molding-shop/casting-pattern/api/service'
-import type { MoldCavityFormFields } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
 import { MoldCoreForm } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/MoldCoreForm'
 import { moldCoreFormDefaultValues } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/schema'
+import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport'
 import type {
   CastingPatternLookupResponse,
   CastingPatternLookupsListResponse,
+  MoldPassportDetailResponse,
 } from '@/shared/api/mold-passport/model'
 import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
+import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { CheckboxWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
-type FormFields = MoldCavityFormFields
-
-interface FormProps<T extends FieldValues> {
+interface FormProps {
   index: number
-  name: ArrayPath<T>
-  control: Control<T>
-  register: UseFormRegister<T>
-  errors: FieldErrors<T>
+  name: 'moldCavities'
+  responseData?: MoldPassportDetailResponse
 }
 
-export function MoldCavityForm<T extends FieldValues>({
-  index,
-  name,
-  control,
-  register,
-  errors,
-}: FormProps<T>) {
+export function MoldCavityForm({ index: cavityIndex, name, responseData }: FormProps) {
+  const {
+    control,
+    register,
+    formState: { errors },
+  } = useFormContext<MoldPassportFormFields>()
   const loadCastingPatternsOptions = useAsyncOptionsNew<CastingPatternLookupResponse, string>(
     castingPatternService.getLookup,
     {
@@ -59,11 +47,40 @@ export function MoldCavityForm<T extends FieldValues>({
     },
   )
 
-  // Динамически строим пути к полям
-  const fieldName = (field: keyof FormFields) => `${name}.${index}.${field}` as Path<T>
+  const defaultCastingPatternsOptions = useDefaultOption(
+    responseData?.moldCavities[cavityIndex].castingPattern,
+    (data) => ({
+      value: data.id,
+      label: data.serialNumber,
+    }),
+  )
 
   // Формируем полный путь до вложенного массива
-  const coresFieldName = `${name}.${index}.moldCores`
+  const coresFieldName = `${name}.${cavityIndex}.moldCores` as const
+
+  type MemoizedFormProps = {
+    index: number
+    name: typeof coresFieldName
+  }
+
+  const MemoizedMoldCoreForm = useCallback(
+    ({ index: coreIndex, name: coreName }: MemoizedFormProps) => {
+      return (
+        <MoldCoreForm
+          cavityIndex={cavityIndex}
+          coreIndex={coreIndex}
+          name={coreName}
+          responseData={responseData}
+        />
+      )
+    },
+    [cavityIndex, responseData],
+  )
+
+  // Динамически строим пути к полям
+  type FormFields = MoldPassportFormFields['moldCavities'][number]
+  const fieldName = (field: keyof FormFields) =>
+    `${name}.${cavityIndex}.${field}` as Path<MoldPassportFormFields>
 
   return (
     <>
@@ -75,6 +92,7 @@ export function MoldCavityForm<T extends FieldValues>({
             field={field}
             fieldState={fieldState}
             options={loadCastingPatternsOptions}
+            defaultOptions={defaultCastingPatternsOptions}
             isVirtualized
             isClearable
             placeholder="Модель"
@@ -90,7 +108,7 @@ export function MoldCavityForm<T extends FieldValues>({
       />
 
       <CheckboxWithError
-        label="Придатне для заливання металу"
+        label="Придатний для заливання металу"
         {...register(fieldName('isFunctional'), formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, fieldName('isFunctional'))}
       />
@@ -99,12 +117,9 @@ export function MoldCavityForm<T extends FieldValues>({
       <DynamicFieldArray
         title="Стрижень"
         label="стрижень"
-        name={coresFieldName as ArrayPath<T>}
-        form={MoldCoreForm}
-        defaultItem={moldCoreFormDefaultValues as DeepPartial<FieldArray<T, ArrayPath<T>>>}
-        control={control}
-        register={register}
-        errors={errors}
+        name={coresFieldName}
+        form={MemoizedMoldCoreForm}
+        defaultItem={moldCoreFormDefaultValues}
       />
     </>
   )

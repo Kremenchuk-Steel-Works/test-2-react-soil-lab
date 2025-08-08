@@ -1,19 +1,36 @@
-import { Controller } from 'react-hook-form'
-import type { MoldPassportDynamicFieldOptions } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
+import { Controller, useFormContext, type Path } from 'react-hook-form'
+import { castingTechnologyService } from '@/entities/molding-shop/casting-technology/api/service'
+import type {
+  MoldPassportDataAsc,
+  MoldPassportDataGsc,
+} from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
+import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/schema'
 import { moldingSandSystemOptions } from '@/entities/molding-shop/molding-sand-type/model/moldingSandSystem'
+import type {
+  MoldPassportDetailResponse,
+  ResinLookupResponse,
+  ResinLookupsListResponse,
+} from '@/shared/api/mold-passport/model'
+import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
+import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import type { DynamicComponentProps } from '@/shared/lib/zod/dynamic-schema'
+import type { BaseDynamicComponentProps } from '@/shared/lib/zod/dynamic-schema'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
 import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
-type DynamicFieldsProps = DynamicComponentProps<MoldPassportDynamicFieldOptions>
+export function CastingTechnologyDataGscDynamicForm() {
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<MoldPassportFormFields>()
+  const fieldName = (field: keyof MoldPassportDataGsc) =>
+    `dataGsc.${field}` as Path<MoldPassportFormFields>
 
-export function CastingTechnologyDataGscDynamicForm({ control, errors }: DynamicFieldsProps) {
   return (
     <FieldsetWrapper title={`Пісочно-глиняна формовка`}>
       <Controller
-        name="moldingSandSystem"
+        name={fieldName('moldingSandSystem')}
         control={control}
         render={({ field, fieldState }) => (
           <FormSelectField
@@ -23,57 +40,91 @@ export function CastingTechnologyDataGscDynamicForm({ control, errors }: Dynamic
             isVirtualized
             isClearable
             placeholder="Підтип суміші"
-            errorMessage={getNestedErrorMessage(errors, 'moldingSandSystem')}
+            errorMessage={getNestedErrorMessage(errors, fieldName('moldingSandSystem'))}
           />
         )}
       />
 
       <InputFieldWithError
         label="Номер суміші"
-        {...control.register('moldingSandNumber', { ...formTransformers.string })}
-        errorMessage={getNestedErrorMessage(errors, 'moldingSandNumber')}
+        {...control.register(fieldName('moldingSandNumber'), { ...formTransformers.string })}
+        errorMessage={getNestedErrorMessage(errors, fieldName('moldingSandNumber'))}
       />
 
       <InputFieldWithError
         label="Горизонтальна щільність форми"
-        {...control.register('moldHorizontalDensity', { ...formTransformers.string })}
-        errorMessage={getNestedErrorMessage(errors, 'moldHorizontalDensity')}
+        {...control.register(fieldName('moldHorizontalDensity'), { ...formTransformers.string })}
+        errorMessage={getNestedErrorMessage(errors, fieldName('moldHorizontalDensity'))}
       />
 
       <InputFieldWithError
         label="Вертикальна щільність форми"
-        {...control.register('moldVerticalDensity', { ...formTransformers.string })}
-        errorMessage={getNestedErrorMessage(errors, 'moldVerticalDensity')}
+        {...control.register(fieldName('moldVerticalDensity'), { ...formTransformers.string })}
+        errorMessage={getNestedErrorMessage(errors, fieldName('moldVerticalDensity'))}
       />
     </FieldsetWrapper>
   )
 }
 
+type CastingTechnologyPassportDataAscDynamicFormProps = BaseDynamicComponentProps & {
+  responseData?: MoldPassportDetailResponse
+}
+
 export function CastingTechnologyPassportDataAscDynamicForm({
-  control,
-  errors,
-  options,
-}: DynamicFieldsProps) {
+  responseData,
+}: CastingTechnologyPassportDataAscDynamicFormProps) {
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<MoldPassportFormFields>()
+  const loadResinsOptions = useAsyncOptionsNew<ResinLookupResponse, string>(
+    castingTechnologyService.getLookup,
+    {
+      paramsBuilder: (search, page) => ({
+        search,
+        page,
+        pageSize: 20,
+      }),
+      responseAdapter: (data: ResinLookupsListResponse) => ({
+        items: data.data,
+        hasMore: data.data.length < data.totalItems,
+      }),
+      mapper: (item) => ({
+        value: item.id,
+        label: item.name,
+      }),
+    },
+  )
+
+  const defaultResinsOptions = useDefaultOption(responseData?.dataAsc?.resin, (data) => ({
+    value: data.id,
+    label: data.name,
+  }))
+
+  const fieldName = (field: keyof MoldPassportDataAsc) =>
+    `dataAsc.${field}` as Path<MoldPassportFormFields>
+
   return (
     <FieldsetWrapper title={`Холодно-твердіюча формовка`}>
       <InputFieldWithError
         label="Твердість форми"
-        {...control.register('moldHardness', { ...formTransformers.string })}
-        errorMessage={getNestedErrorMessage(errors, 'moldHardness')}
+        {...control.register(fieldName('moldHardness'), { ...formTransformers.string })}
+        errorMessage={getNestedErrorMessage(errors, fieldName('moldHardness'))}
       />
 
       <Controller
-        name="resinId"
+        name={fieldName('resinId')}
         control={control}
         render={({ field, fieldState }) => (
           <FormSelectField
             field={field}
             fieldState={fieldState}
-            options={options.loadResinsOptions}
+            options={loadResinsOptions}
+            defaultOptions={defaultResinsOptions}
             isVirtualized
             isClearable
             placeholder="Смола"
-            errorMessage={getNestedErrorMessage(errors, 'resinId')}
+            errorMessage={getNestedErrorMessage(errors, fieldName('resinId'))}
           />
         )}
       />

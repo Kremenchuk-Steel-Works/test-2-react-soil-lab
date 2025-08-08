@@ -10,7 +10,7 @@ export function DynamicFieldArea<TFieldValues extends FieldValues>({
   triggerFor,
 }: DynamicFieldAreaProps<TFieldValues>) {
   // Получаем все необходимое из контекста одним хуком
-  const { config, activeRules, control, errors, options } = useDynamicFields<TFieldValues, any>()
+  const { config, activeRules, options, responseData } = useDynamicFields<any, any>()
 
   return (
     <>
@@ -35,7 +35,7 @@ export function DynamicFieldArea<TFieldValues extends FieldValues>({
         const { Component } = rule
         return (
           <Fragment key={ruleKey}>
-            <Component control={control} errors={errors} options={options} />
+            <Component options={options} responseData={responseData} />
           </Fragment>
         )
       })}

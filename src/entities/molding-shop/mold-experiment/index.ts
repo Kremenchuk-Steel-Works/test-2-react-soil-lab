@@ -4,11 +4,5 @@
 
 export type { MoldExperimentDocumentOptions } from './model/document'
 export type { MoldExperimentFormFields } from './ui/MoldExperimentForm/schema'
-export type {
-  MoldExperimentFormOptions,
-  MoldExperimentFormInitialData,
-} from './ui/MoldExperimentForm/MoldExperimentForm'
-export { default as MoldExperimentForm } from './ui/MoldExperimentForm/MoldExperimentForm'
 export { moldExperimentDocumentOptions } from './model/document'
 export { moldExperimentFormSchema } from './ui/MoldExperimentForm/schema'
-export { moldExperimentRoutes } from './routes'

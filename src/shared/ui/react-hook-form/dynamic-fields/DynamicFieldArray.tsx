@@ -3,29 +3,19 @@ import clsx from 'clsx'
 import { Plus, X } from 'lucide-react'
 import {
   useFieldArray,
+  useFormContext,
   type ArrayPath,
-  type Control,
   type DeepPartial,
   type FieldArray,
-  type FieldErrors,
   type FieldValues,
-  type UseFormRegister,
 } from 'react-hook-form'
 import Button from '@/shared/ui/button/Button'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
 
-interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> = ArrayPath<T>> {
-  control: Control<T>
-  register: UseFormRegister<T>
-  errors: FieldErrors<T>
+interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T>, TResponseData> {
   name: N
-  form: ComponentType<{
-    index: number
-    name: N
-    control: Control<T>
-    register: UseFormRegister<T>
-    errors: FieldErrors<T>
-  }>
+  form: ComponentType<{ index: number; name: N; responseData?: TResponseData }>
+  responseData?: TResponseData
   defaultItem?: DeepPartial<FieldArray<T, N>>
   title?: string
   label?: string
@@ -60,25 +50,24 @@ interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T> =
  * label="контакт"
  * />
  */
-export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>({
-  control,
-  register,
-  errors,
+export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>, TResponseData>({
   name,
   form: FormComponent,
   defaultItem,
+  responseData,
   title,
   label,
   addButton,
   removeButton,
-}: DynamicFieldArrayProps<T, N>) {
+}: DynamicFieldArrayProps<T, N, TResponseData>) {
+  const { control } = useFormContext<T>()
   const { fields, append, remove } = useFieldArray({
     control,
     name,
   })
 
   const handleAppend = () => {
-    append(defaultItem as FieldArray<T, N>, {
+    append(defaultItem as FieldArray<T, ArrayPath<T>>, {
       shouldFocus: false,
     })
   }
@@ -113,13 +102,7 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>>
               )
             }
           >
-            <FormComponent
-              index={index}
-              name={name}
-              control={control}
-              register={register}
-              errors={errors}
-            />
+            <FormComponent index={index} name={name} responseData={responseData} />
           </FieldsetWrapper>
         ))}
       </div>

@@ -6,12 +6,6 @@ import {
 import { MoldingAreaDataDynamicForm } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/components/MoldingAreaIdSpecificFields'
 import { MoldingSandSystem } from '@/shared/api/mold-passport/model'
 import { ANY_VALUE, createFormConfig } from '@/shared/lib/zod/dynamic-schema'
-import type { AsyncOptionsLoader, Option } from '@/shared/ui/select/ReactSelect'
-
-export interface MoldPassportDynamicFieldOptions {
-  loadResinsOptions: AsyncOptionsLoader<Option>
-  loadCastingTechnologiesOptions: AsyncOptionsLoader<Option>
-}
 
 export const dataGscFormSchema = z.object({
   moldingSandSystem: z.nativeEnum(MoldingSandSystem),
@@ -29,7 +23,7 @@ export const dataAscFormSchema = z.object({
 
 export type MoldPassportDataAsc = z.infer<typeof dataAscFormSchema>
 
-export const moldPassportDynamicFieldConfig = createFormConfig<MoldPassportDynamicFieldOptions>([
+export const moldPassportDynamicFieldConfig = createFormConfig([
   // Для участков
   {
     conditions: {

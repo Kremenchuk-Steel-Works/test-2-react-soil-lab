@@ -3,10 +3,4 @@
  */
 
 export type { MoldCoreTypeFormFields } from './ui/MoldCoreTypeForm/schema'
-export type {
-  MoldCoreTypeFormOptions,
-  MoldCoreTypeFormInitialData,
-} from './ui/MoldCoreTypeForm/MoldCoreTypeForm'
-export { default as MoldCoreTypeForm } from './ui/MoldCoreTypeForm/MoldCoreTypeForm'
 export { moldCoreTypeFormSchema } from './ui/MoldCoreTypeForm/schema'
-export { moldCoreTypeRoutes } from './routes'

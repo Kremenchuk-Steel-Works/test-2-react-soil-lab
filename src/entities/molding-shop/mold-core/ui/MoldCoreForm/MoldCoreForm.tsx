@@ -1,40 +1,32 @@
-import {
-  Controller,
-  type ArrayPath,
-  type Control,
-  type FieldErrors,
-  type FieldValues,
-  type Path,
-  type UseFormRegister,
-} from 'react-hook-form'
+import { Controller, useFormContext, type Path } from 'react-hook-form'
 import { coreBatchService } from '@/entities/molding-shop/core-batch/api/service'
-import type { MoldCoreFormFields } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/schema'
+import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport'
 import type {
   MoldCoreBatchLookupResponse,
   MoldCoreBatchLookupsListResponse,
+  MoldPassportDetailResponse,
 } from '@/shared/api/mold-passport/model'
 import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
+import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
-type FormFields = MoldCoreFormFields
-
-interface FormProps<T extends FieldValues> {
-  index: number
-  name: ArrayPath<T>
-  control: Control<T>
-  register: UseFormRegister<T>
-  errors: FieldErrors<T>
+interface FormProps {
+  cavityIndex: number
+  coreIndex: number
+  name: `moldCavities.${number}.moldCores`
+  responseData?: MoldPassportDetailResponse
 }
 
-export function MoldCoreForm<T extends FieldValues>({
-  index,
-  name,
-  control,
-  register,
-  errors,
-}: FormProps<T>) {
+export function MoldCoreForm({ cavityIndex, coreIndex, name, responseData }: FormProps) {
+  const {
+    control,
+    register,
+    formState: { errors },
+  } = useFormContext<MoldPassportFormFields>()
+  const formatCoreBatchLabel = (data: MoldCoreBatchLookupResponse) =>
+    `${data.moldingSandType.name} ${data.moldCoreType.modelNumber} ${data.machine.brand} ${data.machine.model} ${data.manufacturingTimestamp} ${data.batchExpiryDate}`
   const loadCoreBatchesOptions = useAsyncOptionsNew<MoldCoreBatchLookupResponse, string>(
     coreBatchService.getLookup,
     {
@@ -49,13 +41,24 @@ export function MoldCoreForm<T extends FieldValues>({
       }),
       mapper: (item) => ({
         value: item.id,
-        label: `${item.moldingSandType.name} ${item.moldCoreType.modelNumber} ${item.machine.brand} ${item.machine.model} ${item.manufacturingTimestamp} ${item.batchExpiryDate}`,
+        label: formatCoreBatchLabel(item),
       }),
     },
   )
 
+  const defaultCoreBatchesOptions = useDefaultOption(
+    responseData?.moldCavities?.[cavityIndex]?.moldCores?.[coreIndex].coreBatch,
+    (data) => ({
+      value: data.id,
+      label: formatCoreBatchLabel(data),
+    }),
+  )
+
   // Динамически строим пути к полям
-  const fieldName = (field: keyof FormFields) => `${name}.${index}.${field}` as Path<T>
+  type FormFields = MoldPassportFormFields['moldCavities'][number]['moldCores'][number]
+
+  const fieldName = (field: keyof FormFields) =>
+    `${name}.${coreIndex}.${field}` as Path<MoldPassportFormFields>
 
   return (
     <>
@@ -67,6 +70,7 @@ export function MoldCoreForm<T extends FieldValues>({
             field={field}
             fieldState={fieldState}
             options={loadCoreBatchesOptions}
+            defaultOptions={defaultCoreBatchesOptions}
             isVirtualized
             isClearable
             placeholder="Партія"

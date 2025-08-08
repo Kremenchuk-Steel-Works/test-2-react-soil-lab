@@ -3,12 +3,7 @@
  */
 
 export type { PatternPlateFrameFormFields } from './ui/PatternPlateFrameForm/schema'
-export type {
-  PatternPlateFrameFormOptions,
-  PatternPlateFrameFormInitialData,
-} from './ui/PatternPlateFrameForm/PatternPlateFrameForm'
 export type { PatternPlateFrameStatus } from './model/status'
-export { default as PatternPlateFrameForm } from './ui/PatternPlateFrameForm/PatternPlateFrameForm'
 export { patternPlateFrameFormSchema } from './ui/PatternPlateFrameForm/schema'
-export { patternPlateFrameRoutes } from './routes'
+export { patternPlateFrameService } from './api/service'
 export { patternPlateFrameStatusOptions } from './model/status'

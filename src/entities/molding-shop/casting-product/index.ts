@@ -3,12 +3,6 @@
  */
 
 export type { CastingProductFormFields } from './ui/CastingProductForm/schema'
-export type {
-  CastingProductFormOptions,
-  CastingProductFormInitialData,
-} from './ui/CastingProductForm/CastingProductForm'
 export type { castingProductType } from './model/type'
 export { castingProductFormSchema } from './ui/CastingProductForm/schema'
-export { castingProductRoutes } from './routes'
 export { castingProductTypeOptions } from './model/type'
-export { default as CastingProductForm } from './ui/CastingProductForm/CastingProductForm'

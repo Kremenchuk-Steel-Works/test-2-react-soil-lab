@@ -1,12 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
+import { Controller, FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
 import { castingTechnologyService } from '@/entities/molding-shop/casting-technology/api/service'
 import { MoldCavityForm } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/MoldCavityForm'
 import { moldCavityFormDefaultValues } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
-import {
-  moldPassportDynamicFieldConfig,
-  type MoldPassportDynamicFieldOptions,
-} from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
+import { moldPassportDynamicFieldConfig } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
 import {
   moldPassportFormSchema,
   type MoldPassportFormFields,
@@ -14,18 +11,16 @@ import {
 import { moldingFlaskService } from '@/entities/molding-shop/molding-flask/api/service'
 import { patternPlateFrameService } from '@/entities/molding-shop/pattern-plate-frame/api/service'
 import type {
-  CastingTechnologyLookupResponse,
-  CastingTechnologyLookupsListResponse,
   MoldingAreaLookupResponse,
   MoldingAreaLookupsListResponse,
   MoldingFlaskLookupResponse,
   MoldingFlaskLookupsListResponse,
+  MoldPassportDetailResponse,
   PatternPlateFrameLookupResponse,
   PatternPlateFrameLookupsListResponse,
-  ResinLookupResponse,
-  ResinLookupsListResponse,
 } from '@/shared/api/mold-passport/model'
 import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
+import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import { DynamicFieldArea } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArea'
@@ -34,40 +29,30 @@ import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-field
 import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
-import type { Option } from '@/shared/ui/select/ReactSelect'
 import {
   ButtonWithError,
   CheckboxWithError,
   InputFieldWithError,
   TextAreaFieldWithError,
 } from '@/shared/ui/with-error/fieldsWithError'
-import type { FormInitialData, FormProps } from '@/types/react-hook-form'
+import type { FormProps } from '@/types/react-hook-form'
 
 type FormFields = MoldPassportFormFields
 const schema = moldPassportFormSchema
 
 const dynamicFieldConfig = moldPassportDynamicFieldConfig
-type DynamicFieldOptions = MoldPassportDynamicFieldOptions
 
-type MoldPassportFormOptions = {
-  moldingArea: Option[]
-  castingTechnology: Option[]
-  resin: Option[]
-  patternPlateFrame: Option[]
-  moldingFlask: Option[]
-}
-type FormOptions = MoldPassportFormOptions
+type MoldPassportFormProps = FormProps<FormFields, MoldPassportDetailResponse>
 
-export type MoldPassportFormInitialData = FormInitialData<FormFields, FormOptions>
-
-export default function MoldPassportForm({
-  initialData,
+export function MoldPassportForm({
+  defaultValues,
+  responseData,
   onSubmit,
   submitBtnName,
-}: FormProps<FormFields, FormOptions>) {
+}: MoldPassportFormProps) {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
-    defaultValues: initialData?.defaultValues,
+    defaultValues,
   })
 
   const {
@@ -98,44 +83,10 @@ export default function MoldPassportForm({
     },
   )
 
-  const loadCastingTechnologiesOptions = useAsyncOptionsNew<
-    CastingTechnologyLookupResponse,
-    number
-  >(castingTechnologyService.getLookup, {
-    paramsBuilder: (search, page) => ({
-      search,
-      page,
-      pageSize: 20,
-      // moldingAreaId: moldingAreaId,
-    }),
-    responseAdapter: (data: CastingTechnologyLookupsListResponse) => ({
-      items: data.data,
-      hasMore: data.data.length < data.totalItems,
-    }),
-    mapper: (item) => ({
-      value: item.id,
-      label: item.name,
-    }),
-  })
-
-  const loadResinsOptions = useAsyncOptionsNew<ResinLookupResponse, string>(
-    castingTechnologyService.getLookup,
-    {
-      paramsBuilder: (search, page) => ({
-        search,
-        page,
-        pageSize: 20,
-      }),
-      responseAdapter: (data: ResinLookupsListResponse) => ({
-        items: data.data,
-        hasMore: data.data.length < data.totalItems,
-      }),
-      mapper: (item) => ({
-        value: item.id,
-        label: item.name,
-      }),
-    },
-  )
+  const defaultMoldingAreasOptions = useDefaultOption(responseData?.moldingArea, (data) => ({
+    value: data.id,
+    label: data.name,
+  }))
 
   const loadPatternPlateFramesOptions = useAsyncOptionsNew<PatternPlateFrameLookupResponse, string>(
     patternPlateFrameService.getLookup,
@@ -154,6 +105,14 @@ export default function MoldPassportForm({
         label: item.serialNumber,
       }),
     },
+  )
+
+  const defaultPatternPlateFramesOptions = useDefaultOption(
+    responseData?.patternPlateFrame,
+    (data) => ({
+      value: data.id,
+      label: data.serialNumber,
+    }),
   )
 
   const loadMoldingFlasksOptions = useAsyncOptionsNew<MoldingFlaskLookupResponse, string>(
@@ -175,11 +134,10 @@ export default function MoldPassportForm({
     },
   )
 
-  // Dynamic form options
-  const dynamicFieldOptions: DynamicFieldOptions = {
-    loadResinsOptions,
-    loadCastingTechnologiesOptions,
-  }
+  const defaultMoldingFlasksOptions = useDefaultOption(responseData?.moldingFlask, (data) => ({
+    value: data.id,
+    label: data.serialNumber,
+  }))
 
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     // Submit
@@ -193,152 +151,153 @@ export default function MoldPassportForm({
     }
   }
 
+  console.log(defaultValues)
+
   return (
-    <DynamicFieldsProvider
-      control={control}
-      getValues={getValues}
-      resetField={resetField}
-      errors={errors}
-      config={dynamicFieldConfig}
-      options={dynamicFieldOptions}
-    >
-      <FormLayout onSubmit={handleSubmit(submitHandler)}>
-        <h4 className="layout-text">Паспорт ливарної форми</h4>
+    <FormProvider {...form}>
+      <DynamicFieldsProvider
+        control={control}
+        getValues={getValues}
+        resetField={resetField}
+        config={dynamicFieldConfig}
+        responseData={responseData}
+      >
+        <FormLayout onSubmit={handleSubmit(submitHandler)}>
+          <h4 className="layout-text">Паспорт ливарної форми</h4>
 
-        {/* <AlertMessage type={AlertType.WARNING} message={`Попередній стан форми: Не заповнено`} /> */}
+          {/* <AlertMessage type={AlertType.WARNING} message={`Попередній стан форми: Не заповнено`} /> */}
 
-        <Controller
-          name="moldingAreaId"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormSelectField
-              field={field}
-              fieldState={fieldState}
-              options={loadMoldingAreasOptions}
-              defaultOptions={initialData?.options?.moldingArea}
-              isVirtualized
-              isClearable
-              placeholder="Ділянка формовки"
-              errorMessage={getNestedErrorMessage(errors, 'moldingAreaId')}
-            />
-          )}
-        />
+          <Controller
+            name="moldingAreaId"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormSelectField
+                field={field}
+                fieldState={fieldState}
+                options={loadMoldingAreasOptions}
+                defaultOptions={defaultMoldingAreasOptions}
+                isVirtualized
+                isClearable
+                placeholder="Ділянка формовки"
+                errorMessage={getNestedErrorMessage(errors, 'moldingAreaId')}
+              />
+            )}
+          />
 
-        {/* DynamicFields */}
-        <DynamicFieldArea triggerFor="moldingAreaId" />
+          {/* DynamicFields */}
+          <DynamicFieldArea triggerFor="moldingAreaId" />
 
-        <Controller
-          name="patternPlateFrameId"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormSelectField
-              field={field}
-              fieldState={fieldState}
-              options={loadPatternPlateFramesOptions}
-              defaultOptions={initialData?.options?.patternPlateFrame}
-              isVirtualized
-              isClearable
-              placeholder="Модельна рамка"
-              errorMessage={getNestedErrorMessage(errors, 'patternPlateFrameId')}
-            />
-          )}
-        />
+          <Controller
+            name="patternPlateFrameId"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormSelectField
+                field={field}
+                fieldState={fieldState}
+                options={loadPatternPlateFramesOptions}
+                defaultOptions={defaultPatternPlateFramesOptions}
+                isVirtualized
+                isClearable
+                placeholder="Модельна рамка"
+                errorMessage={getNestedErrorMessage(errors, 'patternPlateFrameId')}
+              />
+            )}
+          />
 
-        <Controller
-          name="moldingFlaskId"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormSelectField
-              field={field}
-              fieldState={fieldState}
-              options={loadMoldingFlasksOptions}
-              defaultOptions={initialData?.options?.moldingFlask}
-              isVirtualized
-              isClearable
-              placeholder="Опока"
-              errorMessage={getNestedErrorMessage(errors, 'moldingFlaskId')}
-            />
-          )}
-        />
+          <Controller
+            name="moldingFlaskId"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormSelectField
+                field={field}
+                fieldState={fieldState}
+                options={loadMoldingFlasksOptions}
+                defaultOptions={defaultMoldingFlasksOptions}
+                isVirtualized
+                isClearable
+                placeholder="Опока"
+                errorMessage={getNestedErrorMessage(errors, 'moldingFlaskId')}
+              />
+            )}
+          />
 
-        {/* DynamicFields */}
-        <DynamicFieldArea triggerFor="castingTechnologyId" />
+          {/* DynamicFields */}
+          <DynamicFieldArea triggerFor="castingTechnologyId" />
 
-        <Controller
-          name="markingYear"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormDateTimeField
-              field={field}
-              fieldState={fieldState}
-              type="year"
-              yearOffsetPast={2}
-              yearOffsetFuture={2}
-              label="Рік маркування відбитків"
-              errorMessage={getNestedErrorMessage(errors, 'markingYear')}
-            />
-          )}
-        />
+          <Controller
+            name="markingYear"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormDateTimeField
+                field={field}
+                fieldState={fieldState}
+                type="year"
+                yearOffsetPast={2}
+                yearOffsetFuture={2}
+                label="Рік маркування відбитків"
+                errorMessage={getNestedErrorMessage(errors, 'markingYear')}
+              />
+            )}
+          />
 
-        {/* Cavities */}
-        <DynamicFieldArray
-          title="Відбиток деталі у формі"
-          label="відбиток деталі у формі"
-          name="moldCavities"
-          form={MoldCavityForm}
-          defaultItem={moldCavityFormDefaultValues}
-          control={control}
-          register={register}
-          errors={errors}
-        />
+          {/* Cavities */}
+          <DynamicFieldArray
+            title="Відбиток деталі у формі"
+            label="відбиток деталі у формі"
+            name="moldCavities"
+            form={MoldCavityForm}
+            defaultItem={moldCavityFormDefaultValues}
+            responseData={responseData}
+          />
 
-        <InputFieldWithError
-          label="Тиск, од."
-          {...register('pressingPressure', formTransformers.number)}
-          errorMessage={getNestedErrorMessage(errors, 'pressingPressure')}
-        />
+          <InputFieldWithError
+            label="Тиск, од."
+            {...register('pressingPressure', formTransformers.number)}
+            errorMessage={getNestedErrorMessage(errors, 'pressingPressure')}
+          />
 
-        <InputFieldWithError
-          label="Порядковий номер форми за зміну"
-          {...register('sequenceInShift', formTransformers.number)}
-          errorMessage={getNestedErrorMessage(errors, 'sequenceInShift')}
-        />
+          <InputFieldWithError
+            label="Порядковий номер форми за зміну"
+            {...register('sequenceInShift', formTransformers.number)}
+            errorMessage={getNestedErrorMessage(errors, 'sequenceInShift')}
+          />
 
-        <Controller
-          name="assemblyTimestamp"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormDateTimeField
-              field={field}
-              fieldState={fieldState}
-              type="datetime"
-              label="Дата та час складання півформ"
-              errorMessage={getNestedErrorMessage(errors, 'assemblyTimestamp')}
-            />
-          )}
-        />
+          <Controller
+            name="assemblyTimestamp"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormDateTimeField
+                field={field}
+                fieldState={fieldState}
+                type="datetime"
+                label="Дата та час складання півформ"
+                errorMessage={getNestedErrorMessage(errors, 'assemblyTimestamp')}
+              />
+            )}
+          />
 
-        <CheckboxWithError
-          label="Наявність дефектів"
-          {...register(`isDefective`, formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, 'isDefective')}
-        />
+          <CheckboxWithError
+            label="Наявність дефектів"
+            {...register(`isDefective`, formTransformers.string)}
+            errorMessage={getNestedErrorMessage(errors, 'isDefective')}
+          />
 
-        <TextAreaFieldWithError
-          label="Нотатка"
-          {...register('notes', formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, 'notes')}
-        />
+          <TextAreaFieldWithError
+            label="Нотатка"
+            {...register('notes', formTransformers.string)}
+            errorMessage={getNestedErrorMessage(errors, 'notes')}
+          />
 
-        <ButtonWithError
-          className="w-full"
-          type="submit"
-          errorMessage={errors.root?.message}
-          disabled={isSubmitting}
-        >
-          {submitBtnName}
-        </ButtonWithError>
-      </FormLayout>
-    </DynamicFieldsProvider>
+          <ButtonWithError
+            className="w-full"
+            type="submit"
+            errorMessage={errors.root?.message}
+            disabled={isSubmitting}
+          >
+            {submitBtnName}
+          </ButtonWithError>
+        </FormLayout>
+      </DynamicFieldsProvider>
+    </FormProvider>
   )
 }

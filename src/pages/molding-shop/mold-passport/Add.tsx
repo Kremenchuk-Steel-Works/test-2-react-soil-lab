@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 import {
+  MoldPassportForm,
   moldPassportFormDefaultValues,
   moldPassportService,
   type MoldPassportFormFields,
 } from '@/entities/molding-shop/mold-passport'
-import MoldPassportForm from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/MoldPassportForm'
 
 export default function MoldPassportAdd() {
   const navigate = useNavigate()
@@ -20,7 +20,7 @@ export default function MoldPassportAdd() {
       <div className="flex flex-wrap gap-x-2 gap-y-2">
         <div className="w-full">
           <MoldPassportForm
-            initialData={{ defaultValues: moldPassportFormDefaultValues }}
+            defaultValues={moldPassportFormDefaultValues}
             onSubmit={handleSubmit}
             submitBtnName="Додати"
           />

@@ -23,8 +23,8 @@ import {
 import type { SetURLSearchParams } from 'react-router-dom'
 import type { CSSObjectWithLabel } from 'react-select'
 import Button from '@/shared/ui/button/Button'
+import { AdaptiveInput } from '@/shared/ui/input-field/AdaptiveInput'
 import InputField from '@/shared/ui/input-field/InputField'
-import InputFieldNoLabel from '@/shared/ui/input-field/InputFieldNoLabel'
 import ModalTrigger from '@/shared/ui/modal/ModalTrigger'
 import CustomMultiSelect from '@/shared/ui/select/ReactSelectCheckbox'
 import ReactSelectNoLabel, {
@@ -344,25 +344,22 @@ export function DataTable<T>({
         >
           <ChevronLeft className="h-5 w-5" />
         </Button>
-        <strong className="flex items-center">
-          <InputFieldNoLabel
-            className="w-13"
-            inputClassName="h-9 border-0 focus:ring-0 px-0 text-center dark:bg-gray-800 bg-gray-100"
-            type="number"
-            value={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              table.setPageIndex(Number(e.target.value) - 1)
-            }}
-          />
-          <span className="select-none">/</span>
-          <InputFieldNoLabel
-            className="w-13"
-            inputClassName="h-9 border-0 focus:ring-0 px-0 text-center dark:bg-gray-800 bg-gray-100"
-            type="number"
-            readOnly
-            value={table.getPageCount()}
-          />
+
+        {/* Страницы */}
+        <strong>
+          <div className="inline-flex items-center gap-1">
+            <AdaptiveInput
+              value={table.getState().pagination.pageIndex + 1}
+              onChange={(e) => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0
+                table.setPageIndex(page)
+              }}
+            />
+            <span className="select-none">/</span>
+            <AdaptiveInput value={table.getPageCount()} readOnly />
+          </div>
         </strong>
+
         <Button
           className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
           disabled={!table.getCanNextPage()}

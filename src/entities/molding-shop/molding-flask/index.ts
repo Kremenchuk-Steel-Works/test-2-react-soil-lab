@@ -3,12 +3,7 @@
  */
 
 export type { MoldingFlaskFormFields } from './ui/MoldingFlaskForm/schema'
-export type {
-  MoldingFlaskFormOptions,
-  MoldingFlaskFormInitialData,
-} from './ui/MoldingFlaskForm/MoldingFlaskForm'
 export type { MoldingFlaskFrameStatus } from './model/status'
-export { default as MoldingFlaskForm } from './ui/MoldingFlaskForm/MoldingFlaskForm'
 export { moldingFlaskFormSchema } from './ui/MoldingFlaskForm/schema'
-export { moldingFlaskRoutes } from './routes'
+export { moldingFlaskService } from './api/service'
 export { moldingFlaskStatusOptions } from './model/status'

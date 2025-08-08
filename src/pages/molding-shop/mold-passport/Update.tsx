@@ -6,7 +6,6 @@ import {
   MoldPassportForm,
   moldPassportService,
   type MoldPassportFormFields,
-  type MoldPassportFormInitialData,
 } from '@/entities/molding-shop/mold-passport'
 import type {
   MoldPassportDetailResponse,
@@ -25,52 +24,29 @@ import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 
 // Адаптируем данные с запроса под форму
-function mapResponseToInitialData(
-  response: MoldPassportDetailResponse,
-): MoldPassportFormInitialData {
+function mapResponseToInitialData(response: MoldPassportDetailResponse): MoldPassportFormFields {
   return {
-    defaultValues: {
-      ...response,
-      moldingAreaId: response.moldingArea.id,
-      castingTechnologyId: response.castingTechnology.id,
-      dataAsc: { ...response.dataAsc, resinId: response.dataAsc?.resin?.id },
-      patternPlateFrameId: response.patternPlateFrame?.id,
-      moldingFlaskId: response.moldingFlask?.id,
+    ...response,
+    moldingAreaId: response.moldingArea.id,
+    castingTechnologyId: response.castingTechnology.id,
 
-      moldCavities:
-        response.moldCavities?.map((cavity) => ({
-          ...cavity,
-          castingPatternId: cavity.castingPattern.id,
-          moldCores:
-            cavity.moldCores?.map((core) => ({
-              ...core,
-              coreBatchId: core.coreBatch.id,
-            })) ?? [],
-        })) ?? [],
-    },
-    options: {
-      moldingArea: [
-        {
-          value: response.moldingArea.id,
-          label: response.moldingArea.name,
-        },
-      ],
-      castingTechnology: [
-        {
-          value: response.castingTechnology.id,
-          label: response.castingTechnology.name,
-        },
-      ],
-      resin: response.dataAsc?.resin
-        ? [{ value: response.dataAsc.resin.id, label: response.dataAsc.resin.serialNumber }]
-        : [],
-      patternPlateFrame: response.patternPlateFrame
-        ? [{ value: response.patternPlateFrame.id, label: response.patternPlateFrame.serialNumber }]
-        : [],
-      moldingFlask: response.moldingFlask
-        ? [{ value: response.moldingFlask.id, label: response.moldingFlask.serialNumber }]
-        : [],
-    },
+    patternPlateFrameId: response.patternPlateFrame?.id,
+    moldingFlaskId: response.moldingFlask?.id,
+
+    dataAsc: response.dataAsc ? { ...response.dataAsc, resinId: response.dataAsc.resin?.id } : null,
+
+    moldCavities:
+      response.moldCavities?.map((cavity) => ({
+        ...cavity,
+        castingPatternId: cavity.castingPattern.id,
+        moldCores:
+          cavity.moldCores?.map((core) => ({
+            ...core,
+            coreBatchId: core.coreBatch.id,
+          })) ?? [],
+      })) ?? [],
+
+    assemblyTimestamp: response.moldAssemblyTimestamp ?? null,
   }
 }
 
@@ -79,7 +55,7 @@ export default function MoldPassportUpdate() {
   const { id } = useParams<{ id: string }>()
 
   const {
-    data: initialData,
+    data: responseData,
     isLoading,
     isError,
     error: queryError,
@@ -89,18 +65,14 @@ export default function MoldPassportUpdate() {
     enabled: !!id,
   })
 
-  const formInitialData = useMemo(() => {
-    if (!initialData) {
-      return null // Возвращаем null, пока данные не загружены
-    }
-    return mapResponseToInitialData(initialData)
-  }, [initialData])
+  const formDefaultValues = useMemo(() => {
+    if (!responseData) return undefined
+    return mapResponseToInitialData(responseData)
+  }, [responseData])
 
   // Запрос на обновление
   const handleSubmit = async (formData: MoldPassportFormFields) => {
-    if (!initialData) {
-      return
-    }
+    if (!responseData) return
 
     // Определяем правила трансформации
     const transformations = {
@@ -122,7 +94,7 @@ export default function MoldPassportUpdate() {
     }
 
     const payload = createUpdatePayload(
-      initialData,
+      responseData,
       formData,
       transformations,
     ) as MoldPassportUpdate
@@ -145,12 +117,13 @@ export default function MoldPassportUpdate() {
 
       {isError && <AlertMessage type={AlertType.ERROR} message={getErrorMessage(queryError)} />}
 
-      {!isLoading && formInitialData && (
+      {!isLoading && responseData && formDefaultValues && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
           <div className="w-full">
             <MoldPassportForm
               onSubmit={handleSubmit}
-              initialData={formInitialData}
+              defaultValues={formDefaultValues}
+              responseData={responseData}
               submitBtnName="Оновити"
             />
           </div>

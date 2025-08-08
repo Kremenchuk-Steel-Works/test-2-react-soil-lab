@@ -18,36 +18,42 @@ export interface DynamicFieldsProps {
 
 type ActiveRulesState = Record<string, boolean>
 
-interface DynamicFieldsContextValue<TFieldValues extends FieldValues, TOptions extends object> {
-  control: Control<TFieldValues>
-  errors: FieldErrors<TFieldValues>
-  config: DynamicFieldConfig<TOptions>
+interface DynamicFieldsContextValue<TOptions extends object, TResponseData> {
+  config: DynamicFieldConfig
   options: TOptions
+  responseData?: TResponseData
   activeRules: ActiveRulesState
 }
 
 const DynamicFieldsContext = createContext<DynamicFieldsContextValue<any, any> | null>(null)
 
-interface DynamicFieldsProviderProps<TFieldValues extends FieldValues, TOptions extends object> {
+interface DynamicFieldsProviderProps<
+  TFieldValues extends FieldValues,
+  TOptions extends object,
+  TResponseData,
+> {
   control: Control<TFieldValues>
   getValues: UseFormGetValues<TFieldValues>
   resetField: UseFormResetField<TFieldValues>
-  errors: FieldErrors<TFieldValues>
-  config: DynamicFieldConfig<TOptions>
-  options: TOptions
+  config: DynamicFieldConfig
+  options?: TOptions
+  responseData?: TResponseData
   children: ReactNode
 }
 
-export function DynamicFieldsProvider<TFieldValues extends FieldValues, TOptions extends object>({
+export function DynamicFieldsProvider<
+  TFieldValues extends FieldValues,
+  TOptions extends object,
+  TResponseData,
+>({
   children,
   control,
   getValues,
   resetField,
-  errors,
   config,
   options,
-}: DynamicFieldsProviderProps<TFieldValues, TOptions>) {
-  // Используем хук для получения состояния
+  responseData,
+}: DynamicFieldsProviderProps<TFieldValues, TOptions, TResponseData>) {
   const activeRules = useDynamicFieldsManager({ control, getValues, config })
 
   const prevActiveRulesRef = useRef<ActiveRulesState>({})
@@ -73,13 +79,12 @@ export function DynamicFieldsProvider<TFieldValues extends FieldValues, TOptions
   // Собираем значение для провайдера и передаем его дочерним компонентам
   const contextValue = useMemo(
     () => ({
-      control,
-      errors,
       config,
       options,
+      responseData,
       activeRules,
     }),
-    [control, errors, config, options, activeRules],
+    [config, options, responseData, activeRules],
   )
 
   return (

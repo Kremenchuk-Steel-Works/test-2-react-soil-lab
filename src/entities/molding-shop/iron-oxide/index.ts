@@ -3,10 +3,4 @@
  */
 
 export type { IronOxideFormFields } from './ui/IronOxideForm/schema'
-export type {
-  IronOxideFormOptions,
-  IronOxideFormInitialData,
-} from './ui/IronOxideForm/IronOxideForm'
-export { default as IronOxideForm } from './ui/IronOxideForm/IronOxideForm'
 export { ironOxideFormSchema } from './ui/IronOxideForm/schema'
-export { triethylamineRoutes } from './routes'

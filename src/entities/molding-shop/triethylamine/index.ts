@@ -3,10 +3,4 @@
  */
 
 export type { TriethylamineFormFields } from './ui/TriethylamineForm/schema'
-export type {
-  TriethylamineFormOptions,
-  TriethylamineFormInitialData,
-} from './ui/TriethylamineForm/TriethylamineForm'
-export { default as TriethylamineForm } from './ui/TriethylamineForm/TriethylamineForm'
 export { triethylamineFormSchema } from './ui/TriethylamineForm/schema'
-export { triethylamineRoutes } from './routes'

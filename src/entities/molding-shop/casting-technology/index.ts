@@ -3,10 +3,5 @@
  */
 
 export type { CastingTechnologyFormFields } from './ui/CastingTechnologyForm/schema'
-export type {
-  CastingTechnologyFormOptions,
-  CastingTechnologyFormInitialData,
-} from './ui/CastingTechnologyForm/CastingTechnologyForm'
 export { castingTechnologyFormSchema } from './ui/CastingTechnologyForm/schema'
-export { castingTechnologyRoutes } from './routes'
-export { default as CastingTechnologyForm } from './ui/CastingTechnologyForm/CastingTechnologyForm'
+export { castingTechnologyService } from './api/service'

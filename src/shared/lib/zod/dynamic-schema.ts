@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react'
 import { z, ZodObject, type ZodRawShape } from 'zod'
 import type { DynamicFieldsProps } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 
@@ -15,27 +16,39 @@ type ConditionValue = ConditionPrimitive | ConditionPrimitive[]
  * Правило сработает, если ВСЕ условия в карте будут выполнены (логика "И").
  */
 type ConditionsMap = Record<string, ConditionValue>
-
 // TOptions - это объект, описывающий, какие options доступны (например, { organizationsOptions: Option[] })
-export type DynamicComponentProps<TOptions extends object> = DynamicFieldsProps & {
-  options: TOptions
+
+export type DynamicComponentProps<
+  TOptions extends object,
+  TResponseData = unknown,
+> = DynamicFieldsProps & {
+  options?: TOptions
+  responseData?: TResponseData
 }
+
+export type BaseDynamicComponentProps = object
 
 /**
  * Описание одного динамического правила.
  */
-export interface DynamicRule<TOptions extends object> {
+export interface DynamicRule<TOptions extends object = object, TResponseData = unknown> {
   conditions: ConditionsMap
   exceptions?: ConditionsMap
   schema: z.ZodObject<any>
-  Component: React.ComponentType<DynamicComponentProps<TOptions>>
+  // Компонент теперь ожидает пропсы, которые включают его собственные TOptions и TResponseData
+  Component: ComponentType<
+    BaseDynamicComponentProps & {
+      options?: TOptions
+      responseData?: TResponseData
+    }
+  >
   renderTrigger?: string
 }
 
 /**
  * Тип для конфигурации динамических полей.
  */
-export type DynamicFieldConfig<TOptions extends object> = DynamicRule<TOptions>[]
+export type DynamicFieldConfig = ReadonlyArray<DynamicRule<any, any>>
 
 /**
  * Проверяет, соответствует ли значение поля указанному условию.
@@ -110,9 +123,9 @@ export function checkConditions<TOptions extends object>(
 /**
  * Создает Zod-схему с поддержкой сложных динамических правил.
  */
-export function createDynamicSchema<T extends ZodObject<ZodRawShape>, TOptions extends object>(
+export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
   baseSchema: T,
-  dynamicConfig: DynamicFieldConfig<TOptions>,
+  dynamicConfig: DynamicFieldConfig,
 ) {
   const processedSchema = z.preprocess((input, ctx) => {
     if (typeof input !== 'object' || input === null) {
@@ -143,6 +156,6 @@ export function createDynamicSchema<T extends ZodObject<ZodRawShape>, TOptions e
  * Фабрика для создания конфига динамических полей.
  * Нужна для улучшения type inference в проекте.
  */
-export function createFormConfig<TOptions extends object>(config: DynamicFieldConfig<TOptions>) {
+export function createFormConfig<TConfig extends DynamicFieldConfig>(config: TConfig) {
   return config
 }

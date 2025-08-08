@@ -1,25 +1,71 @@
-import { Controller } from 'react-hook-form'
-import type { MoldPassportDynamicFieldOptions } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
+import { Controller, useFormContext, type Path } from 'react-hook-form'
+import { castingTechnologyService } from '@/entities/molding-shop/casting-technology/api/service'
+import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/schema'
+import type {
+  CastingTechnologyLookupResponse,
+  CastingTechnologyLookupsListResponse,
+  MoldPassportDetailResponse,
+} from '@/shared/api/mold-passport/model'
+import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
+import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import type { DynamicComponentProps } from '@/shared/lib/zod/dynamic-schema'
+import type { BaseDynamicComponentProps } from '@/shared/lib/zod/dynamic-schema'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 
-type DynamicFieldsProps = DynamicComponentProps<MoldPassportDynamicFieldOptions>
+type MoldingAreaDataDynamicFormProps = BaseDynamicComponentProps & {
+  responseData?: MoldPassportDetailResponse
+}
 
-export function MoldingAreaDataDynamicForm({ control, errors, options }: DynamicFieldsProps) {
+export function MoldingAreaDataDynamicForm({ responseData }: MoldingAreaDataDynamicFormProps) {
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext<MoldPassportFormFields>()
+  const loadCastingTechnologiesOptions = useAsyncOptionsNew<
+    CastingTechnologyLookupResponse,
+    number
+  >(castingTechnologyService.getLookup, {
+    paramsBuilder: (search, page) => ({
+      search,
+      page,
+      pageSize: 20,
+      // moldingAreaId: moldingAreaId,
+    }),
+    responseAdapter: (data: CastingTechnologyLookupsListResponse) => ({
+      items: data.data,
+      hasMore: data.data.length < data.totalItems,
+    }),
+    mapper: (item) => ({
+      value: item.id,
+      label: item.name,
+    }),
+  })
+
+  const defaultCastingTechnologiesOptions = useDefaultOption(
+    responseData?.castingTechnology,
+    (data) => ({
+      value: data.id,
+      label: data.name,
+    }),
+  )
+
+  const fieldName = (field: keyof MoldPassportFormFields) =>
+    `${field}` as Path<MoldPassportFormFields>
+
   return (
     <Controller
-      name="castingTechnologyId"
+      name={fieldName('castingTechnologyId')}
       control={control}
       render={({ field, fieldState }) => (
         <FormSelectField
           field={field}
           fieldState={fieldState}
-          options={options.loadCastingTechnologiesOptions}
+          options={loadCastingTechnologiesOptions}
+          defaultOptions={defaultCastingTechnologiesOptions}
           isVirtualized
           isClearable
           placeholder="Технологія формовки"
-          errorMessage={getNestedErrorMessage(errors, 'castingTechnologyId')}
+          errorMessage={getNestedErrorMessage(errors, fieldName('castingTechnologyId'))}
         />
       )}
     />

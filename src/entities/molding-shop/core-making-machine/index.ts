@@ -3,10 +3,4 @@
  */
 
 export type { CoreMakingMachineFormFields } from './ui/CoreMakingMachineForm/schema'
-export type {
-  CoreMakingMachineFormOptions,
-  CoreMakingMachineFormInitialData,
-} from './ui/CoreMakingMachineForm/CoreMakingMachineForm'
 export { coreMakingMachineFormSchema } from './ui/CoreMakingMachineForm/schema'
-export { coreMakingMachineRoutes } from './routes'
-export { default as CoreMakingMachineForm } from './ui/CoreMakingMachineForm/CoreMakingMachineForm'

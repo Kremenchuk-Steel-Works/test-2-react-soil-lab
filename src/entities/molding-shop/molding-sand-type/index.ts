@@ -3,10 +3,5 @@
  */
 
 export type { MoldingSandTypeFormFields } from './ui/MoldingSandTypeForm/schema'
-export type {
-  MoldingSandTypeFormOptions,
-  MoldingSandTypeFormInitialData,
-} from './ui/MoldingSandTypeForm/MoldingSandTypeForm'
-export { default as MoldingSandTypeForm } from './ui/MoldingSandTypeForm/MoldingSandTypeForm'
+export { moldingSandSystemOptions } from './model/moldingSandSystem'
 export { moldingSandTypeFormSchema } from './ui/MoldingSandTypeForm/schema'
-export { moldingSandTypeRoutes } from './routes'

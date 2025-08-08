@@ -4,10 +4,8 @@
 
 export type { ResinComponent } from './model/component'
 export type { ResinFormFields } from './ui/MoldingFlaskForm/schema'
-export type { ResinFormOptions, ResinFormInitialData } from './ui/MoldingFlaskForm/MoldingFlaskForm'
 export type { ResinType } from './model/type'
-export { default as ResinForm } from './ui/MoldingFlaskForm/MoldingFlaskForm'
 export { resinComponentOptions } from './model/component'
 export { resinFormSchema } from './ui/MoldingFlaskForm/schema'
-export { resinRoutes } from './routes'
+export { resinService } from './api/service'
 export { resinTypeOptions } from './model/type'

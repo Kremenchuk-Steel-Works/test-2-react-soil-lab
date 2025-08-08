@@ -3,10 +3,5 @@
  */
 
 export type { CoreBatchFormFields } from './ui/CoreBatchForm/schema'
-export type {
-  CoreBatchFormOptions,
-  CoreBatchFormInitialData,
-} from './ui/CoreBatchForm/CoreBatchForm'
 export { coreBatchFormSchema } from './ui/CoreBatchForm/schema'
-export { coreBatchRoutes } from './routes'
-export { default as CoreBatchForm } from './ui/CoreBatchForm/CoreBatchForm'
+export { coreBatchService } from './api/service'
