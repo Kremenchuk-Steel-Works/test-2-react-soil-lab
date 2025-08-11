@@ -1,5 +1,5 @@
-import { useCallback } from 'react'
-import { Controller, useFormContext, type Path } from 'react-hook-form'
+import { memo, useMemo } from 'react'
+import { Controller, useFormContext, useWatch, type Path } from 'react-hook-form'
 import { castingPatternService } from '@/entities/molding-shop/casting-pattern/api/service'
 import { MoldCoreForm } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/MoldCoreForm'
 import { moldCoreFormDefaultValues } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/schema'
@@ -22,12 +22,29 @@ interface FormProps {
   responseData?: MoldPassportDetailResponse
 }
 
-export function MoldCavityForm({ index: cavityIndex, name, responseData }: FormProps) {
+export function MoldCavityFormComponent({ index, name, responseData }: FormProps) {
   const {
     control,
     register,
     formState: { errors },
   } = useFormContext<MoldPassportFormFields>()
+
+  // Динамически строим пути к полям
+  type FormFields = MoldPassportFormFields['moldCavities'][number]
+  const fieldName = (field: keyof FormFields) =>
+    `${name}.${index}.${field}` as Path<MoldPassportFormFields>
+
+  const currentItemPath = `${name}.${index}` as const
+  const item = useWatch({
+    control,
+    name: currentItemPath,
+  })
+
+  const cavityFromResponse = useMemo(
+    () => responseData?.moldCavities?.find((c) => c.id === item?.id),
+    [responseData, item?.id],
+  )
+
   const loadCastingPatternsOptions = useAsyncOptionsNew<CastingPatternLookupResponse, string>(
     castingPatternService.getLookup,
     {
@@ -48,39 +65,28 @@ export function MoldCavityForm({ index: cavityIndex, name, responseData }: FormP
   )
 
   const defaultCastingPatternsOptions = useDefaultOption(
-    responseData?.moldCavities[cavityIndex].castingPattern,
-    (data) => ({
-      value: data.id,
-      label: data.serialNumber,
-    }),
+    cavityFromResponse?.castingPattern,
+    (d) => ({ value: d.id, label: d.serialNumber }),
   )
 
   // Формируем полный путь до вложенного массива
-  const coresFieldName = `${name}.${cavityIndex}.moldCores` as const
+  const coresFieldName = `${name}.${index}.moldCores` as const
 
   type MemoizedFormProps = {
     index: number
     name: typeof coresFieldName
   }
 
-  const MemoizedMoldCoreForm = useCallback(
-    ({ index: coreIndex, name: coreName }: MemoizedFormProps) => {
-      return (
-        <MoldCoreForm
-          cavityIndex={cavityIndex}
-          coreIndex={coreIndex}
-          name={coreName}
-          responseData={responseData}
-        />
-      )
-    },
-    [cavityIndex, responseData],
-  )
-
-  // Динамически строим пути к полям
-  type FormFields = MoldPassportFormFields['moldCavities'][number]
-  const fieldName = (field: keyof FormFields) =>
-    `${name}.${cavityIndex}.${field}` as Path<MoldPassportFormFields>
+  const MemoizedMoldCoreForm = ({ index: coreIndex, name: coreName }: MemoizedFormProps) => {
+    return (
+      <MoldCoreForm
+        index={coreIndex}
+        cavityId={item?.id}
+        name={coreName}
+        responseData={responseData}
+      />
+    )
+  }
 
   return (
     <>
@@ -120,7 +126,10 @@ export function MoldCavityForm({ index: cavityIndex, name, responseData }: FormP
         name={coresFieldName}
         form={MemoizedMoldCoreForm}
         defaultItem={moldCoreFormDefaultValues}
+        responseData={responseData}
       />
     </>
   )
 }
+
+export const MoldCavityForm = memo(MoldCavityFormComponent)

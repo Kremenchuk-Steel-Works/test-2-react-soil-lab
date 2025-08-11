@@ -1,4 +1,5 @@
-import { Controller, useFormContext, type Path } from 'react-hook-form'
+import { memo, useMemo } from 'react'
+import { Controller, useFormContext, useWatch, type Path } from 'react-hook-form'
 import { coreBatchService } from '@/entities/molding-shop/core-batch/api/service'
 import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport'
 import type {
@@ -13,20 +14,39 @@ import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 interface FormProps {
-  cavityIndex: number
-  coreIndex: number
+  index: number
   name: `moldCavities.${number}.moldCores`
+  cavityId?: string
   responseData?: MoldPassportDetailResponse
 }
 
-export function MoldCoreForm({ cavityIndex, coreIndex, name, responseData }: FormProps) {
+export function MoldCoreFormComponent({ index, name, cavityId, responseData }: FormProps) {
   const {
     control,
     register,
     formState: { errors },
   } = useFormContext<MoldPassportFormFields>()
+
+  // Динамически строим пути к полям
+  type FormFields = MoldPassportFormFields['moldCavities'][number]['moldCores'][number]
+  const fieldName = (field: keyof FormFields) =>
+    `${name}.${index}.${field}` as Path<MoldPassportFormFields>
+
+  const currentItemPath = `${name}.${index}` as const
+  const coreItem = useWatch({
+    control,
+    name: currentItemPath,
+  })
+
+  const coreFromResponse = useMemo(() => {
+    if (!cavityId || !coreItem?.id) return undefined
+    const cavity = responseData?.moldCavities?.find((c) => c.id === cavityId)
+    return cavity?.moldCores?.find((c) => c.id === coreItem.id)
+  }, [responseData, cavityId, coreItem?.id])
+
   const formatCoreBatchLabel = (data: MoldCoreBatchLookupResponse) =>
     `${data.moldingSandType.name} ${data.moldCoreType.modelNumber} ${data.machine.brand} ${data.machine.model} ${data.manufacturingTimestamp} ${data.batchExpiryDate}`
+
   const loadCoreBatchesOptions = useAsyncOptionsNew<MoldCoreBatchLookupResponse, string>(
     coreBatchService.getLookup,
     {
@@ -46,19 +66,10 @@ export function MoldCoreForm({ cavityIndex, coreIndex, name, responseData }: For
     },
   )
 
-  const defaultCoreBatchesOptions = useDefaultOption(
-    responseData?.moldCavities?.[cavityIndex]?.moldCores?.[coreIndex].coreBatch,
-    (data) => ({
-      value: data.id,
-      label: formatCoreBatchLabel(data),
-    }),
-  )
-
-  // Динамически строим пути к полям
-  type FormFields = MoldPassportFormFields['moldCavities'][number]['moldCores'][number]
-
-  const fieldName = (field: keyof FormFields) =>
-    `${name}.${coreIndex}.${field}` as Path<MoldPassportFormFields>
+  const defaultCoreBatchesOptions = useDefaultOption(coreFromResponse?.coreBatch, (d) => ({
+    value: d.id,
+    label: formatCoreBatchLabel(d),
+  }))
 
   return (
     <>
@@ -87,3 +98,5 @@ export function MoldCoreForm({ cavityIndex, coreIndex, name, responseData }: For
     </>
   )
 }
+
+export const MoldCoreForm = memo(MoldCoreFormComponent)

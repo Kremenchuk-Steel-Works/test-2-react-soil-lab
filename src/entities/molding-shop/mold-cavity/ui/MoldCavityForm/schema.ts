@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { moldCoreFormSchema } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/schema'
 
 export const moldCavityFormSchema = z.object({
+  id: z.string().optional(),
   castingPatternId: z.string(),
   serialNumber: z.string(),
   moldCores: z.array(moldCoreFormSchema),

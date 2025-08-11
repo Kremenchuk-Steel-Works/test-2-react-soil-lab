@@ -14,7 +14,11 @@ import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
 
 interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T>, TResponseData> {
   name: N
-  form: ComponentType<{ index: number; name: N; responseData?: TResponseData }>
+  form: ComponentType<{
+    index: number
+    name: N
+    responseData?: TResponseData
+  }>
   responseData?: TResponseData
   defaultItem?: DeepPartial<FieldArray<T, N>>
   title?: string
@@ -81,30 +85,32 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>,
   return (
     <div className="space-y-0">
       <div className="space-y-0 divide-y-2 divide-gray-500/20 dark:divide-gray-950/20">
-        {fields.map((field, index) => (
-          <FieldsetWrapper
-            key={field.id}
-            title={title ? `${title} ${index + 1}` : undefined}
-            className={clsx('rounded-none', {
-              'rounded-t-lg': index === 0, // если это первый элемент
-            })}
-            button={
-              removeButton ? (
-                removeButton(handleRemove(index))
-              ) : (
-                <Button
-                  customColor="red"
-                  className="flex items-center justify-center gap-1 p-1.5 whitespace-nowrap"
-                  onClick={handleRemove(index)}
-                >
-                  <X size={18} />
-                </Button>
-              )
-            }
-          >
-            <FormComponent index={index} name={name} responseData={responseData} />
-          </FieldsetWrapper>
-        ))}
+        {fields.map((field, index) => {
+          return (
+            <FieldsetWrapper
+              key={field.id}
+              title={title ? `${title} ${index + 1}` : undefined}
+              className={clsx('rounded-none', {
+                'rounded-t-lg': index === 0, // если это первый элемент
+              })}
+              button={
+                removeButton ? (
+                  removeButton(handleRemove(index))
+                ) : (
+                  <Button
+                    customColor="red"
+                    className="flex items-center justify-center gap-1 p-1.5 whitespace-nowrap"
+                    onClick={handleRemove(index)}
+                  >
+                    <X size={18} />
+                  </Button>
+                )
+              }
+            >
+              <FormComponent index={index} name={name} responseData={responseData} />
+            </FieldsetWrapper>
+          )
+        })}
       </div>
       {addButton ? (
         <div>{addButton}</div>
