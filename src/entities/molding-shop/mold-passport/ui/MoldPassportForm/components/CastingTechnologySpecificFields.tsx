@@ -53,13 +53,13 @@ export function CastingTechnologyDataGscDynamicForm() {
 
       <InputFieldWithError
         label="Горизонтальна щільність форми"
-        {...control.register(fieldName('moldHorizontalDensity'), { ...formTransformers.string })}
+        {...control.register(fieldName('moldHorizontalDensity'), { ...formTransformers.number })}
         errorMessage={getNestedErrorMessage(errors, fieldName('moldHorizontalDensity'))}
       />
 
       <InputFieldWithError
         label="Вертикальна щільність форми"
-        {...control.register(fieldName('moldVerticalDensity'), { ...formTransformers.string })}
+        {...control.register(fieldName('moldVerticalDensity'), { ...formTransformers.number })}
         errorMessage={getNestedErrorMessage(errors, fieldName('moldVerticalDensity'))}
       />
     </FieldsetWrapper>
@@ -108,7 +108,7 @@ export function CastingTechnologyPassportDataAscDynamicForm({
     <FieldsetWrapper title={`Холодно-твердіюча формовка`}>
       <InputFieldWithError
         label="Твердість форми"
-        {...control.register(fieldName('moldHardness'), { ...formTransformers.string })}
+        {...control.register(fieldName('moldHardness'), { ...formTransformers.number })}
         errorMessage={getNestedErrorMessage(errors, fieldName('moldHardness'))}
       />
 

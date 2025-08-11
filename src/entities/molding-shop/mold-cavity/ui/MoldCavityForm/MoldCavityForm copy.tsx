@@ -1,11 +1,7 @@
-import { memo } from 'react'
-import { Controller, useFormContext, type Path } from 'react-hook-form'
+import { memo, useMemo } from 'react'
+import { Controller, useFormContext, useWatch, type Path } from 'react-hook-form'
 import { castingPatternService } from '@/entities/molding-shop/casting-pattern/api/service'
-import type { MoldCavityFormFields } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
-import {
-  MoldCoreForm,
-  type MoldCoreItemData,
-} from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/MoldCoreForm'
+import { MoldCoreForm } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/MoldCoreForm'
 import { moldCoreFormDefaultValues } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/schema'
 import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport'
 import type {
@@ -20,23 +16,34 @@ import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/Dy
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { CheckboxWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
-export type MoldCavityPathPrefix = `moldCavities.${number}`
-export type MoldCavityItemData = MoldPassportDetailResponse['moldCavities'][number]
-
 interface FormProps {
-  pathPrefix: MoldCavityPathPrefix
-  itemData?: MoldCavityItemData
+  index: number
+  name: 'moldCavities'
+  responseData?: MoldPassportDetailResponse
 }
 
-export function MoldCavityFormComponent({ pathPrefix, itemData }: FormProps) {
+export function MoldCavityFormComponent({ index, name, responseData }: FormProps) {
   const {
     control,
     register,
     formState: { errors },
   } = useFormContext<MoldPassportFormFields>()
 
-  const fieldName = (field: keyof MoldCavityFormFields) =>
-    `${pathPrefix}.${field}` as Path<MoldPassportFormFields>
+  // Динамически строим пути к полям
+  type FormFields = MoldPassportFormFields['moldCavities'][number]
+  const fieldName = (field: keyof FormFields) =>
+    `${name}.${index}.${field}` as Path<MoldPassportFormFields>
+
+  const currentItemPath = `${name}.${index}` as const
+  const item = useWatch({
+    control,
+    name: currentItemPath,
+  })
+
+  const cavityFromResponse = useMemo(
+    () => responseData?.moldCavities?.find((c) => c.id === item?.id),
+    [responseData, item?.id],
+  )
 
   const loadCastingPatternsOptions = useAsyncOptionsNew<CastingPatternLookupResponse, string>(
     castingPatternService.getLookup,
@@ -57,13 +64,29 @@ export function MoldCavityFormComponent({ pathPrefix, itemData }: FormProps) {
     },
   )
 
-  const defaultCastingPatternsOptions = useDefaultOption(itemData?.castingPattern, (d) => ({
-    value: d.id,
-    label: d.serialNumber,
-  }))
+  const defaultCastingPatternsOptions = useDefaultOption(
+    cavityFromResponse?.castingPattern,
+    (d) => ({ value: d.id, label: d.serialNumber }),
+  )
 
   // Формируем полный путь до вложенного массива
-  const coresFieldName = `${pathPrefix}.moldCores` as const
+  const coresFieldName = `${name}.${index}.moldCores` as const
+
+  type MemoizedFormProps = {
+    index: number
+    name: typeof coresFieldName
+  }
+
+  const MemoizedMoldCoreForm = ({ index: coreIndex, name: coreName }: MemoizedFormProps) => {
+    return (
+      <MoldCoreForm
+        index={coreIndex}
+        cavityId={item?.id}
+        name={coreName}
+        responseData={responseData}
+      />
+    )
+  }
 
   console.log('MoldCavityFormComponent render')
 
@@ -94,18 +117,18 @@ export function MoldCavityFormComponent({ pathPrefix, itemData }: FormProps) {
 
       <CheckboxWithError
         label="Придатний для заливання металу"
-        {...register(fieldName('isFunctional'))} // formTransformers не нужен для checkbox
+        {...register(fieldName('isFunctional'), formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, fieldName('isFunctional'))}
       />
 
       {/* Cores */}
-      <DynamicFieldArray<MoldPassportFormFields, typeof coresFieldName, MoldCoreItemData>
+      <DynamicFieldArray
         title="Стрижень"
         label="стрижень"
         name={coresFieldName}
-        form={MoldCoreForm}
+        form={MemoizedMoldCoreForm}
         defaultItem={moldCoreFormDefaultValues}
-        itemsData={itemData?.moldCores}
+        responseData={responseData}
       />
     </>
   )

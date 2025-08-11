@@ -247,7 +247,7 @@ export function MoldPassportForm({
             name="moldCavities"
             form={MoldCavityForm}
             defaultItem={moldCavityFormDefaultValues}
-            itemsData={responseData?.moldCavities}
+            responseData={responseData}
           />
 
           <InputFieldWithError

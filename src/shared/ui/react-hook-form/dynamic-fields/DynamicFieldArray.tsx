@@ -1,4 +1,6 @@
-import type { ComponentType } from 'react'
+// shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray.tsx
+
+import type { ComponentType, Key } from 'react'
 import clsx from 'clsx'
 import { Plus, X } from 'lucide-react'
 import {
@@ -12,14 +14,16 @@ import {
 import Button from '@/shared/ui/button/Button'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
 
-interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T>, TResponseData> {
+// Обновили интерфейс: теперь FormComponent принимает pathPrefix
+export interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T>, TItemData> {
   name: N
+  // `form` теперь принимает `itemData` - срез данных для этого конкретного элемента
   form: ComponentType<{
+    pathPrefix: `${N}.${number}`
     index: number
-    name: N
-    responseData?: TResponseData
+    itemData?: TItemData // Данные для одного элемента
   }>
-  responseData?: TResponseData
+  itemsData?: TItemData[] // Массив данных для всех элементов
   defaultItem?: DeepPartial<FieldArray<T, N>>
   title?: string
   label?: string
@@ -27,43 +31,20 @@ interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T>, 
   removeButton?: (onRemove: () => void) => React.ReactNode
 }
 
-/**
- * Универсальный компонент для управления динамическим массивом полей в react-hook-form.
- *
- * Является оберткой над хуком `useFieldArray`. Позволяет пользователю добавлять и удалять
- * группы полей (суб-формы), например, несколько телефонных номеров или адресов.
- *
- * @param control - Объект `control` из `useForm`, передается в `useFieldArray`.
- * @param register - Функция `register` из `useForm`, пробрасывается в компонент каждого элемента.
- * @param errors - Объект `errors` из `useForm`, пробрасывается в компонент каждого элемента.
- * @param name - Имя (путь) к полю-массиву в схеме формы (например, 'contacts').
- * @param form - React-компонент, отвечающий за рендеринг UI для **одного элемента** массива.
- * @param defaultItem - Объект со значениями по умолчанию для нового элемента, добавляемого в массив.
- * @param addButton - Опциональный рендер-проп для полной кастомизации кнопки "Добавить".
- * @param removeButton - Опциональный рендер-проп для полной кастомизации кнопки "Удалить".
- *
- * @example
- * // Внутри формы, для управления списком контактов
- * <DynamicFieldArrayOld
- * control={control}
- * register={register}
- * errors={errors}
- * name="contacts"
- * form={ContactForm} // ContactForm - это компонент для одного контакта
- * defaultItem={{ type: '', value: '' }}
- * label="контакт"
- * />
- */
-export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>, TResponseData>({
+export function DynamicFieldArray<
+  T extends FieldValues,
+  N extends ArrayPath<T>,
+  TItemData extends { id?: Key },
+>({
   name,
   form: FormComponent,
+  itemsData,
   defaultItem,
-  responseData,
   title,
   label,
   addButton,
   removeButton,
-}: DynamicFieldArrayProps<T, N, TResponseData>) {
+}: DynamicFieldArrayProps<T, N, TItemData>) {
   const { control } = useFormContext<T>()
   const { fields, append, remove } = useFieldArray({
     control,
@@ -76,22 +57,24 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>,
     })
   }
 
-  const handleRemove = (index: number) => {
-    return () => {
-      remove(index)
-    }
+  const handleRemove = (index: number) => () => {
+    remove(index)
   }
 
   return (
     <div className="space-y-0">
       <div className="space-y-0 divide-y-2 divide-gray-500/20 dark:divide-gray-950/20">
         {fields.map((field, index) => {
+          const pathPrefix = `${name}.${index}` as const
+          // Находим данные для этого конкретного элемента по его ID, если он есть, иначе по индексу
+          const itemData = itemsData?.find((data) => data.id === field.id) ?? itemsData?.[index]
+
           return (
             <FieldsetWrapper
               key={field.id}
               title={title ? `${title} ${index + 1}` : undefined}
               className={clsx('rounded-none', {
-                'rounded-t-lg': index === 0, // если это первый элемент
+                'rounded-t-lg': index === 0,
               })}
               button={
                 removeButton ? (
@@ -107,7 +90,7 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>,
                 )
               }
             >
-              <FormComponent index={index} name={name} responseData={responseData} />
+              <FormComponent pathPrefix={pathPrefix} index={index} itemData={itemData} />
             </FieldsetWrapper>
           )
         })}
@@ -117,7 +100,6 @@ export function DynamicFieldArray<T extends FieldValues, N extends ArrayPath<T>,
       ) : (
         <div
           className={clsx({
-            // если есть хотя бы один элемент
             'rounded-b-lg bg-gray-400/20 px-4 pb-4 dark:bg-gray-950/20': fields.length > 0,
           })}
         >

@@ -8,6 +8,7 @@ import {
   type MoldPassportFormFields,
 } from '@/entities/molding-shop/mold-passport'
 import type {
+  MoldCavityUpdateMoldCoreOperations,
   MoldPassportDetailResponse,
   MoldPassportUpdate,
   MoldPassportUpdateDataAscOperation,
@@ -88,8 +89,17 @@ export default function MoldPassportUpdate() {
       },
       moldCavities: {
         targetKey: 'moldCavityOperations',
-        transformer: (initial: any, form: any) =>
-          createApiArrayOperations(initial, form) as MoldPassportUpdateMoldCavityOperations,
+        transformer: (initial: any, form: any) => {
+          return createApiArrayOperations(initial, form).map((op) => {
+            if (op.action === 'update') {
+              op.data.moldCoreOperations = createApiArrayOperations(
+                initial.find((c) => c.id === op.id)?.moldCores,
+                form.find((c) => c.id === op.id)?.moldCores,
+              )
+            }
+            return op
+          }) as MoldPassportUpdateMoldCavityOperations
+        },
       },
     }
 
