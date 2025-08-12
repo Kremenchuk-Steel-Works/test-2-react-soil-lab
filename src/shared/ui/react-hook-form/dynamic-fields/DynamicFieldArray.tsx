@@ -1,29 +1,30 @@
 // shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray.tsx
-
-import type { ComponentType, Key } from 'react'
+import { memo, useCallback, type ComponentType, type Key } from 'react'
 import clsx from 'clsx'
 import { Plus, X } from 'lucide-react'
 import {
   useFieldArray,
   useFormContext,
   type ArrayPath,
+  type Control,
   type DeepPartial,
   type FieldArray,
   type FieldValues,
+  type UseFormRegister,
 } from 'react-hook-form'
 import Button from '@/shared/ui/button/Button'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
 
-// Обновили интерфейс: теперь FormComponent принимает pathPrefix
 export interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T>, TItemData> {
   name: N
-  // `form` теперь принимает `itemData` - срез данных для этого конкретного элемента
   form: ComponentType<{
     pathPrefix: `${N}.${number}`
     index: number
-    itemData?: TItemData // Данные для одного элемента
+    itemData?: TItemData
+    control: Control<T>
+    register: UseFormRegister<T>
   }>
-  itemsData?: TItemData[] // Массив данных для всех элементов
+  itemsData?: TItemData[]
   defaultItem?: DeepPartial<FieldArray<T, N>>
   title?: string
   label?: string
@@ -31,7 +32,7 @@ export interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPa
   removeButton?: (onRemove: () => void) => React.ReactNode
 }
 
-export function DynamicFieldArray<
+function DynamicFieldArrayInner<
   T extends FieldValues,
   N extends ArrayPath<T>,
   TItemData extends { id?: Key },
@@ -45,56 +46,56 @@ export function DynamicFieldArray<
   addButton,
   removeButton,
 }: DynamicFieldArrayProps<T, N, TItemData>) {
-  const { control } = useFormContext<T>()
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name,
-  })
+  // ВАЖНО: один-единственный потребитель контекста тут, выше по дереву рядов
+  const methods = useFormContext<T>()
+  const { control, register } = methods
 
-  const handleAppend = () => {
-    append(defaultItem as FieldArray<T, ArrayPath<T>>, {
-      shouldFocus: false,
-    })
-  }
+  const { fields, append, remove } = useFieldArray({ control, name })
 
-  const handleRemove = (index: number) => () => {
-    remove(index)
-  }
+  const handleAppend = useCallback(() => {
+    append(defaultItem as FieldArray<T, ArrayPath<T>>, { shouldFocus: false })
+  }, [append, defaultItem])
+
+  const makeHandleRemove = useCallback((index: number) => () => remove(index), [remove])
 
   return (
     <div className="space-y-0">
       <div className="space-y-0 divide-y-2 divide-gray-500/20 dark:divide-gray-950/20">
         {fields.map((field, index) => {
           const pathPrefix = `${name}.${index}` as const
-          // Находим данные для этого конкретного элемента по его ID, если он есть, иначе по индексу
-          const itemData = itemsData?.find((data) => data.id === field.id) ?? itemsData?.[index]
+          const itemData = itemsData?.find((d) => d.id === field.id) ?? itemsData?.[index]
 
           return (
             <FieldsetWrapper
               key={field.id}
               title={title ? `${title} ${index + 1}` : undefined}
-              className={clsx('rounded-none', {
-                'rounded-t-lg': index === 0,
-              })}
+              className={clsx('rounded-none', { 'rounded-t-lg': index === 0 })}
               button={
                 removeButton ? (
-                  removeButton(handleRemove(index))
+                  removeButton(makeHandleRemove(index))
                 ) : (
                   <Button
                     customColor="red"
                     className="flex items-center justify-center gap-1 p-1.5 whitespace-nowrap"
-                    onClick={handleRemove(index)}
+                    onClick={makeHandleRemove(index)}
                   >
                     <X size={18} />
                   </Button>
                 )
               }
             >
-              <FormComponent pathPrefix={pathPrefix} index={index} itemData={itemData} />
+              <FormComponent
+                pathPrefix={pathPrefix}
+                index={index}
+                itemData={itemData}
+                control={control}
+                register={register}
+              />
             </FieldsetWrapper>
           )
         })}
       </div>
+
       {addButton ? (
         <div>{addButton}</div>
       ) : (
@@ -114,3 +115,5 @@ export function DynamicFieldArray<
     </div>
   )
 }
+
+export const DynamicFieldArray = memo(DynamicFieldArrayInner) as typeof DynamicFieldArrayInner

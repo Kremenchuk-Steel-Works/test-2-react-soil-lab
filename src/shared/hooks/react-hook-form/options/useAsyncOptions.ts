@@ -1,6 +1,7 @@
 // src/hooks/useAsyncOptions.ts
 import { useCallback } from 'react'
 import { useQueryClient, type QueryKey, type UseQueryOptions } from '@tanstack/react-query'
+import { logger } from '@/shared/lib/logger'
 
 // ... (интерфейсы SelectOption и PaginatedData остаются без изменений) ...
 interface SelectOption<TValue = string | number> {
@@ -66,7 +67,7 @@ export function useAsyncOptions<
           hasMore: data.hasMore ?? false,
         }
       } catch (error) {
-        console.error('Failed to load async options:', error)
+        logger.error('[useAsyncOptions] Failed to load async options:', error)
         return { options: [], hasMore: false }
       }
     },

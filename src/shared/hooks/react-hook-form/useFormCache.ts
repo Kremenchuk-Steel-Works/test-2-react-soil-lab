@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react'
 import { type FieldValues } from 'react-hook-form'
+import { logger } from '@/shared/lib/logger'
 
 interface CachedFormData<T> {
   data: Partial<T>
@@ -41,7 +42,7 @@ export function useFormCache<T extends FieldValues>(
       }
       return parsed.data
     } catch (error) {
-      console.error('Failed to parse form cache:', error)
+      logger.error('[useFormCache] Failed to parse form cache:', error)
       localStorage.removeItem(key)
       return null
     }

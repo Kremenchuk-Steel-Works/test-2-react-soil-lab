@@ -21,7 +21,7 @@ import type {
 } from '@/shared/api/mold-passport/model'
 import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
-import { logger } from '@/shared/lib/logger'
+import { createLogger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import { DynamicFieldArea } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArea'
 import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
@@ -36,6 +36,8 @@ import {
   TextAreaFieldWithError,
 } from '@/shared/ui/with-error/fieldsWithError'
 import type { FormProps } from '@/types/react-hook-form'
+
+const logger = createLogger('MoldPassportForm')
 
 type FormFields = MoldPassportFormFields
 const schema = moldPassportFormSchema
@@ -151,7 +153,7 @@ export function MoldPassportForm({
     }
   }
 
-  console.log('defaultValues', defaultValues)
+  logger.debug('[MoldPassportForm] render', defaultValues)
 
   return (
     <FormProvider {...form}>

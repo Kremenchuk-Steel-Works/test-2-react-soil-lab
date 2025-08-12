@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { useQueryClient, type QueryKey, type UseQueryOptions } from '@tanstack/react-query'
+import { logger } from '@/shared/lib/logger'
 
 // A single option for a select component
 export type SelectOption<TValue> = {
@@ -91,7 +92,7 @@ export function useAsyncOptionsNew<
           hasMore: data.hasMore ?? false,
         }
       } catch (error) {
-        console.error('Failed to load async options:', error)
+        logger.error('Failed to load async options:', error)
         return { options: [], hasMore: false }
       }
     },

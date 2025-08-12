@@ -12,6 +12,7 @@ import type {
   MoldPassportUpdate,
 } from '@/shared/api/mold-passport/model'
 import { getErrorMessage } from '@/shared/lib/axios'
+import { logger } from '@/shared/lib/logger'
 import { createUpdatePayload, type TransformMap } from '@/shared/lib/react-hook-form/api-operations'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
@@ -88,16 +89,16 @@ export default function MoldPassportUpdate() {
       if (!responseData || !formDefaultValues || !id) return
       setMutationError(null)
       try {
-        console.log('UPDATE formDefaultValues', formDefaultValues)
-        console.log('UPDATE formData', formData)
-        console.log('UPDATE transformations', transformations)
+        logger.debug('[MoldPassportUpdate] formDefaultValues', formDefaultValues)
+        logger.debug('[MoldPassportUpdate] formData', formData)
+        logger.debug('[MoldPassportUpdate] transformations', transformations)
         const payload: MoldPassportUpdate = createUpdatePayload(
           formDefaultValues,
           formData,
           transformations,
         )
 
-        console.log('UPDATE payload', payload)
+        logger.debug('[MoldPassportUpdate] payload', payload)
 
         await moldPassportService.update(id, payload)
         navigate('..')

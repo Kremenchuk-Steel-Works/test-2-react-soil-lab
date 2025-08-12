@@ -1,4 +1,5 @@
 import type { PageButtonType } from '@/app/routes/types'
+import { logger } from '@/shared/lib/logger'
 import { BUTTON_DEFINITIONS, type ButtonDefinition } from '@/widgets/page/button.config'
 
 export type PreparedButtonProps = ButtonDefinition & {
@@ -18,7 +19,7 @@ export function prepareButtonLogic(
 
   const definition = BUTTON_DEFINITIONS[type]
   if (!definition) {
-    console.warn(`No definition found for button type: ${type}`)
+    logger.warn(`No definition found for button type: ${type}`)
     return null
   }
 

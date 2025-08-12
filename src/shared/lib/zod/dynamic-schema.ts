@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react'
 import { z, ZodObject, type ZodRawShape } from 'zod'
+import { logger } from '@/shared/lib/logger'
 import type { DynamicFieldsProps } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 
 export const ANY_VALUE = '__ANY__'
@@ -95,8 +96,8 @@ export function checkConditions<TOptions extends object>(
   // Проверяем основные условия (логика "И")
   // Если хотя бы одно условие не выполнено, правило неактивно.
   for (const fieldName in conditions) {
-    console.log(
-      `[Debug] Checking field: '${fieldName}'. Form value is:`,
+    logger.debug(
+      `[dynamic-schema] Checking field: '${fieldName}'. Form value is:`,
       formData[fieldName],
       `Type: ${typeof formData[fieldName]}`,
     )
