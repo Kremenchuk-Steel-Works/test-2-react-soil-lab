@@ -1,11 +1,11 @@
 import { Controller, useFormContext, type Path } from 'react-hook-form'
-import { castingTechnologyService } from '@/entities/molding-shop/casting-technology/api/service'
 import type {
   MoldPassportDataAsc,
   MoldPassportDataGsc,
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
 import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/schema'
 import { moldingSandSystemOptions } from '@/entities/molding-shop/molding-sand-type/model/moldingSandSystem'
+import { resinService } from '@/entities/molding-shop/resin'
 import type {
   MoldPassportDetailResponse,
   ResinLookupResponse,
@@ -78,7 +78,7 @@ export function CastingTechnologyPassportDataAscDynamicForm({
     formState: { errors },
   } = useFormContext<MoldPassportFormFields>()
   const loadResinsOptions = useAsyncOptionsNew<ResinLookupResponse, string>(
-    castingTechnologyService.getLookup,
+    resinService.getLookup,
     {
       paramsBuilder: (search, page) => ({
         search,

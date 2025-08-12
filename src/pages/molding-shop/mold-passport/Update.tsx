@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -8,19 +8,11 @@ import {
   type MoldPassportFormFields,
 } from '@/entities/molding-shop/mold-passport'
 import type {
-  MoldCavityUpdateMoldCoreOperations,
   MoldPassportDetailResponse,
   MoldPassportUpdate,
-  MoldPassportUpdateDataAscOperation,
-  MoldPassportUpdateDataGscOperation,
-  MoldPassportUpdateMoldCavityOperations,
 } from '@/shared/api/mold-passport/model'
 import { getErrorMessage } from '@/shared/lib/axios'
-import {
-  createApiArrayOperations,
-  createApiObjectOperation,
-  createUpdatePayload,
-} from '@/shared/lib/react-hook-form/api-operations'
+import { createUpdatePayload, type TransformMap } from '@/shared/lib/react-hook-form/api-operations'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 
@@ -54,6 +46,7 @@ function mapResponseToInitialData(response: MoldPassportDetailResponse): MoldPas
 export default function MoldPassportUpdate() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
+  const [mutationError, setMutationError] = useState<string | null>(null)
 
   const {
     data: responseData,
@@ -71,48 +64,50 @@ export default function MoldPassportUpdate() {
     return mapResponseToInitialData(responseData)
   }, [responseData])
 
-  // Запрос на обновление
-  const handleSubmit = async (formData: MoldPassportFormFields) => {
-    if (!responseData) return
-
-    // Определяем правила трансформации
-    const transformations = {
-      dataGsc: {
-        targetKey: 'dataGscOperation',
-        transformer: (initial: any, form: any) =>
-          createApiObjectOperation(initial, form) as MoldPassportUpdateDataGscOperation,
-      },
-      dataAsc: {
-        targetKey: 'dataAscOperation',
-        transformer: (initial: any, form: any) =>
-          createApiObjectOperation(initial, form) as MoldPassportUpdateDataAscOperation,
-      },
-      moldCavities: {
-        targetKey: 'moldCavityOperations',
-        transformer: (initial: any, form: any) => {
-          return createApiArrayOperations(initial, form).map((op) => {
-            if (op.action === 'update') {
-              op.data.moldCoreOperations = createApiArrayOperations(
-                initial.find((c) => c.id === op.id)?.moldCores,
-                form.find((c) => c.id === op.id)?.moldCores,
-              )
-            }
-            return op
-          }) as MoldPassportUpdateMoldCavityOperations
+  // Операции
+  const transformations = useMemo(
+    () =>
+      ({
+        dataGsc: { type: 'object', targetKey: 'dataGscOperation' },
+        dataAsc: { type: 'object', targetKey: 'dataAscOperation' },
+        moldCavities: {
+          type: 'array',
+          targetKey: 'moldCavityOperations',
+          nested: {
+            // заменяем массив form.moldCores -> операции moldCoreOperations
+            moldCores: { type: 'array', targetKey: 'moldCoreOperations' },
+          },
         },
-      },
-    }
+      }) satisfies TransformMap<MoldPassportFormFields>,
+    [],
+  )
 
-    const payload = createUpdatePayload(
-      responseData,
-      formData,
-      transformations,
-    ) as MoldPassportUpdate
+  // Запрос на обновление
+  const handleSubmit = useCallback(
+    async (formData: MoldPassportFormFields) => {
+      if (!responseData || !formDefaultValues || !id) return
+      setMutationError(null)
+      try {
+        console.log('UPDATE formDefaultValues', formDefaultValues)
+        console.log('UPDATE formData', formData)
+        console.log('UPDATE transformations', transformations)
+        const payload: MoldPassportUpdate = createUpdatePayload(
+          formDefaultValues,
+          formData,
+          transformations,
+        )
 
-    await moldPassportService.update(id!, payload)
-    navigate('..')
-    return payload
-  }
+        console.log('UPDATE payload', payload)
+
+        await moldPassportService.update(id, payload)
+        navigate('..')
+        return payload
+      } catch (e) {
+        setMutationError(getErrorMessage(e))
+      }
+    },
+    [formDefaultValues, id, navigate, responseData, transformations],
+  )
 
   return (
     <>
@@ -125,7 +120,12 @@ export default function MoldPassportUpdate() {
         </Button>
       </div>
 
-      {isError && <AlertMessage type={AlertType.ERROR} message={getErrorMessage(queryError)} />}
+      {(isError || mutationError) && (
+        <AlertMessage
+          type={AlertType.ERROR}
+          message={mutationError ?? getErrorMessage(queryError)}
+        />
+      )}
 
       {!isLoading && responseData && formDefaultValues && (
         <div className="flex flex-wrap gap-x-2 gap-y-2">
