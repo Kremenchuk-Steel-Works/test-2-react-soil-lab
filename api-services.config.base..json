@@ -1,4 +1,8 @@
 {
+  "main": {
+    "url": "http://195.189.63.125:8002/openapi.json",
+    "path": "src/shared/api/main-service"
+  },
   "mold-passport": {
     "url": "src/shared/api/mold-passport-openapi.json",
     "path": "src/shared/api/mold-passport"

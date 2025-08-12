@@ -13,8 +13,8 @@ export const getGetPatternPlateFrameLookupsListApiV1PatternPlateFramesLookupsGet
 ): PatternPlateFrameLookupsListResponse => ({
   data: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
     id: faker.string.uuid(),
-    serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
     blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+    serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
   })),
   page: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
   totalPages: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),

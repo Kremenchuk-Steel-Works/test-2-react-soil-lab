@@ -28,10 +28,12 @@ export const getGetMoldCoreBatchLookupsListApiV1MoldCoreBatchesLookupsGetRespons
         id: faker.string.uuid(),
         type: faker.helpers.arrayElement(Object.values(CastingProductType)),
         name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        isCastingManualOnly: faker.datatype.boolean(),
       },
       modelNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
     },
-    machine: {
+    moldCoreMakingMachine: {
       id: faker.string.uuid(),
       brand: faker.string.alpha({ length: { min: 10, max: 20 } }),
       model: faker.string.alpha({ length: { min: 10, max: 20 } }),

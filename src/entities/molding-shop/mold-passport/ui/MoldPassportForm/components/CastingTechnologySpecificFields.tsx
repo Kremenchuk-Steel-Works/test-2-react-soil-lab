@@ -4,7 +4,7 @@ import type {
   MoldPassportDataGsc,
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
 import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/schema'
-import { moldingSandSystemOptions } from '@/entities/molding-shop/molding-sand-type/model/moldingSandSystem'
+import { moldingSandSystemOptions } from '@/entities/molding-shop/molding-sand-system/model/moldingSandSystem'
 import { resinService } from '@/entities/molding-shop/resin'
 import type {
   MoldPassportDetailResponse,

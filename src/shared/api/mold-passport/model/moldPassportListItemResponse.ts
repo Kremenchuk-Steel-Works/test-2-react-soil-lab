@@ -7,12 +7,11 @@
 import type { AssetStatus } from './assetStatus'
 import type { CastingTechnologyShortResponse } from './castingTechnologyShortResponse'
 import type { MoldingAreaShortResponse } from './moldingAreaShortResponse'
+import type { MoldPassportListItemResponseAssemblyTimestamp } from './moldPassportListItemResponseAssemblyTimestamp'
 import type { MoldPassportListItemResponseDeletedAt } from './moldPassportListItemResponseDeletedAt'
-import type { MoldPassportListItemResponseMarkingYear } from './moldPassportListItemResponseMarkingYear'
-import type { MoldPassportListItemResponseMoldAssemblyTimestamp } from './moldPassportListItemResponseMoldAssemblyTimestamp'
 import type { MoldPassportListItemResponseMoldingFlask } from './moldPassportListItemResponseMoldingFlask'
-import type { MoldPassportListItemResponseMoldSequenceInShift } from './moldPassportListItemResponseMoldSequenceInShift'
 import type { MoldPassportListItemResponsePatternPlateFrame } from './moldPassportListItemResponsePatternPlateFrame'
+import type { MoldPassportListItemResponseSequenceInShift } from './moldPassportListItemResponseSequenceInShift'
 
 export interface MoldPassportListItemResponse {
   deletedAt?: MoldPassportListItemResponseDeletedAt
@@ -20,13 +19,13 @@ export interface MoldPassportListItemResponse {
   isComplete: boolean
   primaryCastingProductName: string
   referenceCode: string
-  markingYear?: MoldPassportListItemResponseMarkingYear
+  markingYear: number
   moldingArea: MoldingAreaShortResponse
   castingTechnology: CastingTechnologyShortResponse
   patternPlateFrame?: MoldPassportListItemResponsePatternPlateFrame
   moldingFlask?: MoldPassportListItemResponseMoldingFlask
-  moldSequenceInShift?: MoldPassportListItemResponseMoldSequenceInShift
-  moldAssemblyTimestamp?: MoldPassportListItemResponseMoldAssemblyTimestamp
+  sequenceInShift?: MoldPassportListItemResponseSequenceInShift
+  assemblyTimestamp?: MoldPassportListItemResponseAssemblyTimestamp
   status: AssetStatus
   readonly isDeleted: boolean
 }

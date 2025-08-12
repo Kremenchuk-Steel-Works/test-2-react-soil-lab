@@ -18,8 +18,8 @@ export default function MoldPassportList() {
     error: queryError,
   } = useQuery({
     ...moldPassportService.getList({
-      page: String(page),
-      perPage: String(perPage),
+      page: page,
+      perPage: perPage,
     }),
     placeholderData: keepPreviousData,
   })

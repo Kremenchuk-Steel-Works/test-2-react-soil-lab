@@ -7,7 +7,6 @@
 import type { MoldPassportUpdateAssemblyTimestamp } from './moldPassportUpdateAssemblyTimestamp'
 import type { MoldPassportUpdateDataAscOperation } from './moldPassportUpdateDataAscOperation'
 import type { MoldPassportUpdateDataGscOperation } from './moldPassportUpdateDataGscOperation'
-import type { MoldPassportUpdateMarkingYear } from './moldPassportUpdateMarkingYear'
 import type { MoldPassportUpdateMoldCavityOperations } from './moldPassportUpdateMoldCavityOperations'
 import type { MoldPassportUpdateMoldingFlaskId } from './moldPassportUpdateMoldingFlaskId'
 import type { MoldPassportUpdateNotes } from './moldPassportUpdateNotes'
@@ -25,7 +24,6 @@ export interface MoldPassportUpdate {
   moldCavityOperations?: MoldPassportUpdateMoldCavityOperations
   pressingPressure?: MoldPassportUpdatePressingPressure
   sequenceInShift?: MoldPassportUpdateSequenceInShift
-  markingYear?: MoldPassportUpdateMarkingYear
   assemblyTimestamp?: MoldPassportUpdateAssemblyTimestamp
   isDefective?: boolean
   notes?: MoldPassportUpdateNotes

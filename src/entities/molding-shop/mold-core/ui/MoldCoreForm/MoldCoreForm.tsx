@@ -37,7 +37,7 @@ interface FormProps {
 }
 
 const formatCoreBatchLabel = (d: MoldCoreBatchLookupResponse) =>
-  `${d.moldingSandType.name} ${d.moldCoreType.modelNumber} ${d.machine.brand} ${d.machine.model} ${d.manufacturingTimestamp} ${d.batchExpiryDate}`
+  `${d.moldingSandType.name} ${d.moldCoreType.modelNumber} ${d.moldCoreMakingMachine.brand} ${d.moldCoreMakingMachine.model} ${d.manufacturingTimestamp} ${d.batchExpiryDate}`
 
 export function MoldCoreFormComponent({ pathPrefix, itemData, control, register }: FormProps) {
   const fieldName = useCallback(

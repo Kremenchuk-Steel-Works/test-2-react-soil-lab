@@ -7,6 +7,6 @@
 
 export interface MoldingFlaskLookupResponse {
   id: string
-  serialNumber: string
   blueprintNumber: string
+  serialNumber: string
 }

@@ -641,10 +641,9 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "format": "uuid",
+              "type": "integer",
               "default": 1,
-              "ge": 1,
+              "minimum": 1,
               "title": "Page"
             }
           },
@@ -653,11 +652,10 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "format": "uuid",
+              "type": "integer",
               "default": 10,
-              "ge": 1,
-              "le": 20,
+              "maximum": 20,
+              "minimum": 1,
               "title": "Per Page"
             }
           },
@@ -1729,12 +1727,22 @@
           "name": {
             "type": "string",
             "title": "Name"
+          },
+          "blueprintNumber": {
+            "type": "string",
+            "title": "Blueprint Number"
+          },
+          "isCastingManualOnly": {
+            "type": "boolean",
+            "title": "Is Casting Manual Only"
           }
         },
         "required": [
           "id",
           "type",
-          "name"
+          "name",
+          "blueprintNumber",
+          "isCastingManualOnly"
         ],
         "title": "CastingProductLookupResponse"
       },
@@ -2144,7 +2152,7 @@
           "moldCoreType": {
             "$ref": "#/components/schemas/MoldCoreTypeLookupResponse"
           },
-          "machine": {
+          "moldCoreMakingMachine": {
             "$ref": "#/components/schemas/MoldCoreMakingMachineLookupResponse"
           },
           "manufacturingTimestamp": {
@@ -2165,7 +2173,7 @@
           "id",
           "moldingSandType",
           "moldCoreType",
-          "machine",
+          "moldCoreMakingMachine",
           "manufacturingTimestamp",
           "batchExpiryDate",
           "status"
@@ -2533,17 +2541,6 @@
             ],
             "title": "Sequence In Shift"
           },
-          "markingYear": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Marking Year"
-          },
           "assemblyTimestamp": {
             "anyOf": [
               {
@@ -2557,15 +2554,8 @@
             "title": "Assembly Timestamp"
           },
           "isDefective": {
+            "type": "boolean",
             "default": false,
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
             "title": "Is Defective"
           },
           "notes": {
@@ -2978,11 +2968,25 @@
             "title": "Is Complete"
           },
           "primaryCastingProductName": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Primary Casting Product Name"
           },
           "referenceCode": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Reference Code"
           },
           "moldingArea": {
@@ -3031,6 +3035,17 @@
               }
             ]
           },
+          "markingYear": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marking Year"
+          },
           "moldCavities": {
             "type": "array",
             "items": {
@@ -3049,7 +3064,7 @@
             ],
             "title": "Pressing Pressure"
           },
-          "moldSequenceInShift": {
+          "sequenceInShift": {
             "anyOf": [
               {
                 "type": "integer"
@@ -3058,9 +3073,9 @@
                 "type": "null"
               }
             ],
-            "title": "Mold Sequence In Shift"
+            "title": "Sequence In Shift"
           },
-          "moldAssemblyTimestamp": {
+          "assemblyTimestamp": {
             "anyOf": [
               {
                 "type": "string",
@@ -3070,7 +3085,7 @@
                 "type": "null"
               }
             ],
-            "title": "Mold Assembly Timestamp"
+            "title": "Assembly Timestamp"
           },
           "status": {
             "$ref": "#/components/schemas/AssetStatus"
@@ -3101,6 +3116,7 @@
           "referenceCode",
           "moldingArea",
           "castingTechnology",
+          "markingYear",
           "moldCavities",
           "status",
           "isDeleted"
@@ -3140,14 +3156,7 @@
             "title": "Reference Code"
           },
           "markingYear": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
+            "type": "integer",
             "title": "Marking Year"
           },
           "moldingArea": {
@@ -3176,7 +3185,7 @@
               }
             ]
           },
-          "moldSequenceInShift": {
+          "sequenceInShift": {
             "anyOf": [
               {
                 "type": "integer"
@@ -3185,9 +3194,9 @@
                 "type": "null"
               }
             ],
-            "title": "Mold Sequence In Shift"
+            "title": "Sequence In Shift"
           },
-          "moldAssemblyTimestamp": {
+          "assemblyTimestamp": {
             "anyOf": [
               {
                 "type": "string",
@@ -3197,7 +3206,7 @@
                 "type": "null"
               }
             ],
-            "title": "Mold Assembly Timestamp"
+            "title": "Assembly Timestamp"
           },
           "status": {
             "$ref": "#/components/schemas/AssetStatus"
@@ -3213,6 +3222,7 @@
           "isComplete",
           "primaryCastingProductName",
           "referenceCode",
+          "markingYear",
           "moldingArea",
           "castingTechnology",
           "status",
@@ -3399,17 +3409,6 @@
             ],
             "title": "Sequence In Shift"
           },
-          "markingYear": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Marking Year"
-          },
           "assemblyTimestamp": {
             "anyOf": [
               {
@@ -3539,19 +3538,19 @@
             "format": "uuid",
             "title": "Id"
           },
-          "serialNumber": {
-            "type": "string",
-            "title": "Serial Number"
-          },
           "blueprintNumber": {
             "type": "string",
             "title": "Blueprint Number"
+          },
+          "serialNumber": {
+            "type": "string",
+            "title": "Serial Number"
           }
         },
         "required": [
           "id",
-          "serialNumber",
-          "blueprintNumber"
+          "blueprintNumber",
+          "serialNumber"
         ],
         "title": "MoldingFlaskLookupResponse"
       },
@@ -3657,19 +3656,19 @@
             "format": "uuid",
             "title": "Id"
           },
-          "serialNumber": {
-            "type": "string",
-            "title": "Serial Number"
-          },
           "blueprintNumber": {
             "type": "string",
             "title": "Blueprint Number"
+          },
+          "serialNumber": {
+            "type": "string",
+            "title": "Serial Number"
           }
         },
         "required": [
           "id",
-          "serialNumber",
-          "blueprintNumber"
+          "blueprintNumber",
+          "serialNumber"
         ],
         "title": "PatternPlateFrameLookupResponse"
       },
@@ -3703,14 +3702,6 @@
           "totalItems"
         ],
         "title": "PatternPlateFrameLookupsListResponse"
-      },
-      "ResinComponent": {
-        "type": "string",
-        "enum": [
-          "A",
-          "B"
-        ],
-        "title": "ResinComponent"
       },
       "ResinLookupResponse": {
         "type": "object",
@@ -3790,16 +3781,6 @@
           "name": {
             "type": "string",
             "title": "Name"
-          },
-          "component": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ResinComponent"
-              },
-              {
-                "type": "null"
-              }
-            ]
           },
           "serialNumber": {
             "type": "string",

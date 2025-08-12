@@ -6,7 +6,14 @@
  */
 
 export type GetMoldPassportsListApiV1MoldPassportsGetParams = {
-  page?: string
-  perPage?: string
+  /**
+   * @minimum 1
+   */
+  page?: number
+  /**
+   * @minimum 1
+   * @maximum 20
+   */
+  perPage?: number
   status?: 'active' | 'deleted' | 'all' | null
 }

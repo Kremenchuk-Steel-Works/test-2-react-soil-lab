@@ -79,13 +79,13 @@ export const moldPassportColumns = [
     }),
   }),
 
-  columnHelper.accessor('moldSequenceInShift', {
+  columnHelper.accessor('sequenceInShift', {
     header: 'Номер за зміну',
     size: 115,
     ...displayColumn(),
   }),
 
-  columnHelper.accessor('moldAssemblyTimestamp', {
+  columnHelper.accessor('assemblyTimestamp', {
     header: 'Час складання півформ',
     size: 115,
     ...dateColumn(),

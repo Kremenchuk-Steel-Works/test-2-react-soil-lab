@@ -226,22 +226,6 @@ export function MoldPassportForm({
           {/* DynamicFields */}
           <DynamicFieldArea triggerFor="castingTechnologyId" />
 
-          <Controller
-            name="markingYear"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormDateTimeField
-                field={field}
-                fieldState={fieldState}
-                type="year"
-                yearOffsetPast={2}
-                yearOffsetFuture={2}
-                label="Рік маркування відбитків"
-                errorMessage={getNestedErrorMessage(errors, 'markingYear')}
-              />
-            )}
-          />
-
           {/* Cavities */}
           <DynamicFieldArray
             title="Відбиток деталі у формі"

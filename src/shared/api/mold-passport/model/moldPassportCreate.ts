@@ -8,8 +8,6 @@ import type { MoldCavityCreate } from './moldCavityCreate'
 import type { MoldPassportCreateAssemblyTimestamp } from './moldPassportCreateAssemblyTimestamp'
 import type { MoldPassportCreateDataAsc } from './moldPassportCreateDataAsc'
 import type { MoldPassportCreateDataGsc } from './moldPassportCreateDataGsc'
-import type { MoldPassportCreateIsDefective } from './moldPassportCreateIsDefective'
-import type { MoldPassportCreateMarkingYear } from './moldPassportCreateMarkingYear'
 import type { MoldPassportCreateMoldingFlaskId } from './moldPassportCreateMoldingFlaskId'
 import type { MoldPassportCreateNotes } from './moldPassportCreateNotes'
 import type { MoldPassportCreatePatternPlateFrameId } from './moldPassportCreatePatternPlateFrameId'
@@ -26,8 +24,7 @@ export interface MoldPassportCreate {
   moldCavities: MoldCavityCreate[]
   pressingPressure?: MoldPassportCreatePressingPressure
   sequenceInShift?: MoldPassportCreateSequenceInShift
-  markingYear?: MoldPassportCreateMarkingYear
-  assemblyTimestamp: MoldPassportCreateAssemblyTimestamp
-  isDefective?: MoldPassportCreateIsDefective
+  assemblyTimestamp?: MoldPassportCreateAssemblyTimestamp
+  isDefective?: boolean
   notes?: MoldPassportCreateNotes
 }

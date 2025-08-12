@@ -39,8 +39,6 @@ function mapResponseToInitialData(response: MoldPassportDetailResponse): MoldPas
             coreBatchId: core.coreBatch.id,
           })) ?? [],
       })) ?? [],
-
-    assemblyTimestamp: response.moldAssemblyTimestamp ?? null,
   }
 }
 

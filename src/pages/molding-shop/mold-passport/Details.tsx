@@ -135,24 +135,22 @@ export default function MoldPassportDetails() {
               </div>
             )}
 
-            {data.moldSequenceInShift !== null && (
+            {data.sequenceInShift !== null && (
               <div>
                 <dt className="font-medium text-gray-500 dark:text-slate-400">
                   Номер форми у зміні
                 </dt>
-                <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                  {data.moldSequenceInShift}
-                </dd>
+                <dd className="mt-1 text-gray-900 dark:text-slate-300">{data.sequenceInShift}</dd>
               </div>
             )}
 
-            {data.moldAssemblyTimestamp && (
+            {data.assemblyTimestamp && (
               <div>
                 <dt className="font-medium text-gray-500 dark:text-slate-400">
                   Час збирання форми
                 </dt>
                 <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                  {new Date(data.moldAssemblyTimestamp).toLocaleString()}
+                  {new Date(data.assemblyTimestamp).toLocaleString()}
                 </dd>
               </div>
             )}

@@ -8,16 +8,19 @@ import type { AssetStatus } from './assetStatus'
 import type { CastingTechnologyShortResponse } from './castingTechnologyShortResponse'
 import type { MoldCavityDetailResponse } from './moldCavityDetailResponse'
 import type { MoldingAreaShortResponse } from './moldingAreaShortResponse'
+import type { MoldPassportDetailResponseAssemblyTimestamp } from './moldPassportDetailResponseAssemblyTimestamp'
 import type { MoldPassportDetailResponseCreatedById } from './moldPassportDetailResponseCreatedById'
 import type { MoldPassportDetailResponseDataAsc } from './moldPassportDetailResponseDataAsc'
 import type { MoldPassportDetailResponseDataGsc } from './moldPassportDetailResponseDataGsc'
 import type { MoldPassportDetailResponseDeletedAt } from './moldPassportDetailResponseDeletedAt'
-import type { MoldPassportDetailResponseMoldAssemblyTimestamp } from './moldPassportDetailResponseMoldAssemblyTimestamp'
+import type { MoldPassportDetailResponseMarkingYear } from './moldPassportDetailResponseMarkingYear'
 import type { MoldPassportDetailResponseMoldingFlask } from './moldPassportDetailResponseMoldingFlask'
-import type { MoldPassportDetailResponseMoldSequenceInShift } from './moldPassportDetailResponseMoldSequenceInShift'
 import type { MoldPassportDetailResponseNotes } from './moldPassportDetailResponseNotes'
 import type { MoldPassportDetailResponsePatternPlateFrame } from './moldPassportDetailResponsePatternPlateFrame'
 import type { MoldPassportDetailResponsePressingPressure } from './moldPassportDetailResponsePressingPressure'
+import type { MoldPassportDetailResponsePrimaryCastingProductName } from './moldPassportDetailResponsePrimaryCastingProductName'
+import type { MoldPassportDetailResponseReferenceCode } from './moldPassportDetailResponseReferenceCode'
+import type { MoldPassportDetailResponseSequenceInShift } from './moldPassportDetailResponseSequenceInShift'
 import type { MoldPassportDetailResponseUpdatedById } from './moldPassportDetailResponseUpdatedById'
 
 export interface MoldPassportDetailResponse {
@@ -28,18 +31,19 @@ export interface MoldPassportDetailResponse {
   updatedById?: MoldPassportDetailResponseUpdatedById
   id: string
   isComplete: boolean
-  primaryCastingProductName: string
-  referenceCode: string
+  primaryCastingProductName: MoldPassportDetailResponsePrimaryCastingProductName
+  referenceCode: MoldPassportDetailResponseReferenceCode
   moldingArea: MoldingAreaShortResponse
   castingTechnology: CastingTechnologyShortResponse
   patternPlateFrame?: MoldPassportDetailResponsePatternPlateFrame
   moldingFlask?: MoldPassportDetailResponseMoldingFlask
   dataGsc?: MoldPassportDetailResponseDataGsc
   dataAsc?: MoldPassportDetailResponseDataAsc
+  markingYear: MoldPassportDetailResponseMarkingYear
   moldCavities: MoldCavityDetailResponse[]
   pressingPressure?: MoldPassportDetailResponsePressingPressure
-  moldSequenceInShift?: MoldPassportDetailResponseMoldSequenceInShift
-  moldAssemblyTimestamp?: MoldPassportDetailResponseMoldAssemblyTimestamp
+  sequenceInShift?: MoldPassportDetailResponseSequenceInShift
+  assemblyTimestamp?: MoldPassportDetailResponseAssemblyTimestamp
   status: AssetStatus
   notes?: MoldPassportDetailResponseNotes
   readonly isDeleted: boolean

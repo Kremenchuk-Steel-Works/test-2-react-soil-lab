@@ -4,7 +4,6 @@
  * Molding Shop Service
  * OpenAPI spec version: 0.1.0
  */
-import type { ResinShortResponseComponent } from './resinShortResponseComponent'
 import type { ResinType } from './resinType'
 
 export interface ResinShortResponse {
@@ -12,6 +11,5 @@ export interface ResinShortResponse {
   type: ResinType
   brand: string
   name: string
-  component?: ResinShortResponseComponent
   serialNumber: string
 }

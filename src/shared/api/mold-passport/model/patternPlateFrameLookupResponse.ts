@@ -7,6 +7,6 @@
 
 export interface PatternPlateFrameLookupResponse {
   id: string
-  serialNumber: string
   blueprintNumber: string
+  serialNumber: string
 }

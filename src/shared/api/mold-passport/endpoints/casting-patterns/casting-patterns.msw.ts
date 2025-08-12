@@ -17,6 +17,8 @@ export const getGetCastingPatternLookupsListApiV1CastingPatternsLookupsGetRespon
       id: faker.string.uuid(),
       type: faker.helpers.arrayElement(Object.values(CastingProductType)),
       name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      blueprintNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
+      isCastingManualOnly: faker.datatype.boolean(),
     },
     serialNumber: faker.string.alpha({ length: { min: 10, max: 20 } }),
   })),

@@ -10,4 +10,6 @@ export interface CastingProductLookupResponse {
   id: string
   type: CastingProductType
   name: string
+  blueprintNumber: string
+  isCastingManualOnly: boolean
 }

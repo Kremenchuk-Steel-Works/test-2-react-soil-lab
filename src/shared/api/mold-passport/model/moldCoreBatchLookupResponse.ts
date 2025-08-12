@@ -13,7 +13,7 @@ export interface MoldCoreBatchLookupResponse {
   id: string
   moldingSandType: MoldingSandTypeLookupResponse
   moldCoreType: MoldCoreTypeLookupResponse
-  machine: MoldCoreMakingMachineLookupResponse
+  moldCoreMakingMachine: MoldCoreMakingMachineLookupResponse
   manufacturingTimestamp: string
   batchExpiryDate: string
   status: ConsumableStatus

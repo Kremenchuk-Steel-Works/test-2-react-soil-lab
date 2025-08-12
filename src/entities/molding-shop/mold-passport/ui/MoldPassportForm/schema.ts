@@ -21,13 +21,11 @@ const baseSchema = z.object({
   dataGsc: dataGscFormSchema.nullable().optional(),
   dataAsc: dataAscFormSchema.nullable().optional(),
 
-  markingYear: z.number().nullable().optional(),
-
   moldCavities: z.array(moldCavityFormSchema),
 
   pressingPressure: z.number().nullable().optional(),
   sequenceInShift: z.number().nullable().optional(),
-  assemblyTimestamp: z.string().nullable(),
+  assemblyTimestamp: z.string().nullable().optional(),
   isDefective: z.boolean().optional(),
   notes: z.string().nullable().optional(),
 })
@@ -39,5 +37,4 @@ export const moldPassportFormSchema = createDynamicSchema(
 export type MoldPassportFormFields = z.infer<typeof moldPassportFormSchema>
 export const moldPassportFormDefaultValues: DeepPartial<MoldPassportFormFields> = {
   moldCavities: [],
-  assemblyTimestamp: null,
 }

@@ -5,4 +5,4 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type MoldPassportUpdateMarkingYear = number | null
+export type MoldPassportDetailResponseMarkingYear = number | null

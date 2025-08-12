@@ -4,6 +4,5 @@
  * Molding Shop Service
  * OpenAPI spec version: 0.1.0
  */
-import type { ResinComponent } from './resinComponent'
 
-export type ResinShortResponseComponent = ResinComponent | null
+export type MoldPassportListItemResponseAssemblyTimestamp = string | null
