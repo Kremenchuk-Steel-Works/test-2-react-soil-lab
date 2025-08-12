@@ -30,6 +30,7 @@ export const customMutator = <T>(config: AxiosRequestConfig): Promise<T> => {
       const u = new URL(base)
       // меняем только порт
       u.port = '8003'
+      // u.host = 'localhost'
       // без завершающего слэша (чтобы не словить //)
       newConfig.baseURL = u.toString().replace(/\/$/, '')
     } catch {

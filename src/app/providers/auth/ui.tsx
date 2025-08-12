@@ -89,6 +89,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (!cfg._retry && cfg.addAccessToken !== false && accessToken) {
         cfg.headers.Authorization = `Bearer ${accessToken}`
         logger.debug(`Добавлен токен → ${cfg.headers.Authorization}`)
+
+        // КОСТЫЛЬ
+        if (currentUser?.id) {
+          config.headers['X-User-Id'] = currentUser.id
+          logger.debug(`Добавлен X-User-Id → ${currentUser.id}`)
+        }
       }
 
       return cfg
@@ -97,7 +103,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       api.interceptors.request.eject(authInterceptor)
     }
-  }, [accessToken])
+  }, [accessToken, currentUser])
 
   // Обновление токена
   useLayoutEffect(() => {
