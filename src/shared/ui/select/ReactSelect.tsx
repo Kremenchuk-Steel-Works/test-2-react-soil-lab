@@ -105,25 +105,39 @@ function ReactSelect<
   }, [inputValue, debounceTimeout, isAsync])
 
   const loadOptionsAdapter: LoadOptions<OptionType, Group, { page: number }> = useCallback(
-    async (search, _loadedOptions, additional) => {
+    async (search, loadedOptions, additional) => {
       if (typeof options !== 'function') {
         logger.error('`loadOptions` prop is required when `isAsyncPaginate` is true.')
         return { options: [], hasMore: false }
       }
+
       setIsLoading(true)
       try {
-        const page = additional?.page || 1
-        const result = await options(search, page)
+        const page = additional?.page ?? 1
+        const res = await options(search, page)
+
+        // Собираем все уже показанные values (включая defaultOptions и предыдущие страницы)
+        const seen = new Set<OptionType['value']>(
+          (loadedOptions as OptionType[] | undefined)?.map((o) => o.value) ?? [],
+        )
+
+        // Дедуплицируем и внутри текущей страницы, и против уже загруженных
+        const unique = res.options.filter((o) => {
+          if (seen.has(o.value)) return false
+          seen.add(o.value)
+          return true
+        })
+
         return {
-          options: result.options,
-          hasMore: result.hasMore,
+          options: unique,
+          hasMore: res.hasMore,
           additional: { page: page + 1 },
         }
       } finally {
         setIsLoading(false)
       }
     },
-    [options],
+    [options, props.isMulti, props.value],
   )
 
   const handleInputChange = (value: string, actionMeta: InputActionMeta) => {

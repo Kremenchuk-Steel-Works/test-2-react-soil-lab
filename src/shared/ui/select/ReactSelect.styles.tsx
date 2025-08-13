@@ -46,6 +46,7 @@ export const baseClassNames: ClassNamesConfig = {
   option: ({ isFocused, isSelected }) =>
     twMerge(
       'px-3 py-3 cursor-pointer',
+      'whitespace-normal break-words',
       isSelected && 'bg-blue-500 text-white',
       !isSelected && isFocused && 'bg-gray-200 dark:bg-gray-600',
       !isSelected && !isFocused && 'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300',

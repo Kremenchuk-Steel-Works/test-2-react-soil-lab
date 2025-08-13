@@ -1,9 +1,11 @@
-import { useEffect, useRef, type JSX } from 'react'
-import { type GroupBase, type MenuListProps } from 'react-select'
-import { FixedSizeList, type ListOnScrollProps } from 'react-window'
+// src/shared/ui/select/VirtualizedMenuList.tsx
+import { useEffect, useMemo, useRef, type JSX, type MutableRefObject } from 'react'
+import { useVirtualizer } from '@tanstack/react-virtual'
+import type { GroupBase, MenuListProps } from 'react-select'
 
-const OPTION_HEIGHT = 48
+const DEFAULT_ROW_HEIGHT = 48
 const MENU_MAX_HEIGHT = 300
+const BOTTOM_THRESHOLD_PX = 20
 
 type AsyncPaginateMenuListProps<
   OptionType,
@@ -16,6 +18,18 @@ type AsyncPaginateMenuListProps<
   }
 }
 
+function mergeRefs<T>(
+  ...refs: Array<MutableRefObject<T | null> | ((instance: T | null) => void) | null | undefined>
+) {
+  return (instance: T | null) => {
+    for (const ref of refs) {
+      if (!ref) continue
+      if (typeof ref === 'function') ref(instance)
+      else (ref as MutableRefObject<T | null>).current = instance
+    }
+  }
+}
+
 export function VirtualizedMenuList<
   OptionType extends { label: string; value: unknown },
   IsMulti extends boolean = false,
@@ -24,76 +38,97 @@ export function VirtualizedMenuList<
   children,
   maxHeight = MENU_MAX_HEIGHT,
   selectProps,
+  innerRef, // берём только то, что реально нужно
+  innerProps, // aria/role/handlers от react-select
 }: AsyncPaginateMenuListProps<OptionType, IsMulti, Group>): JSX.Element {
   const { handleScrolledToBottom, isLoading } = selectProps
 
-  const outerRef = useRef<HTMLDivElement | null>(null)
-  const scrollOffsetRef = useRef(0)
-
-  const safeChildren = Array.isArray(children) ? children : []
+  const safeChildren = useMemo(() => (Array.isArray(children) ? children : []), [children])
   const itemCount = safeChildren.length
-  const listHeight = Math.min(maxHeight, itemCount * OPTION_HEIGHT)
-  const totalScrollHeight = itemCount * OPTION_HEIGHT
 
-  // Эффект для блокировки скролла страницы
+  const parentRef = useRef<HTMLDivElement | null>(null)
+
+  const rowVirtualizer = useVirtualizer({
+    count: itemCount,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => DEFAULT_ROW_HEIGHT,
+    overscan: 6,
+    measureElement: (el) => el?.getBoundingClientRect().height ?? DEFAULT_ROW_HEIGHT,
+  })
+
+  // размеры контента/вьюпорта
+  const estimatedTotal = itemCount * DEFAULT_ROW_HEIGHT
+  const measuredTotal = rowVirtualizer.getTotalSize()
+  const contentHeight = Math.max(measuredTotal || 0, estimatedTotal)
+  const viewportHeight = Math.min(maxHeight, contentHeight)
+  const needScroll = contentHeight > maxHeight
+
+  // догрузка при скролле к низу
   useEffect(() => {
-    const element = outerRef.current
-    if (!element) return
-
-    const handleWheel = (e: WheelEvent) => {
-      if (totalScrollHeight <= listHeight) {
-        return
-      }
-
-      const currentScroll = scrollOffsetRef.current
-      const isScrollingUp = e.deltaY < 0
-      const isScrollingDown = e.deltaY > 0
-
-      if (currentScroll === 0 && isScrollingUp) {
-        e.preventDefault()
-        return
-      }
-
-      const isAtBottom = currentScroll + listHeight >= totalScrollHeight - 1
-      if (isAtBottom && isScrollingDown) {
-        e.preventDefault()
-        return
+    const el = parentRef.current
+    if (!el || !handleScrolledToBottom) return
+    const onScroll = () => {
+      if (isLoading) return
+      if (el.scrollTop + el.clientHeight >= el.scrollHeight - BOTTOM_THRESHOLD_PX) {
+        handleScrolledToBottom()
       }
     }
+    el.addEventListener('scroll', onScroll)
+    return () => el.removeEventListener('scroll', onScroll)
+  }, [handleScrolledToBottom, isLoading])
 
-    element.addEventListener('wheel', handleWheel, { passive: false })
-
-    return () => {
-      element.removeEventListener('wheel', handleWheel)
-    }
-  }, [listHeight, totalScrollHeight])
-
-  if (itemCount === 0) {
-    return <>{children}</>
-  }
-
-  const handleScroll = ({ scrollOffset }: ListOnScrollProps): void => {
-    scrollOffsetRef.current = scrollOffset
-
-    if (!handleScrolledToBottom || isLoading) {
-      return
-    }
-
-    if (scrollOffset + listHeight >= totalScrollHeight - 20) {
+  // автодогрузка, если контента меньше окна
+  const lastTriggeredCountRef = useRef<number>(-1)
+  useEffect(() => {
+    if (!handleScrolledToBottom || isLoading) return
+    if (contentHeight < maxHeight && itemCount !== lastTriggeredCountRef.current) {
+      lastTriggeredCountRef.current = itemCount
       handleScrolledToBottom()
     }
-  }
+  }, [contentHeight, maxHeight, itemCount, isLoading, handleScrolledToBottom])
+
+  useEffect(() => {
+    if (itemCount < lastTriggeredCountRef.current) lastTriggeredCountRef.current = -1
+  }, [itemCount])
+
+  if (itemCount === 0) return <>{children}</>
 
   return (
-    <FixedSizeList
-      height={listHeight}
-      itemCount={itemCount}
-      itemSize={OPTION_HEIGHT}
-      width="100%"
-      onScroll={handleScroll}
-      outerRef={outerRef}
+    <div
+      ref={mergeRefs(parentRef, innerRef as any)}
+      style={{
+        height: viewportHeight,
+        maxHeight,
+        overflowY: needScroll ? 'auto' : 'hidden',
+      }}
+      {...(innerProps as React.HTMLAttributes<HTMLDivElement>)} // ТОЛЬКО innerProps!
     >
-      {({ index, style }) => <div style={style}>{safeChildren[index]}</div>}
-    </FixedSizeList>
+      <div
+        style={{
+          height: measuredTotal,
+          width: '100%',
+          position: 'relative',
+        }}
+      >
+        {rowVirtualizer.getVirtualItems().map((row) => (
+          <div
+            key={row.key}
+            ref={rowVirtualizer.measureElement}
+            data-index={row.index}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              transform: `translateY(${row.start}px)`,
+            }}
+          >
+            {safeChildren[row.index]}
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
+
+export default VirtualizedMenuList
