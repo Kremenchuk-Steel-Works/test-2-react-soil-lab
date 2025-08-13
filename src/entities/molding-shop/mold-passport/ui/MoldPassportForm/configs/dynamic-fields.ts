@@ -8,6 +8,7 @@ import { MoldingSandSystem } from '@/shared/api/mold-passport/model'
 import { ANY_VALUE, createFormConfig } from '@/shared/lib/zod/dynamic-schema'
 
 export const dataGscFormSchema = z.object({
+  id: z.string().nullable().optional(),
   moldingSandSystem: z.nativeEnum(MoldingSandSystem),
   moldingSandNumber: z.string().nonempty(),
   moldHorizontalDensity: z.number().positive(),
@@ -17,6 +18,7 @@ export const dataGscFormSchema = z.object({
 export type MoldPassportDataGsc = z.infer<typeof dataGscFormSchema>
 
 export const dataAscFormSchema = z.object({
+  id: z.string().nullable().optional(),
   moldHardness: z.number().positive(),
   resinId: z.string().nullable().optional(),
 })

@@ -54,7 +54,6 @@ enableMocking().then(() => {
           </SidebarProvider>
         </AuthProvider>
       </QueryClientProvider>
-      ,
     </StrictMode>,
   )
 })

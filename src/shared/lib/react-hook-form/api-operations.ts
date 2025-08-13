@@ -1,6 +1,3 @@
-// src/shared/lib/api-payload.ts
-// Универсальный генератор payload для API-операций (объекты/массивы/вложенные списки)
-
 import equal from 'fast-deep-equal'
 
 type Id = string | number
@@ -11,18 +8,21 @@ export type ApiArrayOperation<T extends { id: Id }> =
   | { action: 'update'; id: T['id']; data: Record<string, unknown> }
   | { action: 'delete'; id: T['id'] }
 
-export type ApiObjectOperation<T extends { id: Id }> =
+// NB: для OBJECT-операций разрешаем отсутствие id (singleton-объекты)
+export type ApiObjectOperation<T extends Record<string, any>> =
   | { action: 'create'; data: Omit<T, 'id'> }
-  | { action: 'update'; id: T['id']; data: Partial<Omit<T, 'id'>> }
-  | { action: 'delete'; id: T['id'] }
+  | { action: 'update'; data: Partial<Omit<T, 'id'>>; id?: Id }
+  | { action: 'delete'; id?: Id }
 
 // --- Утилиты ---
 const isDefined = <T>(v: T | null | undefined): v is T => v !== undefined && v !== null
+const hasId = (obj: any): obj is { id: Id } => !!obj && 'id' in obj && isDefined(obj.id)
 
 function getObjectDiff<T extends Record<string, any>>(original: T, current: T): Partial<T> {
   const diff: Partial<T> = {}
   for (const key in current) {
     if (!Object.prototype.hasOwnProperty.call(current, key)) continue
+    if (key === 'id') continue // id никогда не апдейтим
     if (!equal(original[key], current[key])) {
       // ВАЖНО: если нужно «очистить» поле — в форме ставь null, не undefined.
       diff[key] = current[key]
@@ -31,25 +31,33 @@ function getObjectDiff<T extends Record<string, any>>(original: T, current: T): 
   return diff
 }
 
-function createApiObjectOperation<T extends { id: Id }>(
+function createApiObjectOperation<T extends Record<string, any>>(
   originalItem: T | null | undefined,
   currentItem: T | null | undefined,
+  opts?: { forceSingleton?: boolean },
 ): ApiObjectOperation<T> | null {
-  const hasOriginal = isDefined(originalItem) && isDefined(originalItem.id)
+  const hasOriginal = isDefined(originalItem)
   const hasCurrent = isDefined(currentItem)
+
+  // Определяем режим: по явному флагу или по наличию id
+  const useId =
+    !opts?.forceSingleton &&
+    ((hasOriginal && hasId(originalItem)) || (hasCurrent && hasId(currentItem)))
 
   if (hasCurrent && !hasOriginal) {
     const { id: _omit, ...data } = currentItem as T
     return { action: 'create', data }
   }
   if (!hasCurrent && hasOriginal) {
-    return { action: 'delete', id: (originalItem as T).id }
+    return useId ? { action: 'delete', id: (originalItem as any).id } : { action: 'delete' }
   }
   if (hasCurrent && hasOriginal) {
     const diff = getObjectDiff(originalItem as any, currentItem as any)
     if (Object.keys(diff).length > 0) {
       const { id: _omit, ...updatePayload } = diff as any
-      return { action: 'update', id: (originalItem as T).id, data: updatePayload }
+      return useId
+        ? { action: 'update', id: (originalItem as any).id, data: updatePayload }
+        : { action: 'update', data: updatePayload }
     }
   }
   return null
@@ -92,7 +100,7 @@ function createBaseApiArrayOperations<T extends { id: Id }>(
 
 // --- Декларативные правила трансформации ---
 export type TransformationRule =
-  | { type: 'object'; targetKey: string }
+  | { type: 'object'; targetKey: string; singleton?: boolean } // singleton -> операции без id
   | { type: 'array'; targetKey: string; nested?: TransformMap<any> }
 
 /**
@@ -105,8 +113,8 @@ export type TransformMap<T> = {
 /**
  * Рекурсивно обрабатывает массив: вложенные операции добавляем ТОЛЬКО в update.
  * Для create оставляем сырые данные сущности (Omit<T,'id'>).
- * Плюс: мы вычищаем из update-диффа сырые массивы, заменяемые на ...Operations
- * (например, moldCores -> moldCoreOperations), чтобы не слать два поля одновременно.
+ * Плюс: вычищаем из update-диффа сырые массивы (которые заменяются ...Operations).
+ * Дополнительно: отсекаем update c пустым data, если после чистки/вложенных операций ничего не осталось.
  */
 function processArrayRecursively<TItem extends { id: Id }>(
   initialArray: TItem[] = [],
@@ -119,26 +127,28 @@ function processArrayRecursively<TItem extends { id: Id }>(
   const initialMap = new Map(initialArray.map((x) => [x.id, x]))
   const keysToStrip = Object.keys(nested) // исходные поля, которые заменяются nested-операциями
 
-  return baseOps.map((op) => {
-    if (op.action === 'update') {
-      const initialItem = initialMap.get(op.id)
-      const currentItem = currentArray.find((x) => x.id === op.id)
-      if (initialItem && currentItem) {
-        const nestedPayload = createUpdatePayload(initialItem, currentItem, nested)
+  const mapped = baseOps
+    .map((op) => {
+      if (op.action === 'update') {
+        const initialItem = initialMap.get(op.id)
+        const currentItem = currentArray.find((x) => x.id === op.id)
+        if (initialItem && currentItem) {
+          const nestedPayload = createUpdatePayload(initialItem, currentItem, nested)
 
-        // 1) удалить сырые поля (например, moldCores) из обычного диффа
-        if (op.data) {
-          for (const key of keysToStrip) {
-            delete (op.data as any)[key]
+          // 1) удалить сырые поля (например, moldCores) из обычного диффа
+          if (op.data) {
+            for (const key of keysToStrip) delete (op.data as any)[key]
           }
+          // 2) добавить операции (например, moldCoreOperations)
+          op.data = { ...(op.data ?? {}), ...nestedPayload }
         }
-        // 2) добавить операции (например, moldCoreOperations)
-        op.data = { ...(op.data ?? {}), ...nestedPayload }
       }
-    }
-    // ВАЖНО: в CREATE ничего не трогаем — нужны именно сырые данные.
-    return op
-  })
+      return op
+    })
+    // 3) если после всего data пустое — такой update не нужен
+    .filter((op) => !(op.action === 'update' && (!op.data || Object.keys(op.data).length === 0)))
+
+  return mapped
 }
 
 /**
@@ -160,7 +170,9 @@ export function createUpdatePayload<T extends Record<string, any>>(
 
     let result: any = null
     if (rule.type === 'object') {
-      result = createApiObjectOperation(initial, current)
+      result = createApiObjectOperation(initial, current, {
+        forceSingleton: !!(rule as any).singleton,
+      })
     } else if (rule.type === 'array') {
       result = processArrayRecursively(
         initial ?? [],

@@ -27,7 +27,20 @@ function mapResponseToInitialData(response: MoldPassportDetailResponse): MoldPas
     patternPlateFrameId: response.patternPlateFrame?.id,
     moldingFlaskId: response.moldingFlask?.id,
 
-    dataAsc: response.dataAsc ? { ...response.dataAsc, resinId: response.dataAsc.resin?.id } : null,
+    dataGsc: response.dataGsc
+      ? {
+          ...response.dataGsc,
+          id: response.dataGsc.moldPassportId,
+        }
+      : null,
+
+    dataAsc: response.dataAsc
+      ? {
+          ...response.dataAsc,
+          id: response.dataAsc.moldPassportId,
+          resinId: response.dataAsc.resin?.id,
+        }
+      : null,
 
     moldCavities:
       response.moldCavities?.map((cavity) => ({
@@ -39,6 +52,8 @@ function mapResponseToInitialData(response: MoldPassportDetailResponse): MoldPas
             coreBatchId: core.coreBatch.id,
           })) ?? [],
       })) ?? [],
+
+    isDefective: response.status === 'dismissed',
   }
 }
 
