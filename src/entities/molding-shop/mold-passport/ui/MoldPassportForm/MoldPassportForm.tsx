@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
-import { castingTechnologyService } from '@/entities/molding-shop/casting-technology/api/service'
 import { MoldCavityForm } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/MoldCavityForm'
 import { moldCavityFormDefaultValues } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
 import { moldPassportDynamicFieldConfig } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
@@ -8,6 +7,7 @@ import {
   moldPassportFormSchema,
   type MoldPassportFormFields,
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/schema'
+import { moldingAreaService } from '@/entities/molding-shop/molding-area'
 import { moldingFlaskService } from '@/entities/molding-shop/molding-flask/api/service'
 import { patternPlateFrameService } from '@/entities/molding-shop/pattern-plate-frame/api/service'
 import type {
@@ -67,7 +67,7 @@ export function MoldPassportForm({
     formState: { errors, isSubmitting },
   } = form
   const loadMoldingAreasOptions = useAsyncOptionsNew<MoldingAreaLookupResponse, number>(
-    castingTechnologyService.getLookup,
+    moldingAreaService.getLookup,
     {
       paramsBuilder: (search, page) => ({
         search,
