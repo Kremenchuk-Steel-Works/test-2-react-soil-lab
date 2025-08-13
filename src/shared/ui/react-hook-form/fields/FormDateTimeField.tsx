@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { addYears, format, getYear, isValid, parse, subYears } from 'date-fns'
+import { addYears, format, getYear, isValid, subYears } from 'date-fns'
 import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
 import type {
   DateTimePickerProps,
@@ -62,16 +62,19 @@ const FormDateTimeField = ({
   }
 
   const parseValue = (value: string | number | undefined): Date | undefined => {
-    if (value === undefined || value === null) return undefined
+    if (value === undefined || value === null) {
+      return undefined
+    }
 
-    // Если из формы пришло число
+    // Если значение - число (например, для типа 'year')
     if (typeof value === 'number') {
       return new Date(value, 0, 1)
     }
 
-    // Если строка
+    // Если значение - строка, используем конструктор Date,
+    // который отлично справляется с форматом ISO 8601 (включая "Z").
     if (typeof value === 'string') {
-      const parsedDate = parse(value, finalFormat, new Date())
+      const parsedDate = new Date(value)
       return isValid(parsedDate) ? parsedDate : undefined
     }
 
