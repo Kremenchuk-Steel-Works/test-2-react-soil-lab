@@ -11,5 +11,5 @@ export { MoldingAreaDataDynamicForm } from './ui/MoldPassportForm/components/Mol
 export { dataGscFormSchema, dataAscFormSchema, moldPassportDynamicFieldConfig } from './ui/MoldPassportForm/configs/dynamic-fields';
 export { moldPassportFormSchema, moldPassportFormDefaultValues } from './ui/MoldPassportForm/schema';
 export { moldPassportRoutes } from './routes';
-export { moldPassportService } from './api/service';
 export { moldPassportStatusOptions } from './model/status';
+export { useMoldPassportService } from './api/service';

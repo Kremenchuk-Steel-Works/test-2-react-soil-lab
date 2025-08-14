@@ -49,7 +49,7 @@
 
 //   return (
 //     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-//       <h4 className="layout-text">Триетиламін</h4>
+//       <h5 className="layout-text">Триетиламін</h5>
 
 //       <InputFieldWithError
 //         label="Торгова марка"

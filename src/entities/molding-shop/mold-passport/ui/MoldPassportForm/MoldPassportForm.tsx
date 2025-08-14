@@ -35,6 +35,7 @@ import {
   InputFieldWithError,
   TextAreaFieldWithError,
 } from '@/shared/ui/with-error/fieldsWithError'
+import { WithError } from '@/shared/ui/with-error/WithError'
 import type { FormProps } from '@/types/react-hook-form'
 
 const logger = createLogger('MoldPassportForm')
@@ -149,7 +150,7 @@ export function MoldPassportForm({
     } catch (err) {
       const error = err as Error
       setError('root', { message: error.message })
-      logger.error('Ошибка при отправке формы:', err, data)
+      logger.error('Ошибка при отправке формы:', 'err:', err, 'data:', data)
     }
   }
 
@@ -165,7 +166,7 @@ export function MoldPassportForm({
         responseData={responseData}
       >
         <FormLayout onSubmit={handleSubmit(submitHandler)}>
-          <h4 className="layout-text">Паспорт ливарної форми</h4>
+          <h5 className="layout-text">Паспорт ливарної форми</h5>
 
           {/* <AlertMessage type={AlertType.WARNING} message={`Попередній стан форми: Не заповнено`} /> */}
 
@@ -227,14 +228,16 @@ export function MoldPassportForm({
           <DynamicFieldArea triggerFor="castingTechnologyId" />
 
           {/* Cavities */}
-          <DynamicFieldArray
-            title="Відбиток деталі у формі"
-            label="відбиток деталі у формі"
-            name="moldCavities"
-            form={MoldCavityForm}
-            defaultItem={moldCavityFormDefaultValues}
-            itemsData={responseData?.moldCavities}
-          />
+          <WithError errorMessage={getNestedErrorMessage(errors, 'moldCavities')}>
+            <DynamicFieldArray
+              title="Відбиток деталі у формі"
+              label="відбиток деталі у формі"
+              name="moldCavities"
+              form={MoldCavityForm}
+              defaultItem={moldCavityFormDefaultValues}
+              itemsData={responseData?.moldCavities}
+            />
+          </WithError>
 
           <InputFieldWithError
             label="Тиск, од."

@@ -1,10 +1,11 @@
 import { lazy } from 'react'
-import { CirclePlus, Database, Info, Layers, RefreshCcw } from 'lucide-react'
+import { CirclePlus, Database, Info, Layers, RefreshCcw, Trash } from 'lucide-react'
 import type { AppRoute } from '@/app/routes/types'
 
 const MoldPassportLayout = lazy(() => import('@/pages/molding-shop/mold-passport/Layout'))
 const MoldPassportList = lazy(() => import('@/pages/molding-shop/mold-passport/list/List'))
 const MoldPassportAdd = lazy(() => import('@/pages/molding-shop/mold-passport/Add'))
+const MoldPassportDelete = lazy(() => import('@/pages/molding-shop/mold-passport/Delete'))
 const MoldPassportDetails = lazy(() => import('@/pages/molding-shop/mold-passport/Details'))
 const MoldPassportUpdate = lazy(() => import('@/pages/molding-shop/mold-passport/Update'))
 
@@ -37,17 +38,33 @@ export const moldPassportRoutes: AppRoute = {
       path: ':id',
       label: 'Деталі',
       icon: Info,
-      Component: MoldPassportDetails,
+      Component: MoldPassportLayout,
       meta: {
         buttons: ['update'],
       },
-    },
-    {
-      key: 'MoldPassportUpdate',
-      path: ':id/update',
-      label: 'Оновити',
-      icon: RefreshCcw,
-      Component: MoldPassportUpdate,
+      children: [
+        {
+          key: 'MoldPassportDetailIndex',
+          path: '',
+          label: 'Деталі',
+          icon: Info,
+          Component: MoldPassportDetails,
+        },
+        {
+          key: 'MoldPassportDelete',
+          path: 'delete',
+          label: 'Видалити',
+          icon: Trash,
+          Component: MoldPassportDelete,
+        },
+        {
+          key: 'MoldPassportUpdate',
+          path: 'update',
+          label: 'Оновити',
+          icon: RefreshCcw,
+          Component: MoldPassportUpdate,
+        },
+      ],
     },
   ],
 }

@@ -41,7 +41,7 @@ export default function LibraryForm({ defaultValues, onSubmit, submitBtnName }: 
 
   return (
     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-      <h4 className="layout-text">Документ</h4>
+      <h5 className="layout-text">Документ</h5>
 
       <InputFieldWithError
         label="Коротка назва"

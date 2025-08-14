@@ -7,7 +7,7 @@ export type Permission =
   | 'library_view'
   | 'library_edit'
 
-export type PageButtonType = 'add' | 'update'
+export type PageButtonType = 'add' | 'update' | 'delete'
 
 export interface RouteMeta {
   buttons?: PageButtonType[]

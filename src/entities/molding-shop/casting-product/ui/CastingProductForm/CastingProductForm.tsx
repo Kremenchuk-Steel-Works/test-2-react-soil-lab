@@ -56,7 +56,7 @@
 
 //   return (
 //     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-//       <h4 className="layout-text">Технологія формовки</h4>
+//       <h5 className="layout-text">Технологія формовки</h5>
 
 //       <Controller
 //         name="type"

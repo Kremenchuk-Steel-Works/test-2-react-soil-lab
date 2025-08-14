@@ -1,12 +1,16 @@
-import { useCallback, useMemo, useState } from 'react'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useCallback, useMemo } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { ArrowLeft } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   MoldPassportForm,
-  moldPassportService,
+  useMoldPassportService,
   type MoldPassportFormFields,
 } from '@/entities/molding-shop/mold-passport'
+import {
+  getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryKey,
+  getGetMoldPassportsListApiV1MoldPassportsGetQueryKey,
+} from '@/shared/api/mold-passport/endpoints/mold-passports/mold-passports'
 import type {
   MoldPassportDetailResponse,
   MoldPassportUpdate,
@@ -42,16 +46,15 @@ function mapResponseToInitialData(response: MoldPassportDetailResponse): MoldPas
         }
       : null,
 
-    moldCavities:
-      response.moldCavities?.map((cavity) => ({
-        ...cavity,
-        castingPatternId: cavity.castingPattern.id,
-        moldCores:
-          cavity.moldCores?.map((core) => ({
-            ...core,
-            coreBatchId: core.coreBatch.id,
-          })) ?? [],
-      })) ?? [],
+    moldCavities: response.moldCavities?.map((cavity) => ({
+      ...cavity,
+      castingPatternId: cavity.castingPattern.id,
+      moldCores:
+        cavity.moldCores?.map((core) => ({
+          ...core,
+          coreBatchId: core.coreBatch.id,
+        })) ?? [],
+    })),
 
     isDefective: response.status === 'dismissed',
   }
@@ -60,17 +63,30 @@ function mapResponseToInitialData(response: MoldPassportDetailResponse): MoldPas
 export default function MoldPassportUpdate() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
-  const [mutationError, setMutationError] = useState<string | null>(null)
+  const queryClient = useQueryClient()
 
   const {
     data: responseData,
     isLoading,
-    isError,
     error: queryError,
-  } = useQuery({
-    ...moldPassportService.getById(id!),
-    placeholderData: keepPreviousData,
-    enabled: !!id,
+  } = useMoldPassportService.getById(id!, {
+    query: { enabled: !!id },
+  })
+
+  const { mutateAsync, error: mutationError } = useMoldPassportService.update({
+    mutation: {
+      onSuccess: (_data, variables) => {
+        const queryKeyList = getGetMoldPassportsListApiV1MoldPassportsGetQueryKey()
+        const queryKeyDetail = getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryKey(
+          variables.moldPassportId,
+        )
+
+        return Promise.all([
+          queryClient.invalidateQueries({ queryKey: queryKeyList }),
+          queryClient.invalidateQueries({ queryKey: queryKeyDetail }),
+        ])
+      },
+    },
   })
 
   const formDefaultValues = useMemo(() => {
@@ -100,7 +116,7 @@ export default function MoldPassportUpdate() {
   const handleSubmit = useCallback(
     async (formData: MoldPassportFormFields) => {
       if (!responseData || !formDefaultValues || !id) return
-      setMutationError(null)
+
       try {
         logger.debug('[MoldPassportUpdate] formDefaultValues', formDefaultValues)
         logger.debug('[MoldPassportUpdate] formData', formData)
@@ -113,15 +129,17 @@ export default function MoldPassportUpdate() {
 
         logger.debug('[MoldPassportUpdate] payload', payload)
 
-        await moldPassportService.update(id, payload)
+        await mutateAsync({ moldPassportId: id, data: payload })
         navigate('..')
         return payload
       } catch (e) {
-        setMutationError(getErrorMessage(e))
+        logger.error('[MoldPassportUpdate] Mutation failed', e)
       }
     },
-    [formDefaultValues, id, navigate, responseData, transformations],
+    [formDefaultValues, id, navigate, responseData, transformations, mutateAsync],
   )
+
+  const combinedError = mutationError || queryError
 
   return (
     <>
@@ -134,11 +152,8 @@ export default function MoldPassportUpdate() {
         </Button>
       </div>
 
-      {(isError || mutationError) && (
-        <AlertMessage
-          type={AlertType.ERROR}
-          message={mutationError ?? getErrorMessage(queryError)}
-        />
+      {combinedError && (
+        <AlertMessage type={AlertType.ERROR} message={getErrorMessage(combinedError)} />
       )}
 
       {!isLoading && responseData && formDefaultValues && (

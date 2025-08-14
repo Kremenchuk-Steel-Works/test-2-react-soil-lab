@@ -1,13 +1,15 @@
 import {
-  createMoldPassportApiV1MoldPassportsPost,
-  getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryOptions,
-  getGetMoldPassportsListApiV1MoldPassportsGetQueryOptions,
-  updateMoldPassportApiV1MoldPassportsMoldPassportIdPut,
+  useCreateMoldPassportApiV1MoldPassportsPost,
+  useDeleteMoldPassportApiV1MoldPassportsMoldPassportIdDelete,
+  useGetMoldPassportApiV1MoldPassportsMoldPassportIdGet,
+  useGetMoldPassportsListApiV1MoldPassportsGet,
+  useUpdateMoldPassportApiV1MoldPassportsMoldPassportIdPut,
 } from '@/shared/api/mold-passport/endpoints/mold-passports/mold-passports'
 
-export const moldPassportService = {
-  getList: getGetMoldPassportsListApiV1MoldPassportsGetQueryOptions,
-  getById: getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryOptions,
-  create: createMoldPassportApiV1MoldPassportsPost,
-  update: updateMoldPassportApiV1MoldPassportsMoldPassportIdPut,
+export const useMoldPassportService = {
+  getList: useGetMoldPassportsListApiV1MoldPassportsGet,
+  getById: useGetMoldPassportApiV1MoldPassportsMoldPassportIdGet,
+  create: useCreateMoldPassportApiV1MoldPassportsPost,
+  update: useUpdateMoldPassportApiV1MoldPassportsMoldPassportIdPut,
+  delete: useDeleteMoldPassportApiV1MoldPassportsMoldPassportIdDelete,
 }

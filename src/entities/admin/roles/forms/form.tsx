@@ -71,7 +71,7 @@ export default function RolesForm({ defaultValues, onSubmit, submitBtnName }: Fo
 
   return (
     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-      <h4 className="layout-text">Роль</h4>
+      <h5 className="layout-text">Роль</h5>
 
       <InputFieldWithError
         label="Назва"

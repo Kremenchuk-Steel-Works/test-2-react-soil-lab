@@ -21,7 +21,7 @@ const baseSchema = z.object({
   dataGsc: dataGscFormSchema.nullable().optional(),
   dataAsc: dataAscFormSchema.nullable().optional(),
 
-  moldCavities: z.array(moldCavityFormSchema),
+  moldCavities: z.array(moldCavityFormSchema).min(1),
 
   pressingPressure: z.number().nullable().optional(),
   sequenceInShift: z.number().nullable().optional(),

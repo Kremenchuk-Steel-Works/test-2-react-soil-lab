@@ -56,7 +56,7 @@
 
 //   return (
 //     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-//       <h4 className="layout-text">Ділянка формовки</h4>
+//       <h5 className="layout-text">Ділянка формовки</h5>
 
 //       <InputFieldWithError
 //         label="Назва"

@@ -39,7 +39,7 @@ export default function CountryForm({ defaultValues, onSubmit, submitBtnName }: 
 
   return (
     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-      <h4 className="layout-text">Країна</h4>
+      <h5 className="layout-text">Країна</h5>
 
       <InputFieldWithError
         label="Назва"

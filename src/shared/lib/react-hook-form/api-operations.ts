@@ -158,7 +158,7 @@ function processArrayRecursively<TItem extends { id: Id }>(
 export function createUpdatePayload<T extends Record<string, any>>(
   initialData: T,
   formData: T,
-  transformations: TransformMap<T>,
+  transformations: TransformMap<T> = {} as TransformMap<T>,
 ): Record<string, any> {
   const payload: Record<string, any> = { ...getObjectDiff(initialData, formData) }
 

@@ -71,7 +71,7 @@ export default function CityForm({ defaultValues, onSubmit, submitBtnName }: For
 
   return (
     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-      <h4 className="layout-text">Місто</h4>
+      <h5 className="layout-text">Місто</h5>
 
       <InputFieldWithError
         label="Назва"

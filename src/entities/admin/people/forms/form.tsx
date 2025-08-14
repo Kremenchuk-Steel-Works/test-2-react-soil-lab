@@ -117,7 +117,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
 
   return (
     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-      <h4 className="layout-text">Людина</h4>
+      <h5 className="layout-text">Людина</h5>
 
       <InputFieldWithError
         label="Ім'я"

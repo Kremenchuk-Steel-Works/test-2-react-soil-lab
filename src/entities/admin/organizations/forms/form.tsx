@@ -77,7 +77,7 @@ export default function OrganizationsForm({ defaultValues, onSubmit, submitBtnNa
 
   return (
     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-      <h4 className="layout-text">Організація</h4>
+      <h5 className="layout-text">Організація</h5>
 
       <InputFieldWithError
         label="Назва"

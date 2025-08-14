@@ -52,7 +52,7 @@
 
 //   return (
 //     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-//       <h4 className="layout-text">Тип стрижня</h4>
+//       <h5 className="layout-text">Тип стрижня</h5>
 
 //       <Controller
 //         name="castingPatternId"

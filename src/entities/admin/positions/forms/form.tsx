@@ -41,7 +41,7 @@ export default function PositionsForm({ defaultValues, onSubmit, submitBtnName }
 
   return (
     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-      <h4 className="layout-text">Посада</h4>
+      <h5 className="layout-text">Посада</h5>
 
       <InputFieldWithError
         label="Назва"

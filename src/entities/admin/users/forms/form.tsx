@@ -123,7 +123,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
 
   return (
     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-      <h4 className="layout-text">Користувач</h4>
+      <h5 className="layout-text">Користувач</h5>
 
       {schemaKeys.includes('personId') && (
         <Controller

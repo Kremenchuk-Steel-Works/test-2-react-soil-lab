@@ -1,4 +1,4 @@
-import { Pen, Plus, type LucideIcon } from 'lucide-react'
+import { Pen, Plus, Trash, type LucideIcon } from 'lucide-react'
 import type { PageButtonType } from '@/app/routes/types'
 import type { ButtonProps } from '@/shared/ui/button/Button'
 
@@ -18,5 +18,11 @@ export const BUTTON_DEFINITIONS: Record<PageButtonType, ButtonDefinition> = {
     Icon: Pen,
     className: 'flex items-center justify-center gap-1 whitespace-nowrap',
     customColor: 'orange',
+  },
+  delete: {
+    label: 'Видалити',
+    Icon: Trash,
+    className: 'flex items-center justify-center gap-1 whitespace-nowrap',
+    customColor: 'red',
   },
 }

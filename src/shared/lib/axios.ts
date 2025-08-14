@@ -92,5 +92,5 @@ export function getErrorMessage(error: unknown): string {
   }
 
   // Запасной вариант
-  return 'Сталася непередбачена помилка.'
+  return ''
 }

@@ -1,20 +1,19 @@
 import React from 'react'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
-export type WithErrorProps = {
+type WithErrorProps = {
   errorMessage?: string
+  children: React.ReactNode
 }
 
-export function withError<P extends object>(
-  Component: React.ComponentType<P>,
-): React.ComponentType<P & WithErrorProps> {
-  return function ComponentWithError(props) {
-    const { errorMessage, ...rest } = props
-    return (
-      <div className="space-y-2">
-        <Component {...(rest as P)} />
-        {errorMessage && <AlertMessage type={AlertType.ERROR} message={errorMessage} />}
-      </div>
-    )
-  }
+/**
+ * Обёртка-контейнер.
+ */
+export function WithError({ errorMessage, children }: WithErrorProps) {
+  return (
+    <div className="space-y-2">
+      {children}
+      {errorMessage && <AlertMessage type={AlertType.ERROR} message={errorMessage} />}
+    </div>
+  )
 }

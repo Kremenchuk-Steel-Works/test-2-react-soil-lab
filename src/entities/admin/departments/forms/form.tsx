@@ -42,7 +42,7 @@ export default function DepartmentsForm({ defaultValues, onSubmit, submitBtnName
 
   return (
     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-      <h4 className="layout-text">Відділ</h4>
+      <h5 className="layout-text">Відділ</h5>
 
       <InputFieldWithError
         label="Назва"

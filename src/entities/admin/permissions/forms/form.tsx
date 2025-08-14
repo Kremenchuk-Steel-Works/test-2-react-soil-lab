@@ -71,7 +71,7 @@ export default function PermissionsForm({ defaultValues, onSubmit, submitBtnName
 
   return (
     <FormLayout onSubmit={handleSubmit(submitHandler)}>
-      <h4 className="layout-text">Права доступу</h4>
+      <h5 className="layout-text">Права доступу</h5>
 
       <InputFieldWithError
         label="Назва"

@@ -24,7 +24,7 @@
 //       {isError && <AlertMessage type={AlertType.ERROR} message={queryError?.message} />}
 //       {!isLoading && !isError && data && (
 //         <>
-//           <h4 className="layout-text">Деталі</h4>
+//           <h5 className="layout-text">Деталі</h5>
 
 //           <dl className="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2">
 //             <div>

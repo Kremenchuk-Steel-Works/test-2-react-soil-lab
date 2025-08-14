@@ -1,5 +1,5 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { moldPassportService } from '@/entities/molding-shop/mold-passport'
+import { keepPreviousData } from '@tanstack/react-query'
+import { useMoldPassportService } from '@/entities/molding-shop/mold-passport'
 import { moldPassportColumns } from '@/pages/molding-shop/mold-passport/list/columns'
 import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import { getErrorMessage } from '@/shared/lib/axios'
@@ -12,30 +12,30 @@ export default function MoldPassportList() {
 
   // Получение данных, usersData
   const {
-    data,
+    data: responseData,
     isLoading,
-    isError,
     error: queryError,
-  } = useQuery({
-    ...moldPassportService.getList({
-      page: page,
-      perPage: perPage,
-    }),
-    placeholderData: keepPreviousData,
-  })
+  } = useMoldPassportService.getList(
+    { page: page, perPage: perPage },
+    {
+      query: {
+        placeholderData: keepPreviousData,
+      },
+    },
+  )
 
   return (
     <>
-      {isError && <AlertMessage type={AlertType.ERROR} message={getErrorMessage(queryError)} />}
+      {queryError && <AlertMessage type={AlertType.ERROR} message={getErrorMessage(queryError)} />}
 
-      {!isLoading && !isError && data && (
+      {!isLoading && !queryError && responseData && (
         <DataTable
-          data={data?.data ?? []}
+          data={responseData?.data ?? []}
           columns={moldPassportColumns}
           setSearchParams={setSearchParams}
           page={page}
           perPage={perPage}
-          totalPages={data?.totalPages}
+          totalPages={responseData?.totalPages}
         />
       )}
     </>
