@@ -1,11 +1,5 @@
-import { memo, useCallback, useMemo } from 'react'
-import {
-  Controller,
-  useFormState,
-  type Control,
-  type Path,
-  type UseFormRegister,
-} from 'react-hook-form'
+import { memo, useCallback } from 'react'
+import { type Path } from 'react-hook-form'
 import { coreBatchService } from '@/entities/molding-shop/core-batch/api/service'
 import type {
   MoldCavityItemData,
@@ -20,9 +14,10 @@ import type {
 import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
+import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
+import InputField from '@/shared/ui/input-field/InputField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
-import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
+import { createFormKit } from '@/shared/ui/react-hook-form/formKit'
 
 const logger = createLogger('MoldCoreForm')
 
@@ -32,25 +27,18 @@ export type MoldCoreItemData = MoldCavityItemData['moldCores'][number]
 interface FormProps {
   pathPrefix: MoldCorePathPrefix
   itemData?: MoldCoreItemData
-  control: Control<MoldPassportFormFields>
-  register: UseFormRegister<MoldPassportFormFields>
 }
+
+const Form = createFormKit<MoldPassportFormFields>()
 
 const formatCoreBatchLabel = (d: MoldCoreBatchLookupResponse) =>
   `${d.moldingSandType.name} ${d.moldCoreType.modelNumber} ${d.moldCoreMakingMachine.brand} ${d.moldCoreMakingMachine.model} ${d.manufacturingTimestamp} ${d.batchExpiryDate}`
 
-export function MoldCoreFormComponent({ pathPrefix, itemData, control, register }: FormProps) {
+export function MoldCoreFormComponent({ pathPrefix, itemData }: FormProps) {
   const fieldName = useCallback(
     (field: keyof MoldCoreFormFields) => `${pathPrefix}.${field}` as Path<MoldPassportFormFields>,
     [pathPrefix],
   )
-
-  // Подписка только на свои ошибки
-  const watchedErrorNames = useMemo(
-    () => [fieldName('coreBatchId'), fieldName('hardness')],
-    [fieldName],
-  )
-  const { errors } = useFormState<MoldPassportFormFields>({ control, name: watchedErrorNames })
 
   // Options
   const loadCoreBatchesOptions = useAsyncOptionsNew<MoldCoreBatchLookupResponse, string>(
@@ -81,10 +69,8 @@ export function MoldCoreFormComponent({ pathPrefix, itemData, control, register 
 
   return (
     <>
-      <Controller
-        name={fieldName('coreBatchId')}
-        control={control}
-        render={({ field, fieldState }) => (
+      <Form.Controller name={fieldName('coreBatchId')}>
+        {({ field, fieldState }) => (
           <FormSelectField
             field={field}
             fieldState={fieldState}
@@ -93,16 +79,13 @@ export function MoldCoreFormComponent({ pathPrefix, itemData, control, register 
             isVirtualized
             isClearable
             placeholder="Партія"
-            errorMessage={getNestedErrorMessage(errors, fieldName('coreBatchId'))}
           />
         )}
-      />
+      </Form.Controller>
 
-      <InputFieldWithError
-        label="Твердість, од."
-        {...register(fieldName('hardness'), formTransformers.number)}
-        errorMessage={getNestedErrorMessage(errors, fieldName('hardness'))}
-      />
+      <Form.Field name={fieldName('hardness')} registerOptions={formTransformers.number}>
+        {({ register }) => <InputField label="Твердість, од." {...register} />}
+      </Form.Field>
     </>
   )
 }

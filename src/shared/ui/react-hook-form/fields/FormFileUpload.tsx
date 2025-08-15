@@ -1,7 +1,7 @@
 import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
 import { fileTypePresets, type FileTypePreset } from '@/shared/ui/file-upload/filePresets'
-import type { FileUploadProps } from '@/shared/ui/file-upload/FileUpload'
-import { FileUploadWithError } from '@/shared/ui/with-error/fieldsWithError'
+import { FileUpload, type FileUploadProps } from '@/shared/ui/file-upload/FileUpload'
+import { WithError } from '@/shared/ui/with-error/WithError'
 
 type FormFileUploadProps = Omit<FileUploadProps, 'acceptedFiles' | 'onFilesChange'> & {
   field: ControllerRenderProps<any, any>
@@ -26,17 +26,18 @@ const FormFileUpload = ({
   }
 
   return (
-    <FileUploadWithError
-      {...rest}
-      multiple={multiple}
-      accept={rest.accept || preset?.accept}
-      maxSize={rest.maxSize || preset?.maxSize}
-      acceptedFiles={acceptedFiles}
-      onFilesChange={(files: File[]) => {
-        field.onChange(multiple ? files : files[0] || null)
-      }}
-      errorMessage={errorMessage || fieldState.error?.message}
-    />
+    <WithError errorMessage={errorMessage}>
+      <FileUpload
+        {...rest}
+        multiple={multiple}
+        accept={rest.accept || preset?.accept}
+        maxSize={rest.maxSize || preset?.maxSize}
+        acceptedFiles={acceptedFiles}
+        onFilesChange={(files: File[]) => {
+          field.onChange(multiple ? files : files[0] || null)
+        }}
+      />
+    </WithError>
   )
 }
 

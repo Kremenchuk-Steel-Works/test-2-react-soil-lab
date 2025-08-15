@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
 import type { OnChangeValue } from 'react-select'
-import { type Option, type ReactSelectProps } from '@/shared/ui/select/ReactSelect'
-import { ReactSelectWithError } from '@/shared/ui/with-error/fieldsWithError'
+import ReactSelect, { type Option, type ReactSelectProps } from '@/shared/ui/select/ReactSelect'
+import { WithError } from '@/shared/ui/with-error/WithError'
 
 type FormSelectFieldProps<
   OptionType extends Option,
@@ -23,7 +23,7 @@ function FormSelectField<OptionType extends Option, IsMulti extends boolean = fa
   errorMessage,
   ...rest
 }: FormSelectFieldProps<OptionType, IsMulti>) {
-  const { name, value: fieldValue, onChange, onBlur, ref } = field
+  const { name, value: fieldValue, onChange, onBlur } = field
 
   const [optionsCache, setOptionsCache] = useState(new Map<OptionType['value'], OptionType>())
 
@@ -83,19 +83,18 @@ function FormSelectField<OptionType extends Option, IsMulti extends boolean = fa
   }
 
   return (
-    <ReactSelectWithError
-      {...(rest as any)}
-      instanceId={name}
-      ref={ref}
-      name={name}
-      onBlur={onBlur}
-      value={selectedValue}
-      onChange={handleChange}
-      options={options}
-      isMulti={isMulti}
-      defaultOptions={defaultOptions}
-      errorMessage={errorMessage || fieldState.error?.message}
-    />
+    <WithError errorMessage={errorMessage}>
+      <ReactSelect
+        {...rest}
+        instanceId={name}
+        name={name}
+        onBlur={onBlur}
+        value={selectedValue}
+        onChange={handleChange}
+        options={options}
+        isMulti={isMulti}
+      />
+    </WithError>
   )
 }
 

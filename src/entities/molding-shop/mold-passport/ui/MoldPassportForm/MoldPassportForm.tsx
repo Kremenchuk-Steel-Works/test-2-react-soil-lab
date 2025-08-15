@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller, FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
+import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
 import { MoldCavityForm } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/MoldCavityForm'
 import { moldCavityFormDefaultValues } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
 import { moldPassportDynamicFieldConfig } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
@@ -22,20 +22,18 @@ import type {
 import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
+import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
+import Button from '@/shared/ui/button/Button'
+import Checkbox from '@/shared/ui/checkbox/Checkbox'
+import InputField from '@/shared/ui/input-field/InputField'
+import TextareaField from '@/shared/ui/input-field/TextareaField'
 import { DynamicFieldArea } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArea'
 import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
 import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
+import { createFormKit } from '@/shared/ui/react-hook-form/formKit'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
-import {
-  ButtonWithError,
-  CheckboxWithError,
-  InputFieldWithError,
-  TextAreaFieldWithError,
-} from '@/shared/ui/with-error/fieldsWithError'
-import { WithError } from '@/shared/ui/with-error/WithError'
 import type { FormProps } from '@/types/react-hook-form'
 
 const logger = createLogger('MoldPassportForm')
@@ -47,6 +45,8 @@ const dynamicFieldConfig = moldPassportDynamicFieldConfig
 
 type MoldPassportFormProps = FormProps<FormFields, MoldPassportDetailResponse>
 
+const Form = createFormKit<FormFields>()
+
 export function MoldPassportForm({
   defaultValues,
   responseData,
@@ -57,15 +57,13 @@ export function MoldPassportForm({
     resolver: zodResolver(schema),
     defaultValues,
   })
-
   const {
     control,
-    register,
     getValues,
     resetField,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = form
   const loadMoldingAreasOptions = useAsyncOptionsNew<MoldingAreaLookupResponse, number>(
     moldingAreaService.getLookup,
@@ -170,10 +168,8 @@ export function MoldPassportForm({
 
           {/* <AlertMessage type={AlertType.WARNING} message={`Попередній стан форми: Не заповнено`} /> */}
 
-          <Controller
-            name="moldingAreaId"
-            control={control}
-            render={({ field, fieldState }) => (
+          <Form.Controller name="moldingAreaId">
+            {({ field, fieldState }) => (
               <FormSelectField
                 field={field}
                 fieldState={fieldState}
@@ -182,18 +178,15 @@ export function MoldPassportForm({
                 isVirtualized
                 isClearable
                 placeholder="Ділянка формовки"
-                errorMessage={getNestedErrorMessage(errors, 'moldingAreaId')}
               />
             )}
-          />
+          </Form.Controller>
 
           {/* DynamicFields */}
           <DynamicFieldArea triggerFor="moldingAreaId" />
 
-          <Controller
-            name="patternPlateFrameId"
-            control={control}
-            render={({ field, fieldState }) => (
+          <Form.Controller name="patternPlateFrameId">
+            {({ field, fieldState }) => (
               <FormSelectField
                 field={field}
                 fieldState={fieldState}
@@ -202,15 +195,12 @@ export function MoldPassportForm({
                 isVirtualized
                 isClearable
                 placeholder="Модельна рамка"
-                errorMessage={getNestedErrorMessage(errors, 'patternPlateFrameId')}
               />
             )}
-          />
+          </Form.Controller>
 
-          <Controller
-            name="moldingFlaskId"
-            control={control}
-            render={({ field, fieldState }) => (
+          <Form.Controller name="moldingFlaskId">
+            {({ field, fieldState }) => (
               <FormSelectField
                 field={field}
                 fieldState={fieldState}
@@ -219,16 +209,17 @@ export function MoldPassportForm({
                 isVirtualized
                 isClearable
                 placeholder="Опока"
-                errorMessage={getNestedErrorMessage(errors, 'moldingFlaskId')}
               />
             )}
-          />
+          </Form.Controller>
 
           {/* DynamicFields */}
-          <DynamicFieldArea triggerFor="castingTechnologyId" />
+          <Form.WithError name={['dataGsc', 'dataAsc']}>
+            <DynamicFieldArea triggerFor="castingTechnologyId" />
+          </Form.WithError>
 
           {/* Cavities */}
-          <WithError errorMessage={getNestedErrorMessage(errors, 'moldCavities')}>
+          <Form.WithError name="moldCavities">
             <DynamicFieldArray
               title="Відбиток деталі у формі"
               label="відбиток деталі у формі"
@@ -237,54 +228,40 @@ export function MoldPassportForm({
               defaultItem={moldCavityFormDefaultValues}
               itemsData={responseData?.moldCavities}
             />
-          </WithError>
+          </Form.WithError>
 
-          <InputFieldWithError
-            label="Тиск, од."
-            {...register('pressingPressure', formTransformers.number)}
-            errorMessage={getNestedErrorMessage(errors, 'pressingPressure')}
-          />
+          <Form.Field name="pressingPressure" registerOptions={formTransformers.number}>
+            {({ register }) => <InputField label="Тиск, од." {...register} />}
+          </Form.Field>
 
-          <InputFieldWithError
-            label="Порядковий номер форми за зміну"
-            {...register('sequenceInShift', formTransformers.number)}
-            errorMessage={getNestedErrorMessage(errors, 'sequenceInShift')}
-          />
+          <Form.Field name="sequenceInShift" registerOptions={formTransformers.number}>
+            {({ register }) => <InputField label="Порядковий номер форми за зміну" {...register} />}
+          </Form.Field>
 
-          <Controller
-            name="assemblyTimestamp"
-            control={control}
-            render={({ field, fieldState }) => (
+          <Form.Controller name="assemblyTimestamp">
+            {({ field, fieldState }) => (
               <FormDateTimeField
                 field={field}
                 fieldState={fieldState}
                 type="datetime"
                 label="Дата та час складання півформ"
-                errorMessage={getNestedErrorMessage(errors, 'assemblyTimestamp')}
               />
             )}
-          />
+          </Form.Controller>
 
-          <CheckboxWithError
-            label="Наявність дефектів"
-            {...register(`isDefective`, formTransformers.string)}
-            errorMessage={getNestedErrorMessage(errors, 'isDefective')}
-          />
+          <Form.Field name="isDefective">
+            {({ register }) => <Checkbox label="Наявність дефектів" {...register} />}
+          </Form.Field>
 
-          <TextAreaFieldWithError
-            label="Нотатка"
-            {...register('notes', formTransformers.string)}
-            errorMessage={getNestedErrorMessage(errors, 'notes')}
-          />
+          <Form.Field name="notes" registerOptions={formTransformers.string}>
+            {({ register }) => <TextareaField label="Нотатка" {...register} />}
+          </Form.Field>
 
-          <ButtonWithError
-            className="w-full"
-            type="submit"
-            errorMessage={errors.root?.message}
-            disabled={isSubmitting}
-          >
-            {submitBtnName}
-          </ButtonWithError>
+          <Form.WithError name="root">
+            <Button className="w-full" type="submit" disabled={isSubmitting}>
+              {submitBtnName}
+            </Button>
+          </Form.WithError>
         </FormLayout>
       </DynamicFieldsProvider>
     </FormProvider>

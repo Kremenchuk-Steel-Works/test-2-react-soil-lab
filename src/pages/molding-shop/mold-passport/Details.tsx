@@ -185,7 +185,7 @@ export default function MoldPassportDetails() {
                   <div>Функціональна: {cavity.isFunctional ? 'Так' : 'Ні'}</div>
                   {cavity.moldCores.length > 0 && (
                     <div className="pl-4">
-                      <p className="font-medium text-gray-600 dark:text-slate-400">Стержні:</p>
+                      <p className="font-medium text-gray-600 dark:text-slate-400">Стрижні:</p>
                       <ul className="mt-1 list-inside list-disc space-y-1">
                         {cavity.moldCores.map((core) => (
                           <li key={core.id}>

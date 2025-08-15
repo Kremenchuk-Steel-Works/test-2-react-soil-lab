@@ -47,9 +47,6 @@ export function ConfiguredButton({
     [permissionPathOverride, targetPath, currentUser, userPermissions],
   )
 
-  console.warn('targetPath', targetPath)
-  console.warn('hasAccess', hasAccess)
-
   const prepared = useMemo<PreparedButtonProps | null>(() => {
     const clickHandler = onClick ?? (() => navigate(targetPath))
     return prepareButtonLogic(btnType, hasAccess, clickHandler)

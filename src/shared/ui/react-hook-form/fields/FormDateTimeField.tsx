@@ -1,11 +1,12 @@
 import { useMemo } from 'react'
 import { addYears, format, getYear, isValid, subYears } from 'date-fns'
 import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
-import type {
-  DateTimePickerProps,
-  DateTimePickerType,
+import {
+  DateTimePicker,
+  type DateTimePickerProps,
+  type DateTimePickerType,
 } from '@/shared/ui/input-field/DateTime/DateTimePicker'
-import { DateTimePickerWithError } from '@/shared/ui/with-error/fieldsWithError'
+import { WithError } from '@/shared/ui/with-error/WithError'
 
 type FormDateTimeFieldProps = Omit<
   DateTimePickerProps,
@@ -91,17 +92,18 @@ const FormDateTimeField = ({
   const valueAsDate = parseValue(field.value)
 
   return (
-    <DateTimePickerWithError
-      {...rest}
-      type={type}
-      minDate={minDate}
-      maxDate={maxDate}
-      value={valueAsDate}
-      onChange={handleChange}
-      onBlur={field.onBlur}
-      ref={field.ref}
-      errorMessage={errorMessage || fieldState.error?.message}
-    />
+    <WithError errorMessage={errorMessage}>
+      <DateTimePicker
+        {...rest}
+        type={type}
+        minDate={minDate}
+        maxDate={maxDate}
+        value={valueAsDate}
+        onChange={handleChange}
+        onBlur={field.onBlur}
+        ref={field.ref}
+      />
+    </WithError>
   )
 }
 

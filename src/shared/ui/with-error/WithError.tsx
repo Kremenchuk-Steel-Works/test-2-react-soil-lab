@@ -7,7 +7,7 @@ type WithErrorProps = {
 }
 
 /**
- * Обёртка-контейнер.
+ * Обёртка-контейнер для полей с ошибками
  */
 export function WithError({ errorMessage, children }: WithErrorProps) {
   return (

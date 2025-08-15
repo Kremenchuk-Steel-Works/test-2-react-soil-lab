@@ -1,11 +1,5 @@
 import { memo, useCallback, useMemo } from 'react'
-import {
-  Controller,
-  useFormState,
-  type Control,
-  type Path,
-  type UseFormRegister,
-} from 'react-hook-form'
+import { type Path } from 'react-hook-form'
 import { castingPatternService } from '@/entities/molding-shop/casting-pattern/api/service'
 import type { MoldCavityFormFields } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/schema'
 import {
@@ -22,10 +16,12 @@ import type {
 import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
+import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
+import Checkbox from '@/shared/ui/checkbox/Checkbox'
+import InputField from '@/shared/ui/input-field/InputField'
 import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
-import { CheckboxWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
+import { createFormKit } from '@/shared/ui/react-hook-form/formKit'
 
 const logger = createLogger('MoldCavityForm')
 
@@ -35,22 +31,15 @@ export type MoldCavityItemData = MoldPassportDetailResponse['moldCavities'][numb
 interface FormProps {
   pathPrefix: MoldCavityPathPrefix
   itemData?: MoldCavityItemData
-  control: Control<MoldPassportFormFields>
-  register: UseFormRegister<MoldPassportFormFields>
 }
 
-export function MoldCavityFormComponent({ pathPrefix, itemData, control, register }: FormProps) {
+const Form = createFormKit<MoldPassportFormFields>()
+
+export function MoldCavityFormComponent({ pathPrefix, itemData }: FormProps) {
   const fieldName = useCallback(
     (field: keyof MoldCavityFormFields) => `${pathPrefix}.${field}` as Path<MoldPassportFormFields>,
     [pathPrefix],
   )
-
-  // Подписываемся только на ошибки текущих полей
-  const watchedErrorNames = useMemo(
-    () => [fieldName('castingPatternId'), fieldName('serialNumber'), fieldName('isFunctional')],
-    [fieldName],
-  )
-  const { errors } = useFormState<MoldPassportFormFields>({ control, name: watchedErrorNames })
 
   // Options
   const loadCastingPatternsOptions = useAsyncOptionsNew<CastingPatternLookupResponse, string>(
@@ -84,10 +73,8 @@ export function MoldCavityFormComponent({ pathPrefix, itemData, control, registe
 
   return (
     <>
-      <Controller
-        name={fieldName('castingPatternId')}
-        control={control}
-        render={({ field, fieldState }) => (
+      <Form.Controller name={fieldName('castingPatternId')}>
+        {({ field, fieldState }) => (
           <FormSelectField
             field={field}
             fieldState={fieldState}
@@ -96,32 +83,29 @@ export function MoldCavityFormComponent({ pathPrefix, itemData, control, registe
             isVirtualized
             isClearable
             placeholder="Модель"
-            errorMessage={getNestedErrorMessage(errors, fieldName('castingPatternId'))}
           />
         )}
-      />
+      </Form.Controller>
 
-      <InputFieldWithError
-        label="Серійний номер"
-        {...register(fieldName('serialNumber'), formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, fieldName('serialNumber'))}
-      />
+      <Form.Field name={fieldName('serialNumber')} registerOptions={formTransformers.string}>
+        {({ register }) => <InputField label="Серійний номер" {...register} />}
+      </Form.Field>
 
-      <CheckboxWithError
-        label="Придатний для заливання металу"
-        {...register(fieldName('isFunctional'))} // formTransformers не нужен для checkbox
-        errorMessage={getNestedErrorMessage(errors, fieldName('isFunctional'))}
-      />
+      <Form.Field name={fieldName('isFunctional')}>
+        {({ register }) => <Checkbox label="Придатний для заливання металу" {...register} />}
+      </Form.Field>
 
       {/* Cores */}
-      <DynamicFieldArray<MoldPassportFormFields, typeof coresFieldName, MoldCoreItemData>
-        title="Стрижень"
-        label="стрижень"
-        name={coresFieldName}
-        form={MoldCoreForm}
-        defaultItem={moldCoreFormDefaultValues}
-        itemsData={itemData?.moldCores}
-      />
+      <Form.WithError name={fieldName('moldCores')}>
+        <DynamicFieldArray<MoldPassportFormFields, typeof coresFieldName, MoldCoreItemData>
+          title="Стрижень"
+          label="стрижень"
+          name={coresFieldName}
+          form={MoldCoreForm}
+          defaultItem={moldCoreFormDefaultValues}
+          itemsData={itemData?.moldCores}
+        />
+      </Form.WithError>
     </>
   )
 }
