@@ -1,6 +1,18 @@
-import { Fragment } from 'react'
+import { Fragment, memo, useMemo } from 'react'
 import type { FieldValues, Path } from 'react-hook-form'
 import { useDynamicFields } from './DynamicFieldsContext'
+
+const RuleRenderer = memo(function RuleRenderer({
+  Component,
+  options,
+  responseData,
+}: {
+  Component: React.ComponentType<any>
+  options: any
+  responseData: any
+}) {
+  return <Component options={options} responseData={responseData} />
+})
 
 interface DynamicFieldAreaProps<TFieldValues extends FieldValues> {
   triggerFor: Path<TFieldValues>
@@ -9,33 +21,32 @@ interface DynamicFieldAreaProps<TFieldValues extends FieldValues> {
 export function DynamicFieldArea<TFieldValues extends FieldValues>({
   triggerFor,
 }: DynamicFieldAreaProps<TFieldValues>) {
-  // Получаем все необходимое из контекста одним хуком
-  const { config, activeRules, options, responseData } = useDynamicFields<any, any>()
+  const { config, activeRules, options, responseData } = useDynamicFields()
+
+  const rulesForTrigger = useMemo(
+    () =>
+      config.filter((rule) => {
+        const conditionKeys = Object.keys(rule.conditions)
+        const isRelevant =
+          (rule.renderTrigger && rule.renderTrigger === triggerFor) ||
+          (!rule.renderTrigger && conditionKeys.length === 1 && conditionKeys[0] === triggerFor)
+        return isRelevant
+      }),
+    [config, triggerFor],
+  )
 
   return (
     <>
-      {config.map((rule, index) => {
-        const ruleKey = String(index)
-        const isRuleActive = activeRules[ruleKey]
-
-        // Проверяем, что правило активно и относится к нашему триггеру
-        if (!isRuleActive) {
-          return null
-        }
-
-        const conditionKeys = Object.keys(rule.conditions)
-        const isRelevantToTrigger =
-          (rule.renderTrigger && rule.renderTrigger === triggerFor) ||
-          (!rule.renderTrigger && conditionKeys.length === 1 && conditionKeys[0] === triggerFor)
-
-        if (!isRelevantToTrigger) {
-          return null
-        }
-
-        const { Component } = rule
+      {rulesForTrigger.map((rule) => {
+        const id = rule.id
+        if (!activeRules[id]) return null
         return (
-          <Fragment key={ruleKey}>
-            <Component options={options} responseData={responseData} />
+          <Fragment key={id}>
+            <RuleRenderer
+              Component={rule.Component}
+              options={options}
+              responseData={responseData}
+            />
           </Fragment>
         )
       })}

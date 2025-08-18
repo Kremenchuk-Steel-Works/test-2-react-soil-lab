@@ -4,6 +4,7 @@ import { PATHS } from '@/app/routes/paths'
 import type { AppRoute } from '@/app/routes/types'
 import { adminRoutes } from '@/entities/admin/routes'
 import { moldingShopRoutes } from '@/entities/molding-shop/routes'
+import { soilLabRoutes } from '@/pages/soil-lab/routes'
 
 const MainPage = lazy(() => import('@/pages/MainPage'))
 const StreamlitDashboard = lazy(() => import('@/pages/StreamlitDashboard'))
@@ -21,6 +22,7 @@ export const APP_ROUTES: AppRoute[] = [
   adminRoutes,
   // moldPassportMainRoutes,
   moldingShopRoutes,
+  soilLabRoutes,
   {
     key: 'streamlitDashboard',
     path: '/streamlit-dashboard',

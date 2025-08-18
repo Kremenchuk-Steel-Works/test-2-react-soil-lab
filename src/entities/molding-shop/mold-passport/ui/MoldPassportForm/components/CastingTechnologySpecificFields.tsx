@@ -14,7 +14,7 @@ import type {
 import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import type { BaseDynamicComponentProps } from '@/shared/lib/zod/dynamic-schema'
+import type { BaseDynamicComponentProps } from '@/shared/lib/zod/dynamic-schemaOld'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
 import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'

@@ -6,7 +6,7 @@ import {
   dataGscFormSchema,
   moldPassportDynamicFieldConfig,
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
-import { createDynamicSchema } from '@/shared/lib/zod/dynamic-schema'
+import { createDynamicSchema } from '@/shared/lib/zod/dynamic-schemaOld'
 
 const baseSchema = z.object({
   moldingAreaId: z.number(),

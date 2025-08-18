@@ -1,3 +1,4 @@
+// formKit.tsx
 import React from 'react'
 import {
   Controller,
@@ -13,9 +14,8 @@ import {
 } from 'react-hook-form'
 import { getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
+import { WithError as ErrorWrap } from '@/shared/ui/with-error/WithError' // общий визуальный контейнер
 import { nameToId } from '@/utils/react-hook-form/nameToId'
-
-const cx = (...c: (string | undefined | false)[]) => c.filter(Boolean).join(' ')
 
 function ErrorBlock({ id, message }: { id: string; message: string }) {
   return (
@@ -65,7 +65,10 @@ export function createFormKit<T extends FieldValues>() {
       const msgs = collectMessages(names, { ...errors, root: (formState.errors as any)?.root })
 
       if (msgs.length === 0) return null
-      if (show === 'first') return <ErrorBlock id={msgs[0].id} message={msgs[0].message} />
+      if (show === 'first') {
+        const m = msgs[0]
+        return <ErrorBlock id={m.id} message={m.message} />
+      }
       return (
         <>
           {msgs.map((m) => (
@@ -88,10 +91,10 @@ export function createFormKit<T extends FieldValues>() {
       className?: string
       children: React.ReactNode
     }) => (
-      <div className={cx('space-y-2', className)}>
+      <ErrorWrap className={className}>
         {children}
         <Message name={name} show={show} />
-      </div>
+      </ErrorWrap>
     ),
   )
 
@@ -120,10 +123,11 @@ export function createFormKit<T extends FieldValues>() {
       const { errors } = useFormState<T>({ control, name: [name] })
       const errorMessage = getNestedErrorMessage(errors, name)
       const inputId = nameToId(String(name))
-      const describedById = errorMessage ? `${inputId}__error` : undefined
+      const errorId = `${inputId}__error`
+      const describedById = errorMessage ? errorId : undefined
 
       return (
-        <div className={cx('space-y-2', className)}>
+        <ErrorWrap errorMessage={errorMessage} errorId={errorId} className={className}>
           <Controller
             name={name}
             control={control}
@@ -134,8 +138,7 @@ export function createFormKit<T extends FieldValues>() {
               children({ field, fieldState, inputId, describedById })
             }
           />
-          {errorMessage && <ErrorBlock id={`${inputId}__error`} message={errorMessage} />}
-        </div>
+        </ErrorWrap>
       )
     },
   )
@@ -160,14 +163,14 @@ export function createFormKit<T extends FieldValues>() {
       const { errors } = useFormState<T>({ control, name: [name] })
       const errorMessage = getNestedErrorMessage(errors, name)
       const inputId = nameToId(String(name))
-      const describedById = errorMessage ? `${inputId}__error` : undefined
+      const errorId = `${inputId}__error`
+      const describedById = errorMessage ? errorId : undefined
       const reg = register(name, registerOptions)
 
       return (
-        <div className={cx('space-y-2', className)}>
+        <ErrorWrap errorMessage={errorMessage} errorId={errorId} className={className}>
           {children({ register: reg, inputId, describedById })}
-          {errorMessage && <ErrorBlock id={`${inputId}__error`} message={errorMessage} />}
-        </div>
+        </ErrorWrap>
       )
     },
   )

@@ -5,7 +5,7 @@ import {
 } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/components/CastingTechnologySpecificFields'
 import { MoldingAreaDataDynamicForm } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/components/MoldingAreaIdSpecificFields'
 import { MoldingSandSystem } from '@/shared/api/mold-passport/model'
-import { ANY_VALUE, createFormConfig } from '@/shared/lib/zod/dynamic-schema'
+import { ANY_VALUE, createFormConfig } from '@/shared/lib/zod/dynamic-schemaOld'
 
 export const dataGscFormSchema = z.object({
   id: z.string().nullable().optional(),

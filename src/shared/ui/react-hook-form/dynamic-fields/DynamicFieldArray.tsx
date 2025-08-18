@@ -1,4 +1,3 @@
-// shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray.tsx
 import { memo, useCallback, type ComponentType, type Key } from 'react'
 import clsx from 'clsx'
 import { Plus, X } from 'lucide-react'
@@ -46,7 +45,6 @@ function DynamicFieldArrayInner<
   addButton,
   removeButton,
 }: DynamicFieldArrayProps<T, N, TItemData>) {
-  // ВАЖНО: один-единственный потребитель контекста тут, выше по дереву рядов
   const methods = useFormContext<T>()
   const { control, register } = methods
 
