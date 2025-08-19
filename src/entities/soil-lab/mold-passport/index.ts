@@ -17,7 +17,7 @@ export { MoldingAreaDataDynamicForm } from './ui/MoldPassportForm/components/Mol
 export {
   dataGscFormSchema,
   dataAscFormSchema,
-  moldPassportDynamicFieldConfig,
+  moldPassportDynamicSections,
 } from './ui/MoldPassportForm/configs/dynamic-fields'
 export { moldPassportFormSchema, moldPassportFormDefaultValues } from './ui/MoldPassportForm/schema'
 export { moldPassportRoutes } from '../../../pages/soil-lab/mold-passport/routes'

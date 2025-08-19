@@ -1,28 +1,31 @@
 import { createContext, memo, useContext, useEffect, useMemo, useRef, type ReactNode } from 'react'
 import { useFormContext, useWatch, type FieldPath, type FieldValues } from 'react-hook-form'
-import { checkConditions, type DynamicFieldConfig } from '@/shared/lib/zod/dynamic-schema'
+import { createLogger } from '@/shared/lib/logger'
+import {
+  checkConditions,
+  flattenRules,
+  type DynamicSectionsConfig,
+} from '@/shared/lib/zod/dynamic-schema'
+
+const logger = createLogger('DynamicFields')
 
 type ActiveRulesState<RuleKey extends string = string> = Record<RuleKey, boolean>
 
-interface DynamicFieldsContextValue<
-  TOptions extends object,
-  TResponseData,
-  RuleKey extends string,
-> {
-  config: DynamicFieldConfig<RuleKey>
+type DynamicMeta<TOptions extends object, TResponseData, SectionKey extends string> = {
+  sections: DynamicSectionsConfig<SectionKey>
   options?: TOptions
   responseData?: TResponseData
-  activeRules: ActiveRulesState<RuleKey>
 }
 
-const DynamicFieldsContext = createContext<DynamicFieldsContextValue<any, any, any> | null>(null)
+const ActiveRulesContext = createContext<ActiveRulesState<any> | null>(null)
+const DynamicMetaContext = createContext<DynamicMeta<any, any, any> | null>(null)
 
-interface DynamicFieldsProviderProps<
+interface ProviderProps<
   TOptions extends object,
   TResponseData,
-  RuleKey extends string = string,
+  SectionKey extends string = string,
 > {
-  config: DynamicFieldConfig<RuleKey>
+  sections: DynamicSectionsConfig<SectionKey>
   options?: TOptions
   responseData?: TResponseData
   children: ReactNode
@@ -32,106 +35,101 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
   TFieldValues extends FieldValues,
   TOptions extends object,
   TResponseData,
-  RuleKey extends string = string,
+  SectionKey extends string = string,
 >({
   children,
-  config,
+  sections,
   options,
   responseData,
-}: DynamicFieldsProviderProps<TOptions, TResponseData, RuleKey>) {
-  const { control, getValues, resetField, clearErrors } = useFormContext<TFieldValues>()
+}: ProviderProps<TOptions, TResponseData, SectionKey>) {
+  const { control, getValues, resetField } = useFormContext<TFieldValues>()
+  const allRules = useMemo(() => flattenRules(sections), [sections])
 
-  // Поля-триггеры из config
+  // Подписываемся на поля из conditions/exceptions
   const fieldsToWatch = useMemo(() => {
-    const fieldSet = new Set<string>()
-    for (const rule of config) {
-      if (rule.conditions) for (const f of Object.keys(rule.conditions)) fieldSet.add(f)
-      if (rule.exceptions) for (const f of Object.keys(rule.exceptions)) fieldSet.add(f)
+    const set = new Set<string>()
+    for (const r of allRules) {
+      if (r.conditions) Object.keys(r.conditions).forEach((f) => set.add(f))
+      if (r.exceptions) Object.keys(r.exceptions).forEach((f) => set.add(f))
     }
-    return Array.from(fieldSet) as FieldPath<TFieldValues>[]
-  }, [config])
+    return Array.from(set) as FieldPath<TFieldValues>[]
+  }, [allRules])
 
-  // ❗ КЛЮЧЕВАЯ ПРАВКА: не передаём undefined -> иначе подписка на весь form state
-  // Пустой массив безопасен: RHF не будет ни на что подписываться.
-  const watchedTick = useWatch({
-    control,
-    name: fieldsToWatch as any, // пустой массив = нет подписки
-  })
+  const tick = useWatch({ control, name: fieldsToWatch as any })
 
-  // Сохраняем предыдущие activeRules, чтобы не плодить новую ссылку без фактических изменений
-  const prevActiveRef = useRef<ActiveRulesState<RuleKey>>({} as ActiveRulesState<RuleKey>)
-
-  const activeRules = useMemo<ActiveRulesState<RuleKey>>(() => {
+  const prevRef = useRef<ActiveRulesState<any>>({})
+  const activeRules = useMemo<ActiveRulesState<any>>(() => {
     const values = getValues()
-    const next: ActiveRulesState<RuleKey> = {} as any
-    for (const rule of config) {
-      next[rule.id as RuleKey] = checkConditions(values, rule)
-    }
+    const next: ActiveRulesState<any> = {}
+    for (const r of allRules) next[r.id] = checkConditions(values, r)
 
-    // shallow equal: если флаги не изменились, возвращаем прошлую ссылку
-    const prev = prevActiveRef.current
-    let changed = false
-    if (Object.keys(prev).length !== Object.keys(next).length) {
-      changed = true
-    } else {
-      for (const k in next) {
-        if (prev[k as keyof typeof prev] !== next[k as keyof typeof next]) {
+    const prev = prevRef.current
+    let changed = Object.keys(prev).length !== Object.keys(next).length
+    if (!changed)
+      for (const k in next)
+        if (prev[k] !== next[k]) {
           changed = true
           break
         }
-      }
-    }
     if (!changed) return prev
-
-    prevActiveRef.current = next
+    prevRef.current = next
     return next
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchedTick, config])
+  }, [tick, allRules, getValues])
 
-  // Сброс полей и ошибок при деактивации правил
-  const prevForResetRef = useRef<ActiveRulesState<RuleKey>>({} as ActiveRulesState<RuleKey>)
+  // При деактивации правила: сбрасываем поля только если этот ключ не нужен никаким другим активным правилам
+  const prevResetRef = useRef<ActiveRulesState<any>>({})
   useEffect(() => {
-    const prev = prevForResetRef.current
-    for (const rule of config) {
-      const key = rule.id as RuleKey
-      const was = prev[key]
-      const now = activeRules[key]
+    logger.debug('activeRules changed', activeRules)
+    const prev = prevResetRef.current
 
+    // Собираем ключи, которые нужны текущим активным правилам
+    const keysRequiredByActive = new Set<string>()
+    for (const r of allRules) {
+      if (!activeRules[r.id]) continue
+      const keys = Object.keys((r as any).schema?.shape ?? {})
+      keys.forEach((k) => keysRequiredByActive.add(k))
+    }
+
+    for (const r of allRules) {
+      const was = prev[r.id]
+      const now = activeRules[r.id]
       if (was && !now) {
-        const fields = Object.keys((rule as any).schema?.shape ?? {}) as FieldPath<TFieldValues>[]
-        if (fields.length) {
-          fields.forEach((name) => resetField(name))
-          clearErrors(fields)
-        }
+        const fields = Object.keys((r as any).schema?.shape ?? {}) as FieldPath<TFieldValues>[]
+        fields.forEach((name) => {
+          // Если ключ больше никем не требуется — очищаем значение и ошибку (keepError=false)
+          if (!keysRequiredByActive.has(String(name))) {
+            resetField(name, { keepError: false, keepDirty: false, keepTouched: false })
+          }
+        })
       }
     }
-    prevForResetRef.current = activeRules
-  }, [activeRules, clearErrors, config, resetField])
+    prevResetRef.current = activeRules
+  }, [activeRules, allRules, resetField])
 
-  const contextValue = useMemo(
-    () =>
-      ({
-        config,
-        options,
-        responseData,
-        activeRules, // ссылка теперь стабильнее, если флаги не изменились
-      }) as DynamicFieldsContextValue<TOptions, TResponseData, RuleKey>,
-    [activeRules, config, options, responseData],
+  const meta = useMemo(
+    () => ({ sections, options, responseData }) as DynamicMeta<TOptions, TResponseData, SectionKey>,
+    [sections, options, responseData],
   )
 
   return (
-    <DynamicFieldsContext.Provider value={contextValue}>{children}</DynamicFieldsContext.Provider>
+    <DynamicMetaContext.Provider value={meta}>
+      <ActiveRulesContext.Provider value={activeRules}>{children}</ActiveRulesContext.Provider>
+    </DynamicMetaContext.Provider>
   )
 })
 
-export function useDynamicFields<
+export function useActiveRules() {
+  const v = useContext(ActiveRulesContext)
+  if (!v) throw new Error('useActiveRules must be used within a DynamicFieldsProvider')
+  return v
+}
+
+export function useDynamicMeta<
   TOptions extends object = Record<string, never>,
   TResponseData = unknown,
-  RuleKey extends string = string,
+  SectionKey extends string = string,
 >() {
-  const ctx = useContext(DynamicFieldsContext)
-  if (!ctx) {
-    throw new Error('useDynamicFields must be used within a DynamicFieldsProvider')
-  }
-  return ctx as DynamicFieldsContextValue<TOptions, TResponseData, RuleKey>
+  const v = useContext(DynamicMetaContext)
+  if (!v) throw new Error('useDynamicMeta must be used within a DynamicFieldsProvider')
+  return v as DynamicMeta<TOptions, TResponseData, SectionKey>
 }

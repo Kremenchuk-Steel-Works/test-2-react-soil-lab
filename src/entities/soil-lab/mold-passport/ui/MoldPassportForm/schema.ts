@@ -4,9 +4,9 @@ import { moldCavityFormSchema } from '@/entities/soil-lab/mold-cavity/ui/MoldCav
 import {
   dataAscFormSchema,
   dataGscFormSchema,
-  moldPassportDynamicFieldConfig,
+  moldPassportDynamicSections,
 } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
-import { createDynamicSchema } from '@/shared/lib/zod/dynamic-schemaOld'
+import { createDynamicSchema } from '@/shared/lib/zod/dynamic-schema'
 
 const baseSchema = z.object({
   moldingAreaId: z.number(),
@@ -30,10 +30,7 @@ const baseSchema = z.object({
   notes: z.string().nullable().optional(),
 })
 
-export const moldPassportFormSchema = createDynamicSchema(
-  baseSchema,
-  moldPassportDynamicFieldConfig,
-)
+export const moldPassportFormSchema = createDynamicSchema(baseSchema, moldPassportDynamicSections)
 export type MoldPassportFormFields = z.infer<typeof moldPassportFormSchema>
 export const moldPassportFormDefaultValues: DeepPartial<MoldPassportFormFields> = {
   moldCavities: [],

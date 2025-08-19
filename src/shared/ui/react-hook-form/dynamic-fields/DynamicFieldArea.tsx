@@ -1,53 +1,54 @@
-import { Fragment, memo, useMemo } from 'react'
-import type { FieldValues, Path } from 'react-hook-form'
-import { useDynamicFields } from './DynamicFieldsContext'
+import { Fragment, useMemo, type ReactNode } from 'react'
+import { useActiveRules, useDynamicMeta } from './DynamicFieldsContext'
 
-const RuleRenderer = memo(function RuleRenderer({
-  Component,
-  options,
-  responseData,
-}: {
-  Component: React.ComponentType<any>
-  options: any
-  responseData: any
-}) {
-  return <Component options={options} responseData={responseData} />
-})
-
-interface DynamicFieldAreaProps<TFieldValues extends FieldValues> {
-  triggerFor: Path<TFieldValues>
+interface DynamicFieldAreaProps {
+  section: string
+  /** Если true — показываем неактивные правила в disabled-состоянии */
+  showInactive?: boolean
+  /** Кастомный текст/узел для неактивного состояния */
+  inactiveHint?: ReactNode
 }
 
-export function DynamicFieldArea<TFieldValues extends FieldValues>({
-  triggerFor,
-}: DynamicFieldAreaProps<TFieldValues>) {
-  const { config, activeRules, options, responseData } = useDynamicFields()
-
-  const rulesForTrigger = useMemo(
-    () =>
-      config.filter((rule) => {
-        const conditionKeys = Object.keys(rule.conditions)
-        const isRelevant =
-          (rule.renderTrigger && rule.renderTrigger === triggerFor) ||
-          (!rule.renderTrigger && conditionKeys.length === 1 && conditionKeys[0] === triggerFor)
-        return isRelevant
-      }),
-    [config, triggerFor],
+/** Вспомогательная обёртка: делает контент недоступным для интеракции и визуально “выключенным” */
+function InactiveWrapper({ children, hint }: { children: React.ReactNode; hint?: ReactNode }) {
+  return (
+    <fieldset disabled aria-disabled="true" className="pointer-events-none relative select-none">
+      {hint ? <p className="text-layout pb-2">{hint}</p> : null}
+      <div className="opacity-50">{children}</div>
+    </fieldset>
   )
+}
+
+export function DynamicFieldArea({
+  section,
+  showInactive = false,
+  inactiveHint,
+}: DynamicFieldAreaProps) {
+  const active = useActiveRules()
+  const { sections } = useDynamicMeta()
+
+  const rules = useMemo(() => sections[section] ?? [], [sections, section])
 
   return (
     <>
-      {rulesForTrigger.map((rule) => {
-        const id = rule.id
-        if (!activeRules[id]) return null
+      {rules.map((rule) => {
+        const { Component, id } = rule
+        const isActive = Boolean(active[id])
+
+        if (isActive) {
+          return (
+            <Fragment key={id}>
+              <Component />
+            </Fragment>
+          )
+        }
+
+        if (!showInactive) return null
+
         return (
-          <Fragment key={id}>
-            <RuleRenderer
-              Component={rule.Component}
-              options={options}
-              responseData={responseData}
-            />
-          </Fragment>
+          <InactiveWrapper key={id} hint={inactiveHint}>
+            <Component />
+          </InactiveWrapper>
         )
       })}
     </>

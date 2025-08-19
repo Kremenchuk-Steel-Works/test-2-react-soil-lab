@@ -19,7 +19,7 @@ import type {
   PatternPlateFrameLookupResponse,
   PatternPlateFrameLookupsListResponse,
 } from '@/shared/api/mold-passport/model'
-import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
+import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
 import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'

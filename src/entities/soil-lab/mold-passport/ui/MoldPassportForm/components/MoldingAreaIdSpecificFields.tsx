@@ -1,26 +1,21 @@
-import { Controller, useFormContext, type Path } from 'react-hook-form'
+import { type Path } from 'react-hook-form'
 import { castingTechnologyService } from '@/entities/soil-lab/casting-technology/api/service'
+import { MoldPassportFormKit } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/FormKit'
 import type { MoldPassportFormFields } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/schema'
 import type {
   CastingTechnologyLookupResponse,
   CastingTechnologyLookupsListResponse,
   MoldPassportDetailResponse,
 } from '@/shared/api/mold-passport/model'
-import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
+import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
-import { getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import type { BaseDynamicComponentProps } from '@/shared/lib/zod/dynamic-schemaOld'
+import { useDynamicMeta } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 
-type MoldingAreaDataDynamicFormProps = BaseDynamicComponentProps & {
-  responseData?: MoldPassportDetailResponse
-}
+const Form = MoldPassportFormKit
 
-export function MoldingAreaDataDynamicForm({ responseData }: MoldingAreaDataDynamicFormProps) {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext<MoldPassportFormFields>()
+export function MoldingAreaDataDynamicForm() {
+  const { responseData } = useDynamicMeta<Record<string, never>, MoldPassportDetailResponse>()
   const loadCastingTechnologiesOptions = useAsyncOptionsNew<
     CastingTechnologyLookupResponse,
     number
@@ -53,10 +48,8 @@ export function MoldingAreaDataDynamicForm({ responseData }: MoldingAreaDataDyna
     `${field}` as Path<MoldPassportFormFields>
 
   return (
-    <Controller
-      name={fieldName('castingTechnologyId')}
-      control={control}
-      render={({ field, fieldState }) => (
+    <Form.Controller name={fieldName('castingTechnologyId')}>
+      {({ field, fieldState }) => (
         <FormSelectField
           field={field}
           fieldState={fieldState}
@@ -65,9 +58,8 @@ export function MoldingAreaDataDynamicForm({ responseData }: MoldingAreaDataDyna
           isVirtualized
           isClearable
           placeholder="Технологія формовки"
-          errorMessage={getNestedErrorMessage(errors, fieldName('castingTechnologyId'))}
         />
       )}
-    />
+    </Form.Controller>
   )
 }

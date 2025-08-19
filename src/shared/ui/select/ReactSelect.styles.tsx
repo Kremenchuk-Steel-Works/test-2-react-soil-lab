@@ -29,7 +29,7 @@ export const baseClassNames: ClassNamesConfig = {
       'relative border rounded-md px-4 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600',
       'flex',
       isFocused && 'ring-2 ring-blue-500',
-      isDisabled && 'bg-gray-200 dark:bg-gray-700 opacity-50',
+      isDisabled && 'opacity-50',
     ),
   valueContainer: (state) => {
     if (state.isMulti && state.hasValue) {

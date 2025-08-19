@@ -1,8 +1,9 @@
-import { Controller, useFormContext, type Path } from 'react-hook-form'
+import { type Path } from 'react-hook-form'
 import type {
   MoldPassportDataAsc,
   MoldPassportDataGsc,
 } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
+import { MoldPassportFormKit } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/FormKit'
 import type { MoldPassportFormFields } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/schema'
 import { moldingSandSystemOptions } from '@/entities/soil-lab/molding-sand-system/model/moldingSandSystem'
 import { resinService } from '@/entities/soil-lab/resin'
@@ -11,28 +12,24 @@ import type {
   ResinLookupResponse,
   ResinLookupsListResponse,
 } from '@/shared/api/mold-passport/model'
-import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
+import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
-import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import type { BaseDynamicComponentProps } from '@/shared/lib/zod/dynamic-schemaOld'
+import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
+import InputField from '@/shared/ui/input-field/InputField'
+import { useDynamicMeta } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
-import { InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
+
+const Form = MoldPassportFormKit
 
 export function CastingTechnologyDataGscDynamicForm() {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext<MoldPassportFormFields>()
   const fieldName = (field: keyof MoldPassportDataGsc) =>
     `dataGsc.${field}` as Path<MoldPassportFormFields>
 
   return (
     <FieldsetWrapper title={`Пісочно-глиняна формовка`}>
-      <Controller
-        name={fieldName('moldingSandSystem')}
-        control={control}
-        render={({ field, fieldState }) => (
+      <Form.Controller name={fieldName('moldingSandSystem')}>
+        {({ field, fieldState }) => (
           <FormSelectField
             field={field}
             fieldState={fieldState}
@@ -40,43 +37,30 @@ export function CastingTechnologyDataGscDynamicForm() {
             isVirtualized
             isClearable
             placeholder="Підтип суміші"
-            errorMessage={getNestedErrorMessage(errors, fieldName('moldingSandSystem'))}
           />
         )}
-      />
+      </Form.Controller>
 
-      <InputFieldWithError
-        label="Номер суміші"
-        {...control.register(fieldName('moldingSandNumber'), { ...formTransformers.string })}
-        errorMessage={getNestedErrorMessage(errors, fieldName('moldingSandNumber'))}
-      />
+      <Form.Field name={fieldName('moldingSandNumber')} registerOptions={formTransformers.string}>
+        {({ register }) => <InputField label="Номер суміші" {...register} />}
+      </Form.Field>
 
-      <InputFieldWithError
-        label="Горизонтальна щільність форми"
-        {...control.register(fieldName('moldHorizontalDensity'), { ...formTransformers.number })}
-        errorMessage={getNestedErrorMessage(errors, fieldName('moldHorizontalDensity'))}
-      />
+      <Form.Field
+        name={fieldName('moldHorizontalDensity')}
+        registerOptions={formTransformers.number}
+      >
+        {({ register }) => <InputField label="Горизонтальна щільність форми" {...register} />}
+      </Form.Field>
 
-      <InputFieldWithError
-        label="Вертикальна щільність форми"
-        {...control.register(fieldName('moldVerticalDensity'), { ...formTransformers.number })}
-        errorMessage={getNestedErrorMessage(errors, fieldName('moldVerticalDensity'))}
-      />
+      <Form.Field name={fieldName('moldVerticalDensity')} registerOptions={formTransformers.number}>
+        {({ register }) => <InputField label="Вертикальна щільність форми" {...register} />}
+      </Form.Field>
     </FieldsetWrapper>
   )
 }
 
-type CastingTechnologyPassportDataAscDynamicFormProps = BaseDynamicComponentProps & {
-  responseData?: MoldPassportDetailResponse
-}
-
-export function CastingTechnologyPassportDataAscDynamicForm({
-  responseData,
-}: CastingTechnologyPassportDataAscDynamicFormProps) {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext<MoldPassportFormFields>()
+export function CastingTechnologyPassportDataAscDynamicForm() {
+  const { responseData } = useDynamicMeta<Record<string, never>, MoldPassportDetailResponse>()
   const loadResinsOptions = useAsyncOptionsNew<ResinLookupResponse, string>(
     resinService.getLookup,
     {
@@ -106,16 +90,12 @@ export function CastingTechnologyPassportDataAscDynamicForm({
 
   return (
     <FieldsetWrapper title={`Холодно-твердіюча формовка`}>
-      <InputFieldWithError
-        label="Твердість форми"
-        {...control.register(fieldName('moldHardness'), { ...formTransformers.number })}
-        errorMessage={getNestedErrorMessage(errors, fieldName('moldHardness'))}
-      />
+      <Form.Field name={fieldName('moldHardness')} registerOptions={formTransformers.number}>
+        {({ register }) => <InputField label="Твердість форми" {...register} />}
+      </Form.Field>
 
-      <Controller
-        name={fieldName('resinId')}
-        control={control}
-        render={({ field, fieldState }) => (
+      <Form.Controller name={fieldName('resinId')}>
+        {({ field, fieldState }) => (
           <FormSelectField
             field={field}
             fieldState={fieldState}
@@ -124,10 +104,9 @@ export function CastingTechnologyPassportDataAscDynamicForm({
             isVirtualized
             isClearable
             placeholder="Смола"
-            errorMessage={getNestedErrorMessage(errors, fieldName('resinId'))}
           />
         )}
-      />
+      </Form.Controller>
     </FieldsetWrapper>
   )
 }

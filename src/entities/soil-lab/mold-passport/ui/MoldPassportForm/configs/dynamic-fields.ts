@@ -5,7 +5,11 @@ import {
 } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/components/CastingTechnologySpecificFields'
 import { MoldingAreaDataDynamicForm } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/components/MoldingAreaIdSpecificFields'
 import { MoldingSandSystem } from '@/shared/api/mold-passport/model'
-import { ANY_VALUE, createFormConfig } from '@/shared/lib/zod/dynamic-schema'
+import {
+  ANY_VALUE,
+  createSectionsConfig,
+  type DynamicSectionsConfig,
+} from '@/shared/lib/zod/dynamic-schema'
 
 export const dataGscFormSchema = z.object({
   id: z.string().nullable().optional(),
@@ -25,35 +29,39 @@ export const dataAscFormSchema = z.object({
 
 export type MoldPassportDataAsc = z.infer<typeof dataAscFormSchema>
 
-export const moldPassportDynamicFieldConfig = createFormConfig([
+export const moldPassportDynamicSections = createSectionsConfig({
   // Для участков
-  {
-    id: 'area',
-    conditions: {
-      moldingAreaId: ANY_VALUE,
+  moldingAreaId: [
+    {
+      id: 'moldingAreaId',
+      conditions: {
+        moldingAreaId: ANY_VALUE,
+      },
+      schema: z.object({
+        castingTechnologyId: z.number(),
+      }),
+      Component: MoldingAreaDataDynamicForm,
     },
-    schema: z.object({
-      castingTechnologyId: z.number(),
-    }),
-    Component: MoldingAreaDataDynamicForm,
-  },
+  ],
 
   // Для технологии Green Sand Casting Песчано-Глинистая
-  {
-    id: 'gsc',
-    conditions: {
-      castingTechnologyId: 1,
+  castingTechnologyId: [
+    {
+      id: 'dataGsc',
+      conditions: {
+        castingTechnologyId: 1,
+      },
+      schema: z.object({ dataGsc: dataGscFormSchema.nullable().optional() }),
+      Component: CastingTechnologyDataGscDynamicForm,
     },
-    schema: z.object({ dataGsc: dataGscFormSchema.nullable().optional() }),
-    Component: CastingTechnologyDataGscDynamicForm,
-  },
-  // Для технологии Air Set Casting Холодно-Твердеющая
-  {
-    id: 'asc',
-    conditions: {
-      castingTechnologyId: 2,
+    // Для технологии Air Set Casting Холодно-Твердеющая
+    {
+      id: 'dataAsc',
+      conditions: {
+        castingTechnologyId: 2,
+      },
+      schema: z.object({ dataAsc: dataAscFormSchema.nullable().optional() }),
+      Component: CastingTechnologyPassportDataAscDynamicForm,
     },
-    schema: z.object({ dataAsc: dataAscFormSchema.nullable().optional() }),
-    Component: CastingTechnologyPassportDataAscDynamicForm,
-  },
-])
+  ],
+} as const satisfies DynamicSectionsConfig)

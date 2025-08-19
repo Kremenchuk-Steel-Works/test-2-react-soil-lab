@@ -19,9 +19,16 @@ export function getNestedErrorMessage<T extends FieldValues>(
   errors: FieldErrors<T>,
   path: Path<T>,
 ): string | undefined {
-  const fieldError = getNestedError(errors, path)
+  const node = getNestedError(errors, path) as any
+  if (!node) return undefined
 
-  return fieldError?.message
+  // обычная ошибка поля
+  if (typeof node?.message === 'string') return node.message
+
+  // ошибка на "корне" массива (RHF + zod для useFieldArray)
+  if (typeof node?.root?.message === 'string') return node.root.message
+
+  return undefined
 }
 
 export const formTransformers = {

@@ -8,12 +8,13 @@ import {
 } from '@/entities/soil-lab/mold-core/ui/MoldCoreForm/MoldCoreForm'
 import { moldCoreFormDefaultValues } from '@/entities/soil-lab/mold-core/ui/MoldCoreForm/schema'
 import type { MoldPassportFormFields } from '@/entities/soil-lab/mold-passport'
+import { MoldPassportFormKit } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/FormKit'
 import type {
   CastingPatternLookupResponse,
   CastingPatternLookupsListResponse,
   MoldPassportDetailResponse,
 } from '@/shared/api/mold-passport/model'
-import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
+import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
 import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
@@ -21,7 +22,6 @@ import Checkbox from '@/shared/ui/checkbox/Checkbox'
 import InputField from '@/shared/ui/input-field/InputField'
 import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
-import { createFormKit } from '@/shared/ui/react-hook-form/formKit'
 
 const logger = createLogger('MoldCavityForm')
 
@@ -33,7 +33,7 @@ interface FormProps {
   itemData?: MoldCavityItemData
 }
 
-const Form = createFormKit<MoldPassportFormFields>()
+const Form = MoldPassportFormKit
 
 export function MoldCavityFormComponent({ pathPrefix, itemData }: FormProps) {
   const fieldName = useCallback(

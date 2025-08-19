@@ -2,7 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
 import { MoldCavityForm } from '@/entities/soil-lab/mold-cavity/ui/MoldCavityForm/MoldCavityForm'
 import { moldCavityFormDefaultValues } from '@/entities/soil-lab/mold-cavity/ui/MoldCavityForm/schema'
-import { moldPassportDynamicFieldConfig } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
+import { moldPassportDynamicSections } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
+import { MoldPassportFormKit } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/FormKit'
 import {
   moldPassportFormSchema,
   type MoldPassportFormFields,
@@ -19,10 +20,11 @@ import type {
   PatternPlateFrameLookupResponse,
   PatternPlateFrameLookupsListResponse,
 } from '@/shared/api/mold-passport/model'
-import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsNew'
+import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
 import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
+import { stableZodResolver } from '@/shared/lib/react-hook-form/stableZodResolver'
 import Button from '@/shared/ui/button/Button'
 import Checkbox from '@/shared/ui/checkbox/Checkbox'
 import InputField from '@/shared/ui/input-field/InputField'
@@ -32,7 +34,6 @@ import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/Dy
 import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
-import { createFormKit } from '@/shared/ui/react-hook-form/formKit'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import type { FormProps } from '@/types/react-hook-form'
 
@@ -41,11 +42,9 @@ const logger = createLogger('MoldPassportForm')
 type FormFields = MoldPassportFormFields
 const schema = moldPassportFormSchema
 
-const dynamicFieldConfig = moldPassportDynamicFieldConfig
-
 type MoldPassportFormProps = FormProps<FormFields, MoldPassportDetailResponse>
 
-const Form = createFormKit<FormFields>()
+const Form = MoldPassportFormKit
 
 export function MoldPassportForm({
   defaultValues,
@@ -54,13 +53,14 @@ export function MoldPassportForm({
   submitBtnName,
 }: MoldPassportFormProps) {
   const form = useForm<FormFields>({
-    resolver: zodResolver(schema),
+    resolver: stableZodResolver(schema),
     defaultValues,
+    shouldUnregister: true,
   })
   const {
     handleSubmit,
     setError,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = form
   const loadMoldingAreasOptions = useAsyncOptionsNew<MoldingAreaLookupResponse, number>(
     moldingAreaService.getLookup,
@@ -150,11 +150,12 @@ export function MoldPassportForm({
   }
 
   logger.debug('[MoldPassportForm] render', defaultValues)
+  logger.debug('[MoldPassportForm] err', errors)
 
   return (
     <FormProvider {...form}>
       <FormLayout onSubmit={handleSubmit(submitHandler)}>
-        <DynamicFieldsProvider config={dynamicFieldConfig} responseData={responseData}>
+        <DynamicFieldsProvider sections={moldPassportDynamicSections} responseData={responseData}>
           <h5 className="layout-text">Паспорт ливарної форми</h5>
 
           {/* <AlertMessage type={AlertType.WARNING} message={`Попередній стан форми: Не заповнено`} /> */}
@@ -174,7 +175,7 @@ export function MoldPassportForm({
           </Form.Controller>
 
           {/* DynamicFields */}
-          <DynamicFieldArea triggerFor="moldingAreaId" />
+          <DynamicFieldArea section="moldingAreaId" showInactive />
 
           <Form.Controller name="patternPlateFrameId">
             {({ field, fieldState }) => (
@@ -206,7 +207,7 @@ export function MoldPassportForm({
 
           {/* DynamicFields */}
           <Form.WithError name={['dataGsc', 'dataAsc']}>
-            <DynamicFieldArea triggerFor="castingTechnologyId" />
+            <DynamicFieldArea section="castingTechnologyId" showInactive />
           </Form.WithError>
 
           {/* Cavities */}
