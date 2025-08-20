@@ -1,3 +1,4 @@
+import { DevTool } from '@hookform/devtools'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
 import { MoldCavityForm } from '@/entities/soil-lab/mold-cavity/ui/MoldCavityForm/MoldCavityForm'
@@ -23,8 +24,6 @@ import type {
 import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
-import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
-import { stableZodResolver } from '@/shared/lib/react-hook-form/stableZodResolver'
 import Button from '@/shared/ui/button/Button'
 import Checkbox from '@/shared/ui/checkbox/Checkbox'
 import InputField from '@/shared/ui/input-field/InputField'
@@ -53,14 +52,13 @@ export function MoldPassportForm({
   submitBtnName,
 }: MoldPassportFormProps) {
   const form = useForm<FormFields>({
-    resolver: stableZodResolver(schema),
+    resolver: zodResolver(schema),
     defaultValues,
-    shouldUnregister: true,
   })
   const {
     handleSubmit,
     setError,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = form
   const loadMoldingAreasOptions = useAsyncOptionsNew<MoldingAreaLookupResponse, number>(
     moldingAreaService.getLookup,
@@ -150,112 +148,116 @@ export function MoldPassportForm({
   }
 
   logger.debug('[MoldPassportForm] render', defaultValues)
-  logger.debug('[MoldPassportForm] err', errors)
 
   return (
-    <FormProvider {...form}>
-      <FormLayout onSubmit={handleSubmit(submitHandler)}>
-        <DynamicFieldsProvider sections={moldPassportDynamicSections} responseData={responseData}>
-          <h5 className="layout-text">Паспорт ливарної форми</h5>
+    <>
+      <FormProvider {...form}>
+        <FormLayout onSubmit={handleSubmit(submitHandler)}>
+          <DynamicFieldsProvider sections={moldPassportDynamicSections} responseData={responseData}>
+            <h5 className="layout-text">Паспорт ливарної форми</h5>
 
-          {/* <AlertMessage type={AlertType.WARNING} message={`Попередній стан форми: Не заповнено`} /> */}
+            {/* <AlertMessage type={AlertType.WARNING} message={`Попередній стан форми: Не заповнено`} /> */}
 
-          <Form.Controller name="moldingAreaId">
-            {({ field, fieldState }) => (
-              <FormSelectField
-                field={field}
-                fieldState={fieldState}
-                options={loadMoldingAreasOptions}
-                defaultOptions={defaultMoldingAreasOptions}
-                isVirtualized
-                isClearable
-                placeholder="Ділянка формовки"
+            <Form.Controller name="moldingAreaId">
+              {({ field, fieldState }) => (
+                <FormSelectField
+                  field={field}
+                  fieldState={fieldState}
+                  options={loadMoldingAreasOptions}
+                  defaultOptions={defaultMoldingAreasOptions}
+                  isVirtualized
+                  isClearable
+                  placeholder="Ділянка формовки"
+                />
+              )}
+            </Form.Controller>
+
+            {/* DynamicFields */}
+            <DynamicFieldArea section="moldingAreaId" showInactive />
+
+            <Form.Controller name="patternPlateFrameId">
+              {({ field, fieldState }) => (
+                <FormSelectField
+                  field={field}
+                  fieldState={fieldState}
+                  options={loadPatternPlateFramesOptions}
+                  defaultOptions={defaultPatternPlateFramesOptions}
+                  isVirtualized
+                  isClearable
+                  placeholder="Модельна рамка"
+                />
+              )}
+            </Form.Controller>
+
+            <Form.Controller name="moldingFlaskId">
+              {({ field, fieldState }) => (
+                <FormSelectField
+                  field={field}
+                  fieldState={fieldState}
+                  options={loadMoldingFlasksOptions}
+                  defaultOptions={defaultMoldingFlasksOptions}
+                  isVirtualized
+                  isClearable
+                  placeholder="Опока"
+                />
+              )}
+            </Form.Controller>
+
+            {/* DynamicFields */}
+            <Form.WithError name={['dataGsc', 'dataAsc']}>
+              <DynamicFieldArea section="castingTechnologyId" showInactive />
+            </Form.WithError>
+
+            {/* Cavities */}
+            <Form.WithError name="moldCavities">
+              <DynamicFieldArray
+                title="Відбиток деталі у формі"
+                label="відбиток деталі у формі"
+                name="moldCavities"
+                form={MoldCavityForm}
+                defaultItem={moldCavityFormDefaultValues}
+                itemsData={responseData?.moldCavities}
               />
-            )}
-          </Form.Controller>
+            </Form.WithError>
 
-          {/* DynamicFields */}
-          <DynamicFieldArea section="moldingAreaId" showInactive />
+            <Form.Field name="pressingPressure">
+              {({ register }) => <InputField label="Тиск, од." {...register} />}
+            </Form.Field>
 
-          <Form.Controller name="patternPlateFrameId">
-            {({ field, fieldState }) => (
-              <FormSelectField
-                field={field}
-                fieldState={fieldState}
-                options={loadPatternPlateFramesOptions}
-                defaultOptions={defaultPatternPlateFramesOptions}
-                isVirtualized
-                isClearable
-                placeholder="Модельна рамка"
-              />
-            )}
-          </Form.Controller>
+            <Form.Field name="sequenceInShift">
+              {({ register }) => (
+                <InputField label="Порядковий номер форми за зміну" {...register} />
+              )}
+            </Form.Field>
 
-          <Form.Controller name="moldingFlaskId">
-            {({ field, fieldState }) => (
-              <FormSelectField
-                field={field}
-                fieldState={fieldState}
-                options={loadMoldingFlasksOptions}
-                defaultOptions={defaultMoldingFlasksOptions}
-                isVirtualized
-                isClearable
-                placeholder="Опока"
-              />
-            )}
-          </Form.Controller>
+            <Form.Controller name="assemblyTimestamp">
+              {({ field, fieldState }) => (
+                <FormDateTimeField
+                  field={field}
+                  fieldState={fieldState}
+                  type="datetime"
+                  label="Дата та час складання півформ"
+                />
+              )}
+            </Form.Controller>
 
-          {/* DynamicFields */}
-          <Form.WithError name={['dataGsc', 'dataAsc']}>
-            <DynamicFieldArea section="castingTechnologyId" showInactive />
-          </Form.WithError>
+            <Form.Field name="isDefective">
+              {({ register }) => <Checkbox label="Наявність дефектів" {...register} />}
+            </Form.Field>
 
-          {/* Cavities */}
-          <Form.WithError name="moldCavities">
-            <DynamicFieldArray
-              title="Відбиток деталі у формі"
-              label="відбиток деталі у формі"
-              name="moldCavities"
-              form={MoldCavityForm}
-              defaultItem={moldCavityFormDefaultValues}
-              itemsData={responseData?.moldCavities}
-            />
-          </Form.WithError>
+            <Form.Field name="notes">
+              {({ register }) => <TextareaField label="Нотатка" {...register} />}
+            </Form.Field>
 
-          <Form.Field name="pressingPressure" registerOptions={formTransformers.number}>
-            {({ register }) => <InputField label="Тиск, од." {...register} />}
-          </Form.Field>
-
-          <Form.Field name="sequenceInShift" registerOptions={formTransformers.number}>
-            {({ register }) => <InputField label="Порядковий номер форми за зміну" {...register} />}
-          </Form.Field>
-
-          <Form.Controller name="assemblyTimestamp">
-            {({ field, fieldState }) => (
-              <FormDateTimeField
-                field={field}
-                fieldState={fieldState}
-                type="datetime"
-                label="Дата та час складання півформ"
-              />
-            )}
-          </Form.Controller>
-
-          <Form.Field name="isDefective">
-            {({ register }) => <Checkbox label="Наявність дефектів" {...register} />}
-          </Form.Field>
-
-          <Form.Field name="notes" registerOptions={formTransformers.string}>
-            {({ register }) => <TextareaField label="Нотатка" {...register} />}
-          </Form.Field>
-
-          <Form.WithError name="root">
-            <Button className="w-full" type="submit" disabled={isSubmitting}>
-              {submitBtnName}
-            </Button>
-          </Form.WithError>
-        </DynamicFieldsProvider>
-      </FormLayout>
-    </FormProvider>
+            <Form.WithError name="root">
+              <Button className="w-full" type="submit" disabled={isSubmitting}>
+                {submitBtnName}
+              </Button>
+            </Form.WithError>
+          </DynamicFieldsProvider>
+        </FormLayout>
+      </FormProvider>
+      {/* <DevTool control={form.control} placement="bottom-left" /> */}
+    </>
   )
 }

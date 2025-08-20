@@ -79,7 +79,7 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
   // При деактивации правила: сбрасываем поля только если этот ключ не нужен никаким другим активным правилам
   const prevResetRef = useRef<ActiveRulesState<any>>({})
   useEffect(() => {
-    logger.debug('activeRules changed', activeRules)
+    logger.debug('[DynamicFields] activeRules changed', activeRules)
     const prev = prevResetRef.current
 
     // Собираем ключи, которые нужны текущим активным правилам
