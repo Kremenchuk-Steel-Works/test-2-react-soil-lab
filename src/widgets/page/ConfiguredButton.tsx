@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '@/app/providers/auth/model'
+import { useAuth } from '@/app/providers/auth/context'
 import type { PageButtonType } from '@/app/routes/types'
 import { checkAccessLogic, useUserPermissionsSet } from '@/shared/hooks/usePermissions'
 import Button, { type ButtonProps } from '@/shared/ui/button/Button'

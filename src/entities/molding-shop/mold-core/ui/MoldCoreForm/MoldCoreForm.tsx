@@ -11,7 +11,7 @@ import type {
   MoldCoreBatchLookupResponse,
   MoldCoreBatchLookupsListResponse,
 } from '@/shared/api/mold-passport/model'
-import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
+import { useAsyncOptions } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
 import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
@@ -41,7 +41,7 @@ export function MoldCoreFormComponent({ pathPrefix, itemData }: FormProps) {
   )
 
   // Options
-  const loadCoreBatchesOptions = useAsyncOptionsNew<MoldCoreBatchLookupResponse, string>(
+  const loadCoreBatchesOptions = useAsyncOptions<MoldCoreBatchLookupResponse, string>(
     coreBatchService.getLookup,
     {
       paramsBuilder: (search, page) => ({

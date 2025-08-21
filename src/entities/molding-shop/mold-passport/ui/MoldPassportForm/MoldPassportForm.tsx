@@ -19,7 +19,7 @@ import type {
   PatternPlateFrameLookupResponse,
   PatternPlateFrameLookupsListResponse,
 } from '@/shared/api/mold-passport/model'
-import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
+import { useAsyncOptions } from '@/shared/hooks/react-hook-form/options/useAsyncOptionsOld'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
 import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
@@ -65,7 +65,7 @@ export function MoldPassportForm({
     setError,
     formState: { isSubmitting },
   } = form
-  const loadMoldingAreasOptions = useAsyncOptionsNew<MoldingAreaLookupResponse, number>(
+  const loadMoldingAreasOptions = useAsyncOptions<MoldingAreaLookupResponse, number>(
     moldingAreaService.getLookup,
     {
       paramsBuilder: (search, page) => ({
@@ -89,7 +89,7 @@ export function MoldPassportForm({
     label: data.name,
   }))
 
-  const loadPatternPlateFramesOptions = useAsyncOptionsNew<PatternPlateFrameLookupResponse, string>(
+  const loadPatternPlateFramesOptions = useAsyncOptions<PatternPlateFrameLookupResponse, string>(
     patternPlateFrameService.getLookup,
     {
       paramsBuilder: (search, page) => ({
@@ -116,7 +116,7 @@ export function MoldPassportForm({
     }),
   )
 
-  const loadMoldingFlasksOptions = useAsyncOptionsNew<MoldingFlaskLookupResponse, string>(
+  const loadMoldingFlasksOptions = useAsyncOptions<MoldingFlaskLookupResponse, string>(
     moldingFlaskService.getLookup,
     {
       paramsBuilder: (search, page) => ({
@@ -177,7 +177,7 @@ export function MoldPassportForm({
                 defaultOptions={defaultMoldingAreasOptions}
                 isVirtualized
                 isClearable
-                placeholder="Ділянка формовки"
+                placeholder="Дільниця формовки"
               />
             )}
           </Form.Controller>

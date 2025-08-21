@@ -12,7 +12,7 @@ import type {
   ResinLookupResponse,
   ResinLookupsListResponse,
 } from '@/shared/api/mold-passport/model'
-import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
+import { useAsyncOptions } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
 import InputField from '@/shared/ui/input-field/InputField'
@@ -61,24 +61,21 @@ export function CastingTechnologyDataGscDynamicForm() {
 
 export function CastingTechnologyPassportDataAscDynamicForm() {
   const { responseData } = useDynamicMeta<Record<string, never>, MoldPassportDetailResponse>()
-  const loadResinsOptions = useAsyncOptionsNew<ResinLookupResponse, string>(
-    resinService.getLookup,
-    {
-      paramsBuilder: (search, page) => ({
-        search,
-        page,
-        pageSize: 20,
-      }),
-      responseAdapter: (data: ResinLookupsListResponse) => ({
-        items: data.data,
-        hasMore: data.data.length < data.totalItems,
-      }),
-      mapper: (item) => ({
-        value: item.id,
-        label: item.name,
-      }),
-    },
-  )
+  const loadResinsOptions = useAsyncOptions<ResinLookupResponse, string>(resinService.getLookup, {
+    paramsBuilder: (search, page) => ({
+      search,
+      page,
+      pageSize: 20,
+    }),
+    responseAdapter: (data: ResinLookupsListResponse) => ({
+      items: data.data,
+      hasMore: data.data.length < data.totalItems,
+    }),
+    mapper: (item) => ({
+      value: item.id,
+      label: item.name,
+    }),
+  })
 
   const defaultResinsOptions = useDefaultOption(responseData?.dataAsc?.resin, (data) => ({
     value: data.id,

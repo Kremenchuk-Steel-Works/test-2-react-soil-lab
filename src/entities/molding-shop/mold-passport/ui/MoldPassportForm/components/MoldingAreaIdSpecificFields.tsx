@@ -6,7 +6,7 @@ import type {
   CastingTechnologyLookupsListResponse,
   MoldPassportDetailResponse,
 } from '@/shared/api/mold-passport/model'
-import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
+import { useAsyncOptions } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import type { BaseDynamicComponentProps } from '@/shared/lib/zod/dynamic-schemaOld'
@@ -21,25 +21,25 @@ export function MoldingAreaDataDynamicForm({ responseData }: MoldingAreaDataDyna
     control,
     formState: { errors },
   } = useFormContext<MoldPassportFormFields>()
-  const loadCastingTechnologiesOptions = useAsyncOptionsNew<
-    CastingTechnologyLookupResponse,
-    number
-  >(castingTechnologyService.getLookup, {
-    paramsBuilder: (search, page) => ({
-      search,
-      page,
-      pageSize: 20,
-      // moldingAreaId: moldingAreaId,
-    }),
-    responseAdapter: (data: CastingTechnologyLookupsListResponse) => ({
-      items: data.data,
-      hasMore: data.data.length < data.totalItems,
-    }),
-    mapper: (item) => ({
-      value: item.id,
-      label: item.name,
-    }),
-  })
+  const loadCastingTechnologiesOptions = useAsyncOptions<CastingTechnologyLookupResponse, number>(
+    castingTechnologyService.getLookup,
+    {
+      paramsBuilder: (search, page) => ({
+        search,
+        page,
+        pageSize: 20,
+        // moldingAreaId: moldingAreaId,
+      }),
+      responseAdapter: (data: CastingTechnologyLookupsListResponse) => ({
+        items: data.data,
+        hasMore: data.data.length < data.totalItems,
+      }),
+      mapper: (item) => ({
+        value: item.id,
+        label: item.name,
+      }),
+    },
+  )
 
   const defaultCastingTechnologiesOptions = useDefaultOption(
     responseData?.castingTechnology,

@@ -1,4 +1,4 @@
-import { useAuth } from '@/app/providers/auth/model'
+import { useAuth } from '@/app/providers/auth/context'
 import LoginForm from '@/entities/auth/forms/form'
 import type { LoginFormFields } from '@/entities/auth/forms/schema'
 

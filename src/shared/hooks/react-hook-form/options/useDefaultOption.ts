@@ -6,7 +6,7 @@ import type { Option } from '@/shared/ui/select/ReactSelect'
 // TValue - тип `value` для опции.
 export function useDefaultOption<TData, TValue extends string | number>(
   data: TData | null | undefined,
-  // Принимаем одну функцию-маппер, как в useAsyncOptionsNew
+  // Принимаем одну функцию-маппер, как в useAsyncOptions
   mapper: (data: TData) => Option<TValue>,
 ): Option<TValue>[] {
   return useMemo(() => {

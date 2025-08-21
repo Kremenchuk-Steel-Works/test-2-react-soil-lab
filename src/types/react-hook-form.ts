@@ -18,3 +18,16 @@ export interface FormProps<TFormFields, TResponseData = unknown> {
   /** Текст на кнопке отправки. */
   submitBtnName?: string
 }
+
+export interface FormBaseProps<TFormFields, TResponseData = unknown> {
+  /** Начальные значения для полей формы (уплощенные данные). */
+  defaultValues?: DeepPartial<TFormFields>
+
+  /** Полные данные сущности, полученные из ответа API. */
+  responseData?: TResponseData
+
+  /** Текст на кнопке отправки. */
+  submitBtnName?: string
+
+  isSubmitting?: boolean
+}

@@ -1,6 +1,6 @@
 import type { PropsWithChildren } from 'react'
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '@/app/providers/auth/model'
+import { useAuth } from '@/app/providers/auth/context'
 import { PATHS } from '@/app/routes/paths'
 import LoadingPage from '@/pages/system/LoadingPage'
 import NotAccessPage from '@/pages/system/NotAccessPage'

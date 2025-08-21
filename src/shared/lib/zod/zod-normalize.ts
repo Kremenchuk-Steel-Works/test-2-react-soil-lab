@@ -1,6 +1,15 @@
 import { z, type ZodEffects, type ZodNumber, type ZodString, type ZodTypeAny } from 'zod'
 
-// Логика нормализации остается прежней
+// Для строк
+const stringNormalizeLogic = (value: unknown) => {
+  if (typeof value === 'string') {
+    const trimmed = value.trim()
+    return trimmed === '' ? undefined : trimmed
+  }
+  return value
+}
+
+// Для чисел
 const numberNormalizeLogic = (value: unknown) => {
   if (value === null) return null
   if (value === undefined) return undefined
@@ -8,14 +17,6 @@ const numberNormalizeLogic = (value: unknown) => {
     const trimmed = value.trim()
     if (trimmed === '') return undefined
     return Number(trimmed)
-  }
-  return value
-}
-
-const stringNormalizeLogic = (value: unknown) => {
-  if (typeof value === 'string') {
-    const trimmed = value.trim()
-    return trimmed === '' ? undefined : trimmed
   }
   return value
 }
@@ -41,13 +42,12 @@ function zn(schema: ZodTypeAny) {
   const coreSchema = getCoreSchema(schema)
 
   // Проверяем тип ядра
-  if (coreSchema instanceof z.ZodNumber) {
-    // preprocess применяем к оригинальной, полной схеме
-    return z.preprocess(numberNormalizeLogic, schema)
-  }
-
   if (coreSchema instanceof z.ZodString) {
     return z.preprocess(stringNormalizeLogic, schema)
+  }
+
+  if (coreSchema instanceof z.ZodNumber) {
+    return z.preprocess(numberNormalizeLogic, schema)
   }
 
   return schema

@@ -9,15 +9,10 @@ import {
 import { moldCoreFormDefaultValues } from '@/entities/soil-lab/mold-core/ui/MoldCoreForm/schema'
 import type { MoldPassportFormFields } from '@/entities/soil-lab/mold-passport'
 import { MoldPassportFormKit } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/FormKit'
-import type {
-  CastingPatternLookupResponse,
-  CastingPatternLookupsListResponse,
-  MoldPassportDetailResponse,
-} from '@/shared/api/mold-passport/model'
-import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
+import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
+import { useAsyncOptions } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
-import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
 import Checkbox from '@/shared/ui/checkbox/Checkbox'
 import InputField from '@/shared/ui/input-field/InputField'
 import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
@@ -42,24 +37,21 @@ export function MoldCavityFormComponent({ pathPrefix, itemData }: FormProps) {
   )
 
   // Options
-  const loadCastingPatternsOptions = useAsyncOptionsNew<CastingPatternLookupResponse, string>(
-    castingPatternService.getLookup,
-    {
-      paramsBuilder: (search, page) => ({
-        search,
-        page,
-        pageSize: 20,
-      }),
-      responseAdapter: (data: CastingPatternLookupsListResponse) => ({
-        items: data.data,
-        hasMore: data.data.length < data.totalItems,
-      }),
-      mapper: (item) => ({
-        value: item.id,
-        label: item.serialNumber,
-      }),
-    },
-  )
+  const loadCastingPatternsOptions = useAsyncOptions(castingPatternService.getLookup, {
+    paramsBuilder: (search, page) => ({
+      search,
+      page,
+      pageSize: 20,
+    }),
+    responseAdapter: (data) => ({
+      items: data.data,
+      hasMore: data.data.length < data.totalItems,
+    }),
+    mapper: (item) => ({
+      value: item.id,
+      label: item.serialNumber,
+    }),
+  })
 
   const defaultCastingPatternsOptions = useDefaultOption(itemData?.castingPattern, (d) => ({
     value: d.id,
@@ -87,7 +79,7 @@ export function MoldCavityFormComponent({ pathPrefix, itemData }: FormProps) {
         )}
       </Form.Controller>
 
-      <Form.Field name={fieldName('serialNumber')} registerOptions={formTransformers.string}>
+      <Form.Field name={fieldName('serialNumber')}>
         {({ register }) => <InputField label="Серійний номер" {...register} />}
       </Form.Field>
 

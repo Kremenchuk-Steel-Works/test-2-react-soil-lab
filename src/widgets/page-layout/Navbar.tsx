@@ -1,6 +1,6 @@
 import { LogOut, Menu, Shield, User } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '@/app/providers/auth/model'
+import { useAuth } from '@/app/providers/auth/context'
 import { PATHS } from '@/app/routes/paths'
 import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
 

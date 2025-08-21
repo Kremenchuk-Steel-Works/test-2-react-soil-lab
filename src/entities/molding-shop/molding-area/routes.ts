@@ -11,7 +11,7 @@
 // export const moldingAreaRoutes: AppRoute = {
 //   key: 'MoldingArea',
 //   path: 'molding-area',
-//   label: 'Ділянка формовки',
+//   label: 'Дільниця формовки',
 //   icon: LayoutGrid,
 //   Component: MoldingAreaLayout,
 //   meta: {

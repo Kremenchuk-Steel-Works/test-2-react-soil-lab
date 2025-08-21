@@ -1,6 +1,6 @@
 import type { PropsWithChildren, ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '@/app/providers/auth/model'
+import { useAuth } from '@/app/providers/auth/context'
 import { PATHS } from '@/app/routes/paths'
 import { logger } from '@/shared/lib/logger'
 

@@ -1,10 +1,7 @@
-// shared/lib/zod/dynamic-schema.ts
-// ✅ Единственное место правки
-
 import { z, ZodObject, type ZodRawShape } from 'zod'
 import { logger } from '@/shared/lib/logger'
 
-export const ANY_VALUE = '__ANY__'
+export const ANY_VALUE = '__ANY__' as const
 
 type ConditionPrimitive = string | number | boolean
 type ConditionValue = ConditionPrimitive | ConditionPrimitive[]
@@ -41,12 +38,15 @@ function isPresent(v: unknown) {
   return v !== null && v !== undefined && v !== ''
 }
 
+function isPresenceBased(cv: ConditionValue): boolean {
+  return (
+    (cv as any) === ANY_VALUE || (Array.isArray(cv) && (cv as any[]).includes(ANY_VALUE as any))
+  )
+}
+
 function valueMatchesCondition(formValue: unknown, cv: ConditionValue): boolean {
-  if (cv === ANY_VALUE) return isPresent(formValue)
-  if (Array.isArray(cv)) {
-    if ((cv as any[]).includes(ANY_VALUE as any)) return isPresent(formValue)
-    return (cv as any[]).includes(formValue as ConditionPrimitive)
-  }
+  if (isPresenceBased(cv)) return isPresent(formValue)
+  if (Array.isArray(cv)) return (cv as any[]).includes(formValue as ConditionPrimitive)
   return formValue === cv
 }
 
@@ -68,38 +68,19 @@ export function checkConditions(formData: Record<string, unknown>, rule: Dynamic
   return true
 }
 
-/* Хелпер для декларации секций с жёсткой типизацией ключей. */
+/* Декларация секций с жёсткой типизацией ключей. */
 export function createSectionsConfig<const T extends DynamicSectionsConfig<string>>(
   sections: T,
 ): T {
   return sections
 }
 
-/* Плоский список правил — удобно для схемы и вычислений. */
+/* Плоский список правил. */
 export function flattenRules(sections: DynamicSectionsConfig): DynamicFieldConfig {
   return Object.values(sections).flat()
 }
 
-/** Удаляем из values ключи правил, которые НЕ активны (и ни одним другим активным правилом не требуются). */
-function stripInactiveRuleFields(
-  values: Record<string, unknown>,
-  rules: DynamicFieldConfig,
-): Record<string, unknown> {
-  const keyActiveMap = new Map<string, boolean>()
-  for (const r of rules) {
-    const keys = Object.keys((r as any).schema?.shape ?? {})
-    const isActive = checkConditions(values, r)
-    for (const k of keys) keyActiveMap.set(k, (keyActiveMap.get(k) ?? false) || isActive)
-  }
-
-  const cleaned: Record<string, unknown> = { ...values }
-  for (const [k, isActiveKey] of keyActiveMap) {
-    if (!isActiveKey && k in cleaned) delete cleaned[k]
-  }
-  return cleaned
-}
-
-/** Собираем множество ключей, которые принадлежат динамическим правилам. */
+/** Все ключи, валидируемые правилами. */
 function collectRuleKeys(rules: DynamicFieldConfig): Set<string> {
   const set = new Set<string>()
   for (const r of rules) {
@@ -109,39 +90,89 @@ function collectRuleKeys(rules: DynamicFieldConfig): Set<string> {
   return set
 }
 
-/**
- * Делаем "смягчённую" базовую схему:
- * все ключи, которые хотя бы где-то валидируются правилами, становятся optional в base.
- * Их обязательность будет навешиваться ТОЛЬКО активными правилами.
- *
- * ⚠️ Мы НЕ меняем исходный объект baseSchema в коде форм — это локальная производная схема.
- */
+/** «Мягчим» базовую схему: rule-keys становятся optional на уровне base. */
 function relaxBaseForRuleKeys<T extends ZodObject<ZodRawShape>>(
   base: T,
   rules: DynamicFieldConfig,
 ): T {
-  // Получаем shape базовой схемы
-  const baseShape = (base as any).shape as ZodRawShape
-  const relaxedShape: ZodRawShape = { ...baseShape }
   const ruleKeys = collectRuleKeys(rules)
 
+  const patch: ZodRawShape = Object.create(null) as ZodRawShape
+
+  const baseShape = (base as any).shape as ZodRawShape
   for (const key of ruleKeys) {
-    const def = relaxedShape[key]
+    const def = baseShape[key]
+    // Добавляем только существующие в base ключи и только если у них есть .optional()
     if (def && typeof (def as any).optional === 'function') {
-      relaxedShape[key] = (def as any).optional()
+      patch[key] = (def as any).optional()
     }
   }
 
-  // Важно: сохраняем прочие свойства базовой схемы (passthrough/strict и т.п. у вас не используются)
-  return z.object(relaxedShape) as unknown as T
+  return (base as ZodObject<ZodRawShape>).extend(patch) as unknown as T
+}
+
+type SignatureMode = 'presence' | 'value'
+type RuleCondEntry = { key: string; mode: SignatureMode }
+
+/** Подготовка entries для подписи каждого правила (dedup + «value» сильнее «presence» + сортировка). */
+function prepareRuleCondEntries(rules: DynamicFieldConfig): RuleCondEntry[][] {
+  return rules.map((r) => {
+    const dedup = new Map<string, SignatureMode>()
+    const push = (obj?: ConditionsMap) => {
+      if (!obj) return
+      for (const [k, cv] of Object.entries(obj)) {
+        const m: SignatureMode = isPresenceBased(cv) ? 'presence' : 'value'
+        const prev = dedup.get(k)
+        if (!prev || (prev === 'presence' && m === 'value')) dedup.set(k, m)
+      }
+    }
+    push(r.conditions)
+    push(r.exceptions)
+
+    // Детерминированный порядок — по ключу
+    return Array.from(dedup.entries())
+      .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+      .map(([key, mode]) => ({ key, mode }))
+  })
+}
+
+/** Безопасная сигнатура значения: без JSON.stringify, чтобы не падать на BigInt/циклах. */
+function valueToSig(v: unknown): string {
+  const t = typeof v
+  if (v === null) return 'null'
+  if (t === 'number') {
+    if (Number.isNaN(v as number)) return 'number:NaN'
+    if (!Number.isFinite(v as number))
+      return `number:${(v as number) > 0 ? 'Infinity' : '-Infinity'}`
+    return `number:${String(v)}`
+  }
+  if (t === 'string' || t === 'boolean' || t === 'undefined') return `${t}:${String(v)}`
+  if (t === 'bigint') return `bigint:${String(v)}`
+  // object/function/symbol — нам достаточно факта типа + presence
+  return t
+}
+
+/** Подпись конкретного правила по его condition-entries. */
+function buildRuleSignature(values: Record<string, unknown>, entries: RuleCondEntry[]): string {
+  if (entries.length === 0) return '∅'
+  let buf = ''
+  for (const { key, mode } of entries) {
+    const v = (values as any)[key]
+    const present = isPresent(v) ? 1 : 0
+    if (mode === 'presence') buf += `${key}:P:${present}|`
+    else buf += `${key}:V:${valueToSig(v)}:${present}|`
+  }
+  return buf
 }
 
 /**
- * Динамическая Zod-схема.
- * 1) Очищаем значения неактивных полей.
- * 2) Валидируем ТОЛЬКО активные правила (их schema).
- * 3) Базовую схему применяем в "смягчённом" режиме: поля из правил — optional на уровне base.
- *    Поэтому ошибки по НЕАКТИВНЫМ полям не появятся, даже если в base они required.
+ * Динамическая Zod-схема с покомпонентной мемоизацией:
+ * - для каждого правила считаем свою подпись (presence/value);
+ * - пересчитываем и логируем только правила с изменившейся подписью;
+ * - удаляем ВСЕ поля неактивных правил (в т.ч. никогда не активировавшихся).
+ *
+ * ВАЖНО: схема содержит внутреннее состояние; создавай её на инстанс формы,
+ * не шарь один и тот же объект схемы между конкурентными запросами/пользователями.
  */
 export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
   base: T,
@@ -150,22 +181,95 @@ export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
   const rules = flattenRules(sections)
   const relaxedBase = relaxBaseForRuleKeys(base, rules)
 
+  const ruleCondEntries = prepareRuleCondEntries(rules)
+  const ruleSchemaKeys = rules.map((r) => Object.keys((r as any).schema?.shape ?? {}))
+
+  // Все rule-keys (нужны для корректного strip с самого старта)
+  const allRuleKeys = new Set<string>(ruleSchemaKeys.flat())
+
+  // Кэш состояния
+  let initialized = false
+  let lastRuleSigs: string[] = []
+  let activeRuleFlags: boolean[] = []
+
+  // Счётчики активности по ключам (ключ присутствует => cnt>0)
+  const keyActiveCount = new Map<string, number>()
+  // Инициализируем НУЛЯМИ для всех rule-keys, чтобы strip работал даже если правило НИКОГДА не включалось
+  for (const k of allRuleKeys) keyActiveCount.set(k, 0)
+
+  // Вычисляем map активности ключей (true, если cnt>0)
+  const buildActiveKeyMap = (): Map<string, boolean> => {
+    const m = new Map<string, boolean>()
+    for (const k of allRuleKeys) m.set(k, (keyActiveCount.get(k) ?? 0) > 0)
+    return m
+  }
+  let activeKeyMap: Map<string, boolean> = new Map()
+
   const processed = z.preprocess((input, ctx) => {
     if (typeof input !== 'object' || input === null) return input
+    const rawValues = input as Record<string, unknown>
 
-    const stripped = stripInactiveRuleFields(input as Record<string, unknown>, rules)
+    // Первый вызов — полная инициализация без двойного инкремента
+    if (!initialized) {
+      lastRuleSigs = rules.map((_, i) => buildRuleSignature(rawValues, ruleCondEntries[i]))
+      activeRuleFlags = rules.map((r) => checkConditions(rawValues, r))
 
-    // Валидируем только активные правила поверх base
-    for (const rule of rules) {
-      if (checkConditions(stripped, rule)) {
-        const r = rule.schema.safeParse(stripped)
-        if (!r.success) r.error.issues.forEach((i) => ctx.addIssue(i))
+      // Счётчики ключей
+      for (let i = 0; i < rules.length; i++) {
+        if (activeRuleFlags[i]) {
+          for (const k of ruleSchemaKeys[i]) keyActiveCount.set(k, (keyActiveCount.get(k) ?? 0) + 1)
+        }
       }
+
+      activeKeyMap = buildActiveKeyMap()
+      initialized = true
+    } else {
+      // Частичный пересчёт активности правил по их индивидуальным подписям
+      let anyRuleToggled = false
+
+      for (let i = 0; i < rules.length; i++) {
+        const sig = buildRuleSignature(rawValues, ruleCondEntries[i])
+        if (sig === lastRuleSigs[i]) continue
+        lastRuleSigs[i] = sig
+
+        const prev = activeRuleFlags[i]
+        const next = checkConditions(rawValues, rules[i]) // лог сработает ТОЛЬКО при изменении подписи
+        if (prev !== next) {
+          activeRuleFlags[i] = next
+          anyRuleToggled = true
+          const keys = ruleSchemaKeys[i]
+          if (next) {
+            for (const k of keys) keyActiveCount.set(k, (keyActiveCount.get(k) ?? 0) + 1)
+          } else {
+            for (const k of keys)
+              keyActiveCount.set(k, Math.max(0, (keyActiveCount.get(k) ?? 0) - 1))
+          }
+        }
+      }
+
+      // Обновляем карту активности ключей только при изменениях
+      if (anyRuleToggled) {
+        activeKeyMap = buildActiveKeyMap()
+      }
+    }
+
+    //  Стрип неактивных полей (включая те, что НИ РАЗУ не были активны)
+    const stripped: Record<string, unknown> = { ...rawValues }
+    for (const k of allRuleKeys) {
+      const isActive = activeKeyMap.get(k) ?? false
+      if (!isActive && k in stripped) delete stripped[k]
+    }
+
+    // Валидируем только активные rule-схемы поверх base
+    for (let i = 0; i < rules.length; i++) {
+      if (!activeRuleFlags[i]) continue
+      const r = rules[i].schema.safeParse(stripped)
+      if (!r.success) r.error.issues.forEach((iss) => ctx.addIssue(iss))
     }
 
     return stripped
   }, relaxedBase)
 
-  // Сохраняем тип вывода из base; pipe нужен, чтобы не потерять эффекты preprocess.
+  // pipe — чтобы сохранить вывод base-типа
   return z.any().pipe(processed)
 }

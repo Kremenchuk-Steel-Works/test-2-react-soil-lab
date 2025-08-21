@@ -8,14 +8,10 @@ import type {
 import type { MoldCoreFormFields } from '@/entities/soil-lab/mold-core/ui/MoldCoreForm/schema'
 import type { MoldPassportFormFields } from '@/entities/soil-lab/mold-passport'
 import { MoldPassportFormKit } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/FormKit'
-import type {
-  MoldCoreBatchLookupResponse,
-  MoldCoreBatchLookupsListResponse,
-} from '@/shared/api/mold-passport/model'
-import { useAsyncOptionsNew } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
+import type { MoldCoreBatchLookupResponse } from '@/shared/api/mold-passport/model'
+import { useAsyncOptions } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
-import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
 import InputField from '@/shared/ui/input-field/InputField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 
@@ -41,24 +37,21 @@ export function MoldCoreFormComponent({ pathPrefix, itemData }: FormProps) {
   )
 
   // Options
-  const loadCoreBatchesOptions = useAsyncOptionsNew<MoldCoreBatchLookupResponse, string>(
-    coreBatchService.getLookup,
-    {
-      paramsBuilder: (search, page) => ({
-        search,
-        page,
-        pageSize: 20,
-      }),
-      responseAdapter: (data: MoldCoreBatchLookupsListResponse) => ({
-        items: data.data,
-        hasMore: data.data.length < data.totalItems,
-      }),
-      mapper: (item) => ({
-        value: item.id,
-        label: formatCoreBatchLabel(item),
-      }),
-    },
-  )
+  const loadCoreBatchesOptions = useAsyncOptions(coreBatchService.getLookup, {
+    paramsBuilder: (search, page) => ({
+      search,
+      page,
+      pageSize: 20,
+    }),
+    responseAdapter: (data) => ({
+      items: data.data,
+      hasMore: data.data.length < data.totalItems,
+    }),
+    mapper: (item) => ({
+      value: item.id,
+      label: formatCoreBatchLabel(item),
+    }),
+  })
 
   const defaultCoreBatchesOptions = useDefaultOption(itemData?.coreBatch, (d) => ({
     value: d.id,
@@ -83,7 +76,7 @@ export function MoldCoreFormComponent({ pathPrefix, itemData }: FormProps) {
         )}
       </Form.Controller>
 
-      <Form.Field name={fieldName('hardness')} registerOptions={formTransformers.number}>
+      <Form.Field name={fieldName('hardness')}>
         {({ register }) => <InputField label="Твердість, од." {...register} />}
       </Form.Field>
     </>

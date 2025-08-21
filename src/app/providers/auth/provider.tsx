@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
-import { AuthContext, type AuthContextType } from '@/app/providers/auth/model'
+import { AuthContext, type AuthContextType } from '@/app/providers/auth/context'
 import { userService } from '@/entities/admin/users/services/service'
 import type { UserDetailResponse } from '@/entities/admin/users/types/response.dto'
 import type { LoginFormFields } from '@/entities/auth/forms/schema'
@@ -112,7 +112,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       async (error) => {
         const originalRequest = error.config
 
-        logger.warn('Ошибка, проверяем нужно ли обновить токен', error.response.data.detail)
         if (
           !(error.response.status >= 200 && error.response.status < 300) &&
           error.response.data.detail === 'Token has expired.'

@@ -12,7 +12,7 @@ export {
   CastingTechnologyDataGscDynamicForm,
   CastingTechnologyPassportDataAscDynamicForm,
 } from './ui/MoldPassportForm/components/CastingTechnologySpecificFields'
-export { MoldPassportForm } from './ui/MoldPassportForm/MoldPassportForm'
+export { MoldPassportForm } from './ui/MoldPassportForm/MoldPassportFormCreate'
 export { MoldingAreaDataDynamicForm } from './ui/MoldPassportForm/components/MoldingAreaIdSpecificFields'
 export {
   dataGscFormSchema,

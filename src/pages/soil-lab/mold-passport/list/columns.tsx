@@ -48,7 +48,7 @@ export const moldPassportColumns = [
   }),
 
   columnHelper.accessor('moldingArea', {
-    header: 'Ділянка формовки',
+    header: 'Дільниця формовки',
     size: 135,
     ...displayColumn<MoldPassportListItemResponse, MoldingAreaShortResponse>({
       formatter: (cell) => cell.name,
