@@ -1,10 +1,16 @@
 import { memo, useCallback, useMemo } from 'react'
-import { type FieldValues, type Path } from 'react-hook-form'
+import { type Path } from 'react-hook-form'
 import { useMoldCavityFormOptions } from '@/entities/soil-lab/mold-cavity/hooks/useMoldCavityFormOptions'
-import type { MoldCavityFormFields } from '@/entities/soil-lab/mold-cavity/ui/MoldCavityForm/schema'
+import type {
+  MoldCavityFormFields,
+  WithMoldCavitiesFormFields,
+} from '@/entities/soil-lab/mold-cavity/ui/MoldCavityForm/schema'
 import { MoldCoreForm } from '@/entities/soil-lab/mold-core/ui/MoldCoreForm/MoldCoreForm'
 import { moldCoreFormDefaultValues } from '@/entities/soil-lab/mold-core/ui/MoldCoreForm/schema'
-import type { MoldCavityDetailResponse } from '@/shared/api/mold-passport/model'
+import type {
+  MoldCavityDetailResponse,
+  MoldCoreDetailResponse,
+} from '@/shared/api/mold-passport/model'
 import { createLogger } from '@/shared/lib/logger'
 import Checkbox from '@/shared/ui/checkbox/Checkbox'
 import InputField from '@/shared/ui/input-field/InputField'
@@ -14,23 +20,24 @@ import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/formKitContext'
 
 const logger = createLogger('MoldCavityForm')
 
+export type MoldCavityPathPrefix = `moldCavities.${number}`
 interface FormProps {
-  pathPrefix: string
+  pathPrefix: MoldCavityPathPrefix
   itemData?: MoldCavityDetailResponse
 }
 
-export function MoldCavityFormComponent<TRootFormFields extends FieldValues>({
-  pathPrefix,
-  itemData,
-}: FormProps) {
-  const Form = useFormKit<TRootFormFields>()
+export function MoldCavityFormComponent({ pathPrefix, itemData }: FormProps) {
+  const Form = useFormKit()
   const fieldName = useCallback(
-    (field: keyof MoldCavityFormFields) => `${pathPrefix}.${field}` as Path<TRootFormFields>,
+    (field: keyof MoldCavityFormFields) =>
+      `${pathPrefix}.${field}` as Path<WithMoldCavitiesFormFields>,
     [pathPrefix],
   )
+
   // Options
   const options = useMoldCavityFormOptions(itemData)
 
+  // Формируем полный путь до вложенного массива
   const coresFieldName = useMemo(() => `${pathPrefix}.moldCores` as const, [pathPrefix])
 
   logger.debug('[MoldCavityForm] render')
@@ -61,7 +68,11 @@ export function MoldCavityFormComponent<TRootFormFields extends FieldValues>({
 
       {/* Cores */}
       <Form.WithError name={fieldName('moldCores')}>
-        <DynamicFieldArray
+        <DynamicFieldArray<
+          WithMoldCavitiesFormFields,
+          typeof coresFieldName,
+          MoldCoreDetailResponse
+        >
           title="Стрижень"
           label="стрижень"
           name={coresFieldName}

@@ -1,14 +1,14 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import {
-  MoldPassportForm,
-  moldPassportFormDefaultValues,
+  MoldPassportCreateForm,
+  moldPassportCreateFormDefaultValues,
   useMoldPassportService,
-  type MoldPassportFormFields,
+  type MoldPassportCreateFormFields,
 } from '@/entities/soil-lab/mold-passport'
 import { getGetMoldPassportsListApiV1MoldPassportsGetQueryKey } from '@/shared/api/mold-passport/endpoints/mold-passports/mold-passports'
 
-export default function MoldPassportAdd() {
+export default function MoldPassportCreate() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -22,23 +22,17 @@ export default function MoldPassportAdd() {
     },
   })
 
-  const handleSubmit = async (data: MoldPassportFormFields) => {
+  const handleSubmit = async (data: MoldPassportCreateFormFields) => {
     await mutateAsync({ data })
     navigate('..')
     return data
   }
 
   return (
-    <>
-      <div className="flex flex-wrap gap-x-2 gap-y-2">
-        <div className="w-full">
-          <MoldPassportForm
-            defaultValues={moldPassportFormDefaultValues}
-            onSubmit={handleSubmit}
-            submitBtnName="Додати"
-          />
-        </div>
-      </div>
-    </>
+    <MoldPassportCreateForm
+      defaultValues={moldPassportCreateFormDefaultValues}
+      onSubmit={handleSubmit}
+      submitBtnName="Додати"
+    />
   )
 }

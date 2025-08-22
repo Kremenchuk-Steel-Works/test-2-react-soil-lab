@@ -1,0 +1,70 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
+import { useMoldPassportFormOptions } from '@/entities/soil-lab/mold-passport/hooks/useMoldPassportFormOptions'
+import { moldPassportDynamicSections } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
+import { MoldPassportCreateBaseForm } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/MoldPassportCreateBaseForm'
+import {
+  moldPassportCreateFormSchema,
+  type MoldPassportCreateFormFields,
+} from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/schema'
+import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
+import { createLogger } from '@/shared/lib/logger'
+import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
+import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
+import type { FormProps } from '@/types/react-hook-form'
+
+const logger = createLogger('MoldPassportForm')
+
+type FormFields = MoldPassportCreateFormFields
+const schema = moldPassportCreateFormSchema
+
+type MoldPassportFormProps = FormProps<FormFields, MoldPassportDetailResponse>
+
+export function MoldPassportCreateForm({
+  defaultValues,
+  responseData,
+  onSubmit,
+  submitBtnName,
+}: MoldPassportFormProps) {
+  const form = useForm<FormFields>({
+    resolver: zodResolver(schema),
+    defaultValues,
+  })
+  const {
+    handleSubmit,
+    setError,
+    formState: { isSubmitting },
+  } = form
+
+  // Options
+  const options = useMoldPassportFormOptions(responseData)
+
+  // Submit
+  const submitHandler: SubmitHandler<FormFields> = async (data) => {
+    try {
+      const response = await onSubmit(data)
+      logger.debug('Форма успешно выполнена', response)
+    } catch (err) {
+      const error = err as Error
+      setError('root', { message: error.message })
+      logger.error('Ошибка при отправке формы:', 'err:', err, 'data:', data)
+    }
+  }
+
+  logger.debug('[MoldPassportForm] render', 'defaultValues', defaultValues)
+
+  return (
+    <FormProvider {...form}>
+      <FormLayout onSubmit={handleSubmit(submitHandler)}>
+        <DynamicFieldsProvider sections={moldPassportDynamicSections} responseData={responseData}>
+          <MoldPassportCreateBaseForm
+            responseData={responseData}
+            options={options}
+            isSubmitting={isSubmitting}
+            submitBtnName={submitBtnName}
+          />
+        </DynamicFieldsProvider>
+      </FormLayout>
+    </FormProvider>
+  )
+}

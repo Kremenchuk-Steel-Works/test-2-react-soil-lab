@@ -199,6 +199,11 @@ function ReactSelect<
         zIndex: 50,
         ...(customStyles.menu ? customStyles.menu(base, props) : {}),
       }),
+      menuList: (base: CSSObjectWithLabel) => ({
+        ...base,
+        maxHeight: 300,
+        overscrollBehavior: 'contain',
+      }),
       control: (base: CSSObjectWithLabel, state: ControlProps<OptionType, IsMulti, Group>) => {
         const custom = customStyles.control ? customStyles.control(base, state) : {}
         return { ...base, ...custom, minHeight: '54px' }

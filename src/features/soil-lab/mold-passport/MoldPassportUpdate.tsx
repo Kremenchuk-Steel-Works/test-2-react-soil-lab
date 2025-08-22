@@ -1,11 +1,10 @@
 import { useCallback, useMemo } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
-  MoldPassportForm,
+  MoldPassportCreateForm,
   useMoldPassportService,
-  type MoldPassportFormFields,
+  type MoldPassportCreateFormFields,
 } from '@/entities/soil-lab/mold-passport'
 import {
   getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryKey,
@@ -19,10 +18,15 @@ import { getErrorMessage } from '@/shared/lib/axios'
 import { logger } from '@/shared/lib/logger'
 import { createUpdatePayload, type TransformMap } from '@/shared/lib/react-hook-form/api-operations'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import Button from '@/shared/ui/button/Button'
+
+interface UpdateMoldPassportProps {
+  id: string
+}
 
 // Адаптируем данные с запроса под форму
-function mapResponseToInitialData(response: MoldPassportDetailResponse): MoldPassportFormFields {
+function mapResponseToInitialData(
+  response: MoldPassportDetailResponse,
+): MoldPassportCreateFormFields {
   return {
     ...response,
     moldingAreaId: response.moldingArea.id,
@@ -60,9 +64,8 @@ function mapResponseToInitialData(response: MoldPassportDetailResponse): MoldPas
   }
 }
 
-export default function MoldPassportUpdate() {
+export default function MoldPassportUpdate({ id }: UpdateMoldPassportProps) {
   const navigate = useNavigate()
-  const { id } = useParams<{ id: string }>()
   const queryClient = useQueryClient()
 
   const {
@@ -108,13 +111,13 @@ export default function MoldPassportUpdate() {
             moldCores: { type: 'array', targetKey: 'moldCoreOperations' },
           },
         },
-      }) satisfies TransformMap<MoldPassportFormFields>,
+      }) satisfies TransformMap<MoldPassportCreateFormFields>,
     [],
   )
 
   // Запрос на обновление
   const handleSubmit = useCallback(
-    async (formData: MoldPassportFormFields) => {
+    async (formData: MoldPassportCreateFormFields) => {
       if (!responseData || !formDefaultValues || !id) return
 
       try {
@@ -143,30 +146,17 @@ export default function MoldPassportUpdate() {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <Button
-          className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate('..')}
-        >
-          <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
-        </Button>
-      </div>
-
       {combinedError && (
         <AlertMessage type={AlertType.ERROR} message={getErrorMessage(combinedError)} />
       )}
 
       {!isLoading && responseData && formDefaultValues && (
-        <div className="flex flex-wrap gap-x-2 gap-y-2">
-          <div className="w-full">
-            <MoldPassportForm
-              onSubmit={handleSubmit}
-              defaultValues={formDefaultValues}
-              responseData={responseData}
-              submitBtnName="Оновити"
-            />
-          </div>
-        </div>
+        <MoldPassportCreateForm
+          onSubmit={handleSubmit}
+          defaultValues={formDefaultValues}
+          responseData={responseData}
+          submitBtnName="Оновити"
+        />
       )}
     </>
   )

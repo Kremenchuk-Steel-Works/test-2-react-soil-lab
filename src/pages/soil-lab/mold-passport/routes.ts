@@ -2,12 +2,12 @@ import { lazy } from 'react'
 import { CirclePlus, Database, Info, Layers, RefreshCcw, Trash } from 'lucide-react'
 import type { AppRoute } from '@/app/routes/types'
 
-const MoldPassportLayout = lazy(() => import('@/pages/soil-lab/mold-passport/Layout'))
-const MoldPassportList = lazy(() => import('@/pages/soil-lab/mold-passport/list/List'))
-const MoldPassportAdd = lazy(() => import('@/pages/soil-lab/mold-passport/Add'))
-const MoldPassportDelete = lazy(() => import('@/pages/soil-lab/mold-passport/Delete'))
-const MoldPassportDetails = lazy(() => import('@/pages/soil-lab/mold-passport/Details'))
-const MoldPassportUpdate = lazy(() => import('@/pages/soil-lab/mold-passport/Update'))
+const MoldPassportLayout = lazy(() => import('@/pages/soil-lab/mold-passport/ui/Layout'))
+const MoldPassportList = lazy(() => import('@/pages/soil-lab/mold-passport/ui/list/List'))
+const MoldPassportAdd = lazy(() => import('@/pages/soil-lab/mold-passport/ui/Add'))
+const MoldPassportDelete = lazy(() => import('@/pages/soil-lab/mold-passport/ui/Delete'))
+const MoldPassportDetails = lazy(() => import('@/pages/soil-lab/mold-passport/ui/Details'))
+const MoldPassportUpdate = lazy(() => import('@/pages/soil-lab/mold-passport/ui/Update'))
 
 export const moldPassportRoutes: AppRoute = {
   key: 'MoldPassport',

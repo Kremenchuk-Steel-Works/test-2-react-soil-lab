@@ -1,51 +1,19 @@
 import { type Path } from 'react-hook-form'
-import { castingTechnologyService } from '@/entities/soil-lab/casting-technology/api/service'
-import { MoldPassportFormKit } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/FormKit'
-import type { MoldPassportFormFields } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/schema'
-import type {
-  CastingTechnologyLookupResponse,
-  CastingTechnologyLookupsListResponse,
-  MoldPassportDetailResponse,
-} from '@/shared/api/mold-passport/model'
-import { useAsyncOptions } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
-import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
+import { useMoldPassportFormOptions } from '@/entities/soil-lab/mold-passport/hooks/useMoldPassportFormOptions'
+import { MoldPassportCreateFormKit } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/FormKit'
+import type { MoldPassportCreateFormFields } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/schema'
+import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
 import { useDynamicMeta } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 
-const Form = MoldPassportFormKit
+const Form = MoldPassportCreateFormKit
 
 export function MoldingAreaDataDynamicForm() {
   const { responseData } = useDynamicMeta<Record<string, never>, MoldPassportDetailResponse>()
-  const loadCastingTechnologiesOptions = useAsyncOptions<CastingTechnologyLookupResponse, number>(
-    castingTechnologyService.getLookup,
-    {
-      paramsBuilder: (search, page) => ({
-        search,
-        page,
-        pageSize: 20,
-        // moldingAreaId: moldingAreaId,
-      }),
-      responseAdapter: (data: CastingTechnologyLookupsListResponse) => ({
-        items: data.data,
-        hasMore: data.data.length < data.totalItems,
-      }),
-      mapper: (item) => ({
-        value: item.id,
-        label: item.name,
-      }),
-    },
-  )
+  const options = useMoldPassportFormOptions(responseData)
 
-  const defaultCastingTechnologiesOptions = useDefaultOption(
-    responseData?.castingTechnology,
-    (data) => ({
-      value: data.id,
-      label: data.name,
-    }),
-  )
-
-  const fieldName = (field: keyof MoldPassportFormFields) =>
-    `${field}` as Path<MoldPassportFormFields>
+  const fieldName = (field: keyof MoldPassportCreateFormFields) =>
+    `${field}` as Path<MoldPassportCreateFormFields>
 
   return (
     <Form.Controller name={fieldName('castingTechnologyId')}>
@@ -53,8 +21,8 @@ export function MoldingAreaDataDynamicForm() {
         <FormSelectField
           field={field}
           fieldState={fieldState}
-          options={loadCastingTechnologiesOptions}
-          defaultOptions={defaultCastingTechnologiesOptions}
+          options={options.loadCastingTechnologies}
+          defaultOptions={options.defaultCastingTechnologies}
           isVirtualized
           isClearable
           placeholder="Технологія формовки"

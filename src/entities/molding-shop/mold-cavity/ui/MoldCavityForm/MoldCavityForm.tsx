@@ -21,7 +21,7 @@ import Checkbox from '@/shared/ui/checkbox/Checkbox'
 import InputField from '@/shared/ui/input-field/InputField'
 import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
-import { createFormKit } from '@/shared/ui/react-hook-form/formKit'
+import { createFormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
 
 const logger = createLogger('MoldCavityForm')
 

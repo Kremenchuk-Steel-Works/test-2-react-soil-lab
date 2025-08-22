@@ -31,14 +31,11 @@ const baseSchema = z.object({
   notes: zn(z.string().nullable().optional()),
 })
 
-export const moldPassportFormSchema = createDynamicSchema(baseSchema, moldPassportDynamicSections)
-export type MoldPassportFormFields = z.infer<typeof moldPassportFormSchema>
-export const moldPassportFormDefaultValues: DeepPartial<MoldPassportFormFields> = {
-  moldCavities: [],
-}
-
 export const moldPassportCreateFormSchema = createDynamicSchema(
   baseSchema,
   moldPassportDynamicSections,
 )
 export type MoldPassportCreateFormFields = z.infer<typeof moldPassportCreateFormSchema>
+export const moldPassportCreateFormDefaultValues: DeepPartial<MoldPassportCreateFormFields> = {
+  moldCavities: [],
+}

@@ -32,7 +32,7 @@ import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/Dy
 import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContextOld'
 import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
-import { createFormKit } from '@/shared/ui/react-hook-form/formKit'
+import { createFormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import type { FormProps } from '@/types/react-hook-form'
 

@@ -16,3 +16,9 @@ export const moldCavityFormDefaultValues: DeepPartial<MoldCavityFormFields> = {
   moldCores: [],
   isFunctional: true,
 }
+
+export const withMoldCavitiesSchema = z.object({
+  moldCavities: z.array(moldCavityFormSchema),
+})
+
+export type WithMoldCavitiesFormFields = z.infer<typeof withMoldCavitiesSchema>

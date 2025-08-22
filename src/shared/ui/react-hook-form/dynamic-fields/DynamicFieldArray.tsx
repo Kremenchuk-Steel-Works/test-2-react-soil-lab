@@ -9,22 +9,25 @@ import {
   type DeepPartial,
   type FieldArray,
   type FieldValues,
+  type PathValue,
   type UseFormRegister,
 } from 'react-hook-form'
 import Button from '@/shared/ui/button/Button'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
 
+type ArrayElement<T> = T extends readonly (infer U)[] ? U : T extends (infer U)[] ? U : never
+
 export interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T>, TItemData> {
   name: N
   form: ComponentType<{
     pathPrefix: `${N}.${number}`
-    index: number
+    index?: number
     itemData?: TItemData
-    control: Control<T>
-    register: UseFormRegister<T>
+    control?: Control<T>
+    register?: UseFormRegister<T>
   }>
   itemsData?: TItemData[]
-  defaultItem?: DeepPartial<FieldArray<T, N>>
+  defaultItem?: DeepPartial<ArrayElement<PathValue<T, N>>>
   title?: string
   label?: string
   addButton?: React.ReactNode
@@ -51,7 +54,7 @@ function DynamicFieldArrayInner<
   const { fields, append, remove } = useFieldArray({ control, name })
 
   const handleAppend = useCallback(() => {
-    append(defaultItem as FieldArray<T, ArrayPath<T>>, { shouldFocus: false })
+    append((defaultItem ?? {}) as FieldArray<T, N>, { shouldFocus: false })
   }, [append, defaultItem])
 
   const makeHandleRemove = useCallback((index: number) => () => remove(index), [remove])
@@ -114,4 +117,19 @@ function DynamicFieldArrayInner<
   )
 }
 
+/**
+ * Универсальный компонент для управления динамическим массивом полей в react-hook-form.
+ *
+ * Является оберткой над хуком `useFieldArray`. Позволяет пользователю добавлять и удалять
+ * группы полей (суб-формы), например, несколько телефонных номеров или адресов.
+ *
+ * @param control - Объект `control` из `useForm`, передается в `useFieldArray`.
+ * @param register - Функция `register` из `useForm`, пробрасывается в компонент каждого элемента.
+ * @param name - Имя (путь) к полю-массиву в схеме формы (например, 'contacts').
+ * @param form - React-компонент, отвечающий за рендеринг UI для **одного элемента** массива.
+ * @param defaultItem - Объект со значениями по умолчанию для нового элемента, добавляемого в массив.
+ * @param addButton - Опциональный рендер-проп для полной кастомизации кнопки "Добавить".
+ * @param removeButton - Опциональный рендер-проп для полной кастомизации кнопки "Удалить".
+ *
+ */
 export const DynamicFieldArray = memo(DynamicFieldArrayInner) as typeof DynamicFieldArrayInner

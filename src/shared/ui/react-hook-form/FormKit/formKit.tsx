@@ -176,3 +176,5 @@ export function createFormKit<T extends FieldValues>() {
 
   return { Field, Controller: ControllerField, Message, WithError }
 }
+
+export type FormKit<T extends FieldValues> = ReturnType<typeof createFormKit<T>>

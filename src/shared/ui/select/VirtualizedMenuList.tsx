@@ -1,5 +1,4 @@
-// src/shared/ui/select/VirtualizedMenuList.tsx
-import { useEffect, useMemo, useRef, type JSX, type MutableRefObject } from 'react'
+import { useEffect, useMemo, useRef, type CSSProperties, type JSX, type RefObject } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import type { GroupBase, MenuListProps } from 'react-select'
 
@@ -19,15 +18,69 @@ type AsyncPaginateMenuListProps<
 }
 
 function mergeRefs<T>(
-  ...refs: Array<MutableRefObject<T | null> | ((instance: T | null) => void) | null | undefined>
+  ...refs: Array<RefObject<T | null> | ((instance: T | null) => void) | null | undefined>
 ) {
   return (instance: T | null) => {
     for (const ref of refs) {
       if (!ref) continue
       if (typeof ref === 'function') ref(instance)
-      else (ref as MutableRefObject<T | null>).current = instance
+      else (ref as RefObject<T | null>).current = instance
     }
   }
+}
+
+// ХУК ДЛЯ ФОЛБЭКА ---
+/**
+ * Применяет JS-фолбэк для блокировки прокрутки страницы,
+ * если CSS `overscroll-behavior` не поддерживается.
+ */
+function useScrollLockFallback(elementRef: RefObject<HTMLElement | null>) {
+  // Проверяем поддержку фичи один раз при инициализации
+  const supportsOverscrollContain = useMemo(
+    () => typeof CSS !== 'undefined' && (CSS as any).supports?.('overscroll-behavior-y', 'contain'),
+    [],
+  )
+
+  useEffect(() => {
+    // Если CSS поддерживается, ничего не делаем. Это современный путь.
+    if (supportsOverscrollContain) return
+
+    const el = elementRef.current
+    if (!el) return
+
+    const atTop = () => el.scrollTop <= 0
+    const atBottom = () => el.scrollTop + el.clientHeight >= el.scrollHeight - 1
+
+    const onWheel = (e: WheelEvent) => {
+      if ((e.deltaY < 0 && atTop()) || (e.deltaY > 0 && atBottom())) {
+        e.preventDefault()
+      }
+    }
+
+    let lastTouchY = 0
+    const onTouchStart = (e: TouchEvent) => {
+      lastTouchY = e.touches?.[0]?.clientY ?? 0
+    }
+    const onTouchMove = (e: TouchEvent) => {
+      const currentY = e.touches?.[0]?.clientY ?? 0
+      const deltaY = lastTouchY - currentY
+      lastTouchY = currentY
+
+      if ((deltaY < 0 && atTop()) || (deltaY > 0 && atBottom())) {
+        e.preventDefault()
+      }
+    }
+
+    el.addEventListener('wheel', onWheel, { passive: false })
+    el.addEventListener('touchstart', onTouchStart, { passive: true })
+    el.addEventListener('touchmove', onTouchMove, { passive: false })
+
+    return () => {
+      el.removeEventListener('wheel', onWheel)
+      el.removeEventListener('touchstart', onTouchStart)
+      el.removeEventListener('touchmove', onTouchMove)
+    }
+  }, [supportsOverscrollContain, elementRef])
 }
 
 export function VirtualizedMenuList<
@@ -38,8 +91,8 @@ export function VirtualizedMenuList<
   children,
   maxHeight = MENU_MAX_HEIGHT,
   selectProps,
-  innerRef, // берём только то, что реально нужно
-  innerProps, // aria/role/handlers от react-select
+  innerRef,
+  innerProps,
 }: AsyncPaginateMenuListProps<OptionType, IsMulti, Group>): JSX.Element {
   const { handleScrolledToBottom, isLoading } = selectProps
 
@@ -56,14 +109,13 @@ export function VirtualizedMenuList<
     measureElement: (el) => el?.getBoundingClientRect().height ?? DEFAULT_ROW_HEIGHT,
   })
 
-  // размеры контента/вьюпорта
   const estimatedTotal = itemCount * DEFAULT_ROW_HEIGHT
   const measuredTotal = rowVirtualizer.getTotalSize()
   const contentHeight = Math.max(measuredTotal || 0, estimatedTotal)
   const viewportHeight = Math.min(maxHeight, contentHeight)
   const needScroll = contentHeight > maxHeight
 
-  // догрузка при скролле к низу
+  // Догрузка при прокрутке к низу
   useEffect(() => {
     const el = parentRef.current
     if (!el || !handleScrolledToBottom) return
@@ -77,7 +129,7 @@ export function VirtualizedMenuList<
     return () => el.removeEventListener('scroll', onScroll)
   }, [handleScrolledToBottom, isLoading])
 
-  // автодогрузка, если контента меньше окна
+  // Автодогрузка, если контента меньше окна
   const lastTriggeredCountRef = useRef<number>(-1)
   useEffect(() => {
     if (!handleScrolledToBottom || isLoading) return
@@ -91,17 +143,27 @@ export function VirtualizedMenuList<
     if (itemCount < lastTriggeredCountRef.current) lastTriggeredCountRef.current = -1
   }, [itemCount])
 
+  // Блокировка прокрутки основной формы
+  useScrollLockFallback(parentRef)
+
   if (itemCount === 0) return <>{children}</>
+
+  // Аккуратно объединяем стили: добавляем overscroll-behavior
+  const innerStyle = (innerProps as any)?.style as CSSProperties | undefined
+  const containerStyle: CSSProperties = {
+    ...(innerStyle || {}),
+    height: viewportHeight,
+    maxHeight,
+    overflowY: needScroll ? 'auto' : 'hidden',
+    overscrollBehaviorY: 'contain',
+    WebkitOverflowScrolling: 'touch',
+  }
 
   return (
     <div
       ref={mergeRefs(parentRef, innerRef as any)}
-      style={{
-        height: viewportHeight,
-        maxHeight,
-        overflowY: needScroll ? 'auto' : 'hidden',
-      }}
-      {...(innerProps as React.HTMLAttributes<HTMLDivElement>)} // ТОЛЬКО innerProps!
+      {...(innerProps as React.HTMLAttributes<HTMLDivElement>)}
+      style={containerStyle}
     >
       <div
         style={{

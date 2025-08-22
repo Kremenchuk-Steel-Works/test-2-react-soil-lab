@@ -10,3 +10,9 @@ export const moldCoreFormSchema = z.object({
 
 export type MoldCoreFormFields = z.infer<typeof moldCoreFormSchema>
 export const moldCoreFormDefaultValues: DeepPartial<MoldCoreFormFields> = {}
+
+export const withMoldCoresFormSchema = z.object({
+  moldCores: z.array(moldCoreFormSchema),
+})
+
+export type WithMoldCoresFormFields = z.infer<typeof withMoldCoresFormSchema>

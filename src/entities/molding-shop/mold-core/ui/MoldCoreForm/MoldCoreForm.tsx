@@ -17,7 +17,7 @@ import { createLogger } from '@/shared/lib/logger'
 import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
 import InputField from '@/shared/ui/input-field/InputField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
-import { createFormKit } from '@/shared/ui/react-hook-form/formKit'
+import { createFormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
 
 const logger = createLogger('MoldCoreForm')
 

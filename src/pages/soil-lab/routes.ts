@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 import { Factory, Users } from 'lucide-react'
 import type { AppRoute } from '@/app/routes/types'
-import { moldPassportRoutes } from '@/entities/soil-lab/mold-passport'
+import { moldPassportRoutes } from '@/pages/soil-lab/mold-passport/routes'
 
 const SoilLabLayout = lazy(() => import('@/pages/soil-lab/Layout'))
 const SoilLabMain = lazy(() => import('@/pages/soil-lab/Main'))
