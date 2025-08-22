@@ -8,11 +8,7 @@ import {
 } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/MoldCoreForm'
 import { moldCoreFormDefaultValues } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/schema'
 import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport'
-import type {
-  CastingPatternLookupResponse,
-  CastingPatternLookupsListResponse,
-  MoldPassportDetailResponse,
-} from '@/shared/api/mold-passport/model'
+import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
 import { useAsyncOptions } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
@@ -42,24 +38,21 @@ export function MoldCavityFormComponent({ pathPrefix, itemData }: FormProps) {
   )
 
   // Options
-  const loadCastingPatternsOptions = useAsyncOptions<CastingPatternLookupResponse, string>(
-    castingPatternService.getLookup,
-    {
-      paramsBuilder: (search, page) => ({
-        search,
-        page,
-        pageSize: 20,
-      }),
-      responseAdapter: (data: CastingPatternLookupsListResponse) => ({
-        items: data.data,
-        hasMore: data.data.length < data.totalItems,
-      }),
-      mapper: (item) => ({
-        value: item.id,
-        label: item.serialNumber,
-      }),
-    },
-  )
+  const loadCastingPatternsOptions = useAsyncOptions(castingPatternService.getLookup, {
+    paramsBuilder: (search, page) => ({
+      search,
+      page,
+      pageSize: 20,
+    }),
+    responseAdapter: (data) => ({
+      items: data.data,
+      hasMore: data.data.length < data.totalItems,
+    }),
+    mapper: (item) => ({
+      value: item.id,
+      label: item.serialNumber,
+    }),
+  })
 
   const defaultCastingPatternsOptions = useDefaultOption(itemData?.castingPattern, (d) => ({
     value: d.id,

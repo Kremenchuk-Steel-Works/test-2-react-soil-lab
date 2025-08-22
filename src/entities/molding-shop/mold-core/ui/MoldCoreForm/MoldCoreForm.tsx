@@ -7,10 +7,7 @@ import type {
 } from '@/entities/molding-shop/mold-cavity/ui/MoldCavityForm/MoldCavityForm'
 import type { MoldCoreFormFields } from '@/entities/molding-shop/mold-core/ui/MoldCoreForm/schema'
 import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport'
-import type {
-  MoldCoreBatchLookupResponse,
-  MoldCoreBatchLookupsListResponse,
-} from '@/shared/api/mold-passport/model'
+import type { MoldCoreBatchLookupResponse } from '@/shared/api/mold-passport/model'
 import { useAsyncOptions } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { createLogger } from '@/shared/lib/logger'
@@ -41,24 +38,21 @@ export function MoldCoreFormComponent({ pathPrefix, itemData }: FormProps) {
   )
 
   // Options
-  const loadCoreBatchesOptions = useAsyncOptions<MoldCoreBatchLookupResponse, string>(
-    coreBatchService.getLookup,
-    {
-      paramsBuilder: (search, page) => ({
-        search,
-        page,
-        pageSize: 20,
-      }),
-      responseAdapter: (data: MoldCoreBatchLookupsListResponse) => ({
-        items: data.data,
-        hasMore: data.data.length < data.totalItems,
-      }),
-      mapper: (item) => ({
-        value: item.id,
-        label: formatCoreBatchLabel(item),
-      }),
-    },
-  )
+  const loadCoreBatchesOptions = useAsyncOptions(coreBatchService.getLookup, {
+    paramsBuilder: (search, page) => ({
+      search,
+      page,
+      pageSize: 20,
+    }),
+    responseAdapter: (data) => ({
+      items: data.data,
+      hasMore: data.data.length < data.totalItems,
+    }),
+    mapper: (item) => ({
+      value: item.id,
+      label: formatCoreBatchLabel(item),
+    }),
+  })
 
   const defaultCoreBatchesOptions = useDefaultOption(itemData?.coreBatch, (d) => ({
     value: d.id,

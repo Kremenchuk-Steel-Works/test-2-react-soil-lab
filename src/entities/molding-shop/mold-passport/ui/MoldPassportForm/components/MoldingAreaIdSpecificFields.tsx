@@ -1,11 +1,7 @@
 import { Controller, useFormContext, type Path } from 'react-hook-form'
 import { castingTechnologyService } from '@/entities/molding-shop/casting-technology/api/service'
 import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/schema'
-import type {
-  CastingTechnologyLookupResponse,
-  CastingTechnologyLookupsListResponse,
-  MoldPassportDetailResponse,
-} from '@/shared/api/mold-passport/model'
+import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
 import { useAsyncOptions } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
@@ -21,25 +17,22 @@ export function MoldingAreaDataDynamicForm({ responseData }: MoldingAreaDataDyna
     control,
     formState: { errors },
   } = useFormContext<MoldPassportFormFields>()
-  const loadCastingTechnologiesOptions = useAsyncOptions<CastingTechnologyLookupResponse, number>(
-    castingTechnologyService.getLookup,
-    {
-      paramsBuilder: (search, page) => ({
-        search,
-        page,
-        pageSize: 20,
-        // moldingAreaId: moldingAreaId,
-      }),
-      responseAdapter: (data: CastingTechnologyLookupsListResponse) => ({
-        items: data.data,
-        hasMore: data.data.length < data.totalItems,
-      }),
-      mapper: (item) => ({
-        value: item.id,
-        label: item.name,
-      }),
-    },
-  )
+  const loadCastingTechnologiesOptions = useAsyncOptions(castingTechnologyService.getLookup, {
+    paramsBuilder: (search, page) => ({
+      search,
+      page,
+      pageSize: 20,
+      // moldingAreaId: moldingAreaId,
+    }),
+    responseAdapter: (data) => ({
+      items: data.data,
+      hasMore: data.data.length < data.totalItems,
+    }),
+    mapper: (item) => ({
+      value: item.id,
+      label: item.name,
+    }),
+  })
 
   const defaultCastingTechnologiesOptions = useDefaultOption(
     responseData?.castingTechnology,

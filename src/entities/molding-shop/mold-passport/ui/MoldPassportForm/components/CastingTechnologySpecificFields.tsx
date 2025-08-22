@@ -6,11 +6,7 @@ import type {
 import type { MoldPassportFormFields } from '@/entities/molding-shop/mold-passport/ui/MoldPassportForm/schema'
 import { moldingSandSystemOptions } from '@/entities/molding-shop/molding-sand-system/model/moldingSandSystem'
 import { resinService } from '@/entities/molding-shop/resin'
-import type {
-  MoldPassportDetailResponse,
-  ResinLookupResponse,
-  ResinLookupsListResponse,
-} from '@/shared/api/mold-passport/model'
+import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
 import { useAsyncOptions } from '@/shared/hooks/react-hook-form/options/useAsyncOptions'
 import { useDefaultOption } from '@/shared/hooks/react-hook-form/options/useDefaultOption'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
@@ -77,13 +73,13 @@ export function CastingTechnologyPassportDataAscDynamicForm({
     control,
     formState: { errors },
   } = useFormContext<MoldPassportFormFields>()
-  const loadResinsOptions = useAsyncOptions<ResinLookupResponse, string>(resinService.getLookup, {
+  const loadResinsOptions = useAsyncOptions(resinService.getLookup, {
     paramsBuilder: (search, page) => ({
       search,
       page,
       pageSize: 20,
     }),
-    responseAdapter: (data: ResinLookupsListResponse) => ({
+    responseAdapter: (data) => ({
       items: data.data,
       hasMore: data.data.length < data.totalItems,
     }),
