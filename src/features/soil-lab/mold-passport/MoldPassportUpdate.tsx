@@ -19,7 +19,7 @@ import { logger } from '@/shared/lib/logger'
 import { createUpdatePayload, type TransformMap } from '@/shared/lib/react-hook-form/api-operations'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
-interface UpdateMoldPassportProps {
+interface MoldPassportUpdateProps {
   id: string
 }
 
@@ -64,7 +64,7 @@ function mapResponseToInitialData(
   }
 }
 
-export default function MoldPassportUpdate({ id }: UpdateMoldPassportProps) {
+export default function MoldPassportUpdate({ id }: MoldPassportUpdateProps) {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 

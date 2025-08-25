@@ -127,3 +127,5 @@ export function useMoldPassportFormOptions(responseData?: MoldPassportDetailResp
     defaultResins,
   }
 }
+
+export type MoldPassportFormOptions = ReturnType<typeof useMoldPassportFormOptions>
