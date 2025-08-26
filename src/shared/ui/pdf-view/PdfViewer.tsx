@@ -1,25 +1,31 @@
+// PdfViewer.tsx
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
 
-// ✅ Vite-способ: создаём модульный worker прямо из пакета (v4, ESM)
+/**
+ * 1) ВАЖНО: версия API и воркера должны совпадать.
+ * Мы создаём URL воркера из пакета и добавляем query ?v=<pdfjs.version> — это бьёт кэш SW/браузера,
+ * и гарантирует, что к старому бандлу не подтянется новый воркер (и наоборот).
+ * 2) Передаём готовый Worker через workerPort — минуем динамический импорт.
+ */
 function setupPdfWorker() {
   if (typeof window === 'undefined') return
-  // 1) Предпочтительно — задать готовый Worker (устойчиво на мобилках)
+
+  // Текущая версия pdfjs из подключённого API
+  const v = (pdfjs as any).version ?? '0'
+
+  // URL воркера из того же пакета + версия в query для cache-busting
+  const url = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url)
+  url.searchParams.set('v', String(v))
+
   try {
-    const worker = new Worker(new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url), {
-      type: 'module',
-    })
-    // Передаём инстанс воркера напрямую (минуем auto-резолв путей)
+    const worker = new Worker(url, { type: 'module' })
     ;(pdfjs as any).GlobalWorkerOptions.workerPort = worker
-    return
   } catch {
-    // 2) Фолбек: просто URL (тоже работает в Vite, если сервер отдаёт .mjs корректно)
-    pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-      'pdfjs-dist/build/pdf.worker.min.mjs',
-      import.meta.url,
-    ).toString()
+    // Фолбек: просто строка URL (если вдруг создание инстанса воркера провалится)
+    pdfjs.GlobalWorkerOptions.workerSrc = url.toString()
   }
 }
 
@@ -97,6 +103,9 @@ function PdfJsViewer({ src, className }: PdfViewerProps) {
     [containerWidth],
   )
 
+  // Специальный UX для ошибки "API/Worker version mismatch"
+  const isVersionMismatch = error?.includes('API version') && error?.includes('Worker version')
+
   return (
     <div className={`flex h-[100vh] w-full flex-col ${className ?? ''}`}>
       <div className="sticky top-0 z-10 flex items-center gap-2 bg-white/80 px-3 py-2 shadow backdrop-blur">
@@ -114,10 +123,12 @@ function PdfJsViewer({ src, className }: PdfViewerProps) {
         >
           След. →
         </button>
+
         <div className="ml-2 text-sm text-gray-700">
           Стр. {page}
           {numPages ? ` / ${numPages}` : ''}
         </div>
+
         <div className="ml-auto flex items-center gap-2">
           <a
             href={encodeURI(src)}
@@ -138,6 +149,8 @@ function PdfJsViewer({ src, className }: PdfViewerProps) {
       </div>
 
       <div ref={containerRef} className="flex-1 overflow-auto bg-gray-50 p-2">
+        {isVersionMismatch && <VersionMismatchHint />}
+
         <Document
           file={{ url: encodeURI(src) }}
           onLoadSuccess={onLoadSuccess}
@@ -155,7 +168,37 @@ function PdfJsViewer({ src, className }: PdfViewerProps) {
             />
           )}
         </Document>
-        {error && <ErrorView src={src} message={error} />}
+
+        {error && !isVersionMismatch && <ErrorView src={src} message={error} />}
+      </div>
+    </div>
+  )
+}
+
+function VersionMismatchHint() {
+  const reload = () => {
+    try {
+      // попытка почистить runtime-кэши, если нет SW — просто игнорируем
+      // @ts-ignore
+      caches
+        ?.keys?.()
+        .then((keys: string[]) => keys.forEach((k) => caches.delete(k)))
+        .finally(() => {
+          location.reload()
+        })
+    } catch {
+      location.reload()
+    }
+  }
+
+  return (
+    <div className="mb-2 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+      Виявлено конфлікт версій PDF.js (API/Worker). Це часто буває після оновлення застосунку або
+      через кеш.
+      <div className="mt-2 flex gap-2">
+        <button onClick={reload} className="rounded-xl bg-amber-600 px-3 py-1 text-white shadow">
+          Оновити сторінку
+        </button>
       </div>
     </div>
   )
