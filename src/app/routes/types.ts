@@ -6,6 +6,7 @@ export type Permission =
   | 'calculator_view'
   | 'library_view'
   | 'library_edit'
+  | 'document_pdf_view'
 
 export type PageButtonType = 'add' | 'update' | 'delete'
 

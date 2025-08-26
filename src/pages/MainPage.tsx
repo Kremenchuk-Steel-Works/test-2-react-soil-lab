@@ -18,10 +18,12 @@ export default function MainPage() {
             .map((route) => (
               <Button
                 key={route.key}
-                className="flex items-center justify-center gap-1 whitespace-nowrap"
+                // Задаем максимальную ширину для кнопки
+                className="flex max-w-70 items-center justify-center gap-1 whitespace-nowrap"
                 onClick={() => navigate(route.path)}
               >
-                <route.icon className="h-5 w-5" /> <span>{route.label}</span>
+                <route.icon className="h-5 w-5 flex-shrink-0" />
+                <span className="truncate">{route.label}</span>
               </Button>
             ))}
         </div>

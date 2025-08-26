@@ -2,8 +2,8 @@ import { z } from 'zod'
 import {
   CastingTechnologyDataGscDynamicForm,
   CastingTechnologyPassportDataAscDynamicForm,
-} from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/components/CastingTechnologySpecificFields'
-import { MoldingAreaDataDynamicForm } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/components/MoldingAreaIdSpecificFields'
+} from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/components/CastingTechnologyDynamicFields'
+import { MoldingAreaDataDynamicForm } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/components/MoldingAreaIdDynamicFields'
 import { MoldingSandSystem } from '@/shared/api/mold-passport/model'
 import {
   ANY_VALUE,

@@ -120,15 +120,15 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
       <h5 className="layout-text">Людина</h5>
 
       <InputFieldWithError
-        label="Ім'я"
-        {...register('firstName', formTransformers.string)}
-        errorMessage={getNestedErrorMessage(errors, 'firstName')}
-      />
-
-      <InputFieldWithError
         label="Прізвище"
         {...register('lastName', formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, 'lastName')}
+      />
+
+      <InputFieldWithError
+        label="Ім'я"
+        {...register('firstName', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'firstName')}
       />
 
       <InputFieldWithError
