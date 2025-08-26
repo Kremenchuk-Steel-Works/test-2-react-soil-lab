@@ -7,6 +7,7 @@ export type Permission =
   | 'library_view'
   | 'library_edit'
   | 'document_pdf_view'
+  | 'ndt_documents_view'
 
 export type PageButtonType = 'add' | 'update' | 'delete'
 

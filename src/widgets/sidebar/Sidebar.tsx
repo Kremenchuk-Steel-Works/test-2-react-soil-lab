@@ -29,10 +29,13 @@ const Sidebar: React.FC = () => {
 
       <aside
         className={`${baseClasses} ${modeClasses}`}
-        onClick={() =>
-          (collapsed && expandedSubMenus && closeSubMenu()) ||
-          (broken && !collapsed && closeSidebar())
-        }
+        // клик по пустому месту сайдбара закрывает только
+        // всплывающее саб-меню в свёрнутом десктопном режиме.
+        onClick={() => {
+          if (collapsed && expandedSubMenus) {
+            closeSubMenu()
+          }
+        }}
       >
         {/* Обёртка для скролла */}
         <div className="flex-1 overflow-y-auto pb-14">

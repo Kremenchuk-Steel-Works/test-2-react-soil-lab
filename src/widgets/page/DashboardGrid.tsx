@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { APP_ROUTES } from '@/app/routes/routes' // 👈 Импортируем наш новый тип
 import Button from '@/shared/ui/button/Button'
+import { findRouteByKey } from '@/utils/routes/routeUtils'
 
 type DashboardGridProps = {
   parentRouteKey: string
@@ -8,10 +9,11 @@ type DashboardGridProps = {
 
 export function DashboardGrid({ parentRouteKey }: DashboardGridProps) {
   const navigate = useNavigate()
-  const parentRoute = APP_ROUTES.find((route) => route.key === parentRouteKey)
+  const parentRoute = findRouteByKey(APP_ROUTES, parentRouteKey)
 
   // Если у найденного роута нет children
   if (!parentRoute?.children) {
+    console.log('NULL')
     return null
   }
 
@@ -23,10 +25,12 @@ export function DashboardGrid({ parentRouteKey }: DashboardGridProps) {
           .map((childRoute) => (
             <Button
               key={childRoute.key}
-              className="flex items-center justify-center gap-1 whitespace-nowrap"
+              // Задаем максимальную ширину для кнопки
+              className="flex max-w-85 items-center justify-center gap-1 whitespace-nowrap"
               onClick={() => navigate(childRoute.path)}
             >
-              <childRoute.icon className="h-5 w-5" /> <span>{childRoute.label}</span>
+              <childRoute.icon className="h-5 w-5 flex-shrink-0" />
+              <span className="truncate">{childRoute.label}</span>
             </Button>
           ))}
       </div>

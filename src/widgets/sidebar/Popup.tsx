@@ -2,67 +2,74 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
 
-const Popup = ({
-  btnRef,
-  children,
-  isCollapsedOpen,
-  isMainMenu,
-}: {
+interface PopupProps {
   btnRef: React.RefObject<HTMLButtonElement | null>
   children: React.ReactNode
   isCollapsedOpen: boolean
   isMainMenu: boolean
-}) => {
-  const { collapsed, closeSubMenu } = useSidebar()
+}
+
+const Popup = ({ btnRef, children, isCollapsedOpen }: PopupProps) => {
+  const { closeSubMenu } = useSidebar()
   const containerRef = useRef<HTMLDivElement>(null)
-  const [height, setHeight] = useState(0)
-
-  const [popupPos, setPopupPos] = useState<{
-    top: number
-    bottom: number
-    left: number
-  }>({
-    top: 0,
-    bottom: 0,
-    left: 0,
-  })
-
-  // Пересчитываем позицию ТОЛЬКО при открытии вкладки в collapsed-режиме
-  useLayoutEffect(() => {
-    if (collapsed && isCollapsedOpen && btnRef.current && isMainMenu) {
-      const rect = btnRef.current.getBoundingClientRect()
-      setPopupPos({ top: rect.top, bottom: rect.bottom, left: rect.right })
-    }
-  }, [collapsed, isCollapsedOpen, isMainMenu, btnRef.current])
+  const [style, setStyle] = useState<React.CSSProperties | null>(null)
 
   useLayoutEffect(() => {
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect()
-      setHeight(rect.height)
+    // Выполняем расчеты только когда попап должен быть открыт
+    if (isCollapsedOpen && btnRef.current && containerRef.current) {
+      const btnRect = btnRef.current.getBoundingClientRect()
+      const popupRect = containerRef.current.getBoundingClientRect()
+      const popupHeight = popupRect.height
+      const viewportHeight = window.innerHeight
+
+      let topPosition: number
+
+      // Основная логика: открываем вниз или вверх
+      if (btnRect.top + popupHeight <= viewportHeight) {
+        // Если попап помещается вниз от кнопки
+        topPosition = btnRect.top
+      } else {
+        // Иначе, выравниваем по нижнему краю кнопки (открываем вверх)
+        topPosition = btnRect.bottom - popupHeight
+      }
+
+      // Дополнительная проверка, чтобы попап не вылезал за верхний край экрана
+      if (topPosition < 0) {
+        topPosition = 0 // Прижимаем к верху
+      }
+
+      setStyle({
+        position: 'fixed',
+        left: btnRect.right,
+        top: topPosition,
+        visibility: 'visible', // Делаем видимым после расчета
+      })
+    } else {
+      // Сбрасываем стили, если попап закрыт
+      setStyle(null)
     }
-  }, [children])
+    // Зависим от `children`, так как их изменение может повлиять на высоту попапа.
+  }, [isCollapsedOpen, btnRef, children])
 
-  const style: React.CSSProperties = {
-    left: popupPos.left,
-  }
-  if (popupPos.top <= window.innerHeight / 2) {
-    style.top = popupPos.top
-  } else {
-    style.top = popupPos.bottom - height
+  if (!isCollapsedOpen) {
+    return null
   }
 
-  // Блокируем рендер до вычисления
-  const positioned = popupPos.left > 0 || popupPos.top > 0
-  if (!positioned) return null
+  // Изначально рендерим портал, но сам попап невидимый.
+  // Это нужно, чтобы `useLayoutEffect` мог измерить его высоту.
+  const initialStyle: React.CSSProperties = {
+    visibility: 'hidden',
+  }
 
   return createPortal(
     <>
       {/* Клик вне элементов popup */}
-      <div className="fixed inset-0" onClick={closeSubMenu} />
+      <div className="fixed inset-0 z-40" onClick={closeSubMenu} />
       <div
         ref={containerRef}
         className="fixed z-50 max-h-[50vh] w-70 overflow-y-auto bg-gray-50 shadow-lg dark:bg-[#0e1523]"
-        style={style}
+        // Сначала применяем initialStyle, а после расчета - вычисленный style
+        style={style || initialStyle}
       >
         {children}
       </div>
