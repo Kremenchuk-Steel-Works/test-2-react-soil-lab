@@ -46,6 +46,7 @@
     "lucide-react": "^0.507.0",
     "nanoid": "^5.1.5",
     "path-to-regexp": "^8.2.0",
+    "pdfjs-dist": "^5.4.54",
     "react": "^19.1.0",
     "react-datepicker": "^8.4.0",
     "react-dom": "^19.1.0",
