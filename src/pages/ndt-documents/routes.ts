@@ -18,7 +18,7 @@ export const ndtDocumentsRoutes: AppRoute = {
   requiredPermissions: ['ndt_documents_view'],
   children: [
     {
-      key: 'NDTDocumentsIndex',
+      key: '',
       path: '',
       label: '',
       icon: Files,
@@ -32,6 +32,7 @@ export const ndtDocumentsRoutes: AppRoute = {
         'П 001-2025 «Процедура з проведення магнітопорошкового контролю корпусу букси кресленик 0014.11.001»',
       icon: FileText,
       Component: SectionLayout,
+      inSidebar: false,
       children: [
         {
           key: '',
