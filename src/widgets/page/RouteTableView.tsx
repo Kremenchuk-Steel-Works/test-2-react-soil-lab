@@ -145,7 +145,7 @@ export default function RouteTableView({ parentRouteKey, rowClickNavigates = tru
         id: 'label',
         header: 'Назва',
         cell: (info) => <span className="font-medium">{info.getValue()}</span>,
-        size: 500,
+        size: 850,
       }),
     ],
     [],
@@ -180,17 +180,15 @@ export default function RouteTableView({ parentRouteKey, rowClickNavigates = tru
       <div className="mb-1 flex items-end justify-between whitespace-nowrap">
         <div className="flex items-center gap-1">
           {/* Единый поиск по названию */}
-          <div className="w-72">
-            <InputField
-              label="Пошук"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value)
-                // при новом поиске всегда на первую страницу
-                setPagination((p) => ({ ...p, pageIndex: 0 }))
-              }}
-            />
-          </div>
+          <InputField
+            label="Пошук"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value)
+              // при новом поиске всегда на первую страницу
+              setPagination((p) => ({ ...p, pageIndex: 0 }))
+            }}
+          />
         </div>
 
         <div className="flex items-center gap-1">

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Download, Minus, Plus, RotateCcw } from 'lucide-react'
+import { Download, Minus, Plus, Printer, RotateCcw } from 'lucide-react'
 import { toSafeUrl } from '@/shared/lib/url/toSafeUrl'
 
 type Point = { x: number; y: number }
@@ -13,7 +13,62 @@ type ImageViewerProps = {
   step?: number
 }
 
-export function ImageViewer({
+/** Хук для media-query, безопасен для SSR и без флика в большинстве случаев */
+function useMediaQuery(query: string) {
+  const getInitial = () =>
+    typeof window !== 'undefined' && 'matchMedia' in window
+      ? window.matchMedia(query).matches
+      : false
+
+  const [matches, setMatches] = React.useState(getInitial)
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined' || !('matchMedia' in window)) return
+    const mql = window.matchMedia(query)
+    const onChange = (e: MediaQueryListEvent) => setMatches(e.matches)
+    // совместимость со старыми Safari
+    mql.addEventListener ? mql.addEventListener('change', onChange) : mql.addListener(onChange)
+    setMatches(mql.matches)
+    return () => {
+      mql.removeEventListener
+        ? mql.removeEventListener('change', onChange)
+        : mql.removeListener(onChange)
+    }
+  }, [query])
+
+  return matches
+}
+
+/** Обёртка: выбирает мобильную/десктопную версию. Здесь всегда одинаковое число хуков. */
+export function ImageViewer(props: ImageViewerProps) {
+  const isPhoneTouch = useMediaQuery('(pointer: coarse) and (max-width: 768px)')
+  return isPhoneTouch ? <ImageViewerMobile {...props} /> : <ImageViewerDesktop {...props} />
+}
+
+/** Мобильная версия — только картинка, нативные жесты. */
+function ImageViewerMobile({ src, alt = 'Зображення', className }: ImageViewerProps) {
+  const safe = React.useMemo(() => toSafeUrl(src), [src])
+
+  return (
+    <figure className={`relative ${className ?? ''}`}>
+      <img
+        src={safe}
+        alt={alt}
+        className="block w-full object-contain select-none"
+        style={{ maxHeight: '75vh' }}
+        loading="lazy"
+        decoding="async"
+        draggable={false}
+        onError={(e) => {
+          ;(e.currentTarget as HTMLImageElement).alt = 'Не вдалося завантажити зображення'
+        }}
+      />
+    </figure>
+  )
+}
+
+/** Десктопная версия — зум/панорамирование и тулбар. */
+function ImageViewerDesktop({
   src,
   alt = 'Зображення',
   className,
@@ -51,15 +106,8 @@ export function ImageViewer({
     [clamp, maxScale, minScale],
   )
 
-  const onWheel = (e: React.WheelEvent) => {
-    // Чтобы не ломать прокрутку страницы — зум только при Ctrl/Cmd
-    if (!e.ctrlKey && !e.metaKey) return
-    e.preventDefault()
-    const dir = -Math.sign(e.deltaY)
-    zoomBy(dir * step, { x: e.clientX, y: e.clientY })
-  }
-
   const onPointerDown = (e: React.PointerEvent) => {
+    if (e.button !== 0) return // только ЛКМ
     panningRef.current.active = true
     panningRef.current.startX = e.clientX - offset.x
     panningRef.current.startY = e.clientY - offset.y
@@ -84,12 +132,55 @@ export function ImageViewer({
 
   const fileName = React.useMemo(() => {
     try {
-      const u = new URL(safe, window.location.origin)
+      const u = new URL(
+        safe,
+        typeof window !== 'undefined' ? window.location.origin : 'http://localhost',
+      )
       const last = u.pathname.split('/').pop() || 'image.jpg'
       return decodeURIComponent(last)
     } catch {
       return 'image.jpg'
     }
+  }, [safe])
+
+  const handlePrint = React.useCallback(() => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return
+
+    const iframe = document.createElement('iframe')
+    Object.assign(iframe.style, {
+      position: 'fixed',
+      right: '0',
+      bottom: '0',
+      width: '0',
+      height: '0',
+      border: '0',
+      visibility: 'hidden',
+    } as CSSStyleDeclaration)
+
+    // Минимальный HTML в srcdoc — БЕЗ document.write
+    iframe.srcdoc = `
+    <!doctype html><html><head><meta charset="utf-8" />
+    <style>
+      @page { margin: 0; }
+      html,body { height:100%; margin:0; }
+      body { display:flex; align-items:center; justify-content:center; }
+      img { max-width:100vw; max-height:100vh; }
+    </style>
+    </head><body></body></html>`
+
+    iframe.onload = () => {
+      const win = iframe.contentWindow!
+      const img = new Image()
+      img.onload = () => {
+        win.focus()
+        win.print()
+        setTimeout(() => iframe.remove(), 0)
+      }
+      img.src = safe // ваша картинка
+      win.document.body.appendChild(img) // наполняем DOM без write()
+    }
+
+    document.body.appendChild(iframe)
   }, [safe])
 
   const toolbarBtn =
@@ -100,7 +191,7 @@ export function ImageViewer({
 
   return (
     <figure className={`relative overflow-hidden ${className ?? ''}`}>
-      {/* Тулбар */}
+      {/* Тулбар (десктоп) */}
       <div
         className="pointer-events-auto absolute top-2 right-2 z-10 flex items-center gap-1 rounded-xl px-1.5 py-1 shadow-md backdrop-blur"
         onPointerDown={(e) => e.stopPropagation()}
@@ -125,7 +216,6 @@ export function ImageViewer({
           <Plus className="h-4 w-4" />
         </button>
 
-        {/* Индикатор масштаба */}
         <div
           className="grid h-9 min-w-12 place-items-center rounded-md bg-gray-200 px-2 text-sm font-medium text-slate-700 dark:bg-gray-700 dark:text-slate-300"
           aria-label="Поточний масштаб"
@@ -144,6 +234,17 @@ export function ImageViewer({
           <RotateCcw className="h-4 w-4" />
         </button>
 
+        <button
+          type="button"
+          title="Друк"
+          aria-label="Друк"
+          onClick={handlePrint}
+          className={toolbarBtn}
+          onPointerDown={(e) => e.stopPropagation()}
+        >
+          <Printer className="h-4 w-4" />
+        </button>
+
         <a
           href={safe}
           download={fileName}
@@ -156,15 +257,17 @@ export function ImageViewer({
         </a>
       </div>
 
-      {/* Полотно перегляду */}
+      {/* Полотно перегляду (десктоп) */}
       <div
         ref={containerRef}
-        className={`relative w-full touch-pan-y select-none ${panningRef.current.active ? 'cursor-grabbing' : 'cursor-grab'} h-[60vh] sm:h-[70vh] lg:h-[75vh]`}
-        onWheel={onWheel}
+        className={`relative w-full select-none ${panningRef.current.active ? 'cursor-grabbing' : 'cursor-grab'} h-[60vh] sm:h-[70vh] lg:h-[75vh]`}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={stopPan}
         onPointerCancel={stopPan}
+        onPointerLeave={stopPan}
+        // жесты внутри вьюера — не прокручиваем страницу
+        style={{ touchAction: 'none', overscrollBehavior: 'contain' }}
       >
         <img
           src={safe}
@@ -181,7 +284,7 @@ export function ImageViewer({
             position: 'absolute',
             left: '50%',
             top: '50%',
-            translate: '-50% -50%', // центрування
+            translate: '-50% -50%',
             userSelect: 'none',
           }}
           onError={(e) => {
