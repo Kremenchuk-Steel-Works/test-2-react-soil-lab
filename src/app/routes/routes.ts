@@ -10,6 +10,7 @@ import { soilLabRoutes } from '@/pages/soil-lab/routes'
 const MainPage = lazy(() => import('@/pages/MainPage'))
 const StreamlitDashboard = lazy(() => import('@/pages/StreamlitDashboard'))
 const StreamlitCalculator = lazy(() => import('@/pages/StreamlitCalculator'))
+const MaterialCalculator = lazy(() => import('@/pages/MaterialCalculator'))
 
 export const APP_ROUTES: AppRoute[] = [
   {
@@ -40,5 +41,13 @@ export const APP_ROUTES: AppRoute[] = [
     icon: Calculator,
     Component: StreamlitCalculator,
     requiredPermissions: ['calculator_view'],
+  },
+  {
+    key: 'materialCalculator',
+    path: '/material-calculator',
+    label: 'Калькулятор розрахунку матеріалів',
+    icon: Calculator,
+    Component: MaterialCalculator,
+    requiredPermissions: ['material_calculator_view'],
   },
 ]

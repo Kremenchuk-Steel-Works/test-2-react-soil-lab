@@ -8,6 +8,7 @@ export type Permission =
   | 'library_edit'
   | 'document_pdf_view'
   | 'ndt_documents_view'
+  | 'material_calculator_view'
 
 export type PageButtonType = 'add' | 'update' | 'delete'
 

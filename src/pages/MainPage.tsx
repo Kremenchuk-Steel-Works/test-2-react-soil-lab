@@ -21,6 +21,8 @@ export default function MainPage() {
                 // Задаем максимальную ширину для кнопки
                 className="flex max-w-70 items-center justify-center gap-1 whitespace-nowrap"
                 onClick={() => navigate(route.path)}
+                title={route.label}
+                aria-label={route.label}
               >
                 <route.icon className="h-5 w-5 flex-shrink-0" />
                 <span className="truncate">{route.label}</span>
