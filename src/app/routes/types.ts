@@ -1,14 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-
-export type Permission =
-  | 'admin'
-  | 'quality_dash_view'
-  | 'calculator_view'
-  | 'library_view'
-  | 'library_edit'
-  | 'document_pdf_view'
-  | 'ndt_documents_view'
-  | 'material_calculator_view'
+import type { Permission } from '@/app/routes/permissions'
 
 export type PageButtonType = 'add' | 'update' | 'delete'
 

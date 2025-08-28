@@ -1,6 +1,8 @@
-import type { MoldPassportFormOptions } from '@/entities/soil-lab/mold-passport/hooks/useMoldPassportFormOptions'
-import { useMoldPassportFormFields } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/fields/MoldPassportFormFields'
-import { type MoldPassportCreateFormFields } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/schema'
+import {
+  useMoldPassportFormFields,
+  type MoldPassportFormOptions,
+} from '@/entities/soil-lab/mold-passport'
+import type { MoldPassportCreateFormFields } from '@/features/soil-lab/mold-passport/create/model/schema'
 import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
 import { logger } from '@/shared/lib/logger'
 import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/formKitContext'

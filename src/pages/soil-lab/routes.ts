@@ -1,5 +1,6 @@
 import { lazy } from 'react'
 import { Factory, Users } from 'lucide-react'
+import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 import { moldPassportRoutes } from '@/pages/soil-lab/mold-passport/routes'
 
@@ -12,7 +13,7 @@ export const soilLabRoutes: AppRoute = {
   label: 'Лабораторія сумішей',
   icon: Factory,
   Component: SoilLabLayout,
-  requiredPermissions: ['admin'],
+  requiredPermissions: [PERMISSIONS.ADMIN],
   children: [
     {
       key: 'moldingShopIndex',

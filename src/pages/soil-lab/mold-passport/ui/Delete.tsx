@@ -1,8 +1,13 @@
-import { useParams } from 'react-router-dom'
-import MoldPassportDelete from '@/features/soil-lab/mold-passport/MoldPassportDelete'
+import { useNavigate, useParams } from 'react-router-dom'
+import MoldPassportDelete from '@/features/soil-lab/mold-passport/delete/ui/MoldPassportDelete'
 
 export default function MoldPassportDeletePage() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
 
-  return id && <MoldPassportDelete id={id} />
+  const onSuccess = async () => {
+    navigate('..')
+  }
+
+  return id && <MoldPassportDelete id={id} onSuccess={onSuccess} />
 }

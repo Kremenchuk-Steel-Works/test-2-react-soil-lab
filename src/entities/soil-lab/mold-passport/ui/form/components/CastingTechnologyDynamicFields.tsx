@@ -1,11 +1,11 @@
-import { type Path } from 'react-hook-form'
+import { type FieldPath, type FieldValues } from 'react-hook-form'
 import { useMoldPassportFormOptions } from '@/entities/soil-lab/mold-passport/hooks/useMoldPassportFormOptions'
 import type {
   MoldPassportDataAsc,
   MoldPassportDataGsc,
-} from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
-import { MoldPassportCreateFormKit } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/FormKit'
-import type { MoldPassportCreateFormFields } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/schema'
+  WithDataAscFormFields,
+  WithDataGscFormFields,
+} from '@/entities/soil-lab/mold-passport/ui/form/lib/dynamic-fields'
 import { moldingSandSystemOptions } from '@/entities/soil-lab/molding-sand-system/model/moldingSandSystem'
 import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
 import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
@@ -13,12 +13,13 @@ import InputField from '@/shared/ui/input-field/InputField'
 import { useDynamicMeta } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
+import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/formKitContext'
 
-const Form = MoldPassportCreateFormKit
-
-export function CastingTechnologyDataGscDynamicForm() {
-  const fieldName = (field: keyof MoldPassportDataGsc) =>
-    `dataGsc.${field}` as Path<MoldPassportCreateFormFields>
+export function CastingTechnologyDataGscDynamicForm<
+  T extends FieldValues & WithDataGscFormFields,
+>() {
+  const Form = useFormKit<T>()
+  const fieldName = <K extends keyof MoldPassportDataGsc>(k: K) => `dataGsc.${k}` as FieldPath<T>
 
   return (
     <FieldsetWrapper title={`Пісочно-глиняна формовка`}>
@@ -53,12 +54,14 @@ export function CastingTechnologyDataGscDynamicForm() {
   )
 }
 
-export function CastingTechnologyPassportDataAscDynamicForm() {
+export function CastingTechnologyPassportDataAscDynamicForm<
+  T extends FieldValues & WithDataAscFormFields,
+>() {
+  const Form = useFormKit<T>()
   const { responseData } = useDynamicMeta<Record<string, never>, MoldPassportDetailResponse>()
   const options = useMoldPassportFormOptions(responseData)
 
-  const fieldName = (field: keyof MoldPassportDataAsc) =>
-    `dataAsc.${field}` as Path<MoldPassportCreateFormFields>
+  const fieldName = <K extends keyof MoldPassportDataAsc>(k: K) => `dataAsc.${k}` as FieldPath<T>
 
   return (
     <FieldsetWrapper title={`Холодно-твердіюча формовка`}>

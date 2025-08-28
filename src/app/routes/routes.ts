@@ -1,9 +1,12 @@
 import { lazy } from 'react'
 import { Calculator, Database, House } from 'lucide-react'
 import { PATHS } from '@/app/routes/paths'
+import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 import { adminRoutes } from '@/entities/admin/routes'
+import { moldingShopRoutes } from '@/entities/molding-shop/routes'
 import { ndtDocumentsRoutes } from '@/pages/ndt-documents/routes'
+import { soilLabRoutes } from '@/pages/soil-lab/routes'
 
 const MainPage = lazy(() => import('@/pages/MainPage'))
 const StreamlitDashboard = lazy(() => import('@/pages/StreamlitDashboard'))
@@ -21,8 +24,8 @@ export const APP_ROUTES: AppRoute[] = [
   },
   adminRoutes,
   // moldPassportMainRoutes,
-  // moldingShopRoutes,
-  // soilLabRoutes,
+  moldingShopRoutes,
+  soilLabRoutes,
   ndtDocumentsRoutes,
   {
     key: 'streamlitDashboard',
@@ -30,7 +33,7 @@ export const APP_ROUTES: AppRoute[] = [
     label: 'Quality Dash',
     icon: Database,
     Component: StreamlitDashboard,
-    requiredPermissions: ['quality_dash_view'],
+    requiredPermissions: [PERMISSIONS.QUALITY_DASH_VIEW],
   },
   {
     key: 'streamlitCalculator',
@@ -38,7 +41,7 @@ export const APP_ROUTES: AppRoute[] = [
     label: 'Калькулятор енергоспоживання',
     icon: Calculator,
     Component: StreamlitCalculator,
-    requiredPermissions: ['calculator_view'],
+    requiredPermissions: [PERMISSIONS.CALCULATOR_VIEW],
   },
   {
     key: 'materialCalculator',
@@ -46,6 +49,6 @@ export const APP_ROUTES: AppRoute[] = [
     label: 'Калькулятор розрахунку матеріалів',
     icon: Calculator,
     Component: MaterialCalculator,
-    requiredPermissions: ['material_calculator_view'],
+    requiredPermissions: [PERMISSIONS.MATERIAL_CALCULATOR_VIEW],
   },
 ]

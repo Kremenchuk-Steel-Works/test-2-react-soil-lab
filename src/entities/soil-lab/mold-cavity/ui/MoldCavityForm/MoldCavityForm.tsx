@@ -19,13 +19,13 @@ interface FormProps {
   itemData?: MoldCavityDetailResponse
 }
 
-export function MoldCavityFormComponent<TRootFormFields extends FieldValues>({
+export function MoldCavityFormComponent<T extends FieldValues>({
   pathPrefix,
   itemData,
 }: FormProps) {
-  const Form = useFormKit<TRootFormFields>()
+  const Form = useFormKit<T>()
   const fieldName = useCallback(
-    (field: keyof MoldCavityFormFields) => `${pathPrefix}.${field}` as Path<TRootFormFields>,
+    (field: keyof MoldCavityFormFields) => `${pathPrefix}.${field}` as Path<T>,
     [pathPrefix],
   )
   // Options

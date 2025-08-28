@@ -1,5 +1,6 @@
 import { lazy } from 'react'
 import { Files, FileText } from 'lucide-react'
+import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 import SectionLayout from '@/widgets/page-layout/SectionLayout'
 
@@ -15,7 +16,7 @@ export const ndtDocumentsRoutes: AppRoute = {
   label: 'Документи НК',
   icon: Files,
   Component: NDTDocumentsPageLayout,
-  requiredPermissions: ['ndt_documents_view'],
+  requiredPermissions: [PERMISSIONS.NDT_DOCUMENTS_VIEW],
   children: [
     {
       key: '',

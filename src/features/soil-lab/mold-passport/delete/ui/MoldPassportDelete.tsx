@@ -1,6 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
-import { useMoldPassportService } from '@/entities/soil-lab/mold-passport'
+import { moldPassportService } from '@/entities/soil-lab/mold-passport'
 import {
   getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryKey,
   getGetMoldPassportsListApiV1MoldPassportsGetQueryKey,
@@ -11,19 +10,20 @@ import { ConfiguredButton } from '@/widgets/page/ConfiguredButton'
 
 interface MoldPassportDeleteProps {
   id: string
+  onSuccess?: (res: unknown) => void
+  onError?: (err: unknown) => void
 }
 
-export default function MoldPassportDelete({ id }: MoldPassportDeleteProps) {
-  const navigate = useNavigate()
+export default function MoldPassportDelete({ id, onSuccess, onError }: MoldPassportDeleteProps) {
   const queryClient = useQueryClient()
 
   const {
     mutateAsync,
     isPending,
     error: mutationError,
-  } = useMoldPassportService.delete({
+  } = moldPassportService.delete({
     mutation: {
-      onSuccess: (_data, variables) => {
+      onSuccess: (res, variables) => {
         const queryKeyList = getGetMoldPassportsListApiV1MoldPassportsGetQueryKey()
         const queryKeyDetail = getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryKey(
           variables.moldPassportId,
@@ -32,16 +32,18 @@ export default function MoldPassportDelete({ id }: MoldPassportDeleteProps) {
         return Promise.all([
           queryClient.invalidateQueries({ queryKey: queryKeyList }),
           queryClient.invalidateQueries({ queryKey: queryKeyDetail }),
-        ])
+        ]).finally(() => {
+          onSuccess?.(res)
+        })
       },
+      onError: (err) => onError?.(err),
     },
   })
 
   // Запрос на удаление
   const handleSubmit = async () => {
-    if (!id) return
+    if (!id || isPending) return
     await mutateAsync({ moldPassportId: id })
-    navigate('..')
   }
 
   return (

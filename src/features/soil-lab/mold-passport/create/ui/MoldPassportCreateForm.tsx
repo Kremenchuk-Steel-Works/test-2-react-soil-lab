@@ -1,13 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
-import { useMoldPassportFormOptions } from '@/entities/soil-lab/mold-passport/hooks/useMoldPassportFormOptions'
-import { moldPassportDynamicSections } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/configs/dynamic-fields'
-import { MoldPassportCreateFormKit } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/FormKit'
-import { MoldPassportCreateBaseForm } from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/MoldPassportCreateBaseForm'
+import {
+  moldPassportDynamicSections,
+  useMoldPassportFormOptions,
+} from '@/entities/soil-lab/mold-passport'
 import {
   moldPassportCreateFormSchema,
   type MoldPassportCreateFormFields,
-} from '@/entities/soil-lab/mold-passport/ui/MoldPassportForm/schema'
+} from '@/features/soil-lab/mold-passport/create/model/schema'
+import { MoldPassportCreateFormKit } from '@/features/soil-lab/mold-passport/create/ui/formKit'
+import { MoldPassportCreateBaseForm } from '@/features/soil-lab/mold-passport/create/ui/MoldPassportCreateBaseForm'
 import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
 import { createLogger } from '@/shared/lib/logger'
 import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'

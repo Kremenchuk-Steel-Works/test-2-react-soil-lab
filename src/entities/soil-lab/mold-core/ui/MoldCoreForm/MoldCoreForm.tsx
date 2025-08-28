@@ -15,14 +15,11 @@ interface FormProps {
   itemData?: MoldCoreDetailResponse
 }
 
-export function MoldCoreFormComponent<TRootFormFields extends FieldValues>({
-  pathPrefix,
-  itemData,
-}: FormProps) {
-  const Form = useFormKit<TRootFormFields>()
+export function MoldCoreFormComponent<T extends FieldValues>({ pathPrefix, itemData }: FormProps) {
+  const Form = useFormKit<T>()
 
   const fieldName = useCallback(
-    (field: keyof MoldCoreFormFields) => `${pathPrefix}.${field}` as Path<TRootFormFields>,
+    (field: keyof MoldCoreFormFields) => `${pathPrefix}.${field}` as Path<T>,
     [pathPrefix],
   )
 

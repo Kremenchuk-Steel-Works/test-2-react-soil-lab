@@ -13,7 +13,7 @@ import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/Dy
 import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import type { FormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
-import { makeBinders, memoNamed } from '@/utils/react-hook-form/makeBinders'
+import { makeBinders } from '@/utils/react-hook-form/makeBinders'
 
 type Options = Pick<
   MoldPassportFormOptions,
@@ -31,12 +31,11 @@ export function useMoldPassportFormFields<T extends FieldValues>(Form: FormKit<T
   const ctxRef = useRef(ctx)
   ctxRef.current = ctx
 
-  // создаём весь реестр один раз (как и раньше), только без промежуточных const
   const Fields = useMemo(() => {
-    const { F, FA } = makeBinders<T, Ctx>(ctxRef)
+    const { F, FA, V } = makeBinders<T, Ctx>(ctxRef)
 
     return Object.freeze({
-      Title: memoNamed('Title', () => <h5 className="layout-text">Паспорт ливарної форми</h5>),
+      Title: V('Title', () => <h5 className="layout-text">Паспорт ливарної форми</h5>),
 
       MoldingAreaSelect: F('moldingAreaId', (name, { options }) => (
         <Form.Controller name={name}>
@@ -90,7 +89,6 @@ export function useMoldPassportFormFields<T extends FieldValues>(Form: FormKit<T
         </Form.Controller>
       )),
 
-      // Если Form.WithError ещё не принимает readonly массивы, сделай спред: name={[...names]}
       CastingTechnologyDynamic: FA(['dataGsc', 'dataAsc'] as const, (names) => (
         <Form.WithError name={[...names]}>
           <DynamicFieldArea section="castingTechnologyId" />
@@ -147,7 +145,7 @@ export function useMoldPassportFormFields<T extends FieldValues>(Form: FormKit<T
         </Form.Field>
       )),
 
-      SubmitButton: memoNamed(
+      SubmitButton: V(
         'SubmitButton',
         ({ text, disabled }: { text: string; disabled?: boolean }) => (
           <Form.WithError name="root">

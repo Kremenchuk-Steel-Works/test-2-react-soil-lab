@@ -1,8 +1,5 @@
 import { useParams } from 'react-router-dom'
-import {
-  moldPassportStatusOptions,
-  useMoldPassportService,
-} from '@/entities/soil-lab/mold-passport'
+import { moldPassportService, moldPassportStatusOptions } from '@/entities/soil-lab/mold-passport'
 import { getErrorMessage } from '@/shared/lib/axios'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { ConfiguredButton } from '@/widgets/page/ConfiguredButton'
@@ -14,7 +11,7 @@ export default function MoldPassportDetails() {
     data: responseData,
     isLoading,
     error: queryError,
-  } = useMoldPassportService.getById(id!, {
+  } = moldPassportService.getById(id!, {
     query: { enabled: !!id },
   })
 

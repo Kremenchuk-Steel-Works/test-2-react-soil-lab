@@ -1,5 +1,5 @@
 import { keepPreviousData } from '@tanstack/react-query'
-import { useMoldPassportService } from '@/entities/soil-lab/mold-passport'
+import { moldPassportService } from '@/entities/soil-lab/mold-passport'
 import { moldPassportColumns } from '@/pages/soil-lab/mold-passport/ui/list/columns'
 import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import { getErrorMessage } from '@/shared/lib/axios'
@@ -15,7 +15,7 @@ export default function MoldPassportList() {
     data: responseData,
     isLoading,
     error: queryError,
-  } = useMoldPassportService.getList(
+  } = moldPassportService.getList(
     { page: page, perPage: perPage },
     {
       query: {

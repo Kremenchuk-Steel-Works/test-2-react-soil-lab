@@ -1,11 +1,8 @@
 import { useCallback, useMemo } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
-import {
-  MoldPassportCreateForm,
-  useMoldPassportService,
-  type MoldPassportCreateFormFields,
-} from '@/entities/soil-lab/mold-passport'
+import { moldPassportService } from '@/entities/soil-lab/mold-passport'
+import type { MoldPassportCreateFormFields } from '@/features/soil-lab/mold-passport/create/model/schema'
+import { MoldPassportCreateForm } from '@/features/soil-lab/mold-passport/create/ui/MoldPassportCreateForm'
 import {
   getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryKey,
   getGetMoldPassportsListApiV1MoldPassportsGetQueryKey,
@@ -21,6 +18,8 @@ import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 interface MoldPassportUpdateProps {
   id: string
+  onSuccess?: (res: unknown) => void
+  onError?: (err: unknown) => void
 }
 
 // Адаптируем данные с запроса под форму
@@ -64,21 +63,24 @@ function mapResponseToInitialData(
   }
 }
 
-export default function MoldPassportUpdate({ id }: MoldPassportUpdateProps) {
-  const navigate = useNavigate()
+export default function MoldPassportUpdate({ id, onSuccess, onError }: MoldPassportUpdateProps) {
   const queryClient = useQueryClient()
 
   const {
     data: responseData,
     isLoading,
     error: queryError,
-  } = useMoldPassportService.getById(id!, {
+  } = moldPassportService.getById(id!, {
     query: { enabled: !!id },
   })
 
-  const { mutateAsync, error: mutationError } = useMoldPassportService.update({
+  const {
+    mutateAsync,
+    error: mutationError,
+    isPending,
+  } = moldPassportService.update({
     mutation: {
-      onSuccess: (_data, variables) => {
+      onSuccess: (res, variables) => {
         const queryKeyList = getGetMoldPassportsListApiV1MoldPassportsGetQueryKey()
         const queryKeyDetail = getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryKey(
           variables.moldPassportId,
@@ -87,8 +89,11 @@ export default function MoldPassportUpdate({ id }: MoldPassportUpdateProps) {
         return Promise.all([
           queryClient.invalidateQueries({ queryKey: queryKeyList }),
           queryClient.invalidateQueries({ queryKey: queryKeyDetail }),
-        ])
+        ]).finally(() => {
+          onSuccess?.(res)
+        })
       },
+      onError: (err) => onError?.(err),
     },
   })
 
@@ -118,7 +123,7 @@ export default function MoldPassportUpdate({ id }: MoldPassportUpdateProps) {
   // Запрос на обновление
   const handleSubmit = useCallback(
     async (formData: MoldPassportCreateFormFields) => {
-      if (!responseData || !formDefaultValues || !id) return
+      if (!responseData || !formDefaultValues || !id || isPending) return
 
       try {
         logger.debug('[MoldPassportUpdate] formDefaultValues', formDefaultValues)
@@ -133,13 +138,12 @@ export default function MoldPassportUpdate({ id }: MoldPassportUpdateProps) {
         logger.debug('[MoldPassportUpdate] payload', payload)
 
         await mutateAsync({ moldPassportId: id, data: payload })
-        navigate('..')
         return payload
       } catch (e) {
         logger.error('[MoldPassportUpdate] Mutation failed', e)
       }
     },
-    [formDefaultValues, id, navigate, responseData, transformations, mutateAsync],
+    [responseData, formDefaultValues, id, transformations, mutateAsync, isPending],
   )
 
   const combinedError = mutationError || queryError

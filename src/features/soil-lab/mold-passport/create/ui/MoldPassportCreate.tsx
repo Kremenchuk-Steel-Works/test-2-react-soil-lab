@@ -1,30 +1,34 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { moldPassportService } from '@/entities/soil-lab/mold-passport'
 import {
-  MoldPassportCreateForm,
   moldPassportCreateFormDefaultValues,
-  useMoldPassportService,
   type MoldPassportCreateFormFields,
-} from '@/entities/soil-lab/mold-passport'
+} from '@/features/soil-lab/mold-passport/create/model/schema'
+import { MoldPassportCreateForm } from '@/features/soil-lab/mold-passport/create/ui/MoldPassportCreateForm'
 import { getGetMoldPassportsListApiV1MoldPassportsGetQueryKey } from '@/shared/api/mold-passport/endpoints/mold-passports/mold-passports'
 
-export default function MoldPassportCreate() {
-  const navigate = useNavigate()
+interface MoldPassportCreateProps {
+  onSuccess?: (res: unknown) => void
+  onError?: (err: unknown) => void
+}
+
+export default function MoldPassportCreate({ onSuccess, onError }: MoldPassportCreateProps) {
   const queryClient = useQueryClient()
 
-  const { mutateAsync } = useMoldPassportService.create({
+  const { mutateAsync } = moldPassportService.create({
     mutation: {
-      onSuccess: () => {
-        return queryClient.invalidateQueries({
+      onSuccess: (res) => {
+        queryClient.invalidateQueries({
           queryKey: getGetMoldPassportsListApiV1MoldPassportsGetQueryKey(),
         })
+        onSuccess?.(res)
       },
+      onError: (err) => onError?.(err),
     },
   })
 
   const handleSubmit = async (data: MoldPassportCreateFormFields) => {
     await mutateAsync({ data })
-    navigate('..')
     return data
   }
 
