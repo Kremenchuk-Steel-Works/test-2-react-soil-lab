@@ -1,10 +1,11 @@
-import { memo, useCallback, useMemo } from 'react'
-import { type FieldValues, type Path } from 'react-hook-form'
+import { memo } from 'react'
+import { type ArrayPath, type FieldValues } from 'react-hook-form'
 import { useMoldCavityFormOptions } from '@/entities/soil-lab/mold-cavity/hooks/useMoldCavityFormOptions'
 import type { MoldCavityFormFields } from '@/entities/soil-lab/mold-cavity/ui/MoldCavityForm/schema'
 import { MoldCoreForm } from '@/entities/soil-lab/mold-core/ui/MoldCoreForm/MoldCoreForm'
 import { moldCoreFormDefaultValues } from '@/entities/soil-lab/mold-core/ui/MoldCoreForm/schema'
 import type { MoldCavityDetailResponse } from '@/shared/api/mold-passport/model'
+import { useScopedFieldName } from '@/shared/hooks/react-hook-form/useFieldName'
 import { createLogger } from '@/shared/lib/logger'
 import Checkbox from '@/shared/ui/checkbox/Checkbox'
 import InputField from '@/shared/ui/input-field/InputField'
@@ -14,24 +15,20 @@ import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/formKitContext'
 
 const logger = createLogger('MoldCavityForm')
 
-interface FormProps {
-  pathPrefix: string
+interface FormProps<T extends FieldValues, N extends ArrayPath<T> = ArrayPath<T>> {
+  pathPrefix: `${N}.${number}`
   itemData?: MoldCavityDetailResponse
 }
 
-export function MoldCavityFormComponent<T extends FieldValues>({
+export function MoldCavityFormComponent<T extends FieldValues, N extends ArrayPath<T>>({
   pathPrefix,
   itemData,
-}: FormProps) {
+}: FormProps<T, N>) {
   const Form = useFormKit<T>()
-  const fieldName = useCallback(
-    (field: keyof MoldCavityFormFields) => `${pathPrefix}.${field}` as Path<T>,
-    [pathPrefix],
-  )
-  // Options
-  const options = useMoldCavityFormOptions(itemData)
+  const fieldName = useScopedFieldName<T, MoldCavityFormFields>(pathPrefix)
+  const coresFieldName = fieldName.array('moldCores')
 
-  const coresFieldName = useMemo(() => `${pathPrefix}.moldCores` as const, [pathPrefix])
+  const options = useMoldCavityFormOptions(itemData)
 
   logger.debug('[MoldCavityForm] render')
 

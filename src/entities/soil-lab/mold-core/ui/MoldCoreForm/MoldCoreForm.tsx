@@ -1,8 +1,9 @@
-import { memo, useCallback } from 'react'
-import { type FieldValues, type Path } from 'react-hook-form'
+import { memo } from 'react'
+import { type ArrayPath, type FieldValues } from 'react-hook-form'
 import { useMoldCoreFormOptions } from '@/entities/soil-lab/mold-core/hooks/useMoldCoreFormOptions'
 import type { MoldCoreFormFields } from '@/entities/soil-lab/mold-core/ui/MoldCoreForm/schema'
 import type { MoldCoreDetailResponse } from '@/shared/api/mold-passport/model'
+import { useScopedFieldName } from '@/shared/hooks/react-hook-form/useFieldName'
 import { createLogger } from '@/shared/lib/logger'
 import InputField from '@/shared/ui/input-field/InputField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
@@ -10,20 +11,18 @@ import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/formKitContext'
 
 const logger = createLogger('MoldCoreForm')
 
-interface FormProps {
-  pathPrefix: string
+interface FormProps<T extends FieldValues, N extends ArrayPath<T> = ArrayPath<T>> {
+  pathPrefix: `${N}.${number}`
   itemData?: MoldCoreDetailResponse
 }
 
-export function MoldCoreFormComponent<T extends FieldValues>({ pathPrefix, itemData }: FormProps) {
+export function MoldCoreFormComponent<T extends FieldValues, N extends ArrayPath<T>>({
+  pathPrefix,
+  itemData,
+}: FormProps<T, N>) {
   const Form = useFormKit<T>()
+  const fieldName = useScopedFieldName<T, MoldCoreFormFields>(pathPrefix)
 
-  const fieldName = useCallback(
-    (field: keyof MoldCoreFormFields) => `${pathPrefix}.${field}` as Path<T>,
-    [pathPrefix],
-  )
-
-  // Options
   const options = useMoldCoreFormOptions(itemData)
 
   logger.debug('[MoldCoreForm] render')

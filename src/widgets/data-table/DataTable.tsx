@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import {
   flexRender,
   getCoreRowModel,
@@ -52,6 +52,7 @@ export function DataTable<T>({
   enableSortingRemoval = false,
   initialSorting,
 }: DataTableProps<T>) {
+  const id = useId()
   // Состояния таблицы
   const [sorting, setSorting] = useState<SortingState>(
     initialSorting ?? [{ id: 'id', desc: false }],
@@ -349,6 +350,8 @@ export function DataTable<T>({
         <strong>
           <div className="inline-flex items-center gap-1">
             <AdaptiveInput
+              id={`${id}-currentPage`}
+              name="currentPage"
               value={table.getState().pagination.pageIndex + 1}
               onChange={(e) => {
                 const page = e.target.value ? Number(e.target.value) - 1 : 0
@@ -356,7 +359,12 @@ export function DataTable<T>({
               }}
             />
             <span className="select-none">/</span>
-            <AdaptiveInput value={table.getPageCount()} readOnly />
+            <AdaptiveInput
+              id={`${id}-totalPages`}
+              name="totalPages"
+              value={table.getPageCount()}
+              readOnly
+            />
           </div>
         </strong>
 

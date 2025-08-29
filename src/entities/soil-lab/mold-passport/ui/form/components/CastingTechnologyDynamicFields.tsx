@@ -1,4 +1,3 @@
-import { type FieldPath, type FieldValues } from 'react-hook-form'
 import { useMoldPassportFormOptions } from '@/entities/soil-lab/mold-passport/hooks/useMoldPassportFormOptions'
 import type {
   MoldPassportDataAsc,
@@ -8,6 +7,7 @@ import type {
 } from '@/entities/soil-lab/mold-passport/ui/form/lib/dynamic-fields'
 import { moldingSandSystemOptions } from '@/entities/soil-lab/molding-sand-system/model/moldingSandSystem'
 import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
+import { useScopedFieldName } from '@/shared/hooks/react-hook-form/useFieldName'
 import { formTransformers } from '@/shared/lib/react-hook-form/nested-error'
 import InputField from '@/shared/ui/input-field/InputField'
 import { useDynamicMeta } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
@@ -15,11 +15,9 @@ import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
 import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/formKitContext'
 
-export function CastingTechnologyDataGscDynamicForm<
-  T extends FieldValues & WithDataGscFormFields,
->() {
-  const Form = useFormKit<T>()
-  const fieldName = <K extends keyof MoldPassportDataGsc>(k: K) => `dataGsc.${k}` as FieldPath<T>
+export function CastingTechnologyDataGscDynamicForm() {
+  const Form = useFormKit<WithDataGscFormFields>()
+  const fieldName = useScopedFieldName<WithDataGscFormFields, MoldPassportDataGsc>('dataGsc')
 
   return (
     <FieldsetWrapper title={`Пісочно-глиняна формовка`}>
@@ -54,14 +52,12 @@ export function CastingTechnologyDataGscDynamicForm<
   )
 }
 
-export function CastingTechnologyPassportDataAscDynamicForm<
-  T extends FieldValues & WithDataAscFormFields,
->() {
-  const Form = useFormKit<T>()
+export function CastingTechnologyPassportDataAscDynamicForm() {
+  const Form = useFormKit<WithDataAscFormFields>()
   const { responseData } = useDynamicMeta<Record<string, never>, MoldPassportDetailResponse>()
   const options = useMoldPassportFormOptions(responseData)
 
-  const fieldName = <K extends keyof MoldPassportDataAsc>(k: K) => `dataAsc.${k}` as FieldPath<T>
+  const fieldName = useScopedFieldName<WithDataAscFormFields, MoldPassportDataAsc>('dataAsc')
 
   return (
     <FieldsetWrapper title={`Холодно-твердіюча формовка`}>

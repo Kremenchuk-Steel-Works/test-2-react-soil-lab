@@ -1,4 +1,4 @@
-import { memo, useCallback, type ComponentType, type Key } from 'react'
+import { memo, useCallback, useMemo, type ComponentType, type Key } from 'react'
 import clsx from 'clsx'
 import { Plus, X } from 'lucide-react'
 import {
@@ -17,7 +17,12 @@ import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
 
 type ArrayElement<T> = T extends readonly (infer U)[] ? U : T extends (infer U)[] ? U : never
 
-export interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPath<T>, TItemData> {
+export interface DynamicFieldArrayProps<
+  T extends FieldValues,
+  N extends ArrayPath<T>,
+  TItemData extends { id?: Key },
+  TItem = ArrayElement<PathValue<T, N>>,
+> {
   name: N
   form: ComponentType<{
     pathPrefix: `${N}.${number}`
@@ -27,17 +32,20 @@ export interface DynamicFieldArrayProps<T extends FieldValues, N extends ArrayPa
     register?: UseFormRegister<T>
   }>
   itemsData?: TItemData[]
-  defaultItem?: DeepPartial<ArrayElement<PathValue<T, N>>>
+  /** поддерживаем как значение, так и фабрику */
+  defaultItem?: DeepPartial<TItem> | (() => DeepPartial<TItem>)
   title?: string
   label?: string
   addButton?: React.ReactNode
-  removeButton?: (onRemove: () => void) => React.ReactNode
+  /** иногда полезно знать index при кастомном удалении */
+  removeButton?: (onRemove: () => void, index: number) => React.ReactNode
 }
 
 function DynamicFieldArrayInner<
   T extends FieldValues,
   N extends ArrayPath<T>,
   TItemData extends { id?: Key },
+  TItem = ArrayElement<PathValue<T, N>>,
 >({
   name,
   form: FormComponent,
@@ -47,14 +55,26 @@ function DynamicFieldArrayInner<
   label,
   addButton,
   removeButton,
-}: DynamicFieldArrayProps<T, N, TItemData>) {
-  const methods = useFormContext<T>()
-  const { control, register } = methods
-
+}: DynamicFieldArrayProps<T, N, TItemData, TItem>) {
+  const { control, register } = useFormContext<T>()
   const { fields, append, remove } = useFieldArray({ control, name })
 
+  // Приводим id к строке (field.id — всегда string у RHF), убираем O(n²) find на map
+  const itemDataById = useMemo(() => {
+    const map = new Map<string, TItemData>()
+    for (const d of itemsData ?? []) {
+      if (d?.id != null) map.set(String(d.id), d)
+    }
+    return map
+  }, [itemsData])
+
   const handleAppend = useCallback(() => {
-    append((defaultItem ?? {}) as FieldArray<T, N>, { shouldFocus: false })
+    const value =
+      typeof defaultItem === 'function'
+        ? (defaultItem() as unknown as FieldArray<T, N>)
+        : ((defaultItem ?? {}) as unknown as FieldArray<T, N>)
+
+    append(value, { shouldFocus: false })
   }, [append, defaultItem])
 
   const makeHandleRemove = useCallback((index: number) => () => remove(index), [remove])
@@ -63,8 +83,8 @@ function DynamicFieldArrayInner<
     <div className="space-y-0">
       <div className="space-y-0 divide-y-2 divide-gray-500/20 dark:divide-gray-950/20">
         {fields.map((field, index) => {
-          const pathPrefix = `${name}.${index}` as const
-          const itemData = itemsData?.find((d) => d.id === field.id) ?? itemsData?.[index]
+          const pathPrefix = `${name}.${index}` as `${N}.${number}`
+          const itemData = itemDataById.get(field.id) ?? itemsData?.[index]
 
           return (
             <FieldsetWrapper
@@ -73,7 +93,7 @@ function DynamicFieldArrayInner<
               className={clsx('rounded-none', { 'rounded-t-lg': index === 0 })}
               button={
                 removeButton ? (
-                  removeButton(makeHandleRemove(index))
+                  removeButton(makeHandleRemove(index), index)
                 ) : (
                   <Button
                     customColor="red"

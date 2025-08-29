@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import {
   createColumnHelper,
   flexRender,
@@ -81,6 +81,7 @@ const reactStyles = {
 const ch = createColumnHelper<RouteRow>()
 
 export default function RouteTableView({ parentRouteKey, rowClickNavigates = true }: Props) {
+  const id = useId()
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -335,6 +336,8 @@ export default function RouteTableView({ parentRouteKey, rowClickNavigates = tru
         <strong>
           <div className="inline-flex items-center gap-1">
             <AdaptiveInput
+              id={`${id}-currentPage`}
+              name="currentPage"
               value={table.getState().pagination.pageIndex + 1}
               onChange={(e) => {
                 const idx = e.target.value ? Number(e.target.value) - 1 : 0
@@ -342,7 +345,12 @@ export default function RouteTableView({ parentRouteKey, rowClickNavigates = tru
               }}
             />
             <span className="select-none">/</span>
-            <AdaptiveInput value={table.getPageCount()} readOnly />
+            <AdaptiveInput
+              id={`${id}-totalPages`}
+              name="totalPages"
+              value={table.getPageCount()}
+              readOnly
+            />
           </div>
         </strong>
 
