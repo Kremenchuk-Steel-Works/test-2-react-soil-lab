@@ -1,9 +1,8 @@
 import type { ContactBase } from '@/entities/admin/contact/types/base.model'
 import type { CreateOperationBase, DeleteOperationBase, UpdateOperationBase } from '@/types/common'
 
-export interface ContactCreateRequest extends ContactBase {}
-
-export interface ContactUpdateRequest extends Partial<ContactBase> {}
+export type ContactCreateRequest = ContactBase
+export type ContactUpdateRequest = Partial<ContactBase>
 
 export type ContactCreateOperation = CreateOperationBase<ContactCreateRequest>
 export type ContactUpdateOperation = UpdateOperationBase<ContactUpdateRequest>

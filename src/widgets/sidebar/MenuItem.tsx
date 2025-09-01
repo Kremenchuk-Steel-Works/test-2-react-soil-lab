@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useIsTruncated } from '@/shared/hooks/useIsTruncated'
-import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
+import { useSidebar } from '@/widgets/sidebar/sidebar-context'
 
 interface MenuItemProps {
   label: string

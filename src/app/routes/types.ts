@@ -1,3 +1,4 @@
+import type { ComponentType, LazyExoticComponent } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import type { Permission } from '@/app/routes/permissions'
 
@@ -7,12 +8,20 @@ export interface RouteMeta {
   buttons?: PageButtonType[]
 }
 
-export interface AppRoute {
+/**
+ * Универсальный тип для компонента роутa (может быть ленивым или обычным).
+ * По умолчанию считаем, что пропсов нет.
+ */
+type RouteComponent<P = Record<string, never>> =
+  | ComponentType<P>
+  | LazyExoticComponent<ComponentType<P>>
+
+export interface AppRoute<P = Record<string, never>> {
   key: string
   path: string
   label: string
   icon: LucideIcon
-  Component: React.LazyExoticComponent<React.ComponentType<any>> | React.ComponentType<any>
+  Component: RouteComponent<P>
   requiredPermissions?: Permission[]
   inSidebar?: boolean
   children?: AppRoute[]

@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import DepartmentsForm from '@/entities/admin/departments/forms/form'
 import type { DepartmentsFormFields } from '@/entities/admin/departments/forms/schema'
@@ -6,11 +7,13 @@ import { departmentService } from '@/entities/admin/departments/services/service
 export default function AdminDepartmentsAdd() {
   const navigate = useNavigate()
 
-  const handleSubmit = async (data: DepartmentsFormFields) => {
-    await departmentService.create(data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: DepartmentsFormFields): Promise<void> => {
+      await departmentService.create(data)
+      await navigate('..')
+    },
+    [navigate],
+  )
 
   return (
     <>

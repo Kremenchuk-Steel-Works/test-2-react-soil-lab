@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import PermissionsForm from '@/entities/admin/permissions/forms/form'
@@ -22,11 +23,13 @@ export default function AdminPermissionsUpdate() {
     enabled: !!id,
   })
 
-  const handleSubmit = async (data: PermissionsFormFields) => {
-    await permissionService.update(id!, data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: PermissionsFormFields): Promise<void> => {
+      await permissionService.update(id!, data)
+      await navigate('..')
+    },
+    [navigate, id],
+  )
 
   // Адаптируем данные под форму
   function mapToFormDefaults(obj: PermissionDetailResponse): Partial<PermissionsFormFields> {

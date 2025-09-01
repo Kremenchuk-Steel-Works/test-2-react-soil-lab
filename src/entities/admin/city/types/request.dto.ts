@@ -4,4 +4,4 @@ export interface CityCreateRequest extends CityBase {
   countryId: number
 }
 
-export interface CityUpdateRequest extends Partial<CityCreateRequest> {}
+export type CityUpdateRequest = Partial<CityCreateRequest>

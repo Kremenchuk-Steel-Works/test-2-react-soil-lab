@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, type ComponentType, type Key } from 'react'
+import { useCallback, useMemo, type ComponentType, type Key } from 'react'
 import clsx from 'clsx'
 import { Plus, X } from 'lucide-react'
 import {
@@ -14,6 +14,7 @@ import {
 } from 'react-hook-form'
 import Button from '@/shared/ui/button/Button'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
+import { typedMemo } from '@/utils/typedMemo'
 
 type ArrayElement<T> = T extends readonly (infer U)[] ? U : T extends (infer U)[] ? U : never
 
@@ -83,7 +84,7 @@ function DynamicFieldArrayInner<
     <div className="space-y-0">
       <div className="space-y-0 divide-y-2 divide-gray-500/20 dark:divide-gray-950/20">
         {fields.map((field, index) => {
-          const pathPrefix = `${name}.${index}` as `${N}.${number}`
+          const pathPrefix: `${N}.${number}` = `${name}.${index}`
           const itemData = itemDataById.get(field.id) ?? itemsData?.[index]
 
           return (
@@ -152,4 +153,4 @@ function DynamicFieldArrayInner<
  * @param removeButton - Опциональный рендер-проп для полной кастомизации кнопки "Удалить".
  *
  */
-export const DynamicFieldArray = memo(DynamicFieldArrayInner) as typeof DynamicFieldArrayInner
+export const DynamicFieldArray = typedMemo(DynamicFieldArrayInner)

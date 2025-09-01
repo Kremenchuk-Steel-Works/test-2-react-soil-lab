@@ -15,7 +15,7 @@ export default function MoldPassportDelete() {
   const { id } = useParams<{ id: string }>()
 
   const {
-    mutateAsync,
+    mutate,
     isPending,
     error: mutationError,
   } = useMoldPassportService.delete({
@@ -34,10 +34,10 @@ export default function MoldPassportDelete() {
     },
   })
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!id) return
-    await mutateAsync({ moldPassportId: id })
-    navigate('..')
+    void mutate({ moldPassportId: id })
+    void navigate('..')
   }
 
   return (

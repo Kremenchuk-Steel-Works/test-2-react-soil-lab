@@ -15,7 +15,7 @@ export const departmentService = {
   // Request
   async create(params: DepartmentCreateRequest): Promise<DepartmentDetailResponse> {
     try {
-      const response = await api.post(`/departments/`, params)
+      const response = await api.post<DepartmentDetailResponse>(`/departments/`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -24,7 +24,7 @@ export const departmentService = {
 
   async update(id: string, params: DepartmentUpdateRequest): Promise<DepartmentDetailResponse> {
     try {
-      const response = await api.put(`/departments/${id}`, params)
+      const response = await api.put<DepartmentDetailResponse>(`/departments/${id}`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -34,7 +34,7 @@ export const departmentService = {
   // Response
   async getList(params?: PageParams): Promise<DepartmentListResponse> {
     try {
-      const response = await api.get(`/departments`, { params })
+      const response = await api.get<DepartmentListResponse>(`/departments`, { params })
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -43,7 +43,7 @@ export const departmentService = {
 
   async getById(id: string): Promise<DepartmentDetailResponse> {
     try {
-      const response = await api.get(`/departments/${id}`)
+      const response = await api.get<DepartmentDetailResponse>(`/departments/${id}`)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -52,7 +52,7 @@ export const departmentService = {
 
   async getLookup(): Promise<DepartmentLookupResponse[]> {
     try {
-      const response = await api.get(`/lookups/departments`)
+      const response = await api.get<DepartmentLookupResponse[]>(`/lookups/departments`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

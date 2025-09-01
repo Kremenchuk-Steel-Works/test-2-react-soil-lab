@@ -45,7 +45,7 @@ function createApiObjectOperation<T extends Record<string, any>>(
     ((hasOriginal && hasId(originalItem)) || (hasCurrent && hasId(currentItem)))
 
   if (hasCurrent && !hasOriginal) {
-    const { id: _omit, ...data } = currentItem as T
+    const { id: _omit, ...data } = currentItem
     return { action: 'create', data }
   }
   if (!hasCurrent && hasOriginal) {
@@ -84,7 +84,7 @@ function createBaseApiArrayOperations<T extends { id: Id }>(
   for (const currentItem of currentItems) {
     const { id } = currentItem
     if (!isDefined(id) || !originalMap.has(id)) {
-      const { id: _omit, ...data } = currentItem as T
+      const { id: _omit, ...data } = currentItem
       operations.push({ action: 'create', data })
     } else {
       const originalItem = originalMap.get(id)!

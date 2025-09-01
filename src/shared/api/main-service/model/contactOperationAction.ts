@@ -8,7 +8,7 @@
 export type ContactOperationAction =
   (typeof ContactOperationAction)[keyof typeof ContactOperationAction]
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const ContactOperationAction = {
   create: 'create',
   update: 'update',

@@ -7,7 +7,7 @@
 
 export type CastingProductType = (typeof CastingProductType)[keyof typeof CastingProductType]
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const CastingProductType = {
   primary: 'primary',
   auxiliary: 'auxiliary',

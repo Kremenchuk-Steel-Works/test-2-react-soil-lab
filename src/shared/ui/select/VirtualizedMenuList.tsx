@@ -24,7 +24,7 @@ function mergeRefs<T>(
     for (const ref of refs) {
       if (!ref) continue
       if (typeof ref === 'function') ref(instance)
-      else (ref as RefObject<T | null>).current = instance
+      else (ref).current = instance
     }
   }
 }

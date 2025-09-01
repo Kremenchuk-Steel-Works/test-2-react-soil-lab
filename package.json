@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint . --ext .ts,.tsx --cache --cache-location ./.eslintcache",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "preview": "vite preview",
     "spellcheck": "cspell \"**/*.{ts,tsx,md,json}\" --show-context",
     "index": "node scripts/generate-explicit-api.mjs",

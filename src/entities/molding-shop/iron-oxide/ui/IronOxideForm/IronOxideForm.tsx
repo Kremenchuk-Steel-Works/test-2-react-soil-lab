@@ -48,7 +48,7 @@
 //   }
 
 //   return (
-//     <FormLayout onSubmit={handleSubmit(submitHandler)}>
+//     <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
 //       <h5 className="layout-text">Смола</h5>
 
 //       <InputFieldWithError

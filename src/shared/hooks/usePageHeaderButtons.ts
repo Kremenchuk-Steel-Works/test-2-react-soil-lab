@@ -12,19 +12,19 @@ export function usePageHeaderButtons(): PreparedButtonProps[] {
   const userPermissions = useUserPermissionsSet()
 
   const currentRoute = useMemo(() => findRouteObjectByPath(pathname), [pathname])
-  const buttonConfigs = currentRoute?.meta?.buttons ?? []
 
-  return useMemo(
-    () =>
-      buttonConfigs
-        .map((buttonType) => {
-          const targetPath = `${pathname}/${buttonType}`
-          const hasAccess = checkAccessLogic(targetPath, currentUser, userPermissions)
-          const onClick = () => navigate(targetPath)
+  return useMemo(() => {
+    const buttonConfigs = currentRoute?.meta?.buttons ?? []
 
-          return prepareButtonLogic(buttonType, hasAccess, onClick)
-        })
-        .filter((button): button is PreparedButtonProps => button !== null),
-    [buttonConfigs, pathname, currentUser, userPermissions, navigate],
-  )
+    return buttonConfigs
+      .map((buttonType) => {
+        const targetPath = `${pathname}/${buttonType}`
+        const hasAccess = checkAccessLogic(targetPath, currentUser, userPermissions)
+
+        const onClick = () => void navigate(targetPath)
+
+        return prepareButtonLogic(buttonType, hasAccess, onClick)
+      })
+      .filter((button): button is PreparedButtonProps => button !== null)
+  }, [currentRoute, pathname, currentUser, userPermissions, navigate])
 }

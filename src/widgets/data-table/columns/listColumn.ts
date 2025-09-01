@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { ColumnDef } from '@tanstack/react-table'
+import { toLowerSafe } from '@/shared/lib/strings/toLowerSafe'
 
 interface ListColumnOptions<TItem> {
   placeholder?: ReactNode
@@ -52,8 +53,9 @@ export function listColumn<TData, TItem>(
     },
     filterFn: (row, columnId, filterValue) => {
       const list = row.getValue<TItem[] | null | undefined>(columnId)
-      const fullText = formatList(list)
-      return fullText.toLowerCase().includes(filterValue.toLowerCase())
+      const fullText = formatList(list).toLowerCase()
+      const needle = toLowerSafe(filterValue)
+      return fullText.includes(needle)
     },
   }
 }

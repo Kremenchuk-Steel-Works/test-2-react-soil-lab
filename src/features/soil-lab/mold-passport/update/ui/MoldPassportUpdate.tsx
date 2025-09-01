@@ -70,7 +70,7 @@ export default function MoldPassportUpdate({ id, onSuccess, onError }: MoldPassp
     data: responseData,
     isLoading,
     error: queryError,
-  } = moldPassportService.getById(id!, {
+  } = moldPassportService.getById(id, {
     query: { enabled: !!id },
   })
 

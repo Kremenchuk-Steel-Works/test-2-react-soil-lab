@@ -130,7 +130,7 @@ export default function MoldPassportUpdate() {
         logger.debug('[MoldPassportUpdate] payload', payload)
 
         await mutateAsync({ moldPassportId: id, data: payload })
-        navigate('..')
+        await navigate('..')
         return payload
       } catch (e) {
         logger.error('[MoldPassportUpdate] Mutation failed', e)
@@ -146,7 +146,7 @@ export default function MoldPassportUpdate() {
       <div className="flex items-center justify-between">
         <Button
           className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate('..')}
+          onClick={() => void navigate('..')}
         >
           <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
         </Button>

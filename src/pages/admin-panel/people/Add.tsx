@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PeopleForm from '@/entities/admin/people/forms/form'
 import { type PeopleFormFields } from '@/entities/admin/people/forms/schema'
@@ -6,11 +7,13 @@ import { personService } from '@/entities/admin/people/services/service'
 export default function AdminPeopleAdd() {
   const navigate = useNavigate()
 
-  const handleSubmit = async (data: PeopleFormFields) => {
-    await personService.create(data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: PeopleFormFields): Promise<void> => {
+      await personService.create(data)
+      await navigate('..')
+    },
+    [navigate],
+  )
 
   return (
     <>

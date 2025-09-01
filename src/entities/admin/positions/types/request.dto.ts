@@ -1,5 +1,4 @@
 import type { PositionBase } from '@/entities/admin/positions/types/base.model'
 
-export interface PositionCreateRequest extends PositionBase {}
-
-export interface PositionUpdateRequest extends Partial<PositionBase> {}
+export type PositionCreateRequest = PositionBase
+export type PositionUpdateRequest = Partial<PositionBase>

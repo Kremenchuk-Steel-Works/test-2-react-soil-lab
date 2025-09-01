@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueries, type UseQueryResult } from '@tanstack/react-query'
+import { useQueries } from '@tanstack/react-query'
 import {
   Controller,
   useForm,
@@ -7,16 +7,13 @@ import {
   type Path,
   type SubmitHandler,
 } from 'react-hook-form'
-import { ZodObject, type z, type ZodType } from 'zod'
+import { ZodObject, type z, type ZodRawShape } from 'zod'
 import { personQueryKeys } from '@/entities/admin/people/services/keys'
 import { personService } from '@/entities/admin/people/services/service'
-import type { PersonLookupResponse } from '@/entities/admin/people/types/response.dto'
 import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
 import { permissionService } from '@/entities/admin/permissions/services/service'
-import type { PermissionLookupResponse } from '@/entities/admin/permissions/types/response.dto'
 import { roleQueryKeys } from '@/entities/admin/roles/services/keys'
 import { roleService } from '@/entities/admin/roles/services/service'
-import type { RoleLookupResponse } from '@/entities/admin/roles/types/response.dto'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
@@ -29,14 +26,20 @@ import {
   InputFieldWithError,
 } from '@/shared/ui/with-error/fieldsWithError'
 
-interface FormProps<T extends ZodType<any, any>> {
+/**
+ * Принимаем только объектные схемы Zod — нам нужен .shape и список ключей.
+ * Это снимает no-explicit-any и проблемы с instanceof.
+ */
+type AnyZodObject = ZodObject<ZodRawShape>
+
+interface FormProps<T extends AnyZodObject> {
   schema: T
   defaultValues?: DefaultValues<z.infer<T>>
   onSubmit: SubmitHandler<z.infer<T>>
   submitBtnName: string
 }
 
-export default function UsersForm<T extends ZodType<any, any>>({
+export default function UsersForm<T extends AnyZodObject>({
   schema,
   defaultValues,
   onSubmit,
@@ -96,11 +99,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
   }
 
   // Queries data
-  const [peopleQ, rolesQ, permissionsQ] = queries as [
-    UseQueryResult<PersonLookupResponse[], Error>,
-    UseQueryResult<RoleLookupResponse[], Error>,
-    UseQueryResult<PermissionLookupResponse[], Error>,
-  ]
+  const [peopleQ, rolesQ, permissionsQ] = queries
 
   // Options
   const peopleOptions: Option[] =
@@ -121,13 +120,17 @@ export default function UsersForm<T extends ZodType<any, any>>({
       label: c.name,
     })) || []
 
+  const onFormSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    void handleSubmit(submitHandler)(e)
+  }
+
   return (
-    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={onFormSubmit}>
       <h5 className="layout-text">Користувач</h5>
 
       {schemaKeys.includes('personId') && (
         <Controller
-          name={`personId` as Path<T>}
+          name={`personId` as Path<z.infer<T>>}
           control={control}
           render={({ field, fieldState }) => (
             <FormSelectField
@@ -137,7 +140,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
               isVirtualized
               isClearable
               placeholder="Оберіть людину"
-              errorMessage={getNestedErrorMessage(errors, `personId` as Path<T>)}
+              errorMessage={getNestedErrorMessage(errors, `personId` as Path<z.infer<T>>)}
             />
           )}
         />
@@ -147,8 +150,8 @@ export default function UsersForm<T extends ZodType<any, any>>({
         <InputFieldWithError
           label="Email"
           type="email"
-          {...register(`email` as Path<T>, formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, `email` as Path<T>)}
+          {...register(`email` as Path<z.infer<T>>, formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, `email` as Path<z.infer<T>>)}
         />
       )}
 
@@ -156,30 +159,30 @@ export default function UsersForm<T extends ZodType<any, any>>({
         <InputFieldWithError
           label="Пароль"
           type="password"
-          {...register(`rawPassword` as Path<T>, formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, `rawPassword` as Path<T>)}
+          {...register(`rawPassword` as Path<z.infer<T>>, formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, `rawPassword` as Path<z.infer<T>>)}
         />
       )}
 
       {schemaKeys.includes('isActive') && (
         <CheckboxWithError
           label="Активний"
-          {...register(`isActive` as Path<T>, formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, `isActive` as Path<T>)}
+          {...register(`isActive` as Path<z.infer<T>>, formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, `isActive` as Path<z.infer<T>>)}
         />
       )}
 
       {schemaKeys.includes('isSuperuser') && (
         <CheckboxWithError
           label="Адміністратор"
-          {...register(`isSuperuser` as Path<T>, formTransformers.string)}
-          errorMessage={getNestedErrorMessage(errors, `isSuperuser` as Path<T>)}
+          {...register(`isSuperuser` as Path<z.infer<T>>, formTransformers.string)}
+          errorMessage={getNestedErrorMessage(errors, `isSuperuser` as Path<z.infer<T>>)}
         />
       )}
 
       {schemaKeys.includes('rolesIds') && (
         <Controller
-          name={`rolesIds` as Path<T>}
+          name={`rolesIds` as Path<z.infer<T>>}
           control={control}
           render={({ field, fieldState }) => (
             <FormSelectField
@@ -190,7 +193,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
               isMulti
               isClearable
               placeholder="Оберіть ролі"
-              errorMessage={getNestedErrorMessage(errors, `rolesIds` as Path<T>)}
+              errorMessage={getNestedErrorMessage(errors, `rolesIds` as Path<z.infer<T>>)}
             />
           )}
         />
@@ -198,7 +201,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
 
       {schemaKeys.includes('permissionsIds') && (
         <Controller
-          name={`permissionsIds` as Path<T>}
+          name={`permissionsIds` as Path<z.infer<T>>}
           control={control}
           render={({ field, fieldState }) => (
             <FormSelectField
@@ -209,7 +212,7 @@ export default function UsersForm<T extends ZodType<any, any>>({
               isMulti
               isClearable
               placeholder="Оберіть права доступу"
-              errorMessage={getNestedErrorMessage(errors, `permissionsIds` as Path<T>)}
+              errorMessage={getNestedErrorMessage(errors, `permissionsIds` as Path<z.infer<T>>)}
             />
           )}
         />

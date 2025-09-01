@@ -15,7 +15,7 @@ export const organizationService = {
   // Request
   async create(params: OrganizationCreateRequest): Promise<OrganizationDetailResponse> {
     try {
-      const response = await api.post(`/organizations/`, params)
+      const response = await api.post<OrganizationDetailResponse>(`/organizations/`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -24,7 +24,7 @@ export const organizationService = {
 
   async update(id: string, params: OrganizationUpdateRequest): Promise<OrganizationDetailResponse> {
     try {
-      const response = await api.put(`/organizations/${id}`, params)
+      const response = await api.put<OrganizationDetailResponse>(`/organizations/${id}`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -34,7 +34,7 @@ export const organizationService = {
   // Response
   async getList(params?: PageParams): Promise<OrganizationListResponse> {
     try {
-      const response = await api.get(`/organizations`, { params })
+      const response = await api.get<OrganizationListResponse>(`/organizations`, { params })
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -43,7 +43,7 @@ export const organizationService = {
 
   async getById(id: string): Promise<OrganizationDetailResponse> {
     try {
-      const response = await api.get(`/organizations/${id}`)
+      const response = await api.get<OrganizationDetailResponse>(`/organizations/${id}`)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -52,7 +52,7 @@ export const organizationService = {
 
   async getLookup(): Promise<OrganizationLookupResponse[]> {
     try {
-      const response = await api.get(`/lookups/organizations`)
+      const response = await api.get<OrganizationLookupResponse[]>(`/lookups/organizations`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

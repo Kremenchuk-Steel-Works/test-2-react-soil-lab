@@ -59,7 +59,7 @@ export default function AdminPeopleUpdate() {
     ) as AddressOperationRequest[]
 
     await personService.update(id!, payload)
-    navigate('..')
+    await navigate('..')
     return payload
   }
 

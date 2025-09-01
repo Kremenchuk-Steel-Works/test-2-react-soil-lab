@@ -42,7 +42,7 @@ export default function LoginForm({ defaultValues, onSubmit, submitBtnName }: Fo
   }
 
   return (
-    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
       <InputFieldWithError
         label="Email"
         errorMessage={errors.email?.message}

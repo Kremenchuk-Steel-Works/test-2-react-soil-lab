@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PermissionsForm from '@/entities/admin/permissions/forms/form'
 import type { PermissionsFormFields } from '@/entities/admin/permissions/forms/schema'
@@ -6,11 +7,13 @@ import { permissionService } from '@/entities/admin/permissions/services/service
 export default function AdminPermissionsAdd() {
   const navigate = useNavigate()
 
-  const handleSubmit = async (data: PermissionsFormFields) => {
-    await permissionService.create(data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: PermissionsFormFields): Promise<void> => {
+      await permissionService.create(data)
+      await navigate('..')
+    },
+    [navigate],
+  )
 
   return (
     <>

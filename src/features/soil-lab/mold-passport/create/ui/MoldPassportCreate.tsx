@@ -18,7 +18,7 @@ export default function MoldPassportCreate({ onSuccess, onError }: MoldPassportC
   const { mutateAsync } = moldPassportService.create({
     mutation: {
       onSuccess: (res) => {
-        queryClient.invalidateQueries({
+        void queryClient.invalidateQueries({
           queryKey: getGetMoldPassportsListApiV1MoldPassportsGetQueryKey(),
         })
         onSuccess?.(res)

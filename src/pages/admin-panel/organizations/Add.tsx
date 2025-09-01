@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import OrganizationsForm from '@/entities/admin/organizations/forms/form'
 import type { OrganizationsFormFields } from '@/entities/admin/organizations/forms/schema'
@@ -6,11 +7,13 @@ import { organizationService } from '@/entities/admin/organizations/services/ser
 export default function AdminOrganizationsAdd() {
   const navigate = useNavigate()
 
-  const handleSubmit = async (data: OrganizationsFormFields) => {
-    await organizationService.create(data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: OrganizationsFormFields): Promise<void> => {
+      await organizationService.create(data)
+      await navigate('..')
+    },
+    [navigate],
+  )
 
   return (
     <>

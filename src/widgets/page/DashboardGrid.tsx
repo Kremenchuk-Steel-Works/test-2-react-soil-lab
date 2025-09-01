@@ -29,7 +29,7 @@ export function DashboardGrid({ parentRouteKey, variant = 'buttons' }: Dashboard
             <Button
               key={childRoute.key}
               className="flex max-w-85 items-center justify-center gap-1 whitespace-nowrap"
-              onClick={() => navigate(childRoute.path)}
+              onClick={() => void navigate(childRoute.path)}
               title={childRoute.label}
               aria-label={childRoute.label}
             >

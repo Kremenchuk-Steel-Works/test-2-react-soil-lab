@@ -16,7 +16,7 @@ export function Breadcrumbs() {
     })
     // Создаем массив объектов для рендеринга
     .map((match) => {
-      const route = match.handle!.route
+      const route = match.handle.route
       return {
         pathname: match.pathname,
         label: route.label,

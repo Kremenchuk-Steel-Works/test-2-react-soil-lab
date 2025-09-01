@@ -4,4 +4,4 @@ export interface PermissionCreateRequest extends PermissionBase {
   departmentId: string
 }
 
-export interface PermissionUpdateRequest extends Partial<PermissionCreateRequest> {}
+export type PermissionUpdateRequest = Partial<PermissionCreateRequest>

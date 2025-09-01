@@ -4,4 +4,4 @@ export interface RoleCreateRequest extends RoleBase {
   permissionIds?: number[]
 }
 
-export interface RoleUpdateRequest extends Partial<RoleCreateRequest> {}
+export type RoleUpdateRequest = Partial<RoleCreateRequest>

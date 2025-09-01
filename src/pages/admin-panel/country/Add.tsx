@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CountryForm from '@/entities/admin/country/forms/form'
 import type { CountryFormFields } from '@/entities/admin/country/forms/schema'
@@ -6,11 +7,13 @@ import { countryService } from '@/entities/admin/country/services/service'
 export default function AdminCountryAdd() {
   const navigate = useNavigate()
 
-  const handleSubmit = async (data: CountryFormFields) => {
-    await countryService.create(data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: CountryFormFields): Promise<void> => {
+      await countryService.create(data)
+      await navigate('..')
+    },
+    [navigate],
+  )
 
   return (
     <>

@@ -24,7 +24,7 @@ export default function MoldPassportAdd() {
 
   const handleSubmit = async (data: MoldPassportFormFields) => {
     await mutateAsync({ data })
-    navigate('..')
+    await navigate('..')
     return data
   }
 

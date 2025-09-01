@@ -38,7 +38,7 @@ export default function CountryForm({ defaultValues, onSubmit, submitBtnName }: 
   }
 
   return (
-    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
       <h5 className="layout-text">Країна</h5>
 
       <InputFieldWithError

@@ -23,7 +23,10 @@ export function makeBinders<T extends FieldValues, C>(ctxRef: React.RefObject<C>
   }
 
   // «Вьюшный» компонент (без привязки к форме)
-  function V<P = {}>(displayName: string, Comp: React.FC<P>): React.FC<P> {
+  function V<P extends object = Record<string, never>>(
+    displayName: string,
+    Comp: React.FC<P>,
+  ): React.FC<P> {
     const M = React.memo(Comp)
     M.displayName = displayName
     return M

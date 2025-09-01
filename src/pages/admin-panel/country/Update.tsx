@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import CountryForm from '@/entities/admin/country/forms/form'
@@ -22,11 +23,13 @@ export default function AdminCountryUpdate() {
     enabled: !!id,
   })
 
-  const handleSubmit = async (data: CountryFormFields) => {
-    await countryService.update(id!, data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: CountryFormFields): Promise<void> => {
+      await countryService.update(id!, data)
+      await navigate('..')
+    },
+    [navigate, id],
+  )
 
   return (
     <>

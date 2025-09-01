@@ -1,44 +1,38 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
+import { SidebarContext, type SidebarContextType } from './sidebar-context'
 
-type SidebarContextType = {
-  collapsed: boolean
-  broken: boolean
-  toggleSidebar: () => void
-  closeSidebar: () => void
-  expandedSubMenus: Set<string>
-  collapsedSubMenu: string | null
-  toggleSubMenu: (id: string, forceCollapsed?: boolean) => void
-  closeSubMenu: () => void
-}
+type Props = { children: ReactNode }
 
-const SidebarContext = createContext<SidebarContextType | undefined>(undefined)
-
-export const useSidebar = () => {
-  const ctx = useContext(SidebarContext)
-  if (!ctx) throw new Error('useSidebar must be used within SidebarProvider')
-  return ctx
-}
-
-export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(
-    () =>
+export function SidebarProvider({ children }: Props) {
+  // Инициализация: читаем из media query и localStorage (с SSR-проверкой)
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false
+    return (
       window.matchMedia('(max-width: 768px)').matches ||
-      localStorage.getItem('sidebar-collapsed') === 'true',
-  )
-  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 768px)').matches)
+      localStorage.getItem('sidebar-collapsed') === 'true'
+    )
+  })
 
-  // Multiple expanded sub-menus when expanded
+  // Признак мобильной ширины экрана
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia('(max-width: 768px)').matches
+  })
+
+  // В развернутом режиме можно открыть несколько подпунктов
   const [expandedSubMenus, setExpandedSubMenus] = useState<Set<string>>(new Set())
-  // Single open sub-menu when collapsed (popup)
+  // В свернутом режиме открыт только один подпункт (показывается как попап)
   const [collapsedSubMenu, setCollapsedSubMenu] = useState<string | null>(null)
 
-  // sync media query
+  // Синхронизируемся с media query (при изменении ширины экрана)
   useEffect(() => {
+    if (typeof window === 'undefined') return
     const mql = window.matchMedia('(max-width: 768px)')
+
     const listener = () => {
       const mobile = mql.matches
       setIsMobile(mobile)
-      // Если зашли в мобильный — сворачиваем sidebar и закрываем сабменю-портал
+      // При входе в мобильный режим — сворачиваем сайдбар и закрываем попап подпункта
       if (mobile) {
         setCollapsed(true)
         setCollapsedSubMenu(null)
@@ -49,35 +43,44 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return () => mql.removeEventListener('change', listener)
   }, [])
 
-  // when the sidebar toggles collapsed state, only reset collapsedSubMenu
+  // При смене состояния сайдбара сбрасываем открытый подпункт и сохраняем флаг в localStorage
   useEffect(() => {
     setCollapsedSubMenu(null)
-    localStorage.setItem('sidebar-collapsed', String(collapsed))
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('sidebar-collapsed', String(collapsed))
+    }
   }, [collapsed])
 
   const toggleSidebar = () => setCollapsed((c) => !c)
   const closeSidebar = () => setCollapsed(true)
 
-  // unified toggler: branch on collapsed
-  const toggleSubMenu = (id: string, forceCollapsed = false) => {
+  // Универсальный тогглер подпунктов: ветвимся по режиму (свернут/развернут)
+  const toggleSubMenu: SidebarContextType['toggleSubMenu'] = (id, forceCollapsed = false) => {
     if (collapsed && forceCollapsed) {
-      // collapsed: single popup
+      // Свернутый режим: управляем одиночным попапом
       setCollapsedSubMenu((prev) => (prev === id ? null : id))
     } else {
-      // expanded: multiple independent
+      // Развернутый режим: можно независимо открывать/закрывать несколько подпунктов
       setExpandedSubMenus((prev) => {
         const next = new Set(prev)
-        next.has(id) ? next.delete(id) : next.add(id)
+        if (next.has(id)) {
+          next.delete(id)
+        } else {
+          next.add(id)
+        }
         return next
       })
     }
   }
 
+  // Закрыть подпункты в зависимости от режима
   const closeSubMenu = () => {
     if (collapsed) setCollapsedSubMenu(null)
     else setExpandedSubMenus(new Set())
   }
 
+  // Объект контекста, мемоизация здесь не критична: все функции стабильны,
+  // а перерендеры завязаны на локальные стейты
   const value: SidebarContextType = {
     collapsed,
     broken: isMobile,
@@ -91,3 +94,5 @@ export const SidebarProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>
 }
+
+export default SidebarProvider

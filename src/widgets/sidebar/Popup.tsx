@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
+import { useSidebar } from '@/widgets/sidebar/sidebar-context'
 
 interface PopupProps {
   btnRef: React.RefObject<HTMLButtonElement | null>

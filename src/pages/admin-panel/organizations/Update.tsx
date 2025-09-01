@@ -52,7 +52,7 @@ export default function AdminOrganizationsUpdate() {
     ) as AddressOperationRequest[]
 
     await organizationService.update(id!, payload)
-    navigate('..')
+    await navigate('..')
     return payload
   }
 

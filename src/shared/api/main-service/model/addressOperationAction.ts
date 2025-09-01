@@ -8,7 +8,7 @@
 export type AddressOperationAction =
   (typeof AddressOperationAction)[keyof typeof AddressOperationAction]
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const AddressOperationAction = {
   create: 'create',
   update: 'update',

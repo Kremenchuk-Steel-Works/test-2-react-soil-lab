@@ -10,7 +10,7 @@
  */
 export type EmploymentStatus = (typeof EmploymentStatus)[keyof typeof EmploymentStatus]
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const EmploymentStatus = {
   intern: 'intern',
   'full-time': 'full-time',

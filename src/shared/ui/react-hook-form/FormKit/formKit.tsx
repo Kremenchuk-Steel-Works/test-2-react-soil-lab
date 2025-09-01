@@ -39,7 +39,7 @@ export function createFormKit<T extends FieldValues>() {
         if (message) msgs.push({ name: 'root', message, id: 'form-root__error' })
         continue
       }
-      const message = getNestedErrorMessage(allErrors, n as N)
+      const message = getNestedErrorMessage(allErrors, n)
       if (message) {
         const id = `${nameToId(String(n))}__error`
         msgs.push({ name: n, message, id })

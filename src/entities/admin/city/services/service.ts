@@ -12,7 +12,7 @@ export const cityService = {
   // Request
   async create(params: CityCreateRequest): Promise<CityDetailResponse> {
     try {
-      const response = await api.post(`/cities/`, params)
+      const response = await api.post<CityDetailResponse>(`/cities/`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -21,7 +21,7 @@ export const cityService = {
 
   async update(id: string, params: CityUpdateRequest): Promise<CityDetailResponse> {
     try {
-      const response = await api.put(`/cities/${id}`, params)
+      const response = await api.put<CityDetailResponse>(`/cities/${id}`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -31,7 +31,7 @@ export const cityService = {
   // Response
   async getList(params?: PageParams): Promise<CityListResponse> {
     try {
-      const response = await api.get(`/cities`, { params })
+      const response = await api.get<CityListResponse>(`/cities`, { params })
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -40,7 +40,7 @@ export const cityService = {
 
   async getById(id: string): Promise<CityDetailResponse> {
     try {
-      const response = await api.get(`/cities/${id}`)
+      const response = await api.get<CityDetailResponse>(`/cities/${id}`)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -49,7 +49,7 @@ export const cityService = {
 
   async getLookup(): Promise<CityLookupResponse[]> {
     try {
-      const response = await api.get(`/lookups/cities`)
+      const response = await api.get<CityLookupResponse[]>(`/lookups/cities`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

@@ -2,15 +2,15 @@ import { LogOut, Menu, Shield, User } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '@/app/providers/auth/context'
 import { PATHS } from '@/app/routes/paths'
-import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
+import { useSidebar } from '@/widgets/sidebar/sidebar-context'
 
 const Navbar: React.FC = () => {
   const { logout, currentUser } = useAuth()
   const { toggleSidebar, closeSidebar, closeSubMenu, expandedSubMenus, collapsed, broken } =
     useSidebar()
 
-  const handleLogout = async () => {
-    await logout()
+  const handleLogout = () => {
+    void logout()
   }
 
   return (

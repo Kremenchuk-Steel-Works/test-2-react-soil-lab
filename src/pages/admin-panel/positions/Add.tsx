@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PositionsForm from '@/entities/admin/positions/forms/form'
 import type { PositionsFormFields } from '@/entities/admin/positions/forms/schema'
@@ -6,11 +7,13 @@ import { positionService } from '@/entities/admin/positions/services/service'
 export default function AdminPositionsAdd() {
   const navigate = useNavigate()
 
-  const handleSubmit = async (data: PositionsFormFields) => {
-    await positionService.create(data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: PositionsFormFields): Promise<void> => {
+      await positionService.create(data)
+      await navigate('..')
+    },
+    [navigate],
+  )
 
   return (
     <>

@@ -24,7 +24,7 @@ export default function AdminRolesUpdate() {
 
   const handleSubmit = async (data: RolesFormFields) => {
     await roleService.update(id!, data)
-    navigate('..')
+    await navigate('..')
     return data
   }
 

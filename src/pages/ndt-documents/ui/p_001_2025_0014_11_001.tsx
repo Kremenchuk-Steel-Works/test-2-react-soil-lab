@@ -11,7 +11,6 @@ export default function Document0014_11_001Page() {
         }
         alt="Титульний лист"
       />
-      {/* <PdfViewer src="/docs/П 001-2025 0014.11.001/П 001-2025 «Процедура з проведення магнітопорошкового контролю корпусу букси кресленик 0014.11.001».pdf" /> */}
       <div>
         <Button className="flex items-center justify-center gap-1 whitespace-nowrap">
           <FileText className="h-5 w-5" />{' '}

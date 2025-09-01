@@ -55,6 +55,7 @@ export function ConfiguredButton({
   if (!prepared) return null
 
   const { Icon, label, className: defClass, key: _ignoreKey, ...defButtonProps } = prepared
+  void _ignoreKey
 
   return (
     <Button

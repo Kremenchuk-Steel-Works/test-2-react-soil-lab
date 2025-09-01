@@ -65,11 +65,11 @@ export function createSingleObjectOperation<T>(
   const hasCurrent = currentItem !== null && currentItem !== undefined
 
   if (hasCurrent && !hasOriginal) {
-    return { action: 'create', data: currentItem! }
+    return { action: 'create', data: currentItem }
   }
 
   if (hasCurrent && hasOriginal) {
-    return { action: 'update', data: currentItem! }
+    return { action: 'update', data: currentItem }
   }
 
   if (!hasCurrent && hasOriginal) {

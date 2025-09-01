@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import DepartmentsForm from '@/entities/admin/departments/forms/form'
@@ -22,11 +23,13 @@ export default function AdminDepartmentsUpdate() {
     enabled: !!id,
   })
 
-  const handleSubmit = async (data: DepartmentsFormFields) => {
-    await departmentService.update(id!, data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: DepartmentsFormFields): Promise<void> => {
+      await departmentService.update(id!, data)
+      await navigate('..')
+    },
+    [navigate, id],
+  )
 
   return (
     <>

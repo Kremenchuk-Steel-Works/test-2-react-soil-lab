@@ -41,7 +41,7 @@ export default function DepartmentsForm({ defaultValues, onSubmit, submitBtnName
   }
 
   return (
-    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
       <h5 className="layout-text">Відділ</h5>
 
       <InputFieldWithError

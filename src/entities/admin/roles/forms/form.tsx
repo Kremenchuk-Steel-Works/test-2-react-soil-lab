@@ -70,7 +70,7 @@ export default function RolesForm({ defaultValues, onSubmit, submitBtnName }: Fo
     })) || []
 
   return (
-    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
       <h5 className="layout-text">Роль</h5>
 
       <InputFieldWithError

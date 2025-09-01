@@ -26,7 +26,7 @@ export function usePrepareNavButton(
 
   // Создаем обработчик клика с помощью useCallback для стабильности
   const handleClick = useCallback(() => {
-    navigate(targetPathSuffix)
+    void navigate(targetPathSuffix)
   }, [navigate, targetPathSuffix])
 
   // Используем нашу чистую логику для финальной подготовки

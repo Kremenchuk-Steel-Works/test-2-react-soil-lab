@@ -163,7 +163,7 @@ export function MoldPassportForm({
         config={dynamicFieldConfig}
         responseData={responseData}
       >
-        <FormLayout onSubmit={handleSubmit(submitHandler)}>
+        <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
           <h5 className="layout-text">Паспорт ливарної форми</h5>
 
           {/* <AlertMessage type={AlertType.WARNING} message={`Попередній стан форми: Не заповнено`} /> */}

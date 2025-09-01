@@ -55,7 +55,7 @@
 //   }
 
 //   return (
-//     <FormLayout onSubmit={handleSubmit(submitHandler)}>
+//     <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
 //       <h5 className="layout-text">Технологія формовки</h5>
 
 //       <Controller

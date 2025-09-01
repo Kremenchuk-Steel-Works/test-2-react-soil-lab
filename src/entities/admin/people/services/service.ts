@@ -15,7 +15,7 @@ export const personService = {
   // Request
   async create(params: PersonCreateRequest): Promise<PersonDetailResponse> {
     try {
-      const response = await api.post(`/people/`, params)
+      const response = await api.post<PersonDetailResponse>(`/people/`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -24,7 +24,7 @@ export const personService = {
 
   async update(id: string, params: PersonUpdateRequest): Promise<PersonDetailResponse> {
     try {
-      const response = await api.put(`/people/${id}`, params)
+      const response = await api.put<PersonDetailResponse>(`/people/${id}`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -34,7 +34,7 @@ export const personService = {
   // Response
   async getList(params?: PageParams): Promise<PersonListResponse> {
     try {
-      const response = await api.get(`/people`, { params })
+      const response = await api.get<PersonListResponse>(`/people`, { params })
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -43,7 +43,7 @@ export const personService = {
 
   async getById(id: string): Promise<PersonDetailResponse> {
     try {
-      const response = await api.get(`/people/${id}`)
+      const response = await api.get<PersonDetailResponse>(`/people/${id}`)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -52,7 +52,7 @@ export const personService = {
 
   async getLookup(): Promise<PersonLookupResponse[]> {
     try {
-      const response = await api.get(`/lookups/people`)
+      const response = await api.get<PersonLookupResponse[]>(`/lookups/people`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

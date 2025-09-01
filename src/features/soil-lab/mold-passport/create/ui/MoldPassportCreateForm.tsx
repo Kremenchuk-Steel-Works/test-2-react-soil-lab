@@ -61,7 +61,7 @@ export function MoldPassportCreateForm({
 
   return (
     <FormProvider {...form}>
-      <FormLayout onSubmit={handleSubmit(submitHandler)}>
+      <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
         <FormKitProvider value={Form}>
           <DynamicFieldsProvider sections={moldPassportDynamicSections} responseData={responseData}>
             <MoldPassportCreateBaseForm

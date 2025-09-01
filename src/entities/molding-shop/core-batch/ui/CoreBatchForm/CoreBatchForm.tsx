@@ -53,7 +53,7 @@
 //   }
 
 //   return (
-//     <FormLayout onSubmit={handleSubmit(submitHandler)}>
+//     <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
 //       <h5 className="layout-text">Партія стрижнів</h5>
 
 //       <Controller

@@ -15,7 +15,7 @@ export const positionService = {
   // Request
   async create(params: PositionCreateRequest): Promise<PositionDetailResponse> {
     try {
-      const response = await api.post(`/positions/`, params)
+      const response = await api.post<PositionDetailResponse>(`/positions/`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -24,7 +24,7 @@ export const positionService = {
 
   async update(id: string, params: PositionUpdateRequest): Promise<PositionDetailResponse> {
     try {
-      const response = await api.put(`/positions/${id}`, params)
+      const response = await api.put<PositionDetailResponse>(`/positions/${id}`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -34,7 +34,7 @@ export const positionService = {
   // Response
   async getList(params?: PageParams): Promise<PositionListResponse> {
     try {
-      const response = await api.get(`/positions`, { params })
+      const response = await api.get<PositionListResponse>(`/positions`, { params })
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -43,7 +43,7 @@ export const positionService = {
 
   async getById(id: string): Promise<PositionDetailResponse> {
     try {
-      const response = await api.get(`/positions/${id}`)
+      const response = await api.get<PositionDetailResponse>(`/positions/${id}`)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -52,7 +52,7 @@ export const positionService = {
 
   async getLookup(): Promise<PositionLookupResponse[]> {
     try {
-      const response = await api.get(`/lookups/positions`)
+      const response = await api.get<PositionLookupResponse[]>(`/lookups/positions`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

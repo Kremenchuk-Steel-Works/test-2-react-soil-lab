@@ -6,7 +6,6 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  type ColumnDef,
   type PaginationState,
   type SortingState,
 } from '@tanstack/react-table'
@@ -140,7 +139,7 @@ export default function RouteTableView({ parentRouteKey, rowClickNavigates = tru
   }, [filteredRows.length, pagination.pageIndex, pagination.pageSize])
 
   // === Columns (icon + name), with createColumnHelper ===
-  const columns: ColumnDef<RouteRow, any>[] = useMemo(
+  const columns = useMemo(
     () => [
       ch.accessor('label', {
         id: 'label',
@@ -296,7 +295,13 @@ export default function RouteTableView({ parentRouteKey, rowClickNavigates = tru
                 className={`border-b border-gray-200 hover:bg-gray-50 dark:border-gray-700 dark:hover:bg-gray-800 ${
                   rowClickNavigates ? 'cursor-pointer' : ''
                 }`}
-                onClick={rowClickNavigates ? () => navigate(row.original.path) : undefined}
+                onClick={
+                  rowClickNavigates
+                    ? () => {
+                        void navigate(row.original.path)
+                      }
+                    : undefined
+                }
               >
                 {row.getVisibleCells().map((cell) => (
                   <td

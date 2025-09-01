@@ -11,7 +11,7 @@ export const userService = {
   // Request
   async create(params: UserCreateRequest): Promise<UserDetailResponse> {
     try {
-      const response = await api.post(`/users/`, params)
+      const response = await api.post<UserDetailResponse>(`/users/`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -20,7 +20,7 @@ export const userService = {
 
   async update(id: string, params: UserUpdateRequest): Promise<UserDetailResponse> {
     try {
-      const response = await api.put(`/users/${id}`, params)
+      const response = await api.put<UserDetailResponse>(`/users/${id}`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -30,7 +30,7 @@ export const userService = {
   // Response
   async getList(params?: PageParams): Promise<UserListResponse> {
     try {
-      const response = await api.get(`/users`, { params })
+      const response = await api.get<UserListResponse>(`/users`, { params })
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -40,7 +40,7 @@ export const userService = {
   async getById(id: string): Promise<UserDetailResponse> {
     try {
       console.log(id)
-      const response = await api.get(`/users/${id}`)
+      const response = await api.get<UserDetailResponse>(`/users/${id}`)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -49,7 +49,7 @@ export const userService = {
 
   async getMe(): Promise<UserDetailResponse> {
     try {
-      const response = await api.get(`/users/me`)
+      const response = await api.get<UserDetailResponse>(`/users/me`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

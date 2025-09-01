@@ -156,7 +156,7 @@ export function useMoldPassportFormFields<T extends FieldValues>(Form: FormKit<T
         ),
       ),
     } as const)
-  }, [])
+  }, [Form])
 
   return Fields
 }

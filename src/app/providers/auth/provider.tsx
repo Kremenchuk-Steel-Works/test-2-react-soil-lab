@@ -1,4 +1,10 @@
-import { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState, type ReactNode } from 'react'
+import {
+  AxiosHeaders,
+  isAxiosError,
+  type AxiosRequestHeaders,
+  type InternalAxiosRequestConfig,
+} from 'axios'
 import { AuthContext, type AuthContextType } from '@/app/providers/auth/context'
 import { userService } from '@/entities/admin/users/services/service'
 import type { UserDetailResponse } from '@/entities/admin/users/types/response.dto'
@@ -7,50 +13,69 @@ import { authService } from '@/entities/auth/services/service'
 import { api } from '@/shared/api/client'
 import { logger } from '@/shared/lib/logger'
 
-// Функции для чтения данных из storage:
-const getStoredItem = (itemName: string): string | null => {
-  return localStorage.getItem(itemName) || sessionStorage.getItem(itemName) || null
-}
+// --- utils ---
+const getStoredItem = (itemName: string): string | null =>
+  localStorage.getItem(itemName) || sessionStorage.getItem(itemName) || null
 
-/**
- * Функция для очистки localStorage по префиксу.
- * Находит все ключи, начинающиеся с заданной строки, и удаляет их.
- * @param prefix Префикс ключей для удаления.
- */
 const clearLocalStorageByKeyPrefix = (prefix: string) => {
-  // Мы не можем итерироваться по localStorage напрямую,
-  // поэтому сначала собираем все ключи в массив.
   const keysToRemove: string[] = []
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i)
-    if (key && key.startsWith(prefix)) {
-      keysToRemove.push(key)
-    }
+    if (key && key.startsWith(prefix)) keysToRemove.push(key)
   }
-
-  // Удаляем найденные ключи
   keysToRemove.forEach((key) => {
     localStorage.removeItem(key)
     logger.debug(`Кэш формы очищен: ${key}`)
   })
 }
 
-// Компонент-провайдер
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+// безопасная установка заголовков для Axios v1 без подмены типа headers
+const setHeader = (cfg: InternalAxiosRequestConfig, key: string, value: string) => {
+  if (!cfg.headers) {
+    cfg.headers = {} as AxiosRequestHeaders
+  }
+  const h = cfg.headers
+  if (h instanceof AxiosHeaders) {
+    h.set(key, value)
+  } else {
+    ;(h as Record<string, string>)[key] = value
+  }
+}
+
+// расширяем конфиг только нашими флагами (не трогаем тип headers)
+type WithFlags = { _retry?: boolean; addAccessToken?: boolean }
+type ReqCfg = InternalAxiosRequestConfig & WithFlags
+
+// --- provider ---
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(() => getStoredItem('accessToken'))
   const [refreshToken, setRefreshToken] = useState<string | null>(() =>
     getStoredItem('refreshToken'),
   )
+  // Присваивается изначально undefined, пока пользователь не будет проверен (null => не авторизован, undefined => проверяется)
   const [currentUser, setCurrentUser] = useState<UserDetailResponse | null>()
 
-  // Функция входа
+  // синхронный logout + совместимость по типу Promise<void>
+  const performLogout = (): void => {
+    logger.debug('Выполняем выход из системы')
+    setAccessToken(null)
+    setRefreshToken(null)
+    setCurrentUser(null)
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    sessionStorage.removeItem('accessToken')
+    sessionStorage.removeItem('refreshToken')
+    clearLocalStorageByKeyPrefix('formCache:')
+  }
+  const logout = (): Promise<void> => {
+    performLogout()
+    return Promise.resolve()
+  }
+
   const login = async ({ email, password, rememberMe }: LoginFormFields) => {
     logger.debug('Выполняем вход в систему')
     const response = await authService.login({ email, password })
-
-    // logout чтобы точно очистить все старые данные пользователя
-    logout()
-    logger.debug(response.accessToken)
+    await logout()
 
     setAccessToken(response.accessToken)
     setRefreshToken(response.refreshToken)
@@ -60,39 +85,22 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     storage.setItem('refreshToken', response.refreshToken)
   }
 
-  // Функция выхода
-  const logout = async () => {
-    logger.debug('Выполняем выход из системы')
-    setAccessToken(null)
-    setRefreshToken(null)
-    setCurrentUser(null)
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('refreshToken')
-    sessionStorage.removeItem('accessToken')
-    sessionStorage.removeItem('refreshToken')
-
-    // Очищаем весь кэш форм
-    clearLocalStorageByKeyPrefix('formCache:')
-  }
-
-  // Перехватчик для добавления токена в header Authorization
+  // Добавление токена
   useLayoutEffect(() => {
     const authInterceptor = api.interceptors.request.use((config) => {
-      const cfg = config as typeof config & { _retry?: boolean }
+      const cfg = config as ReqCfg
 
-      // Логирование метода, URL и заголовков до изменения
       logger.debug(`${cfg.method?.toUpperCase()} → ${cfg.url}`, {
         headersBefore: { ...cfg.headers },
       })
 
-      // Условное добавление токена в заголовки
       if (!cfg._retry && cfg.addAccessToken !== false && accessToken) {
-        cfg.headers.Authorization = `Bearer ${accessToken}`
-        logger.debug(`Добавлен токен → ${cfg.headers.Authorization}`)
+        setHeader(cfg, 'Authorization', `Bearer ${accessToken}`)
+        logger.debug('Добавлен токен Authorization')
 
         // КОСТЫЛЬ
         if (currentUser?.id) {
-          config.headers['X-User-Id'] = currentUser.id
+          setHeader(cfg, 'X-User-Id', String(currentUser.id))
           logger.debug(`Добавлен X-User-Id → ${currentUser.id}`)
         }
       }
@@ -110,41 +118,51 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const refreshInterceptor = api.interceptors.response.use(
       (response) => response,
       async (error) => {
-        const originalRequest = error.config
+        // строгое сужение, без опасных приведения типов
+        if (!isAxiosError<{ detail?: string }>(error)) {
+          return Promise.reject(error instanceof Error ? error : new Error('Request failed'))
+        }
 
-        if (
-          !(error.response.status >= 200 && error.response.status < 300) &&
-          error.response.data.detail === 'Token has expired.'
-        ) {
+        const originalRequest = error.config as ReqCfg | undefined
+        const isTokenExpired =
+          error.response?.status === 401 && error.response?.data?.detail === 'Token has expired.'
+
+        if (isTokenExpired) {
           try {
-            logger.debug('Обновляем токен', error.response.data.detail)
+            logger.debug('Обновляем токен', error.response?.data?.detail)
 
-            if (!refreshToken) {
-              logger.warn('Отсутствует корректный refreshToken')
+            if (!refreshToken || !originalRequest) {
+              logger.warn('Отсутствует корректный refreshToken или originalRequest')
               return Promise.reject(error)
             }
-            const response = await authService.refresh({ refreshToken })
 
-            logger.debug('Токен обновлен', response.accessToken)
+            if (originalRequest._retry) {
+              return Promise.reject(error)
+            }
 
-            // Обновляем токены в состоянии
-            setAccessToken(response.accessToken)
-            const storage = sessionStorage.getItem('accessToken') ? sessionStorage : localStorage
-            storage.setItem('accessToken', response.accessToken)
+            const res = await authService.refresh({ refreshToken })
+            logger.debug('Токен обновлен', res.accessToken)
 
-            // Повторяем запрос
-            originalRequest.headers.Authorization = `Bearer ${response.accessToken}`
+            setAccessToken(res.accessToken)
+            const storage =
+              sessionStorage.getItem('accessToken') !== null ? sessionStorage : localStorage
+            storage.setItem('accessToken', res.accessToken)
+
+            setHeader(originalRequest, 'Authorization', `Bearer ${res.accessToken}`)
             originalRequest._retry = true
+
             return api(originalRequest)
-          } catch (err) {
+          } catch (e) {
             setAccessToken(null)
-            logger.debug('Токен не получилось обновить', err)
+            logger.debug('Токен не получилось обновить', e)
+            return Promise.reject(e instanceof Error ? e : new Error('Token refresh failed'))
           }
         }
 
         return Promise.reject(error)
       },
     )
+
     return () => {
       api.interceptors.response.eject(refreshInterceptor)
     }
@@ -166,14 +184,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         logger.debug(user)
       } catch (error) {
         setCurrentUser(null)
-        throw error
+        throw error instanceof Error ? error : new Error('Failed to fetch user')
       }
     }
 
-    fetchMe()
+    void fetchMe()
   }, [accessToken])
 
-  // Возвращаем провайдер с нужным значением
   const value: AuthContextType = { accessToken, currentUser, login, logout }
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

@@ -8,6 +8,7 @@ import {
   type ColumnDef,
   type ColumnFiltersState,
   type PaginationState,
+  type RowData,
   type SortingState,
 } from '@tanstack/react-table'
 import {
@@ -31,9 +32,11 @@ import ReactSelectNoLabel, {
   type ReactSelectNoLabelOption,
 } from '@/shared/ui/select/ReactSelectNoLabel'
 
-export type DataTableProps<T> = {
-  data: T[]
-  columns: ColumnDef<T, any>[]
+export type DataTableProps<TData extends RowData> = {
+  data: TData[]
+  // Разные TValue в массиве колонок совместимы только через any.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  columns: ColumnDef<TData, any>[]
   page: number
   perPage: number
   setSearchParams: SetURLSearchParams
@@ -42,7 +45,7 @@ export type DataTableProps<T> = {
   initialSorting?: SortingState
 }
 
-export function DataTable<T>({
+export function DataTable<TData extends RowData>({
   data,
   columns,
   page,
@@ -51,7 +54,7 @@ export function DataTable<T>({
   setSearchParams,
   enableSortingRemoval = false,
   initialSorting,
-}: DataTableProps<T>) {
+}: DataTableProps<TData>) {
   const id = useId()
   // Состояния таблицы
   const [sorting, setSorting] = useState<SortingState>(

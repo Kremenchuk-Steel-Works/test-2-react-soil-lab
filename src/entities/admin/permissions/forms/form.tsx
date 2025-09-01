@@ -70,7 +70,7 @@ export default function PermissionsForm({ defaultValues, onSubmit, submitBtnName
   }
 
   return (
-    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
       <h5 className="layout-text">Права доступу</h5>
 
       <InputFieldWithError

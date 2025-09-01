@@ -3,7 +3,7 @@ import type { AppRoute } from '@/app/routes/types'
 import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
 import { getFullPath } from '@/utils/path'
 import MenuItem from '@/widgets/sidebar/MenuItem'
-import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
+import { useSidebar } from '@/widgets/sidebar/sidebar-context'
 import { SubMenu } from '@/widgets/sidebar/SubMenu'
 
 const Sidebar: React.FC = () => {
@@ -11,44 +11,35 @@ const Sidebar: React.FC = () => {
   const visibleRoutes = useVisibleRoutes()
 
   const baseClasses = `
-    z-50 flex flex-col bg-white dark:bg-gray-900 shadow-md transition-all duration-200 ease-in-out overflow-hidden
+    z-50 flex flex-col bg-white dark:bg-gray-900 shadow-md transition-all duration-200 ease-in-out
   `
-  // При broken-mode — fixed overlay, иначе - static в потоке
+
   const modeClasses = broken
-    ? `fixed top-14 bottom-0 left-0
-       transform ${collapsed ? '-translate-x-full' : 'translate-x-0'}
-       w-70`
+    ? `fixed top-14 bottom-0 left-0 transform ${collapsed ? '-translate-x-full' : 'translate-x-0'} w-70`
     : `relative ${collapsed ? 'w-14' : 'w-70'}`
 
   return (
     <>
-      {/* Бекдроп для мобильного, при клике вне области закрываем sidebar */}
       {broken && !collapsed && (
         <div className="fixed inset-0 top-14 z-40 bg-black/50" onClick={closeSidebar} />
       )}
 
       <aside
         className={`${baseClasses} ${modeClasses}`}
-        // клик по пустому месту сайдбара закрывает только
-        // всплывающее саб-меню в свёрнутом десктопном режиме.
         onClick={() => {
-          if (collapsed && expandedSubMenus) {
-            closeSubMenu()
-          }
+          if (collapsed && expandedSubMenus) closeSubMenu()
         }}
       >
-        {/* Обёртка для скролла */}
-        <div className="flex-1 overflow-y-auto pb-14">
+        {/* Скролл-обёртка: резерв под скролл + выносим его за контент */}
+        <div className="-mr-[var(--sbw,8px)] flex-1 overflow-y-auto pr-[var(--sbw,0px)] pb-14 [scrollbar-gutter:stable]">
           <nav onClick={(e) => e.stopPropagation()}>
             {visibleRoutes
               .filter((route) => route.inSidebar !== false)
               .map((route) => {
-                // Находим дочерние элементы, которые должны быть видимы в сайдбаре
                 const visibleChildren = route.children?.filter(
                   (child: AppRoute) => child.inSidebar !== false,
                 )
 
-                // Если видимые дочерние элементы есть, то рендерим SubMenu
                 if (visibleChildren && visibleChildren.length > 0) {
                   return (
                     <SubMenu key={route.key} id={route.key} label={route.label} Icon={route.icon}>
@@ -64,7 +55,6 @@ const Sidebar: React.FC = () => {
                   )
                 }
 
-                // В противном случае (если children нет или все они скрыты) рендерим простой MenuItem
                 return (
                   <MenuItem key={route.key} label={route.label} Icon={route.icon} to={route.path} />
                 )

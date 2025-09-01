@@ -194,7 +194,7 @@
 //         config={dynamicFieldConfig}
 //         options={dynamicFieldOptions}
 //       >
-//         <FormLayout onSubmit={handleSubmit(submitHandler)}>
+//         <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
 //           <h5 className="layout-text">Паспорт ливарної форми</h5>
 
 //           {/* Async validators */}

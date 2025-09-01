@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import CityForm from '@/entities/admin/city/forms/form'
@@ -22,11 +23,13 @@ export default function AdminCityUpdate() {
     enabled: !!id,
   })
 
-  const handleSubmit = async (data: CityFormFields) => {
-    await cityService.update(id!, data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: CityFormFields): Promise<void> => {
+      await cityService.update(id!, data)
+      await navigate('..')
+    },
+    [navigate, id],
+  )
 
   // Адаптируем данные под форму
   function mapToFormDefaults(obj: CityDetailResponse): Partial<CityFormFields> {

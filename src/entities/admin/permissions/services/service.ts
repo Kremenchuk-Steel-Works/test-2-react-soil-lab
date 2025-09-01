@@ -15,7 +15,7 @@ export const permissionService = {
   // Request
   async create(params: PermissionCreateRequest): Promise<PermissionDetailResponse> {
     try {
-      const response = await api.post(`/permissions/`, params)
+      const response = await api.post<PermissionDetailResponse>(`/permissions/`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -24,7 +24,7 @@ export const permissionService = {
 
   async update(id: string, params: PermissionUpdateRequest): Promise<PermissionDetailResponse> {
     try {
-      const response = await api.put(`/permissions/${id}`, params)
+      const response = await api.put<PermissionDetailResponse>(`/permissions/${id}`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -34,7 +34,7 @@ export const permissionService = {
   // Response
   async getList(params?: PageParams): Promise<PermissionListResponse> {
     try {
-      const response = await api.get(`/permissions`, { params })
+      const response = await api.get<PermissionListResponse>(`/permissions`, { params })
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -44,7 +44,7 @@ export const permissionService = {
   async getById(id: string): Promise<PermissionDetailResponse> {
     try {
       console.log(id)
-      const response = await api.get(`/permissions/${id}`)
+      const response = await api.get<PermissionDetailResponse>(`/permissions/${id}`)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -53,7 +53,7 @@ export const permissionService = {
 
   async getLookup(): Promise<PermissionLookupResponse[]> {
     try {
-      const response = await api.get(`/lookups/permissions`)
+      const response = await api.get<PermissionLookupResponse[]>(`/lookups/permissions`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

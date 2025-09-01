@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import RolesForm from '@/entities/admin/roles/forms/form'
 import type { RolesFormFields } from '@/entities/admin/roles/forms/schema'
@@ -6,11 +7,13 @@ import { roleService } from '@/entities/admin/roles/services/service'
 export default function AdminRolesAdd() {
   const navigate = useNavigate()
 
-  const handleSubmit = async (data: RolesFormFields) => {
-    await roleService.create(data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: RolesFormFields): Promise<void> => {
+      await roleService.create(data)
+      await navigate('..')
+    },
+    [navigate],
+  )
 
   return (
     <>

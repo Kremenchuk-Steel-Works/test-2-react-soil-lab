@@ -12,7 +12,7 @@ export const roleService = {
   // Request
   async create(params: RoleCreateRequest): Promise<RoleDetailResponse> {
     try {
-      const response = await api.post(`/roles/`, params)
+      const response = await api.post<RoleDetailResponse>(`/roles/`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -21,7 +21,7 @@ export const roleService = {
 
   async update(id: string, params: RoleUpdateRequest): Promise<RoleDetailResponse> {
     try {
-      const response = await api.put(`/roles/${id}`, params)
+      const response = await api.put<RoleDetailResponse>(`/roles/${id}`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -31,7 +31,7 @@ export const roleService = {
   // Response
   async getList(params?: PageParams): Promise<RoleListResponse> {
     try {
-      const response = await api.get(`/roles`, { params })
+      const response = await api.get<RoleListResponse>(`/roles`, { params })
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -40,7 +40,7 @@ export const roleService = {
 
   async getById(id: string): Promise<RoleDetailResponse> {
     try {
-      const response = await api.get(`/roles/${id}`)
+      const response = await api.get<RoleDetailResponse>(`/roles/${id}`)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -49,7 +49,7 @@ export const roleService = {
 
   async getLookup(): Promise<RoleLookupResponse[]> {
     try {
-      const response = await api.get(`/lookups/roles`)
+      const response = await api.get<RoleLookupResponse[]>(`/lookups/roles`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

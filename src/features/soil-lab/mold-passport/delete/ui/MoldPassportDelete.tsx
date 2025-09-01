@@ -18,7 +18,7 @@ export default function MoldPassportDelete({ id, onSuccess, onError }: MoldPassp
   const queryClient = useQueryClient()
 
   const {
-    mutateAsync,
+    mutate,
     isPending,
     error: mutationError,
   } = moldPassportService.delete({
@@ -41,9 +41,9 @@ export default function MoldPassportDelete({ id, onSuccess, onError }: MoldPassp
   })
 
   // Запрос на удаление
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!id || isPending) return
-    await mutateAsync({ moldPassportId: id })
+    mutate({ moldPassportId: id })
   }
 
   return (

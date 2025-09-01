@@ -40,7 +40,7 @@ export default function PositionsForm({ defaultValues, onSubmit, submitBtnName }
   console.log(errors)
 
   return (
-    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
       <h5 className="layout-text">Посада</h5>
 
       <InputFieldWithError

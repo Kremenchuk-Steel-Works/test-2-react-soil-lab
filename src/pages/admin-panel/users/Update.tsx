@@ -24,7 +24,7 @@ export default function AdminUsersUpdate() {
 
   const handleSubmit = async (data: UserUpdateFormFields) => {
     await userService.update(id!, data)
-    navigate('..')
+    await navigate('..')
     return data
   }
 

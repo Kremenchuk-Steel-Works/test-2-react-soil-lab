@@ -1,17 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQueries, type UseQueryResult } from '@tanstack/react-query'
+import { useQueries } from '@tanstack/react-query'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { AddressForm } from '@/entities/admin/address/forms/form'
 import { ContactForm } from '@/entities/admin/contact/forms/form'
 import { EmployeeProfileForm } from '@/entities/admin/employeeProfile/forms/form'
 import { organizationQueryKeys } from '@/entities/admin/organizations/services/keys'
 import { organizationService } from '@/entities/admin/organizations/services/service'
-import type { OrganizationLookupResponse } from '@/entities/admin/organizations/types/response.dto'
 import { peopleSchema, type PeopleFormFields } from '@/entities/admin/people/forms/schema'
 import { genderOptions } from '@/entities/admin/people/types/gender'
 import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
 import { positionService } from '@/entities/admin/positions/services/service'
-import type { PositionLookupResponse } from '@/entities/admin/positions/types/response.dto'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
@@ -91,10 +89,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
   }
 
   // Queries data
-  const [organizationsQ, positionsQ] = queries as [
-    UseQueryResult<OrganizationLookupResponse[], Error>,
-    UseQueryResult<PositionLookupResponse[], Error>,
-  ]
+  const [organizationsQ, positionsQ] = queries
 
   // Options
   const organizationsOptions: Option<string>[] =
@@ -116,7 +111,7 @@ export default function PeopleForm({ initialData, onSubmit, submitBtnName }: For
   // })
 
   return (
-    <FormLayout onSubmit={handleSubmit(submitHandler)}>
+    <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
       <h5 className="layout-text">Людина</h5>
 
       <InputFieldWithError

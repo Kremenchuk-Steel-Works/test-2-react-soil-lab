@@ -1,4 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
+import { toLowerSafe } from '@/shared/lib/strings/toLowerSafe'
 
 interface DateColumnOptions {
   placeholder?: string
@@ -24,13 +25,17 @@ export function dateColumn<TData>(
       // Проверяем, что значение существует, прежде чем создавать Date
       return dateValue ? formatter(new Date(dateValue)) : placeholder
     },
+
     filterFn: (row, columnId, filterValue) => {
       const rawValue = row.getValue<string | undefined | null>(columnId)
-
       // Получаем отформатированное значение в том же виде, как в `cell`,
       const displayValue = rawValue ? formatter(new Date(rawValue)) : ''
+      const haystack = toLowerSafe(displayValue)
+      const needle = toLowerSafe(filterValue)
 
-      return displayValue.toLowerCase().includes(filterValue.toLowerCase())
+      // Пустой фильтр — не ограничивает выдачу
+      if (needle === '') return true
+      return haystack.includes(needle)
     },
   }
 }

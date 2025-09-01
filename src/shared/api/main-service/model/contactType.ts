@@ -10,7 +10,7 @@
  */
 export type ContactType = (typeof ContactType)[keyof typeof ContactType]
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const ContactType = {
   email: 'email',
   phone: 'phone',

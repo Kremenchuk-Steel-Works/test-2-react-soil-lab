@@ -3,7 +3,7 @@ import { ChevronRight, type LucideIcon } from 'lucide-react'
 import { useIsTruncated } from '@/shared/hooks/useIsTruncated'
 import { CollapseFM } from '@/shared/ui/animation/CollapseFM'
 import Popup from '@/widgets/sidebar/Popup'
-import { useSidebar } from '@/widgets/sidebar/SidebarProvider'
+import { useSidebar } from '@/widgets/sidebar/sidebar-context'
 
 interface SubMenuProps {
   label: string

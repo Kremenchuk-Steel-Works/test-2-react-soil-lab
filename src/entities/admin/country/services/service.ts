@@ -15,7 +15,7 @@ export const countryService = {
   // Request
   async create(params: CountryCreateRequest): Promise<CountryDetailResponse> {
     try {
-      const response = await api.post(`/counties/`, params)
+      const response = await api.post<CountryDetailResponse>(`/counties/`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -24,7 +24,7 @@ export const countryService = {
 
   async update(id: string, params: CountryUpdateRequest): Promise<CountryDetailResponse> {
     try {
-      const response = await api.put(`/counties/${id}`, params)
+      const response = await api.put<CountryDetailResponse>(`/counties/${id}`, params)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -34,7 +34,7 @@ export const countryService = {
   // Response
   async getList(params?: PageParams): Promise<CountryListResponse> {
     try {
-      const response = await api.get(`/counties`, { params })
+      const response = await api.get<CountryListResponse>(`/counties`, { params })
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -43,7 +43,7 @@ export const countryService = {
 
   async getById(id: string): Promise<CountryDetailResponse> {
     try {
-      const response = await api.get(`/counties/${id}`)
+      const response = await api.get<CountryDetailResponse>(`/counties/${id}`)
       return response.data
     } catch (err) {
       handleAxiosError(err)
@@ -52,7 +52,7 @@ export const countryService = {
 
   async getLookup(): Promise<CountryLookupResponse[]> {
     try {
-      const response = await api.get(`/lookups/countries`)
+      const response = await api.get<CountryLookupResponse[]>(`/lookups/countries`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

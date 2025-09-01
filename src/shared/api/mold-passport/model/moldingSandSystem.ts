@@ -18,7 +18,7 @@ Common in automated foundries where sand is continuously reclaimed and condition
  */
 export type MoldingSandSystem = (typeof MoldingSandSystem)[keyof typeof MoldingSandSystem]
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
+ 
 export const MoldingSandSystem = {
   layered: 'layered',
   unitary: 'unitary',

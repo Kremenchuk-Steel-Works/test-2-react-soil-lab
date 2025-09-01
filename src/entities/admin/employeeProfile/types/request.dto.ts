@@ -1,9 +1,8 @@
 import type { EmployeeProfileBase } from '@/entities/admin/employeeProfile/types/base.model'
 import type { CreateOperationBase, DeleteOperationBase, UpdateOperationBase } from '@/types/common'
 
-export interface EmployeeProfileCreateRequest extends EmployeeProfileBase {}
-
-export interface EmployeeProfileUpdateRequest extends Partial<EmployeeProfileBase> {}
+export type EmployeeProfileCreateRequest = EmployeeProfileBase
+export type EmployeeProfileUpdateRequest = Partial<EmployeeProfileBase>
 
 export type EmployeeProfileCreateOperation = CreateOperationBase<EmployeeProfileCreateRequest>
 export type EmployeeProfileUpdateOperation = UpdateOperationBase<EmployeeProfileUpdateRequest>

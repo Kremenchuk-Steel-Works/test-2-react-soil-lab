@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import PositionsForm from '@/entities/admin/positions/forms/form'
@@ -22,11 +23,13 @@ export default function AdminPositionsUpdate() {
     enabled: !!id,
   })
 
-  const handleSubmit = async (data: PositionsFormFields) => {
-    await positionService.update(id!, data)
-    navigate('..')
-    return data
-  }
+  const handleSubmit = useCallback(
+    async (data: PositionsFormFields): Promise<void> => {
+      await positionService.update(id!, data)
+      await navigate('..')
+    },
+    [navigate, id],
+  )
 
   return (
     <>

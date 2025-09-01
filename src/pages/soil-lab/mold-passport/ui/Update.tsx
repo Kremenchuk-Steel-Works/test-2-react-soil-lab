@@ -5,8 +5,8 @@ export default function MoldPassportUpdatePage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
 
-  const onSuccess = async () => {
-    navigate('..')
+  const onSuccess = () => {
+    void navigate('..')
   }
 
   return (

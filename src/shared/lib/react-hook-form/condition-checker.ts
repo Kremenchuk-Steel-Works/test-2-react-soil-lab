@@ -13,7 +13,7 @@ const checkValueMatch = (fieldValue: unknown, condition: ConditionValue): boolea
   const actualValue = (fieldValue as { value: string })?.value ?? fieldValue
 
   if (Array.isArray(condition)) {
-    return condition.includes(actualValue as string)
+    return condition.includes(actualValue)
   }
   return actualValue === condition
 }
