@@ -7,7 +7,8 @@ import { RouterProvider } from 'react-router-dom'
 import { AuthProvider } from '@/app/providers/auth/provider'
 import { router } from '@/app/routes/AppRoutes.tsx'
 import { initApp } from '@/init.ts'
-import { ModalProvider } from '@/shared/ui/modal/ModalContext.tsx'
+import { logger } from '@/shared/lib/logger'
+import { ModalProvider } from '@/shared/ui/modal/ModalProvider'
 import { SidebarProvider } from '@/widgets/sidebar/SidebarProvider.tsx'
 
 export const queryClient = new QueryClient({
@@ -34,11 +35,13 @@ async function enableMocking() {
   })
 }
 
-// Вызываем функцию и рендерим приложение ТОЛЬКО ПОСЛЕ того, как она отработает.
-enableMocking().then(() => {
-  initApp()
+function renderApp() {
+  const rootEl = document.getElementById('root')
+  if (!rootEl) {
+    throw new Error('#root not found')
+  }
 
-  createRoot(document.getElementById('root')!).render(
+  createRoot(rootEl).render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
@@ -56,4 +59,22 @@ enableMocking().then(() => {
       </QueryClientProvider>
     </StrictMode>,
   )
-})
+}
+
+async function bootstrap() {
+  try {
+    await enableMocking()
+  } catch (e) {
+    logger.warn('[msw] failed to start', e)
+  }
+
+  try {
+    initApp()
+  } catch (e) {
+    logger.error('[initApp] failed', e)
+  }
+
+  renderApp()
+}
+
+void bootstrap()

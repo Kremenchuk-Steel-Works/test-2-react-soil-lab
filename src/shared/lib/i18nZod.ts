@@ -5,7 +5,7 @@ import { makeZodI18nMap } from 'zod-i18n-map'
 import zodUk from 'zod-i18n-map/locales/uk-UA/zod.json'
 
 export function setupZodI18n() {
-  i18n.use(initReactI18next).init({
+  void i18n.use(initReactI18next).init({
     lng: 'uk',
     fallbackLng: 'uk',
     resources: {

@@ -53,7 +53,7 @@ function isHttpValidationError(data: unknown): data is HttpValidationError {
  */
 export function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
-    const responseData = error.response?.data
+    const responseData: unknown = error.response?.data
 
     if (responseData && isHttpValidationError(responseData)) {
       return responseData.detail?.[0]?.msg || 'Помилка валідації даних.'

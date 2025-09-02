@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type PointerEventHandler } from 'react'
 import { Download, Minus, Plus, Printer, RotateCcw } from 'lucide-react'
 import { toSafeUrl } from '@/shared/lib/url/toSafeUrl'
 
@@ -20,19 +20,28 @@ function useMediaQuery(query: string) {
       ? window.matchMedia(query).matches
       : false
 
-  const [matches, setMatches] = React.useState(getInitial)
+  const [matches, setMatches] = useState(getInitial)
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (typeof window === 'undefined' || !('matchMedia' in window)) return
     const mql = window.matchMedia(query)
     const onChange = (e: MediaQueryListEvent) => setMatches(e.matches)
+
     // совместимость со старыми Safari
-    mql.addEventListener ? mql.addEventListener('change', onChange) : mql.addListener(onChange)
+    if (typeof mql.addEventListener === 'function') {
+      mql.addEventListener('change', onChange)
+    } else {
+      mql.addListener(onChange) // устаревший API, оставлен как фолбэк
+    }
+
     setMatches(mql.matches)
+
     return () => {
-      mql.removeEventListener
-        ? mql.removeEventListener('change', onChange)
-        : mql.removeListener(onChange)
+      if (typeof mql.removeEventListener === 'function') {
+        mql.removeEventListener('change', onChange)
+      } else {
+        mql.removeListener(onChange) // устаревший API, оставлен как фолбэк
+      }
     }
   }, [query])
 
@@ -47,7 +56,7 @@ export function ImageViewer(props: ImageViewerProps) {
 
 /** Мобильная версия — только картинка, нативные жесты. */
 function ImageViewerMobile({ src, alt = 'Зображення', className }: ImageViewerProps) {
-  const safe = React.useMemo(() => toSafeUrl(src), [src])
+  const safe = useMemo(() => toSafeUrl(src), [src])
 
   return (
     <figure className={`relative ${className ?? ''}`}>
@@ -76,20 +85,17 @@ function ImageViewerDesktop({
   maxScale = 5,
   step = 0.2,
 }: ImageViewerProps) {
-  const safe = React.useMemo(() => toSafeUrl(src), [src])
+  const safe = useMemo(() => toSafeUrl(src), [src])
 
-  const [scale, setScale] = React.useState(1)
-  const [offset, setOffset] = React.useState<Point>({ x: 0, y: 0 })
-  const containerRef = React.useRef<HTMLDivElement>(null)
-  const panningRef = React.useRef({ active: false, startX: 0, startY: 0 })
+  const [scale, setScale] = useState(1)
+  const [offset, setOffset] = useState<Point>({ x: 0, y: 0 })
+  const containerRef = useRef<HTMLDivElement>(null)
+  const panningRef = useRef({ active: false, startX: 0, startY: 0 })
 
-  const clamp = React.useCallback(
-    (v: number, a: number, b: number) => Math.min(b, Math.max(a, v)),
-    [],
-  )
+  const clamp = useCallback((v: number, a: number, b: number) => Math.min(b, Math.max(a, v)), [])
 
   // Зум с учётом точки наведения
-  const zoomBy = React.useCallback(
+  const zoomBy = useCallback(
     (delta: number, pivot?: Point) => {
       setScale((prev) => {
         const next = clamp(prev + delta, minScale, maxScale)
@@ -106,31 +112,33 @@ function ImageViewerDesktop({
     [clamp, maxScale, minScale],
   )
 
-  const onPointerDown = (e: React.PointerEvent) => {
+  const onPointerDown: PointerEventHandler<HTMLDivElement> = (e) => {
     if (e.button !== 0) return // только ЛКМ
     panningRef.current.active = true
     panningRef.current.startX = e.clientX - offset.x
     panningRef.current.startY = e.clientY - offset.y
-    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+    e.currentTarget.setPointerCapture(e.pointerId)
   }
-  const onPointerMove = (e: React.PointerEvent) => {
+
+  const onPointerMove: PointerEventHandler<HTMLDivElement> = (e) => {
     if (!panningRef.current.active) return
     setOffset({
       x: e.clientX - panningRef.current.startX,
       y: e.clientY - panningRef.current.startY,
     })
   }
-  const stopPan = (e: React.PointerEvent) => {
+
+  const stopPan: PointerEventHandler<HTMLDivElement> = (e) => {
     panningRef.current.active = false
-    ;(e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId)
+    e.currentTarget.releasePointerCapture?.(e.pointerId)
   }
 
-  const reset = React.useCallback(() => {
+  const reset = useCallback(() => {
     setScale(1)
     setOffset({ x: 0, y: 0 })
   }, [])
 
-  const fileName = React.useMemo(() => {
+  const fileName = useMemo(() => {
     try {
       const u = new URL(
         safe,
@@ -143,21 +151,18 @@ function ImageViewerDesktop({
     }
   }, [safe])
 
-  const handlePrint = React.useCallback(() => {
-    if (typeof window === 'undefined' || typeof document === 'undefined') return
+  const handlePrint = useCallback(() => {
+    if (typeof window === 'undefined') return
 
     const iframe = document.createElement('iframe')
     Object.assign(iframe.style, {
       position: 'fixed',
-      right: '0',
-      bottom: '0',
+      visibility: 'hidden',
       width: '0',
       height: '0',
       border: '0',
-      visibility: 'hidden',
     } as CSSStyleDeclaration)
 
-    // Минимальный HTML в srcdoc — БЕЗ document.write
     iframe.srcdoc = `
     <!doctype html><html><head><meta charset="utf-8" />
     <style>
@@ -169,15 +174,38 @@ function ImageViewerDesktop({
     </head><body></body></html>`
 
     iframe.onload = () => {
-      const win = iframe.contentWindow!
-      const img = new Image()
+      const win = iframe.contentWindow
+      if (!win) {
+        iframe.remove()
+        return
+      }
+
+      // Назначаем обработчик onafterprint
+      win.onafterprint = () => {
+        iframe.remove()
+      }
+
+      const doc = win.document
+      const img = doc.createElement('img')
+
       img.onload = () => {
         win.focus()
-        win.print()
-        setTimeout(() => iframe.remove(), 0)
+        setTimeout(() => win.print(), 50)
       }
-      img.src = safe // ваша картинка
-      win.document.body.appendChild(img) // наполняем DOM без write()
+      img.onerror = () => iframe.remove()
+      doc.body.appendChild(img)
+      img.src = safe
+      if (img.complete) {
+        // уже закэшировано — вручную триггерим
+        img.onload?.(new Event('load'))
+      }
+
+      img.onerror = () => {
+        iframe.remove()
+      }
+
+      doc.body.appendChild(img)
+      img.src = safe
     }
 
     document.body.appendChild(iframe)

@@ -31,11 +31,13 @@ export function createArrayOperations<T extends { id?: string | number }>(
     if (!currentItem.id) {
       // Если ID нет, это всегда создание
       const { id, ...data } = currentItem
+      void id
       operations.push({ action: 'create', data })
     } else {
       // Если ID есть, это обновление
       if (originalMap.has(currentItem.id)) {
         const { id, ...data } = currentItem
+        void id
         operations.push({ action: 'update', id: currentItem.id, data })
       }
     }

@@ -31,33 +31,33 @@ export function CachedForm<T extends FieldValues>({
   cacheConfig,
   onSubmit,
   children,
-  initialData, // Убрали значение по умолчанию `{}`
+  initialData,
 }: CachedFormProps<T>) {
-  // Если кэширование для этой формы выключено, просто рендерим дочерний компонент
-  // с исходными пропсами.
-  if (!cacheConfig.enabled) {
+  // Если кэш выключен — подставляем «пустые» аргументы,
+  // чтобы хук не трогал реальные данные.
+  const isEnabled = cacheConfig.enabled
+  const { cachedData, saveData } = useFormCache<T>(
+    isEnabled ? cacheConfig.cacheKey : `__disabled__:${cacheConfig.cacheKey}`,
+    isEnabled ? cacheConfig.fieldsToCache : [],
+    isEnabled ? { ttl: cacheConfig.ttl } : undefined,
+  )
+
+  // Если кэширование выключено — возвращаем исходные пропсы без обёртки сохранения
+  if (!isEnabled) {
     return children({
       defaultValues: initialData,
       onSubmit,
     })
   }
 
-  const { cachedData, saveData } = useFormCache<T>(
-    cacheConfig.cacheKey,
-    cacheConfig.fieldsToCache,
-    { ttl: cacheConfig.ttl },
-  )
-
   const handleSubmitWithCache: SubmitHandler<T> = async (data, event) => {
     const result = await onSubmit(data, event)
-
     // Сохраняем данные в кэш только после успешной отправки
     saveData(data)
-
     return result
   }
 
-  // Собираем данные: объединяем начальные данные и данные из кэша, вторые имеют приоритет.
+  // Объединяем начальные данные и данные из кэша (кэш приоритетнее)
   const formDefaultValues = Object.assign({}, initialData, cachedData)
 
   return children({

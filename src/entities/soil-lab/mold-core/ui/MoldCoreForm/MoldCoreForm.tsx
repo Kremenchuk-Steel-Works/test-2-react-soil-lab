@@ -7,7 +7,7 @@ import { useScopedFieldName } from '@/shared/hooks/react-hook-form/useFieldName'
 import { createLogger } from '@/shared/lib/logger'
 import InputField from '@/shared/ui/input-field/InputField'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
-import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/formKitContext'
+import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/useFormKit'
 
 const logger = createLogger('MoldCoreForm')
 

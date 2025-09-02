@@ -1,6 +1,11 @@
 import { useMemo } from 'react'
 import { addYears, format, getYear, isValid, subYears } from 'date-fns'
-import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
+import type {
+  ControllerFieldState,
+  ControllerRenderProps,
+  FieldValues,
+  Path,
+} from 'react-hook-form'
 import {
   DateTimePicker,
   type DateTimePickerProps,
@@ -8,11 +13,11 @@ import {
 } from '@/shared/ui/input-field/DateTime/DateTimePicker'
 import { WithError } from '@/shared/ui/with-error/WithError'
 
-type FormDateTimeFieldProps = Omit<
-  DateTimePickerProps,
-  'value' | 'onChange' | 'onBlur' | 'ref' | 'type'
-> & {
-  field: ControllerRenderProps<any, any>
+type FormDateTimeFieldProps<
+  TFieldValues extends FieldValues,
+  TName extends Path<TFieldValues>,
+> = Omit<DateTimePickerProps, 'value' | 'onChange' | 'onBlur' | 'ref' | 'type'> & {
+  field: ControllerRenderProps<TFieldValues, TName>
   fieldState: ControllerFieldState
   type?: DateTimePickerType
   yearOffsetPast?: number
@@ -21,16 +26,17 @@ type FormDateTimeFieldProps = Omit<
   errorMessage?: string
 }
 
-const FormDateTimeField = ({
+const FormDateTimeField = <TFieldValues extends FieldValues, TName extends Path<TFieldValues>>({
   field,
-  fieldState,
+  fieldState: _fieldState,
   type = 'date',
   yearOffsetPast,
   yearOffsetFuture,
   stringFormat,
   errorMessage,
   ...rest
-}: FormDateTimeFieldProps) => {
+}: FormDateTimeFieldProps<TFieldValues, TName>) => {
+  void _fieldState
   const getFormat = () => {
     if (stringFormat) return stringFormat
     switch (type) {

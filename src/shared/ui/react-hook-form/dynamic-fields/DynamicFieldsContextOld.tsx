@@ -11,9 +11,9 @@ import { useDynamicFieldsManager } from '@/shared/hooks/react-hook-form/dynamic-
 import { logger } from '@/shared/lib/logger'
 import { type DynamicFieldConfig } from '@/shared/lib/zod/dynamic-schemaOld'
 
-export interface DynamicFieldsProps {
-  control: Control<any>
-  errors: FieldErrors<any>
+export interface DynamicFieldsProps<TFieldValues extends FieldValues = FieldValues> {
+  control: Control<TFieldValues>
+  errors: FieldErrors<TFieldValues>
 }
 
 type ActiveRulesState = Record<string, boolean>
@@ -25,7 +25,7 @@ interface DynamicFieldsContextValue<TOptions extends object, TResponseData> {
   activeRules: ActiveRulesState
 }
 
-const DynamicFieldsContext = createContext<DynamicFieldsContextValue<any, any> | null>(null)
+const DynamicFieldsContext = createContext<DynamicFieldsContextValue<object, unknown> | null>(null)
 
 interface DynamicFieldsProviderProps<
   TFieldValues extends FieldValues,
@@ -68,7 +68,9 @@ export function DynamicFieldsProvider<
       const isActive = activeRules[ruleKey]
 
       if (wasActive && !isActive) {
-        const fieldsToReset = Object.keys(rule.schema.shape) as FieldPath<TFieldValues>[]
+        // Безопасно приводим shape к записи, чтобы убрать no-unsafe-argument
+        const shape = (rule.schema as { shape: Record<string, unknown> }).shape
+        const fieldsToReset = Object.keys(shape) as FieldPath<TFieldValues>[]
         fieldsToReset.forEach((fieldName) => resetField(fieldName))
       }
     })
@@ -76,15 +78,17 @@ export function DynamicFieldsProvider<
     prevActiveRulesRef.current = activeRules
   }, [activeRules, config, resetField])
 
+  const normalizedOptions = useMemo(() => options ?? ({} as TOptions), [options])
+
   // Собираем значение для провайдера и передаем его дочерним компонентам
   const contextValue = useMemo(
     () => ({
       config,
-      options,
+      options: normalizedOptions,
       responseData,
       activeRules,
     }),
-    [config, options, responseData, activeRules],
+    [config, normalizedOptions, responseData, activeRules],
   )
 
   return (
@@ -92,6 +96,7 @@ export function DynamicFieldsProvider<
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useDynamicFields<TFieldValues extends FieldValues, TOptions extends object>() {
   const context = useContext(DynamicFieldsContext)
   if (!context) {

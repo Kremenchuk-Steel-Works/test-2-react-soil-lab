@@ -4,7 +4,7 @@ import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/mode
 import { useFieldName } from '@/shared/hooks/react-hook-form/useFieldName'
 import { useDynamicMeta } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
-import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/formKitContext'
+import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/useFormKit'
 
 export function MoldingAreaDataDynamicForm() {
   const Form = useFormKit<CastingTechnology>()

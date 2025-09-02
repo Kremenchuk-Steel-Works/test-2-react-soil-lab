@@ -17,8 +17,8 @@ type DynamicMeta<TOptions extends object, TResponseData, SectionKey extends stri
   responseData?: TResponseData
 }
 
-const ActiveRulesContext = createContext<ActiveRulesState<any> | null>(null)
-const DynamicMetaContext = createContext<DynamicMeta<any, any, any> | null>(null)
+const ActiveRulesContext = createContext<ActiveRulesState<string> | null>(null)
+const DynamicMetaContext = createContext<DynamicMeta<object, unknown, string> | null>(null)
 
 interface ProviderProps<
   TOptions extends object,
@@ -43,7 +43,10 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
   responseData,
 }: ProviderProps<TOptions, TResponseData, SectionKey>) {
   const { control, getValues, resetField } = useFormContext<TFieldValues>()
-  const allRules = useMemo(() => flattenRules(sections), [sections])
+  const allRules = useMemo(
+    () => flattenRules(sections) as ReadonlyArray<Parameters<typeof checkConditions>[1]>,
+    [sections],
+  )
 
   // Подписываемся на поля из conditions/exceptions
   const fieldsToWatch = useMemo(() => {
@@ -55,12 +58,14 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     return Array.from(set) as FieldPath<TFieldValues>[]
   }, [allRules])
 
-  const tick = useWatch({ control, name: fieldsToWatch as any })
+  const tick = useWatch<TFieldValues>({ control, name: fieldsToWatch })
 
-  const prevRef = useRef<ActiveRulesState<any>>({})
-  const activeRules = useMemo<ActiveRulesState<any>>(() => {
+  const prevRef = useRef<ActiveRulesState<string>>({})
+  const activeRules = useMemo<ActiveRulesState<string>>(() => {
+    Boolean(tick)
+
     const values = getValues()
-    const next: ActiveRulesState<any> = {}
+    const next: ActiveRulesState<string> = {}
     for (const r of allRules) next[r.id] = checkConditions(values, r)
 
     const prev = prevRef.current
@@ -77,7 +82,7 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
   }, [tick, allRules, getValues])
 
   // При деактивации правила: сбрасываем поля только если этот ключ не нужен никаким другим активным правилам
-  const prevResetRef = useRef<ActiveRulesState<any>>({})
+  const prevResetRef = useRef<ActiveRulesState<string>>({})
   useEffect(() => {
     logger.debug('[DynamicFields] activeRules changed', activeRules)
     const prev = prevResetRef.current
@@ -86,7 +91,8 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     const keysRequiredByActive = new Set<string>()
     for (const r of allRules) {
       if (!activeRules[r.id]) continue
-      const keys = Object.keys((r as any).schema?.shape ?? {})
+      const shape = (r as { schema?: { shape?: Record<string, unknown> } }).schema?.shape ?? {}
+      const keys = Object.keys(shape)
       keys.forEach((k) => keysRequiredByActive.add(k))
     }
 
@@ -94,7 +100,8 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
       const was = prev[r.id]
       const now = activeRules[r.id]
       if (was && !now) {
-        const fields = Object.keys((r as any).schema?.shape ?? {}) as FieldPath<TFieldValues>[]
+        const shape = (r as { schema?: { shape?: Record<string, unknown> } }).schema?.shape ?? {}
+        const fields = Object.keys(shape) as FieldPath<TFieldValues>[]
         fields.forEach((name) => {
           // Если ключ больше никем не требуется — очищаем значение и ошибку (keepError=false)
           if (!keysRequiredByActive.has(String(name))) {
@@ -118,12 +125,14 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
   )
 })
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useActiveRules() {
   const v = useContext(ActiveRulesContext)
   if (!v) throw new Error('useActiveRules must be used within a DynamicFieldsProvider')
   return v
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useDynamicMeta<
   TOptions extends object = Record<string, never>,
   TResponseData = unknown,

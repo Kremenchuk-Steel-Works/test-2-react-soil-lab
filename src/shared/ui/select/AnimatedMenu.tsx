@@ -1,21 +1,22 @@
-import type { CSSProperties } from 'react'
+import type { CSSProperties, HTMLAttributes } from 'react'
 import { AnimatePresence, motion, type Transition, type Variants } from 'framer-motion'
 import { type GroupBase, type MenuProps } from 'react-select'
 
 const menuVariants: Variants = {
-  hidden: {
-    opacity: 1,
-    height: 0,
-  },
-  visible: {
-    opacity: 1,
-    height: 'auto',
-  },
+  hidden: { opacity: 1, height: 0 },
+  visible: { opacity: 1, height: 'auto' },
 }
 
-const menuTransition: Transition = {
-  duration: 0.2,
-  ease: 'easeOut',
+const menuTransition: Transition = { duration: 0.2, ease: 'easeOut' }
+
+// Универсальный omit с корректным типом результата
+const omit = <T extends object, K extends readonly (keyof T)[]>(
+  obj: T,
+  keys: K,
+): Omit<T, K[number]> => {
+  const clone: Record<string, unknown> = { ...(obj as Record<string, unknown>) }
+  for (const k of keys) delete clone[k as string]
+  return clone as Omit<T, K[number]>
 }
 
 function AnimatedMenu<
@@ -25,10 +26,18 @@ function AnimatedMenu<
 >(props: MenuProps<OptionType, IsMulti, Group>) {
   const { children, className, cx, getStyles, innerProps, selectProps } = props
 
-  const baseMenuStyles = getStyles('menu', props)
-  const { transition, ...safeStyles } = baseMenuStyles as CSSProperties
+  // Убираем transition из inline-стилей (его задаёт framer-motion)
+  const baseMenuStyles = getStyles('menu', props) as CSSProperties
+  const safeStyles = omit(baseMenuStyles, ['transition'] as const)
 
-  const { onDrag, onDragStart, onDragEnd, onAnimationStart, ...safeInnerProps } = innerProps
+  // Фильтруем конфликтующие DOM-события, чтобы совпадающие имена подошли по типу motion.div
+  const rawInner = innerProps as HTMLAttributes<HTMLDivElement>
+  const safeInnerProps = omit(rawInner, [
+    'onAnimationStart',
+    'onDrag',
+    'onDragStart',
+    'onDragEnd',
+  ] as const)
 
   return (
     <AnimatePresence>
@@ -47,10 +56,7 @@ function AnimatedMenu<
             'dark:border-gray-700 dark:bg-gray-700',
             className,
           )}
-          style={{
-            ...safeStyles,
-            overflow: 'hidden',
-          }}
+          style={{ ...safeStyles, overflow: 'hidden' }}
         >
           {children}
         </motion.div>

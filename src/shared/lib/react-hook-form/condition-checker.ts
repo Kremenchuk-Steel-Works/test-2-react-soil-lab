@@ -3,6 +3,16 @@ import type { FieldValues } from 'react-hook-form'
 export type ConditionValue = string | string[]
 export type ConditionsMap = Record<string, ConditionValue>
 
+// Узкий type-guard для строки
+const isString = (v: unknown): v is string => typeof v === 'string'
+
+// Узкий type-guard для объектов формата { value: string }
+const hasStringValue = (v: unknown): v is { value: string } =>
+  typeof v === 'object' &&
+  v !== null &&
+  'value' in (v as Record<string, unknown>) &&
+  typeof (v as Record<string, unknown>).value === 'string'
+
 /**
  * Проверяет, соответствует ли значение поля заданному условию.
  * @param fieldValue - Текущее значение поля.
@@ -10,12 +20,12 @@ export type ConditionsMap = Record<string, ConditionValue>
  * @returns {boolean} - true, если условие выполнено.
  */
 const checkValueMatch = (fieldValue: unknown, condition: ConditionValue): boolean => {
-  const actualValue = (fieldValue as { value: string })?.value ?? fieldValue
+  const actualValue = hasStringValue(fieldValue) ? fieldValue.value : fieldValue
 
   if (Array.isArray(condition)) {
-    return condition.includes(actualValue)
+    return isString(actualValue) && condition.includes(actualValue)
   }
-  return actualValue === condition
+  return isString(actualValue) && actualValue === condition
 }
 
 /**
@@ -25,9 +35,8 @@ const checkValueMatch = (fieldValue: unknown, condition: ConditionValue): boolea
  * @returns {boolean} - true, если ВСЕ условия выполнены.
  */
 export const areConditionsMet = (conditions: ConditionsMap, formValues: FieldValues): boolean => {
-  // `every` реализует логику "И" — все условия должны быть истинными.
   return Object.entries(conditions).every(([fieldName, conditionValue]) => {
-    const fieldValue = formValues[fieldName]
+    const fieldValue = (formValues as Record<string, unknown>)[fieldName]
     return checkValueMatch(fieldValue, conditionValue)
   })
 }

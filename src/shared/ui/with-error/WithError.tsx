@@ -32,3 +32,11 @@ export function WithError({
     </div>
   )
 }
+
+export function ErrorBlock({ id, message }: { id: string; message: string }) {
+  return (
+    <div id={id} role="alert" aria-live="polite">
+      <AlertMessage type={AlertType.ERROR} message={message} />
+    </div>
+  )
+}

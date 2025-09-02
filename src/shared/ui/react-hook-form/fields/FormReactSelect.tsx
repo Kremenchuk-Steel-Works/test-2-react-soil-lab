@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
+import type {
+  ControllerFieldState,
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues,
+} from 'react-hook-form'
 import type { OnChangeValue } from 'react-select'
 import ReactSelect, { type Option, type ReactSelectProps } from '@/shared/ui/select/ReactSelect'
 import { WithError } from '@/shared/ui/with-error/WithError'
@@ -7,22 +12,30 @@ import { WithError } from '@/shared/ui/with-error/WithError'
 type FormSelectFieldProps<
   OptionType extends Option,
   IsMulti extends boolean = false,
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 > = ReactSelectProps<OptionType, IsMulti> & {
-  field: ControllerRenderProps<any, any>
+  field: ControllerRenderProps<TFieldValues, TName>
   fieldState: ControllerFieldState
   errorMessage?: string
   defaultOptions?: OptionType[] | boolean
 }
 
-function FormSelectField<OptionType extends Option, IsMulti extends boolean = false>({
+function FormSelectField<
+  OptionType extends Option,
+  IsMulti extends boolean = false,
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   field,
-  fieldState,
+  fieldState: _fieldState,
   isMulti,
   options,
   defaultOptions,
   errorMessage,
   ...rest
-}: FormSelectFieldProps<OptionType, IsMulti>) {
+}: FormSelectFieldProps<OptionType, IsMulti, TFieldValues, TName>) {
+  void _fieldState
   const { name, value: fieldValue, onChange, onBlur } = field
 
   const [optionsCache, setOptionsCache] = useState(new Map<OptionType['value'], OptionType>())

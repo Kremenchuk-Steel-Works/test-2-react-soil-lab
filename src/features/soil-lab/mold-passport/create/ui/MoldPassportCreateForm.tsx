@@ -13,7 +13,7 @@ import { MoldPassportCreateBaseForm } from '@/features/soil-lab/mold-passport/cr
 import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
 import { createLogger } from '@/shared/lib/logger'
 import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
-import { FormKitProvider } from '@/shared/ui/react-hook-form/FormKit/formKitContext'
+import { FormKitProvider } from '@/shared/ui/react-hook-form/FormKit/FormKitProvider'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import type { FormProps } from '@/types/react-hook-form'
 

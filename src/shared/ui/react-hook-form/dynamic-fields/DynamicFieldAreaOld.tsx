@@ -10,7 +10,10 @@ export function DynamicFieldArea<TFieldValues extends FieldValues>({
   triggerFor,
 }: DynamicFieldAreaProps<TFieldValues>) {
   // Получаем все необходимое из контекста одним хуком
-  const { config, activeRules, options, responseData } = useDynamicFields<any, any>()
+  const { config, activeRules, options, responseData } = useDynamicFields<
+    TFieldValues,
+    FieldValues
+  >()
 
   return (
     <>

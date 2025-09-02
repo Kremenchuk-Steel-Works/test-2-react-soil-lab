@@ -5,6 +5,7 @@ import {
   useFormState,
   type ControllerFieldState,
   type ControllerRenderProps,
+  type FieldErrors,
   type FieldValues,
   type Path,
   type PathValue,
@@ -12,17 +13,12 @@ import {
   type UseFormRegisterReturn,
 } from 'react-hook-form'
 import { getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import { WithError as ErrorWrap } from '@/shared/ui/with-error/WithError' // общий визуальный контейнер
+import { ErrorBlock, WithError as ErrorWrap } from '@/shared/ui/with-error/WithError'
 import { nameToId } from '@/utils/react-hook-form/nameToId'
 
-function ErrorBlock({ id, message }: { id: string; message: string }) {
-  return (
-    <div id={id} role="alert" aria-live="polite">
-      <AlertMessage type={AlertType.ERROR} message={message} />
-    </div>
-  )
-}
+// Расширяем тип ошибок, чтобы аккуратно работать с root-ошибкой
+type RootError = { root?: { message?: string } }
+type ErrorsWithRoot<T extends FieldValues> = FieldErrors<T> & RootError
 
 export function createFormKit<T extends FieldValues>() {
   type N = Path<T>
@@ -31,11 +27,11 @@ export function createFormKit<T extends FieldValues>() {
 
   const normalize = (name: NamesProp): NameLike[] => (Array.isArray(name) ? name : [name])
 
-  const collectMessages = (names: NameLike[], allErrors: any) => {
+  const collectMessages = (names: NameLike[], allErrors: ErrorsWithRoot<T>) => {
     const msgs: { name: NameLike; message: string; id: string }[] = []
     for (const n of names) {
       if (n === 'root') {
-        const message = allErrors?.root?.message as string | undefined
+        const message = allErrors.root?.message
         if (message) msgs.push({ name: 'root', message, id: 'form-root__error' })
         continue
       }
@@ -54,16 +50,25 @@ export function createFormKit<T extends FieldValues>() {
       const names = normalize(name)
       const fieldNames = names.filter((n): n is N => n !== 'root')
 
+      // Имя передаём только если есть полевые имена
+      const { errors } = useFormState<T>({
+        control,
+        name: fieldNames.length ? fieldNames : undefined,
+      })
+
+      // Достаём root
+      const root =
+        'root' in formState.errors ? (formState.errors as ErrorsWithRoot<T>).root : undefined
+
       if (fieldNames.length === 0) {
-        const rootMsg = (formState.errors as any)?.root?.message as string | undefined
+        const rootMsg = root?.message
         if (!rootMsg) return null
         return <ErrorBlock id="form-root__error" message={rootMsg} />
       }
 
-      const { errors } = useFormState<T>({ control, name: fieldNames })
-      const msgs = collectMessages(names, { ...errors, root: (formState.errors as any)?.root })
-
+      const msgs = collectMessages(names, { ...errors, root } as ErrorsWithRoot<T>)
       if (msgs.length === 0) return null
+
       if (show === 'first') {
         const m = msgs[0]
         return <ErrorBlock id={m.id} message={m.message} />

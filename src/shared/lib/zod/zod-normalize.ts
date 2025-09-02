@@ -22,12 +22,12 @@ const numberNormalizeLogic = (value: unknown) => {
 }
 
 // Рекурсивно "разворачиваем" схему, чтобы найти ядро
-function getCoreSchema(schema: ZodTypeAny): ZodTypeAny {
+function getCoreSchema<T extends ZodTypeAny>(schema: T): ZodTypeAny {
   if (schema instanceof z.ZodOptional || schema instanceof z.ZodNullable) {
-    return getCoreSchema(schema.unwrap())
+    return getCoreSchema(schema.unwrap() as ZodTypeAny)
   }
   if (schema instanceof z.ZodEffects) {
-    return getCoreSchema(schema.innerType())
+    return getCoreSchema(schema.innerType() as ZodTypeAny)
   }
   return schema
 }
@@ -37,9 +37,9 @@ function zn<T extends ZodNumber>(schema: T): ZodEffects<T>
 function zn<T extends ZodString>(schema: T): ZodEffects<T>
 function zn<T extends ZodTypeAny>(schema: T): T
 
-function zn(schema: ZodTypeAny) {
+function zn<T extends ZodTypeAny>(schema: T): ZodEffects<T> | T {
   // Получаем ядро схемы, чтобы проверить его тип
-  const coreSchema = getCoreSchema(schema)
+  const coreSchema = getCoreSchema(schema as ZodTypeAny)
 
   // Проверяем тип ядра
   if (coreSchema instanceof z.ZodString) {

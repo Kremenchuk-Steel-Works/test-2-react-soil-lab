@@ -17,7 +17,13 @@ export interface DynamicRule<
   id: RuleKey
   conditions: ConditionsMap
   exceptions?: ConditionsMap
-  schema: z.ZodObject<any>
+  schema: z.ZodObject<
+    ZodRawShape,
+    z.UnknownKeysParam,
+    z.ZodTypeAny,
+    Record<string, unknown>,
+    Record<string, unknown>
+  >
   Component: React.ComponentType<
     BaseDynamicComponentProps & {
       options?: TOptions
@@ -27,7 +33,7 @@ export interface DynamicRule<
 }
 
 export type DynamicFieldConfig<RuleKey extends string = string> = ReadonlyArray<
-  DynamicRule<any, any, RuleKey>
+  DynamicRule<object, unknown, RuleKey>
 >
 
 export type DynamicSectionsConfig<SectionKey extends string = string> = Readonly<
@@ -39,14 +45,13 @@ function isPresent(v: unknown) {
 }
 
 function isPresenceBased(cv: ConditionValue): boolean {
-  return (
-    (cv as any) === ANY_VALUE || (Array.isArray(cv) && (cv as any[]).includes(ANY_VALUE as any))
-  )
+  return cv === ANY_VALUE || (Array.isArray(cv) && (cv as ConditionPrimitive[]).includes(ANY_VALUE))
 }
 
 function valueMatchesCondition(formValue: unknown, cv: ConditionValue): boolean {
   if (isPresenceBased(cv)) return isPresent(formValue)
-  if (Array.isArray(cv)) return (cv as any[]).includes(formValue as ConditionPrimitive)
+  if (Array.isArray(cv))
+    return (cv as ConditionPrimitive[]).includes(formValue as ConditionPrimitive)
   return formValue === cv
 }
 
@@ -84,7 +89,7 @@ export function flattenRules(sections: DynamicSectionsConfig): DynamicFieldConfi
 function collectRuleKeys(rules: DynamicFieldConfig): Set<string> {
   const set = new Set<string>()
   for (const r of rules) {
-    const shape = (r as any).schema?.shape ?? {}
+    const shape = r.schema.shape
     Object.keys(shape).forEach((k) => set.add(k))
   }
   return set
@@ -99,12 +104,12 @@ function relaxBaseForRuleKeys<T extends ZodObject<ZodRawShape>>(
 
   const patch: ZodRawShape = Object.create(null) as ZodRawShape
 
-  const baseShape = (base as any).shape as ZodRawShape
+  const baseShape = base.shape
   for (const key of ruleKeys) {
     const def = baseShape[key]
-    // Добавляем только существующие в base ключи и только если у них есть .optional()
-    if (def && typeof (def as any).optional === 'function') {
-      patch[key] = (def as any).optional()
+    // Добавляем только существующие в base ключи
+    if (def) {
+      patch[key] = def.optional()
     }
   }
 
@@ -141,13 +146,15 @@ function valueToSig(v: unknown): string {
   const t = typeof v
   if (v === null) return 'null'
   if (t === 'number') {
-    if (Number.isNaN(v as number)) return 'number:NaN'
-    if (!Number.isFinite(v as number))
-      return `number:${(v as number) > 0 ? 'Infinity' : '-Infinity'}`
-    return `number:${String(v)}`
+    const num = v as number
+    if (Number.isNaN(num)) return 'number:NaN'
+    if (!Number.isFinite(num)) return `number:${num > 0 ? 'Infinity' : '-Infinity'}`
+    return `number:${num}`
   }
-  if (t === 'string' || t === 'boolean' || t === 'undefined') return `${t}:${String(v)}`
-  if (t === 'bigint') return `bigint:${String(v)}`
+  if (t === 'string') return `string:${v as string}`
+  if (t === 'boolean') return `boolean:${(v as boolean) ? 'true' : 'false'}`
+  if (t === 'undefined') return 'undefined:undefined'
+  if (t === 'bigint') return `bigint:${(v as bigint).toString()}`
   // object/function/symbol — нам достаточно факта типа + presence
   return t
 }
@@ -157,7 +164,7 @@ function buildRuleSignature(values: Record<string, unknown>, entries: RuleCondEn
   if (entries.length === 0) return '∅'
   let buf = ''
   for (const { key, mode } of entries) {
-    const v = (values as any)[key]
+    const v = values[key]
     const present = isPresent(v) ? 1 : 0
     if (mode === 'presence') buf += `${key}:P:${present}|`
     else buf += `${key}:V:${valueToSig(v)}:${present}|`
@@ -182,7 +189,7 @@ export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
   const relaxedBase = relaxBaseForRuleKeys(base, rules)
 
   const ruleCondEntries = prepareRuleCondEntries(rules)
-  const ruleSchemaKeys = rules.map((r) => Object.keys((r as any).schema?.shape ?? {}))
+  const ruleSchemaKeys = rules.map((r) => Object.keys(r.schema.shape))
 
   // Все rule-keys (нужны для корректного strip с самого старта)
   const allRuleKeys = new Set<string>(ruleSchemaKeys.flat())

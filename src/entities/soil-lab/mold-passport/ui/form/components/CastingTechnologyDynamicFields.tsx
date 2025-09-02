@@ -13,7 +13,7 @@ import InputField from '@/shared/ui/input-field/InputField'
 import { useDynamicMeta } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FieldsetWrapper } from '@/shared/ui/react-hook-form/FieldsetWrapper'
-import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/formKitContext'
+import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/useFormKit'
 
 export function CastingTechnologyDataGscDynamicForm() {
   const Form = useFormKit<WithDataGscFormFields>()

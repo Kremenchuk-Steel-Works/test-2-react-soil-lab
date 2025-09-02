@@ -137,7 +137,7 @@ function ReactSelect<
         setIsLoading(false)
       }
     },
-    [options, props.isMulti, props.value],
+    [options],
   )
 
   const handleInputChange = (value: string, actionMeta: InputActionMeta) => {

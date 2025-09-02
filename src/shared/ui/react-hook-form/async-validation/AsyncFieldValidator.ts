@@ -131,14 +131,23 @@ export function AsyncFieldValidator<T extends FieldValues>({
 
     const timer = setTimeout(() => {
       logger.debug(`[AsyncValidator: ${name}] --- Timer Fired ---`)
-      runValidation(value)
+      void runValidation(value)
     }, debounceMs)
 
     return () => {
       logger.debug(`[AsyncValidator: ${name}] Cleanup: Clearing timer for value "${value}"`)
       clearTimeout(timer)
     }
-  }, [value, runValidation, debounceMs, getFieldState, clearErrors, onErrorChange, name])
+  }, [
+    value,
+    runValidation,
+    debounceMs,
+    getFieldState,
+    clearErrors,
+    onErrorChange,
+    name,
+    onStatusChange,
+  ])
 
   // Эффект #2: Восстановление ошибки
   useEffect(() => {
@@ -158,13 +167,13 @@ export function AsyncFieldValidator<T extends FieldValues>({
         onStatusChange?.(name, true)
         // Используем getValues, чтобы получить самое свежее значение,
         const currentValue = getValues(name)
-        runValidation(currentValue)
+        void runValidation(currentValue)
       }
     }
 
     selfClearedErrorRef.current = false
     prevErrorRef.current = currentError
-  }, [currentError, runValidation, getValues, name])
+  }, [currentError, runValidation, getValues, name, onStatusChange])
 
   return null
 }

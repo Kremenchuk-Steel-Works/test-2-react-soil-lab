@@ -1,23 +1,33 @@
-import type { ControllerFieldState, ControllerRenderProps } from 'react-hook-form'
+import type {
+  ControllerFieldState,
+  ControllerRenderProps,
+  FieldValues,
+  Path,
+} from 'react-hook-form'
 import { fileTypePresets, type FileTypePreset } from '@/shared/ui/file-upload/filePresets'
 import { FileUpload, type FileUploadProps } from '@/shared/ui/file-upload/FileUpload'
 import { WithError } from '@/shared/ui/with-error/WithError'
 
-type FormFileUploadProps = Omit<FileUploadProps, 'acceptedFiles' | 'onFilesChange'> & {
-  field: ControllerRenderProps<any, any>
+type FormFileUploadProps<TFieldValues extends FieldValues, TName extends Path<TFieldValues>> = Omit<
+  FileUploadProps,
+  'acceptedFiles' | 'onFilesChange'
+> & {
+  field: ControllerRenderProps<TFieldValues, TName>
   fieldState: ControllerFieldState
   fileType?: FileTypePreset
   errorMessage?: string
 }
 
-const FormFileUpload = ({
+const FormFileUpload = <TFieldValues extends FieldValues, TName extends Path<TFieldValues>>({
   field,
-  fieldState,
+  fieldState: _fieldState,
   fileType,
   multiple = false,
   errorMessage,
   ...rest
-}: FormFileUploadProps) => {
+}: FormFileUploadProps<TFieldValues, TName>) => {
+  void _fieldState
+
   const preset = fileType ? fileTypePresets[fileType] : undefined
 
   let acceptedFiles: File[] = []

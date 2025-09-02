@@ -35,7 +35,7 @@ export type BaseDynamicComponentProps = object
 export interface DynamicRule<TOptions extends object = object, TResponseData = unknown> {
   conditions: ConditionsMap
   exceptions?: ConditionsMap
-  schema: z.ZodObject<any>
+  schema: z.ZodObject<ZodRawShape>
   // Компонент теперь ожидает пропсы, которые включают его собственные TOptions и TResponseData
   Component: ComponentType<
     BaseDynamicComponentProps & {
@@ -49,6 +49,7 @@ export interface DynamicRule<TOptions extends object = object, TResponseData = u
 /**
  * Тип для конфигурации динамических полей.
  */
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 export type DynamicFieldConfig = ReadonlyArray<DynamicRule<any, any>>
 
 /**

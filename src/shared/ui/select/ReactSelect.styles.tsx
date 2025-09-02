@@ -1,21 +1,26 @@
-import { ChevronDown, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import {
   components,
   type ClearIndicatorProps,
-  type DropdownIndicatorProps,
+  type GroupBase,
   type OptionProps,
   type ValueContainerProps,
 } from 'react-select'
 import { twMerge } from 'tailwind-merge'
+import { CustomDropdownIndicator } from '@/shared/ui/select/CustomDropdownIndicator'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 
 export type ClassNamesConfig = Partial<{
   control: (props: { isFocused: boolean; isDisabled: boolean }) => string
   input: () => string
   placeholder: () => string
-  option: (props: OptionProps<any, any, any>) => string
+  option: <OT extends Option, IM extends boolean, G extends GroupBase<OT>>(
+    props: OptionProps<OT, IM, G>,
+  ) => string
   menu: () => string
-  valueContainer: (state: ValueContainerProps<any, any>) => string
+  valueContainer: <OT extends Option, IM extends boolean>(
+    state: ValueContainerProps<OT, IM>,
+  ) => string
   singleValue: () => string
   multiValue: () => string
   multiValueLabel: () => string
@@ -67,35 +72,6 @@ export const baseClassNames: ClassNamesConfig = {
       'hover:text-red-800 dark:hover:text-red-300',
       'transition-colors duration-200',
     ),
-}
-
-/**
- * @description Кастомный индикатор, который отображает либо спиннер загрузки, либо стрелку.
- * Это решает проблему смещения контента, так как оба состояния рендерятся в одном и том же месте.
- */
-const CustomDropdownIndicator = <OptionType extends Option, IsMulti extends boolean>(
-  props: DropdownIndicatorProps<OptionType, IsMulti>,
-) => {
-  const {
-    selectProps: { isLoading },
-  } = props
-
-  if (isLoading) {
-    return (
-      <div className="mx-[2px] h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
-    )
-  }
-
-  return (
-    <components.DropdownIndicator {...props}>
-      <ChevronDown
-        className={twMerge(
-          'h-5 w-5 text-gray-600 transition-all duration-200 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200',
-          props.selectProps.menuIsOpen ? '-rotate-180' : 'rotate-0',
-        )}
-      />
-    </components.DropdownIndicator>
-  )
 }
 
 // Объект с кастомными компонентами для стилизации

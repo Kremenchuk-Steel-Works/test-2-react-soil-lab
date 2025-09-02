@@ -1,33 +1,50 @@
 import type { FieldError, FieldErrors, FieldValues, Path } from 'react-hook-form'
 
+/** Узкий type guard для ошибок RHF */
+function isFieldError(value: unknown): value is FieldError {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    ('message' in value || 'type' in value || 'ref' in value || 'types' in value)
+  )
+}
+
+/** Универсальная проверка на индексируемый объект/массив */
+function isIndexable(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
+
 function getNestedError<T extends FieldValues>(
   errors: FieldErrors<T>,
   path: Path<T>,
 ): FieldError | undefined {
-  const pathParts = (path as string).split('.')
+  const pathParts = String(path).split('.')
 
-  let currentError: any = errors
+  let current: unknown = errors
   for (const part of pathParts) {
-    if (!currentError) return undefined
-    currentError = currentError[part]
+    if (!isIndexable(current)) return undefined
+    current = current[part]
+    if (current == null) return undefined
   }
 
-  return currentError as FieldError
+  // RHF + zod для useFieldArray может класть ошибку в "root"
+  if (isFieldError(current)) return current
+  if (isIndexable(current)) {
+    const root = current['root']
+    if (isFieldError(root)) return root
+  }
+
+  return undefined
 }
 
 export function getNestedErrorMessage<T extends FieldValues>(
   errors: FieldErrors<T>,
   path: Path<T>,
 ): string | undefined {
-  const node = getNestedError(errors, path) as any
+  const node = getNestedError(errors, path)
   if (!node) return undefined
 
-  // обычная ошибка поля
-  if (typeof node?.message === 'string') return node.message
-
-  // ошибка на "корне" массива (RHF + zod для useFieldArray)
-  if (typeof node?.root?.message === 'string') return node.root.message
-
+  if (typeof node.message === 'string') return node.message
   return undefined
 }
 

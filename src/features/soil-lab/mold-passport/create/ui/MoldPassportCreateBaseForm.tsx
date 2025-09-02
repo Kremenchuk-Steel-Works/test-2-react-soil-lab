@@ -5,7 +5,7 @@ import {
 import type { MoldPassportCreateFormFields } from '@/features/soil-lab/mold-passport/create/model/schema'
 import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
 import { logger } from '@/shared/lib/logger'
-import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/formKitContext'
+import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/useFormKit'
 import type { FormBaseProps } from '@/types/react-hook-form'
 
 type Options = Pick<

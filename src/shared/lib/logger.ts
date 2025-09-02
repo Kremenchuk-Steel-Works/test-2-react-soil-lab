@@ -10,6 +10,13 @@ const getActiveNamespaces = (): string[] => {
   return storedValue ? storedValue.split(',') : []
 }
 
+// Глобальное расширение для window, чтобы избежать any
+declare global {
+  interface Window {
+    setDebug: (namespaces: string) => void
+  }
+}
+
 /**
  * Создает и настраивает экземпляр логгера для конкретного неймспейса.
  * @param {string} namespace - Имя модуля или компонента для логирования.
@@ -40,7 +47,7 @@ export const logger = createLogger('global')
 
 // Утилита для удобства разработки
 if (import.meta.env.DEV && typeof window !== 'undefined') {
-  ;(window as any).setDebug = (namespaces: string) => {
+  window.setDebug = (namespaces: string) => {
     console.log(`[Logger] Debugging levels are set for: ${namespaces}. Reload page.`)
     window.localStorage.setItem(LOG_LEVEL_KEY, namespaces)
     window.location.reload()

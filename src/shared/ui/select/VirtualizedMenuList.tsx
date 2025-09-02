@@ -1,6 +1,15 @@
-import { useEffect, useMemo, useRef, type CSSProperties, type JSX, type RefObject } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  type CSSProperties,
+  type HTMLAttributes,
+  type JSX,
+  type RefObject,
+} from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import type { GroupBase, MenuListProps } from 'react-select'
+import { castRef, mergeRefs } from '@/shared/lib/refs'
 
 const DEFAULT_ROW_HEIGHT = 48
 const MENU_MAX_HEIGHT = 300
@@ -17,32 +26,20 @@ type AsyncPaginateMenuListProps<
   }
 }
 
-function mergeRefs<T>(
-  ...refs: Array<RefObject<T | null> | ((instance: T | null) => void) | null | undefined>
-) {
-  return (instance: T | null) => {
-    for (const ref of refs) {
-      if (!ref) continue
-      if (typeof ref === 'function') ref(instance)
-      else (ref).current = instance
-    }
-  }
-}
-
-// ХУК ДЛЯ ФОЛБЭКА ---
 /**
- * Применяет JS-фолбэк для блокировки прокрутки страницы,
+ * JS-фолбэк для блокировки прокрутки страницы,
  * если CSS `overscroll-behavior` не поддерживается.
  */
 function useScrollLockFallback(elementRef: RefObject<HTMLElement | null>) {
-  // Проверяем поддержку фичи один раз при инициализации
-  const supportsOverscrollContain = useMemo(
-    () => typeof CSS !== 'undefined' && (CSS as any).supports?.('overscroll-behavior-y', 'contain'),
-    [],
-  )
+  const supportsOverscrollContain = useMemo<boolean>(() => {
+    return (
+      typeof CSS !== 'undefined' &&
+      typeof CSS.supports === 'function' &&
+      CSS.supports('overscroll-behavior-y', 'contain')
+    )
+  }, [])
 
   useEffect(() => {
-    // Если CSS поддерживается, ничего не делаем. Это современный путь.
     if (supportsOverscrollContain) return
 
     const el = elementRef.current
@@ -96,46 +93,59 @@ export function VirtualizedMenuList<
 }: AsyncPaginateMenuListProps<OptionType, IsMulti, Group>): JSX.Element {
   const { handleScrolledToBottom, isLoading } = selectProps
 
-  const safeChildren = useMemo(() => (Array.isArray(children) ? children : []), [children])
-  const itemCount = safeChildren.length
+  // Определяем, можно ли виртуализировать (как в старой версии)
+  const isArrayChildren = Array.isArray(children)
 
+  // Нормализуем детей ВСЕГДА — но если не массив, получим []
+  const safeChildren = useMemo<JSX.Element[]>(
+    () => (isArrayChildren ? (children as unknown as JSX.Element[]) : []),
+    [children, isArrayChildren],
+  )
+
+  const itemCount = safeChildren.length
+  const shouldRenderVirtual = isArrayChildren && itemCount > 0
+
+  // Реф и виртуализатор — ВСЕГДА вызываем хуки
   const parentRef = useRef<HTMLDivElement | null>(null)
 
   const rowVirtualizer = useVirtualizer({
-    count: itemCount,
+    count: itemCount, // будет 0, если не виртуализируем
     getScrollElement: () => parentRef.current,
     estimateSize: () => DEFAULT_ROW_HEIGHT,
     overscan: 6,
     measureElement: (el) => el?.getBoundingClientRect().height ?? DEFAULT_ROW_HEIGHT,
   })
 
+  // Вычисления высот — безопасны и при count=0
   const estimatedTotal = itemCount * DEFAULT_ROW_HEIGHT
   const measuredTotal = rowVirtualizer.getTotalSize()
   const contentHeight = Math.max(measuredTotal || 0, estimatedTotal)
   const viewportHeight = Math.min(maxHeight, contentHeight)
   const needScroll = contentHeight > maxHeight
 
-  // Догрузка при прокрутке к низу
+  // Эффекты — вызываются всегда, но не сработают без контейнера
   useEffect(() => {
     const el = parentRef.current
-    if (!el || !handleScrolledToBottom) return
+    const bottomCb = handleScrolledToBottom
+    if (!el || !bottomCb) return
+
     const onScroll = () => {
       if (isLoading) return
       if (el.scrollTop + el.clientHeight >= el.scrollHeight - BOTTOM_THRESHOLD_PX) {
-        handleScrolledToBottom()
+        bottomCb()
       }
     }
     el.addEventListener('scroll', onScroll)
     return () => el.removeEventListener('scroll', onScroll)
   }, [handleScrolledToBottom, isLoading])
 
-  // Автодогрузка, если контента меньше окна
   const lastTriggeredCountRef = useRef<number>(-1)
   useEffect(() => {
-    if (!handleScrolledToBottom || isLoading) return
+    const bottomCb = handleScrolledToBottom
+    if (!bottomCb || isLoading) return
     if (contentHeight < maxHeight && itemCount !== lastTriggeredCountRef.current) {
       lastTriggeredCountRef.current = itemCount
-      handleScrolledToBottom()
+      bottomCb()
     }
   }, [contentHeight, maxHeight, itemCount, isLoading, handleScrolledToBottom])
 
@@ -143,15 +153,15 @@ export function VirtualizedMenuList<
     if (itemCount < lastTriggeredCountRef.current) lastTriggeredCountRef.current = -1
   }, [itemCount])
 
-  // Блокировка прокрутки основной формы
+  // Скролл-лок — всегда, но без контейнера просто не активируется
   useScrollLockFallback(parentRef)
 
-  if (itemCount === 0) return <>{children}</>
+  // Стили контейнера для виртуализированного режима
+  const htmlInnerProps = innerProps as unknown as HTMLAttributes<HTMLDivElement> | undefined
+  const innerStyle: CSSProperties | undefined = htmlInnerProps?.style
 
-  // Аккуратно объединяем стили: добавляем overscroll-behavior
-  const innerStyle = (innerProps as any)?.style as CSSProperties | undefined
   const containerStyle: CSSProperties = {
-    ...(innerStyle || {}),
+    ...(innerStyle ?? {}),
     height: viewportHeight,
     maxHeight,
     overflowY: needScroll ? 'auto' : 'hidden',
@@ -159,10 +169,15 @@ export function VirtualizedMenuList<
     WebkitOverflowScrolling: 'touch',
   }
 
+  // Два режима. В НЕ виртуальном — просто отдаём детей
+  if (!shouldRenderVirtual) {
+    return <>{children}</>
+  }
+
   return (
     <div
-      ref={mergeRefs(parentRef, innerRef as any)}
-      {...(innerProps as React.HTMLAttributes<HTMLDivElement>)}
+      ref={mergeRefs<HTMLDivElement>(parentRef, castRef<HTMLDivElement>(innerRef))}
+      {...(htmlInnerProps as HTMLAttributes<HTMLDivElement>)}
       style={containerStyle}
     >
       <div
