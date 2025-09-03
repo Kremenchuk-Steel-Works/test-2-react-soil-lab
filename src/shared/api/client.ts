@@ -20,18 +20,33 @@ const baseApi = axios.create({
 // Сначала применяем конвертер регистров
 export const api = axiosCaseConverter(baseApi)
 
+// Утилита безопасного получения логируемого значения
+const toLoggable = (value: unknown): unknown => {
+  if (typeof value === 'string') {
+    try {
+      return JSON.parse(value)
+    } catch {
+      return value
+    }
+  }
+  return value
+}
+
 // Request Interceptor
 api.interceptors.request.use((config) => {
   // Добавляем метку времени для отслеживания длительности запроса
   config.meta = { startTime: new Date() }
 
   // Логируем ключевую информацию о запросе
-  const { method, url, params, data } = config
+  const { method, url } = config
+  const params: unknown = config.params as unknown
+  const requestData: unknown = toLoggable(config.data)
+
   logger.info(`[API] -> Request`, {
     method: method?.toUpperCase(),
     url,
-    params, // Query-параметры для GET запросов
-    data, // Тело для POST/PUT/PATCH запросов
+    params,
+    data: requestData,
   })
 
   return config
@@ -41,16 +56,17 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => {
     // Успешный ответ
-    const { config, status, data } = response
+    const { config, status } = response
     const { method, url } = config
-    const duration = config.meta ? new Date().getTime() - config.meta.startTime.getTime() : 0
+    const duration = config.meta ? Date.now() - config.meta.startTime.getTime() : 0
+    const responseData: unknown = toLoggable(response.data)
 
     logger.info(`[API] <- Response`, {
       status,
       method: method?.toUpperCase(),
       url,
       duration: `${duration}ms`,
-      data,
+      data: responseData,
     })
 
     return response
@@ -65,31 +81,28 @@ api.interceptors.response.use(
         method: error.config?.method?.toUpperCase(),
         url: error.config?.url,
       })
-      // Пробрасываем дальше — React Query/внешний код не считает это ошибкой статуса.
       return Promise.reject(error)
     }
 
     // Ответ с ошибкой
     if (error.response) {
-      const { config, status, data } = error.response
+      const { config, status } = error.response
       const { method, url } = config
-      const duration = config.meta ? new Date().getTime() - config.meta.startTime.getTime() : 0
+      const duration = config.meta ? Date.now() - config.meta.startTime.getTime() : 0
+
+      const errorData: unknown = toLoggable(error.response.data)
+      const originalParams: unknown = config.params as unknown
+      const originalData: unknown = toLoggable(config.data)
 
       logger.error(`[API] <- Error Response`, {
         status,
         method: method?.toUpperCase(),
         url,
         duration: `${duration}ms`,
-        errorData: data,
+        errorData,
         originalRequest: {
-          params: config.params,
-          data: (() => {
-            try {
-              return typeof config.data === 'string' ? JSON.parse(config.data) : config.data
-            } catch {
-              return config.data
-            }
-          })(),
+          params: originalParams,
+          data: originalData,
         },
       })
     } else if (error.request) {
@@ -106,7 +119,7 @@ api.interceptors.response.use(
       })
     }
 
-    // Обязательно пробрасываем ошибку дальше, чтобы ее можно было поймать в коде (например, в .catch() или React Query)
+    // Обязательно пробрасываем ошибку дальше
     return Promise.reject(error)
   },
 )

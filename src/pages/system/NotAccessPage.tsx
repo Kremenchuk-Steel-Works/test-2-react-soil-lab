@@ -14,13 +14,13 @@ export default function NotAccessPage() {
       <div className="flex items-center justify-center space-x-2">
         <Button
           className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate(PATHS.MAIN)}
+          onClick={() => void navigate(PATHS.MAIN)}
         >
           <House className="h-5 w-5" /> <span>На головну</span>
         </Button>
         <Button
           className="flex items-center justify-center gap-1 whitespace-nowrap"
-          onClick={() => navigate(-1)}
+          onClick={() => void navigate(-1)}
         >
           <ArrowLeft className="h-5 w-5" /> <span>Назад</span>
         </Button>

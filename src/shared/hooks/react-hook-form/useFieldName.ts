@@ -22,7 +22,7 @@ type AnyElementPrefix<T extends FieldValues> = `${ArrayPath<T>}.${number}`
 
 /** Ключи верхнего уровня S, значения которых — массивы */
 type ArrayKeysOf<S> = {
-  [K in keyof S]-?: S[K] extends readonly any[] ? K : never
+  [K in keyof S]-?: S[K] extends readonly unknown[] ? K : never
 }[keyof S]
 
 /** Тип возвращаемого API: функция + helper’ы */

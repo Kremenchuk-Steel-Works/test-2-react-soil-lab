@@ -1,5 +1,3 @@
-// scripts/generate-api.ts
-
 import { execSync } from 'child_process'
 import { existsSync, mkdirSync, readFileSync } from 'fs'
 import path from 'path'

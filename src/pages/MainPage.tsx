@@ -20,7 +20,7 @@ export default function MainPage() {
                 key={route.key}
                 // Задаем максимальную ширину для кнопки
                 className="flex max-w-70 items-center justify-center gap-1 whitespace-nowrap"
-                onClick={() => navigate(route.path)}
+                onClick={() => void navigate(route.path)}
                 title={route.label}
                 aria-label={route.label}
               >

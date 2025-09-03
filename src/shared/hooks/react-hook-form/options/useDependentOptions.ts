@@ -62,9 +62,18 @@ export function useDependentOptions<
 }: UseDependentOptionsProps<TFieldValues, T>): UseDependentOptionsReturn<T> {
   const fieldConfig = config[dependentFieldName]
 
+  // Логируем отсутствие конфига (не влияет на порядок вызова хуков)
   if (!fieldConfig) {
     logger.warn(`Конфігурація для поля "${dependentFieldName}" не знайдена.`)
-    return { options: [], isDisabled: true, placeholder: 'Конфігурація відсутня' }
+  }
+
+  // Нормализуем конфиг, чтобы не делать ранний return
+  const normalizedConfig: DependentFieldConfig<T> = fieldConfig ?? {
+    rules: [],
+    defaultOptions: [],
+    defaultPlaceholder: 'Конфігурація відсутня',
+    resetOnChanges: true,
+    disableWhenUnmet: true,
   }
 
   const {
@@ -73,7 +82,7 @@ export function useDependentOptions<
     defaultPlaceholder,
     resetOnChanges = true,
     disableWhenUnmet = true,
-  } = fieldConfig
+  } = normalizedConfig
 
   const triggerFieldNames = useMemo(() => {
     const fieldSet = new Set<string>()
@@ -86,7 +95,12 @@ export function useDependentOptions<
     return Array.from(fieldSet) as Path<TFieldValues>[]
   }, [rules])
 
-  const watchedValues = useWatch({ control, name: triggerFieldNames })
+  const watchedValues = useWatch({
+    control,
+    name: triggerFieldNames,
+    // Если отслеживать нечего — отключаем подписку
+    disabled: triggerFieldNames.length === 0,
+  })
 
   const currentValues = useMemo(() => {
     return triggerFieldNames.reduce<FieldValues>((acc, key, index) => {

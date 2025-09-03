@@ -28,4 +28,18 @@ export default tseslint.config(
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
+
+  // Для сгенерированных orval/msw файлов
+  {
+    files: ['**/*.msw.ts'],
+    rules: {
+      // "unknown" в union поглощает остальные типы
+      '@typescript-eslint/no-redundant-type-constituents': 'off',
+      // Генератор часто оставляет Function/unknown
+      '@typescript-eslint/no-unsafe-call': 'off',
+
+      // Эти файлы не содержат React-компонентов
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 )

@@ -1,31 +1,41 @@
 /**
+ * Рекурсивный тип, который заменяет все вхождения `null` на `undefined`.
+ */
+type NullsToUndefined<T> = T extends null
+  ? undefined
+  : T extends Date // Исключаем объекты, которые не нужно обходить, например Date
+    ? T
+    : T extends object
+      ? { [K in keyof T]: NullsToUndefined<T[K]> }
+      : T
+
+/**
  * Recursively converts all `null` values in an object to `undefined`.
  * This is useful for cleaning up API responses before they are used in the application,
  * aligning them with TypeScript's preference for `undefined` for optional properties.
  * @param obj The object to clean.
  * @returns A new object with `null` values replaced by `undefined`.
  */
-export function nullsToUndefined<T>(obj: T): T {
+export function nullsToUndefined<T>(obj: T): NullsToUndefined<T> {
   if (obj === null || obj === undefined) {
-    return undefined as any
+    return undefined as NullsToUndefined<T>
   }
 
-  // Если это не объект (например, строка, число) или массив, возвращаем как есть
   if (typeof obj !== 'object') {
-    return obj
+    return obj as NullsToUndefined<T>
   }
 
   if (Array.isArray(obj)) {
-    return obj.map((item) => nullsToUndefined(item)) as any
+    return (obj as unknown[]).map((item) => nullsToUndefined(item)) as NullsToUndefined<T>
   }
 
-  // Рекурсивно обрабатываем ключи объекта
-  const newObj = { ...obj }
-  for (const key in newObj) {
-    if (newObj.hasOwnProperty(key)) {
-      ;(newObj as any)[key] = nullsToUndefined((newObj as any)[key])
-    }
-  }
-
-  return newObj
+  // Используем reduce для создания нового объекта без мутаций и `any`
+  return (Object.keys(obj) as Array<keyof T>).reduce(
+    (acc, key) => {
+      const value = obj[key]
+      acc[key] = nullsToUndefined(value)
+      return acc
+    },
+    {} as { [K in keyof T]: NullsToUndefined<T[K]> },
+  ) as NullsToUndefined<T>
 }

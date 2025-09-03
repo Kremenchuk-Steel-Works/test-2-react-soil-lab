@@ -1,4 +1,4 @@
-import type { AxiosRequestConfig } from 'axios'
+import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { api } from '@/shared/api/client'
 
 /**
@@ -24,7 +24,8 @@ export const customMutator = <T>(config: AxiosRequestConfig): Promise<T> => {
   }
 
   // Берём базовый URL из нашего axios-инстанса и меняем порт на 8003
-  const base = (api as any)?.defaults?.baseURL as string | undefined
+  const base = api?.defaults?.baseURL
+
   if (base) {
     try {
       const u = new URL(base)
@@ -43,7 +44,7 @@ export const customMutator = <T>(config: AxiosRequestConfig): Promise<T> => {
   }
 
   // Передаем исправленный конфиг в инстанс axios
-  return api(newConfig).then((response) => response.data)
+  return api<T, AxiosResponse<T>>(newConfig).then((response) => response.data)
 }
 
 export default customMutator

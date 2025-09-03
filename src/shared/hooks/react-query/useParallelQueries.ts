@@ -8,9 +8,9 @@ type QueryConfig<TQueryFnData = unknown, TError = Error> = Omit<
   queryKey: QueryKey
 }
 
-export type ParallelQueriesConfig = Record<string, QueryConfig<any, any>>
+export type ParallelQueriesConfig = Record<string, QueryConfig<unknown, unknown>>
 
-type QueryFnData<TQueryFn> = TQueryFn extends (...args: any) => infer TReturn
+type QueryFnData<TQueryFn> = TQueryFn extends (...args: unknown[]) => infer TReturn
   ? Awaited<TReturn>
   : unknown
 

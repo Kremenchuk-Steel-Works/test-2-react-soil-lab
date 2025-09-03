@@ -1,5 +1,3 @@
-// orval.config.template.ts
-
 import type { Config } from 'orval'
 
 /**

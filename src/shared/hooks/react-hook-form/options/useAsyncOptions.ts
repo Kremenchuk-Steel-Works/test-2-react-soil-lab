@@ -17,13 +17,15 @@ interface PaginatedData<TItem> {
 }
 
 // Утилиты для вывода типов
-type InferParamsFromProvider<P> = P extends (params: infer PP, ...args: any[]) => any ? PP : never
+type InferParamsFromProvider<P> = P extends (params: infer PP, ...args: never[]) => unknown
+  ? PP
+  : never
 
 // Логика вывода типов.
-type InferDataFromProvider<P> = P extends (...args: any[]) => {
+type InferDataFromProvider<P> = P extends (...args: never[]) => {
   queryFn?: infer Q
 }
-  ? Q extends (...args: any[]) => infer R
+  ? Q extends (...args: never[]) => infer R
     ? Awaited<R>
     : never
   : never
@@ -32,6 +34,7 @@ type InferDataFromProvider<P> = P extends (...args: any[]) => {
  * Хук для загрузки опций в асинхронных select-компонентах.
  */
 export function useAsyncOptions<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   P extends (...args: any[]) => object,
   TItem,
   TValue extends string | number | boolean,

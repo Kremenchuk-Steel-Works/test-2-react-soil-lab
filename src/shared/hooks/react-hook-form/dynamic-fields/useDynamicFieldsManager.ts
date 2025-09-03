@@ -33,6 +33,8 @@ export function useDynamicFieldsManager<TFieldValues extends FieldValues>({
   const watchedValues = useWatch({ control, name: fieldsToWatch })
 
   const activeRules = useMemo(() => {
+    void watchedValues
+
     const formValues = getValues()
     const newActiveState: ActiveRulesState = {}
     config.forEach((rule, index) => {

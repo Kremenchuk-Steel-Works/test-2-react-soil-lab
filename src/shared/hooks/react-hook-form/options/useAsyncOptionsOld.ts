@@ -29,8 +29,10 @@ type QueryOptionsProvider<TParams, TRawData> = (
   params: TParams,
 ) => UseQueryOptions<TRawData> & { queryKey: QueryKey }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ParamsBuilder = (search: string, page: number) => Record<string, any>
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ResponseAdapter<TData> = (data: any) => PaginatedData<TData>
 
 /**
@@ -63,10 +65,12 @@ interface UseAsyncOptionsConfig<TData, TValue> {
  */
 // ИЗМЕНЕНИЕ: Добавляем второй generic TValue с ограничением
 export function useAsyncOptions<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   TData extends Record<string, any>,
   TValue extends string | number | boolean,
 >(
-  queryOptionsProvider: QueryOptionsProvider<any, any>,
+  queryOptionsProvider: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  QueryOptionsProvider<any, any>,
   // ИЗМЕНЕНИЕ: Используем обновленный тип конфига
   config: UseAsyncOptionsConfig<TData, TValue>,
 ) {
@@ -83,6 +87,7 @@ export function useAsyncOptions<
       }
 
       try {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const rawData = await queryClient.fetchQuery({ queryKey, queryFn })
         const data = responseAdapter(rawData)
         const formattedOptions = data.items.map(mapper)
