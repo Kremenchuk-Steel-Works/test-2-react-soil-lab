@@ -51,7 +51,6 @@ export function MoldPassportCreateBaseForm({
 
       {/* DynamicFields */}
       <F.MoldingAreaDynamic />
-      {/* <DynamicFieldArea section="moldingAreaId" showInactive /> */}
 
       <F.PatternPlateFrameSelect />
 

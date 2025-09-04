@@ -7,7 +7,7 @@
 
 export type ConsumableStatus = (typeof ConsumableStatus)[keyof typeof ConsumableStatus]
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ConsumableStatus = {
   available: 'available',
   used: 'used',

@@ -7,7 +7,7 @@
 
 export type ResinType = (typeof ResinType)[keyof typeof ResinType]
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ResinType = {
   mold_core: 'mold_core',
   universal: 'universal',

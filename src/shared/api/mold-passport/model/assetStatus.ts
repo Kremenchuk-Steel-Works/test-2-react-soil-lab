@@ -7,7 +7,7 @@
 
 export type AssetStatus = (typeof AssetStatus)[keyof typeof AssetStatus]
 
- 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AssetStatus = {
   available: 'available',
   under_maintenance: 'under_maintenance',
