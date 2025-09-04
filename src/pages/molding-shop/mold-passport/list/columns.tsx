@@ -11,7 +11,7 @@ import {
   booleanColumn,
   dateColumn,
   displayColumn,
-  idColumn,
+  linkColumn,
   optionColumn,
 } from '@/widgets/data-table'
 
@@ -20,7 +20,7 @@ const columnHelper = createColumnHelper<MoldPassportListItemResponse>()
 export const moldPassportColumns = [
   columnHelper.accessor('id', {
     header: 'ID',
-    ...idColumn(),
+    ...linkColumn(),
   }),
 
   columnHelper.accessor('isComplete', {

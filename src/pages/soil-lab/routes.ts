@@ -1,28 +1,28 @@
 import { lazy } from 'react'
-import { Factory, Users } from 'lucide-react'
+import { FlaskConical, Users } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
-import { moldPassportRoutes } from '@/pages/soil-lab/mold-passport/routes'
+import { measurementsRoutes } from '@/pages/soil-lab/measurements/routes'
 
-const SoilLabLayout = lazy(() => import('@/pages/soil-lab/Layout'))
-const SoilLabMain = lazy(() => import('@/pages/soil-lab/Main'))
+const soilLabLayout = lazy(() => import('@/pages/soil-lab/Layout'))
+const soilLabMain = lazy(() => import('@/pages/soil-lab/Main'))
 
 export const soilLabRoutes: AppRoute = {
   key: 'soilLab',
   path: '/soil-lab',
   label: 'Лабораторія сумішей',
-  icon: Factory,
-  Component: SoilLabLayout,
+  icon: FlaskConical,
+  Component: soilLabLayout,
   requiredPermissions: [PERMISSIONS.ADMIN],
   children: [
     {
-      key: 'moldingShopIndex',
+      key: '',
       path: '',
       label: '',
       icon: Users,
-      Component: SoilLabMain,
+      Component: soilLabMain,
       inSidebar: false,
     },
-    moldPassportRoutes,
+    measurementsRoutes,
   ],
 }

@@ -2,14 +2,14 @@ import { createColumnHelper } from '@tanstack/react-table'
 import type { OrganizationListResponse } from '@/entities/admin/organizations/types/response.dto'
 import type { ListDataType } from '@/types/pagination'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
-import { idColumn } from '@/widgets/data-table/columns/idColumn'
+import { linkColumn } from '@/widgets/data-table/columns/linkColumn'
 
 const columnHelper = createColumnHelper<ListDataType<OrganizationListResponse>>()
 
 export const adminOrganizationsColumns = [
   columnHelper.accessor('id', {
     header: 'ID',
-    ...idColumn(),
+    ...linkColumn(),
   }),
 
   columnHelper.accessor('countryName', {

@@ -56,9 +56,54 @@ export function DataTable<TData extends RowData>({
   initialSorting,
 }: DataTableProps<TData>) {
   const id = useId()
+
+  /**
+   * Вычисляем дефолтную колонку для сортировки.
+   * - Если есть 'id' — используем её.
+   * - Если нет — берём первую доступную accessor-колонку с enableSorting !== false.
+   * Работает и для вложенных групп колонок.
+   */
+  type AnyCol = ColumnDef<TData, unknown> & {
+    id?: string
+    accessorKey?: string
+    accessorFn?: unknown
+    enableSorting?: boolean
+    columns?: AnyCol[]
+  }
+
+  const defaultSortId = useMemo(() => {
+    const flatten = (defs: AnyCol[], acc: AnyCol[] = []): AnyCol[] => {
+      for (const c of defs) {
+        if (Array.isArray(c.columns) && c.columns.length) {
+          flatten(c.columns as AnyCol[], acc)
+        } else {
+          acc.push(c)
+        }
+      }
+      return acc
+    }
+
+    const leafs = flatten(columns as unknown as AnyCol[])
+
+    const colIdOf = (c: AnyCol): string | undefined =>
+      c.id ?? (typeof c.accessorKey === 'string' ? c.accessorKey : undefined)
+
+    const hasId = leafs.some((c) => colIdOf(c) === 'id')
+    if (hasId) return 'id'
+
+    const firstSortableAccessor = leafs.find((c) => {
+      const id = colIdOf(c)
+      const sortable = c.enableSorting !== false
+      const isAccessor = typeof c.accessorKey === 'string' || typeof c.accessorFn !== 'undefined'
+      return Boolean(id && sortable && isAccessor)
+    })
+
+    return firstSortableAccessor ? colIdOf(firstSortableAccessor) : undefined
+  }, [columns])
+
   // Состояния таблицы
   const [sorting, setSorting] = useState<SortingState>(
-    initialSorting ?? [{ id: 'id', desc: false }],
+    initialSorting ?? (defaultSortId ? [{ id: defaultSortId, desc: true }] : []),
   )
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>({})

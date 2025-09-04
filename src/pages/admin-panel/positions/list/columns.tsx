@@ -2,14 +2,14 @@ import { createColumnHelper } from '@tanstack/react-table'
 import type { PositionListResponse } from '@/entities/admin/positions/types/response.dto'
 import type { ListDataType } from '@/types/pagination'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
-import { idColumn } from '@/widgets/data-table/columns/idColumn'
+import { linkColumn } from '@/widgets/data-table/columns/linkColumn'
 
 const columnHelper = createColumnHelper<ListDataType<PositionListResponse>>()
 
 export const adminPositionsColumns = [
   columnHelper.accessor('id', {
     header: 'ID',
-    ...idColumn(),
+    ...linkColumn(),
   }),
   columnHelper.accessor('name', {
     header: 'Назва',

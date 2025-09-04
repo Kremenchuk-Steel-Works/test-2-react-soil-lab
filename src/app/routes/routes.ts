@@ -4,6 +4,7 @@ import { PATHS } from '@/app/routes/paths'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 import { adminRoutes } from '@/entities/admin/routes'
+import { moldingShopRoutes } from '@/pages/molding-shop-update/routes'
 import { ndtDocumentsRoutes } from '@/pages/ndt-documents/routes'
 import { soilLabRoutes } from '@/pages/soil-lab/routes'
 
@@ -24,8 +25,9 @@ export const APP_ROUTES: AppRoute[] = [
   adminRoutes,
   // moldPassportMainRoutes,
   // moldingShopRoutes,
-  soilLabRoutes,
+  moldingShopRoutes,
   ndtDocumentsRoutes,
+  soilLabRoutes,
   {
     key: 'streamlitDashboard',
     path: '/streamlit-dashboard',

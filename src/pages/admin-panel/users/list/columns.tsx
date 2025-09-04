@@ -4,7 +4,7 @@ import type { ListDataType } from '@/types/pagination'
 import { booleanColumn } from '@/widgets/data-table/columns/booleanColumn'
 import { dateColumn } from '@/widgets/data-table/columns/dateColumn'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
-import { idColumn } from '@/widgets/data-table/columns/idColumn'
+import { linkColumn } from '@/widgets/data-table/columns/linkColumn'
 import { listColumn } from '@/widgets/data-table/columns/listColumn'
 
 const columnHelper = createColumnHelper<ListDataType<UserListResponse>>()
@@ -12,7 +12,7 @@ const columnHelper = createColumnHelper<ListDataType<UserListResponse>>()
 export const adminUsersColumns = [
   columnHelper.accessor('id', {
     header: 'ID',
-    ...idColumn(),
+    ...linkColumn(),
   }),
 
   columnHelper.accessor('email', {

@@ -3,7 +3,7 @@ import type { PermissionListItemResponse } from '@/entities/admin/permissions/ty
 import type { RoleListResponse } from '@/entities/admin/roles/types/response.dto'
 import type { ListDataType } from '@/types/pagination'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
-import { idColumn } from '@/widgets/data-table/columns/idColumn'
+import { linkColumn } from '@/widgets/data-table/columns/linkColumn'
 import { listColumn } from '@/widgets/data-table/columns/listColumn'
 
 const columnHelper = createColumnHelper<ListDataType<RoleListResponse>>()
@@ -11,7 +11,7 @@ const columnHelper = createColumnHelper<ListDataType<RoleListResponse>>()
 export const adminRolesColumns = [
   columnHelper.accessor('id', {
     header: 'ID',
-    ...idColumn(),
+    ...linkColumn(),
   }),
   columnHelper.accessor('name', {
     header: 'Назва',

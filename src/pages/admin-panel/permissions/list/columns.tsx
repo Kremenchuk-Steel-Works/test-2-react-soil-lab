@@ -2,14 +2,14 @@ import { createColumnHelper } from '@tanstack/react-table'
 import type { PermissionListResponse } from '@/entities/admin/permissions/types/response.dto'
 import type { ListDataType } from '@/types/pagination'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
-import { idColumn } from '@/widgets/data-table/columns/idColumn'
+import { linkColumn } from '@/widgets/data-table/columns/linkColumn'
 
 const columnHelper = createColumnHelper<ListDataType<PermissionListResponse>>()
 
 export const adminPermissionsColumns = [
   columnHelper.accessor('id', {
     header: 'ID',
-    ...idColumn(),
+    ...linkColumn(),
   }),
   columnHelper.accessor('name', {
     header: 'Назва',

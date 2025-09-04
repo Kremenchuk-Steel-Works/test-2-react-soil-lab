@@ -4,7 +4,7 @@
 // import type { ListDataType } from '@/types/pagination'
 // import { booleanColumn } from '@/widgets/data-table/columns/booleanColumn'
 // import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
-// import { idColumn } from '@/widgets/data-table/columns/idColumn'
+// import { linkColumn } from '@/widgets/data-table/columns/linkColumn'
 // import { listColumn } from '@/widgets/data-table/columns/listColumn'
 // import { optionColumn } from '@/widgets/data-table/columns/optionColumn'
 
@@ -13,7 +13,7 @@
 // export const moldPassportColumnsOld = [
 //   columnHelper.accessor('id', {
 //     header: 'ID',
-//     ...idColumn(),
+//     ...linkColumn(),
 //   }),
 
 //   columnHelper.accessor('fullName', {
