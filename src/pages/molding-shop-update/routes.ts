@@ -7,10 +7,10 @@ import { moldPassportRoutes } from '@/pages/molding-shop-update/mold-passport/ro
 const moldingShopUpdateLayout = lazy(() => import('@/pages/molding-shop-update/Layout'))
 const moldingShopUpdateMain = lazy(() => import('@/pages/molding-shop-update/Main'))
 
-export const moldingShopRoutes: AppRoute = {
+export const moldingShopUpdateRoutes: AppRoute = {
   key: 'moldingShopUpdate',
   path: '/molding-shop-update',
-  label: 'Лабораторія сумішей',
+  label: 'Паспорт ливарної форми',
   icon: Factory,
   Component: moldingShopUpdateLayout,
   requiredPermissions: [PERMISSIONS.ADMIN],

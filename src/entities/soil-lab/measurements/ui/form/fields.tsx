@@ -1,5 +1,6 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
+import { MEASUREMENTS as FR } from '@/entities/soil-lab/measurements/model/fields-registry'
 import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
 import Button from '@/shared/ui/button/Button'
 import InputField from '@/shared/ui/input-field/InputField'
@@ -20,46 +21,54 @@ export function useMeasurementsFormFields<T extends FieldValues>(Form: FormKit<T
     return Object.freeze({
       Title: V('Title', () => <h5 className="layout-text">Вимірювання суміші</h5>),
 
-      MoldingSandNumberField: F('moldingSandNumber', (name) => (
+      [FR.moldingSandNumber.key]: F(FR.moldingSandNumber.key, (name) => (
         <Form.Field name={name}>
-          {({ register }) => <InputField label="№ суміші *" {...register} />}
+          {({ register }) => (
+            <InputField label={FR.moldingSandNumber.label.default + ' *'} {...register} />
+          )}
         </Form.Field>
       )),
 
-      StrengthKgfCm2Field: F('moldingSandStrengthKgfCm2', (name) => (
+      [FR.moldingSandStrengthKgfCm2.key]: F(FR.moldingSandStrengthKgfCm2.key, (name) => (
         <Form.Field name={name}>
-          {({ register }) => <InputField label="Міцність на стиск (кгс/см²) *" {...register} />}
+          {({ register }) => (
+            <InputField label={FR.moldingSandStrengthKgfCm2.label.default + ' *'} {...register} />
+          )}
         </Form.Field>
       )),
 
-      GasPermeabilityField: F('moldingSandGasPermeability', (name) => (
+      [FR.moldingSandGasPermeability.key]: F(FR.moldingSandGasPermeability.key, (name) => (
         <Form.Field name={name}>
-          {({ register }) => <InputField label="Газопроникність (од.) *" {...register} />}
+          {({ register }) => (
+            <InputField label={FR.moldingSandGasPermeability.label.default + ' *'} {...register} />
+          )}
         </Form.Field>
       )),
 
-      MoisturePercentField: F('moldingSandMoisturePercent', (name) => (
+      [FR.moldingSandMoisturePercent.key]: F(FR.moldingSandMoisturePercent.key, (name) => (
         <Form.Field name={name}>
-          {({ register }) => <InputField label="Вологість (%) *" {...register} />}
+          {({ register }) => (
+            <InputField label={FR.moldingSandMoisturePercent.label.default + ' *'} {...register} />
+          )}
         </Form.Field>
       )),
 
-      PerformedAtField: F('performedAt', (name) => (
+      [FR.performedAt.key]: F(FR.performedAt.key, (name) => (
         <Form.Controller name={name}>
           {({ field, fieldState }) => (
             <FormDateTimeField
               field={field}
               fieldState={fieldState}
               type="datetime"
-              label="Дата й час вимірювання"
+              label={FR.performedAt.label.default + ' *'}
             />
           )}
         </Form.Controller>
       )),
 
-      NoteField: F('note', (name) => (
+      [FR.note.key]: F(FR.note.key, (name) => (
         <Form.Field name={name}>
-          {({ register }) => <TextareaField label="Примітка" {...register} />}
+          {({ register }) => <TextareaField label={FR.note.label.default} {...register} />}
         </Form.Field>
       )),
 

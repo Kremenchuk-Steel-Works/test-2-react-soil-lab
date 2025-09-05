@@ -22,17 +22,17 @@ export function MeasurementsUpdateBaseForm({
     <>
       <F.Title />
 
-      <F.MoldingSandNumberField />
+      <F.moldingSandNumber />
 
-      <F.StrengthKgfCm2Field />
+      <F.moldingSandStrengthKgfCm2 />
 
-      <F.GasPermeabilityField />
+      <F.moldingSandGasPermeability />
 
-      <F.MoisturePercentField />
+      <F.moldingSandMoisturePercent />
 
-      <F.NoteField />
+      <F.note />
 
-      <F.PerformedAtField />
+      {/* <F.performedAt /> */}
 
       <F.SubmitButton text={submitBtnName} disabled={isSubmitting} />
     </>

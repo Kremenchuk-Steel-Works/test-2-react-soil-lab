@@ -5,8 +5,10 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
+  type Cell,
   type ColumnDef,
   type ColumnFiltersState,
+  type Header,
   type PaginationState,
   type RowData,
   type SortingState,
@@ -24,6 +26,7 @@ import {
 import type { SetURLSearchParams } from 'react-router-dom'
 import type { CSSObjectWithLabel } from 'react-select'
 import Button from '@/shared/ui/button/Button'
+import { EllipsisText } from '@/shared/ui/ellipsis/EllipsisText'
 import { AdaptiveInput } from '@/shared/ui/input-field/AdaptiveInput'
 import InputField from '@/shared/ui/input-field/InputField'
 import ModalTrigger from '@/shared/ui/modal/ModalTrigger'
@@ -45,6 +48,12 @@ export type DataTableProps<TData extends RowData> = {
   initialSorting?: SortingState
 }
 
+/* Позволяет задать текст тултипа через columnDef.meta.title */
+type ColumnMeta<TData> = {
+  /** Статичный заголовок/подсказка или генератор для ячеек */
+  title?: string | ((row: TData, cell: Cell<TData, unknown>) => string)
+}
+
 export function DataTable<TData extends RowData>({
   data,
   columns,
@@ -56,6 +65,25 @@ export function DataTable<TData extends RowData>({
   initialSorting,
 }: DataTableProps<TData>) {
   const id = useId()
+
+  // Хелперы для текста тултипа
+  const getHeaderTooltip = (header: Header<TData, unknown>): string | undefined => {
+    const def = header.column.columnDef
+    const meta = def.meta as ColumnMeta<TData> | undefined
+    if (typeof meta?.title === 'string') return meta.title
+    if (typeof def.header === 'string') return def.header
+    return header.column.id
+  }
+
+  const getCellTooltip = (cell: Cell<TData, unknown>): string | undefined => {
+    const meta = cell.column.columnDef.meta as ColumnMeta<TData> | undefined
+    if (typeof meta?.title === 'function') return meta.title(cell.row.original, cell)
+
+    const v = cell.getValue()
+    if (v == null) return undefined
+    if (typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean') return String(v)
+    return undefined
+  }
 
   /**
    * Вычисляем дефолтную колонку для сортировки.
@@ -315,9 +343,12 @@ export function DataTable<TData extends RowData>({
                           onClick={canSort ? header.column.getToggleSortingHandler() : undefined}
                         >
                           <div className="flex min-w-0 items-center">
-                            <span className="mr-1 min-w-0 truncate text-left">
+                            <EllipsisText
+                              className="mr-1 text-left"
+                              title={getHeaderTooltip(header)}
+                            >
                               {flexRender(header.column.columnDef.header, header.getContext())}
-                            </span>
+                            </EllipsisText>
                             {/* Иконки сортировки */}
                             <ChevronUp
                               className={`shrink-0 origin-center transform transition-all duration-200 ease-in-out ${
@@ -367,9 +398,9 @@ export function DataTable<TData extends RowData>({
                     style={{ width: cell.column.getSize() }}
                     className="overflow-hidden px-4 py-2 text-ellipsis whitespace-nowrap"
                   >
-                    <div className="min-w-0 truncate">
+                    <EllipsisText title={getCellTooltip(cell)}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </div>
+                    </EllipsisText>
                   </td>
                 ))}
               </tr>

@@ -1,43 +1,44 @@
 import { createColumnHelper } from '@tanstack/react-table'
+import { MEASUREMENTS as FR } from '@/entities/soil-lab/measurements/model/fields-registry'
 import type { MoldPassportListItemResponse } from '@/shared/api/mold-passport/model'
 import { dateColumn, displayColumn, linkColumn } from '@/widgets/data-table'
 
 const columnHelper = createColumnHelper<MoldPassportListItemResponse>()
 
 export const measurementsColumns = [
-  columnHelper.accessor('moldingSandNumber', {
-    header: '№ суміші',
-    size: 145,
+  columnHelper.accessor(FR.moldingSandNumber.key, {
+    header: FR.moldingSandNumber.label.default,
+    size: 60,
     ...linkColumn(),
   }),
 
-  columnHelper.accessor('moldingSandStrengthKgfCm2', {
-    header: 'Міцність на стиск (кгс/см²)',
-    size: 100,
+  columnHelper.accessor(FR.moldingSandStrengthKgfCm2.key, {
+    header: FR.moldingSandStrengthKgfCm2.label.default,
+    size: 110,
     ...displayColumn(),
   }),
 
-  columnHelper.accessor('moldingSandGasPermeability', {
-    header: 'Газопроникність (од.)',
-    size: 155,
+  columnHelper.accessor(FR.moldingSandGasPermeability.key, {
+    header: FR.moldingSandGasPermeability.label.default,
+    size: 85,
     ...displayColumn(),
   }),
 
-  columnHelper.accessor('moldingSandMoisturePercent', {
-    header: 'Вологість (%)',
-    size: 155,
+  columnHelper.accessor(FR.moldingSandMoisturePercent.key, {
+    header: FR.moldingSandMoisturePercent.label.default,
+    size: 55,
     ...displayColumn(),
   }),
 
-  columnHelper.accessor('performedAt', {
-    header: 'Дата й час вимірювання',
-    size: 115,
+  columnHelper.accessor(FR.performedAt.key, {
+    header: FR.performedAt.label.default,
+    size: 75,
     ...dateColumn(),
   }),
 
-  columnHelper.accessor('note', {
-    header: 'Примітка',
-    size: 155,
+  columnHelper.accessor(FR.note.key, {
+    header: FR.note.label.default,
+    size: 70,
     ...displayColumn(),
   }),
 ]
