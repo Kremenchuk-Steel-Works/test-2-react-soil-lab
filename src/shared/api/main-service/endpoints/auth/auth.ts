@@ -27,7 +27,7 @@ import type {
  */
 export const loginApiV1AuthLoginPost = (loginRequest: LoginRequest, signal?: AbortSignal) => {
   return customMutator<TokenPairResponse>({
-    url: `/api/v1/auth/login`,
+    url: `/api/v1/auth-old/login`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     data: loginRequest,
@@ -108,7 +108,7 @@ export const refreshAccessTokenApiV1AuthRefreshPost = (
   signal?: AbortSignal,
 ) => {
   return customMutator<TokenRefreshResponse>({
-    url: `/api/v1/auth/refresh`,
+    url: `/api/v1/auth-old/refresh`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     data: tokenRefreshRequest,
@@ -189,7 +189,7 @@ export const useRefreshAccessTokenApiV1AuthRefreshPost = <
  */
 export const logoutApiV1AuthLogoutPost = (logoutRequest: LogoutRequest, signal?: AbortSignal) => {
   return customMutator<null>({
-    url: `/api/v1/auth/logout`,
+    url: `/api/v1/auth-old/logout`,
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     data: logoutRequest,

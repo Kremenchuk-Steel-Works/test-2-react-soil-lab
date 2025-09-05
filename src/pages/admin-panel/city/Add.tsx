@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import CityForm from '@/entities/admin/city/forms/form'
-import type { CityFormFields } from '@/entities/admin/city/forms/schema'
-import { cityService } from '@/entities/admin/city/services/service'
+import CityForm from '@/entities/admin-old/city/forms/form'
+import type { CityFormFields } from '@/entities/admin-old/city/forms/schema'
+import { cityService } from '@/entities/admin-old/city/services/service'
 
 export default function AdminCityAdd() {
   const navigate = useNavigate()

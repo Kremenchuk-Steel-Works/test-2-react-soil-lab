@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
-import { cityQueryKeys } from '@/entities/admin/city/services/keys'
-import { cityService } from '@/entities/admin/city/services/service'
-import type { CityDetailResponse } from '@/entities/admin/city/types/response.dto'
+import { cityQueryKeys } from '@/entities/admin-old/city/services/keys'
+import { cityService } from '@/entities/admin-old/city/services/service'
+import type { CityDetailResponse } from '@/entities/admin-old/city/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminCityDetails() {

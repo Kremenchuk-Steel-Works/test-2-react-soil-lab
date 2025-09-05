@@ -30,17 +30,5 @@ export const createOrvalConfig = (serviceName: string, servicePath: string): Con
         afterAllFilesWrite: 'prettier --write',
       },
     },
-    // [`${serviceName}Zod`]: {
-    //   input,
-    //   output: {
-    //     mode: 'tags-split',
-    //     target: `${servicePath}/endpoints`,
-    //     client: 'zod',
-    //     fileExtension: '.zod.ts',
-    //   },
-    //   hooks: {
-    //     afterAllFilesWrite: 'prettier --no-error-on-unmatched-pattern --write',
-    //   },
-    // },
   }
 }

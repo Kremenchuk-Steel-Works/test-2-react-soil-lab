@@ -1,6 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import { genderOptions } from '@/entities/admin/people/types/gender'
-import type { PersonListResponse } from '@/entities/admin/people/types/response.dto'
+import { genderOptions } from '@/entities/admin-old/people/types/gender'
+import type { PersonListResponse } from '@/entities/admin-old/people/types/response.dto'
 import type { ListDataType } from '@/types/pagination'
 import { booleanColumn } from '@/widgets/data-table/columns/booleanColumn'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'

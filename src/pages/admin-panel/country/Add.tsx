@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import CountryForm from '@/entities/admin/country/forms/form'
-import type { CountryFormFields } from '@/entities/admin/country/forms/schema'
-import { countryService } from '@/entities/admin/country/services/service'
+import CountryForm from '@/entities/admin-old/country/forms/form'
+import type { CountryFormFields } from '@/entities/admin-old/country/forms/schema'
+import { countryService } from '@/entities/admin-old/country/services/service'
 
 export default function AdminCountryAdd() {
   const navigate = useNavigate()

@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import PositionsForm from '@/entities/admin/positions/forms/form'
-import type { PositionsFormFields } from '@/entities/admin/positions/forms/schema'
-import { positionService } from '@/entities/admin/positions/services/service'
+import PositionsForm from '@/entities/admin-old/positions/forms/form'
+import type { PositionsFormFields } from '@/entities/admin-old/positions/forms/schema'
+import { positionService } from '@/entities/admin-old/positions/services/service'
 
 export default function AdminPositionsAdd() {
   const navigate = useNavigate()

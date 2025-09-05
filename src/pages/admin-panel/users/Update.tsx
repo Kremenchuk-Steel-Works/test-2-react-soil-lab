@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import UsersForm from '@/entities/admin/users/forms/form'
-import { userUpdateSchema, type UserUpdateFormFields } from '@/entities/admin/users/forms/schema'
-import { userQueryKeys } from '@/entities/admin/users/services/keys'
-import { userService } from '@/entities/admin/users/services/service'
-import type { UserDetailResponse } from '@/entities/admin/users/types/response.dto'
+import UsersForm from '@/entities/admin-old/users/forms/form'
+import {
+  userUpdateSchema,
+  type UserUpdateFormFields,
+} from '@/entities/admin-old/users/forms/schema'
+import { userQueryKeys } from '@/entities/admin-old/users/services/keys'
+import { userService } from '@/entities/admin-old/users/services/service'
+import type { UserDetailResponse } from '@/entities/admin-old/users/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminUsersUpdate() {

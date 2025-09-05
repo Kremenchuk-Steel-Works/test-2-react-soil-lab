@@ -14,7 +14,7 @@ export default tseslint.config(
       sourceType: 'module',
       parser: tseslint.parser,
       parserOptions: {
-        projectService: true,
+        project: ['./tsconfig.app.json', './tsconfig.node.json', './tsconfig.scripts.json'],
         tsconfigRootDir: import.meta.dirname,
       },
       globals: globals.browser,
@@ -31,15 +31,14 @@ export default tseslint.config(
 
   // Для сгенерированных orval/msw файлов
   {
-    files: ['**/*.msw.ts'],
+    files: ['src/shared/api/**/*.msw.ts', 'src/shared/api/**/model/*.ts', 'src/mocks/**/*.ts'],
     rules: {
-      // "unknown" в union поглощает остальные типы
       '@typescript-eslint/no-redundant-type-constituents': 'off',
-      // Генератор часто оставляет Function/unknown
       '@typescript-eslint/no-unsafe-call': 'off',
-
-      // Эти файлы не содержат React-компонентов
       'react-refresh/only-export-components': 'off',
+    },
+    linterOptions: {
+      reportUnusedDisableDirectives: 'off',
     },
   },
 )

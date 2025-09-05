@@ -41,7 +41,7 @@ export const getLoginApiV1AuthLoginPostMockHandler = (
         info: Parameters<Parameters<typeof http.post>[1]>[0],
       ) => Promise<TokenPairResponse> | TokenPairResponse),
 ) => {
-  return http.post('*/api/v1/auth/login', async (info) => {
+  return http.post('*/api/v1/auth-old/login', async (info) => {
     await delay(1000)
 
     return new HttpResponse(
@@ -64,7 +64,7 @@ export const getRefreshAccessTokenApiV1AuthRefreshPostMockHandler = (
         info: Parameters<Parameters<typeof http.post>[1]>[0],
       ) => Promise<TokenRefreshResponse> | TokenRefreshResponse),
 ) => {
-  return http.post('*/api/v1/auth/refresh', async (info) => {
+  return http.post('*/api/v1/auth-old/refresh', async (info) => {
     await delay(1000)
 
     return new HttpResponse(
@@ -85,7 +85,7 @@ export const getLogoutApiV1AuthLogoutPostMockHandler = (
     | null
     | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<null> | null),
 ) => {
-  return http.post('*/api/v1/auth/logout', async (info) => {
+  return http.post('*/api/v1/auth-old/logout', async (info) => {
     await delay(1000)
     if (typeof overrideResponse === 'function') {
       await overrideResponse(info)

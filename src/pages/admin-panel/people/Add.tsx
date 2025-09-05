@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import PeopleForm from '@/entities/admin/people/forms/form'
-import { type PeopleFormFields } from '@/entities/admin/people/forms/schema'
-import { personService } from '@/entities/admin/people/services/service'
+import PeopleForm from '@/entities/admin-old/people/forms/form'
+import { type PeopleFormFields } from '@/entities/admin-old/people/forms/schema'
+import { personService } from '@/entities/admin-old/people/services/service'
 
 export default function AdminPeopleAdd() {
   const navigate = useNavigate()

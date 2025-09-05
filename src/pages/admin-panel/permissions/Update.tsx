@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import PermissionsForm from '@/entities/admin/permissions/forms/form'
-import type { PermissionsFormFields } from '@/entities/admin/permissions/forms/schema'
-import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
-import { permissionService } from '@/entities/admin/permissions/services/service'
-import type { PermissionDetailResponse } from '@/entities/admin/permissions/types/response.dto'
+import PermissionsForm from '@/entities/admin-old/permissions/forms/form'
+import type { PermissionsFormFields } from '@/entities/admin-old/permissions/forms/schema'
+import { permissionQueryKeys } from '@/entities/admin-old/permissions/services/keys'
+import { permissionService } from '@/entities/admin-old/permissions/services/service'
+import type { PermissionDetailResponse } from '@/entities/admin-old/permissions/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminPermissionsUpdate() {

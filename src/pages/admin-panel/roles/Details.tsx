@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
-import { roleQueryKeys } from '@/entities/admin/roles/services/keys'
-import { roleService } from '@/entities/admin/roles/services/service'
-import type { RoleDetailResponse } from '@/entities/admin/roles/types/response.dto'
+import { roleQueryKeys } from '@/entities/admin-old/roles/services/keys'
+import { roleService } from '@/entities/admin-old/roles/services/service'
+import type { RoleDetailResponse } from '@/entities/admin-old/roles/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminRolesDetails() {

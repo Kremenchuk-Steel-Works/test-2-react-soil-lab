@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import DepartmentsForm from '@/entities/admin/departments/forms/form'
-import type { DepartmentsFormFields } from '@/entities/admin/departments/forms/schema'
-import { departmentQueryKeys } from '@/entities/admin/departments/services/keys'
-import { departmentService } from '@/entities/admin/departments/services/service'
-import type { DepartmentDetailResponse } from '@/entities/admin/departments/types/response.dto'
+import DepartmentsForm from '@/entities/admin-old/departments/forms/form'
+import type { DepartmentsFormFields } from '@/entities/admin-old/departments/forms/schema'
+import { departmentQueryKeys } from '@/entities/admin-old/departments/services/keys'
+import { departmentService } from '@/entities/admin-old/departments/services/service'
+import type { DepartmentDetailResponse } from '@/entities/admin-old/departments/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminDepartmentsUpdate() {

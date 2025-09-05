@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import DepartmentsForm from '@/entities/admin/departments/forms/form'
-import type { DepartmentsFormFields } from '@/entities/admin/departments/forms/schema'
-import { departmentService } from '@/entities/admin/departments/services/service'
+import DepartmentsForm from '@/entities/admin-old/departments/forms/form'
+import type { DepartmentsFormFields } from '@/entities/admin-old/departments/forms/schema'
+import { departmentService } from '@/entities/admin-old/departments/services/service'
 
 export default function AdminDepartmentsAdd() {
   const navigate = useNavigate()

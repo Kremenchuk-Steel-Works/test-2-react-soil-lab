@@ -1,28 +1,12 @@
-import { useAuth } from '@/app/providers/auth/context'
-import LoginForm from '@/entities/auth/forms/form'
-import type { LoginFormFields } from '@/entities/auth/forms/schema'
+import Login from '@/features/auth/login/ui/Login'
 
-export default function AdminDepartmentsAdd() {
-  const { login } = useAuth()
-
-  const handleSubmit = async (data: LoginFormFields) => {
-    await login(data)
-  }
-
+export default function LoginPage() {
   return (
     <>
       <div className="flex min-h-screen items-center justify-center">
         <div className="w-full max-w-md rounded-xl p-8">
           <h4 className="mb-8 text-center text-3xl font-bold">Вхід у систему</h4>
-          <LoginForm
-            // defaultValues={{
-            //   email: 'admin@steel.pl.ua',
-            //   password: 'admin4real',
-            //   rememberMe: false,
-            // }}
-            onSubmit={handleSubmit}
-            submitBtnName="Вхід"
-          />
+          <Login />
         </div>
       </div>
     </>

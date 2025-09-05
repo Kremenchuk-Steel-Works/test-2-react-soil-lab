@@ -1,5 +1,5 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import type { CityListResponse } from '@/entities/admin/city/types/response.dto'
+import type { CityListResponse } from '@/entities/admin-old/city/types/response.dto'
 import type { ListDataType } from '@/types/pagination'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
 import { linkColumn } from '@/widgets/data-table/columns/linkColumn'

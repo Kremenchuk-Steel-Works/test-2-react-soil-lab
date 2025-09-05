@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import CountryForm from '@/entities/admin/country/forms/form'
-import type { CountryFormFields } from '@/entities/admin/country/forms/schema'
-import { countryQueryKeys } from '@/entities/admin/country/services/keys'
-import { countryService } from '@/entities/admin/country/services/service'
-import type { CountryDetailResponse } from '@/entities/admin/country/types/response.dto'
+import CountryForm from '@/entities/admin-old/country/forms/form'
+import type { CountryFormFields } from '@/entities/admin-old/country/forms/schema'
+import { countryQueryKeys } from '@/entities/admin-old/country/services/keys'
+import { countryService } from '@/entities/admin-old/country/services/service'
+import type { CountryDetailResponse } from '@/entities/admin-old/country/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminCountryUpdate() {

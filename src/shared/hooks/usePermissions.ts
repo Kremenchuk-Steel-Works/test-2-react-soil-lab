@@ -4,7 +4,7 @@ import { useAuth } from '@/app/providers/auth/context'
 import { APP_ROUTES } from '@/app/routes/routes'
 import type { AppRoute } from '@/app/routes/types'
 import { findRouteObjectByPath } from '@/app/routes/utils'
-import type { UserResponse } from '@/entities/admin/users/types/response.dto'
+import type { UserResponse } from '@/entities/admin-old/users/types/response.dto'
 
 export function useUserPermissionNames(): string[] {
   const { currentUser } = useAuth()

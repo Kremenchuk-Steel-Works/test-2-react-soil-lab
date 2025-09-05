@@ -8,15 +8,31 @@ interface ServiceConfig {
   url: string
   path: string
 }
+type ApiConfig = Record<string, ServiceConfig>
 
-interface ApiConfig {
-  [key: string]: ServiceConfig
+function isApiConfig(x: unknown): x is ApiConfig {
+  if (!x || typeof x !== 'object') return false
+  for (const v of Object.values(x as Record<string, unknown>)) {
+    if (!v || typeof v !== 'object') return false
+    const svc = v as Record<string, unknown>
+    if (typeof svc.url !== 'string' || typeof svc.path !== 'string') return false
+  }
+  return true
+}
+
+function readApiConfig(): ApiConfig {
+  const raw = readFileSync('./api-services.config.json', 'utf-8')
+  const parsed: unknown = JSON.parse(raw) // <- больше не any
+  if (!isApiConfig(parsed)) {
+    throw new Error('Invalid api-services.config.json: expected { [name]: { url, path } }')
+  }
+  return parsed
 }
 
 // --- Основная логика ---
 
-const run = async () => {
-  const config: ApiConfig = JSON.parse(readFileSync('./api-services.config.json', 'utf-8'))
+const run = async (): Promise<void> => {
+  const config = readApiConfig()
   const serviceArg = process.argv[2]
 
   const servicesToGenerate = serviceArg ? [serviceArg] : Object.keys(config)
@@ -42,14 +58,14 @@ const generateServiceAPI = async (name: string, service: ServiceConfig) => {
 
   const { url, path: servicePath } = service
 
-  // 1. Создание директории
+  // Создание директории
   if (!existsSync(servicePath)) {
     mkdirSync(servicePath, { recursive: true })
   }
 
   const openapiJsonPath = path.join(servicePath, 'openapi.json')
 
-  // 2. Получение и форматирование OpenAPI схемы
+  // Получение и форматирование OpenAPI схемы
   try {
     console.log(`[${name}]  Шаг 1/2: Получение и форматирование схемы из ${url}...`)
     execSync(`npx openapi-format ${url} -o ${openapiJsonPath} --casingFile casing.yaml`, {
@@ -61,20 +77,18 @@ const generateServiceAPI = async (name: string, service: ServiceConfig) => {
     process.exit(1)
   }
 
-  // 3. Генерация кода с помощью Orval
+  // Генерация кода с помощью Orval
   try {
     console.log(`[${name}] Шаг 2/2: Генерация TypeScript-кода с помощью Orval...`)
 
     const orval = (await import('orval')).default
     const orvalConfig = createOrvalConfig(name, servicePath)
 
-    // --- ИЗМЕНЕНИЕ ЗДЕСЬ ---
     // Перебираем ключи в нашем конфиге ('main', 'mainZod')
     // и вызываем orval для каждого из них по отдельности.
     for (const projectConfig of Object.values(orvalConfig)) {
       await orval(projectConfig)
     }
-    // --- КОНЕЦ ИЗМЕНЕНИЯ ---
 
     console.log(`[${name}] ✅ Код клиента API успешно сгенерирован.`)
   } catch (error) {
@@ -83,4 +97,4 @@ const generateServiceAPI = async (name: string, service: ServiceConfig) => {
   }
 }
 
-run()
+void run()

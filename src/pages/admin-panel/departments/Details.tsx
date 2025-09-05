@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
-import { departmentQueryKeys } from '@/entities/admin/departments/services/keys'
-import { departmentService } from '@/entities/admin/departments/services/service'
-import type { DepartmentDetailResponse } from '@/entities/admin/departments/types/response.dto'
+import { departmentQueryKeys } from '@/entities/admin-old/departments/services/keys'
+import { departmentService } from '@/entities/admin-old/departments/services/service'
+import type { DepartmentDetailResponse } from '@/entities/admin-old/departments/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminDepartmentsDetails() {

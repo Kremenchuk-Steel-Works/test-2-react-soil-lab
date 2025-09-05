@@ -1,5 +1,5 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import type { PermissionListResponse } from '@/entities/admin/permissions/types/response.dto'
+import type { PermissionListResponse } from '@/entities/admin-old/permissions/types/response.dto'
 import type { ListDataType } from '@/types/pagination'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
 import { linkColumn } from '@/widgets/data-table/columns/linkColumn'

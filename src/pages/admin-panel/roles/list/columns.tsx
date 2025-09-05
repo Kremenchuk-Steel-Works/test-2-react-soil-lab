@@ -1,6 +1,6 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import type { PermissionListItemResponse } from '@/entities/admin/permissions/types/response.dto'
-import type { RoleListResponse } from '@/entities/admin/roles/types/response.dto'
+import type { PermissionListItemResponse } from '@/entities/admin-old/permissions/types/response.dto'
+import type { RoleListResponse } from '@/entities/admin-old/roles/types/response.dto'
 import type { ListDataType } from '@/types/pagination'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
 import { linkColumn } from '@/widgets/data-table/columns/linkColumn'

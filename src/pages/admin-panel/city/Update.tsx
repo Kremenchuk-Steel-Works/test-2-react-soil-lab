@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import CityForm from '@/entities/admin/city/forms/form'
-import type { CityFormFields } from '@/entities/admin/city/forms/schema'
-import { cityQueryKeys } from '@/entities/admin/city/services/keys'
-import { cityService } from '@/entities/admin/city/services/service'
-import type { CityDetailResponse } from '@/entities/admin/city/types/response.dto'
+import CityForm from '@/entities/admin-old/city/forms/form'
+import type { CityFormFields } from '@/entities/admin-old/city/forms/schema'
+import { cityQueryKeys } from '@/entities/admin-old/city/services/keys'
+import { cityService } from '@/entities/admin-old/city/services/service'
+import type { CityDetailResponse } from '@/entities/admin-old/city/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminCityUpdate() {

@@ -10,7 +10,7 @@ COPY . .
 RUN npm run build
 
 # Этап продакшен-образа
-FROM nginx:stable-alpine AS production
+FROM nginx:1.28.0-alpine-slim
 
 # Настраиваем пользовательские конфиги
 COPY nginx.conf /etc/nginx/nginx.conf

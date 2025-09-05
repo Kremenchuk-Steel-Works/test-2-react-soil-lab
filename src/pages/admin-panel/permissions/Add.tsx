@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import PermissionsForm from '@/entities/admin/permissions/forms/form'
-import type { PermissionsFormFields } from '@/entities/admin/permissions/forms/schema'
-import { permissionService } from '@/entities/admin/permissions/services/service'
+import PermissionsForm from '@/entities/admin-old/permissions/forms/form'
+import type { PermissionsFormFields } from '@/entities/admin-old/permissions/forms/schema'
+import { permissionService } from '@/entities/admin-old/permissions/services/service'
 
 export default function AdminPermissionsAdd() {
   const navigate = useNavigate()

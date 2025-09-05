@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
-import { permissionQueryKeys } from '@/entities/admin/permissions/services/keys'
-import { permissionService } from '@/entities/admin/permissions/services/service'
-import type { PermissionDetailResponse } from '@/entities/admin/permissions/types/response.dto'
+import { permissionQueryKeys } from '@/entities/admin-old/permissions/services/keys'
+import { permissionService } from '@/entities/admin-old/permissions/services/service'
+import type { PermissionDetailResponse } from '@/entities/admin-old/permissions/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminPermissionsDetails() {

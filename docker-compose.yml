@@ -3,9 +3,9 @@ services:
     build:
       context: .
       target: production
-    image: steelworks-react-ui:${IMAGE_TAG:-latest}
+    image: test-react-soil-lab:${IMAGE_TAG:-latest}
     ports:
-      - '80:80'
+      - '81:80'
     restart: unless-stopped
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost']

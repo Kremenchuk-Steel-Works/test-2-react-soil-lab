@@ -1,5 +1,5 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import type { UserListResponse } from '@/entities/admin/users/types/response.dto'
+import type { UserListResponse } from '@/entities/admin-old/users/types/response.dto'
 import type { ListDataType } from '@/types/pagination'
 import { booleanColumn } from '@/widgets/data-table/columns/booleanColumn'
 import { dateColumn } from '@/widgets/data-table/columns/dateColumn'

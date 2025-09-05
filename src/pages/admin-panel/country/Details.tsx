@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
-import { countryQueryKeys } from '@/entities/admin/country/services/keys'
-import { countryService } from '@/entities/admin/country/services/service'
-import type { CountryDetailResponse } from '@/entities/admin/country/types/response.dto'
+import { countryQueryKeys } from '@/entities/admin-old/country/services/keys'
+import { countryService } from '@/entities/admin-old/country/services/service'
+import type { CountryDetailResponse } from '@/entities/admin-old/country/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminCountryDetails() {

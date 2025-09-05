@@ -6,10 +6,10 @@ import {
   type InternalAxiosRequestConfig,
 } from 'axios'
 import { AuthContext, type AuthContextType } from '@/app/providers/auth/context'
-import { userService } from '@/entities/admin/users/services/service'
-import type { UserDetailResponse } from '@/entities/admin/users/types/response.dto'
-import type { LoginFormFields } from '@/entities/auth/forms/schema'
-import { authService } from '@/entities/auth/services/service'
+import { userService } from '@/entities/admin-old/users/services/service'
+import type { UserDetailResponse } from '@/entities/admin-old/users/types/response.dto'
+import type { LoginFormFields } from '@/entities/auth-old/forms/schema'
+import { authService } from '@/entities/auth-old/services/service'
 import { api } from '@/shared/api/client'
 import { logger } from '@/shared/lib/logger'
 

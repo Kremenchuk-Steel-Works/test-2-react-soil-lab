@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import PositionsForm from '@/entities/admin/positions/forms/form'
-import type { PositionsFormFields } from '@/entities/admin/positions/forms/schema'
-import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
-import { positionService } from '@/entities/admin/positions/services/service'
-import type { PositionDetailResponse } from '@/entities/admin/positions/types/response.dto'
+import PositionsForm from '@/entities/admin-old/positions/forms/form'
+import type { PositionsFormFields } from '@/entities/admin-old/positions/forms/schema'
+import { positionQueryKeys } from '@/entities/admin-old/positions/services/keys'
+import { positionService } from '@/entities/admin-old/positions/services/service'
+import type { PositionDetailResponse } from '@/entities/admin-old/positions/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminPositionsUpdate() {

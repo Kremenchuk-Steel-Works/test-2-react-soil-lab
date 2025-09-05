@@ -1,5 +1,6 @@
 import { lazy } from 'react'
 import { CirclePlus, Database, Info, RefreshCcw, TestTubeDiagonal, Trash } from 'lucide-react'
+import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 
 const MeasurementsLayout = lazy(() => import('@/pages/soil-lab/measurements/ui/Layout'))
@@ -32,6 +33,7 @@ export const measurementsRoutes: AppRoute = {
       label: 'Додати',
       icon: CirclePlus,
       Component: MeasurementsAdd,
+      requiredPermissions: [PERMISSIONS.SOIL_LAB_UPDATE],
     },
     {
       key: 'MeasurementsDetail',
@@ -44,7 +46,7 @@ export const measurementsRoutes: AppRoute = {
       },
       children: [
         {
-          key: 'MeasurementsDetailIndex',
+          key: 'MeasurementsIndex',
           path: '',
           label: 'Деталі',
           icon: Info,
@@ -56,6 +58,7 @@ export const measurementsRoutes: AppRoute = {
           label: 'Видалити',
           icon: Trash,
           Component: MeasurementsDelete,
+          requiredPermissions: [PERMISSIONS.SOIL_LAB_UPDATE],
         },
         {
           key: 'MeasurementsUpdate',
@@ -63,6 +66,7 @@ export const measurementsRoutes: AppRoute = {
           label: 'Оновити',
           icon: RefreshCcw,
           Component: MeasurementsUpdate,
+          requiredPermissions: [PERMISSIONS.SOIL_LAB_UPDATE],
         },
       ],
     },

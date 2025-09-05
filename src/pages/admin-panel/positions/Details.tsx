@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
-import { positionQueryKeys } from '@/entities/admin/positions/services/keys'
-import { positionService } from '@/entities/admin/positions/services/service'
-import type { PositionDetailResponse } from '@/entities/admin/positions/types/response.dto'
+import { positionQueryKeys } from '@/entities/admin-old/positions/services/keys'
+import { positionService } from '@/entities/admin-old/positions/services/service'
+import type { PositionDetailResponse } from '@/entities/admin-old/positions/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminPositionsDetails() {

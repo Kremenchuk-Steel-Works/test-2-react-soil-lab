@@ -13,7 +13,7 @@ export const soilLabRoutes: AppRoute = {
   label: 'Лабораторія сумішей',
   icon: FlaskConical,
   Component: soilLabLayout,
-  requiredPermissions: [PERMISSIONS.ADMIN],
+  requiredPermissions: [PERMISSIONS.SOIL_LAB_VIEW],
   children: [
     {
       key: '',

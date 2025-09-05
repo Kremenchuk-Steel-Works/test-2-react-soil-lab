@@ -5,7 +5,7 @@ import ProtectedRoute from '@/app/routes/ProtectedRoute'
 import { APP_ROUTES } from '@/app/routes/routes'
 import type { AppRoute } from '@/app/routes/types'
 import { UnAuthRoute } from '@/app/routes/UnAuthRoute'
-import LoginPage from '@/pages/LoginPage'
+import LoginPage from '@/pages/LoginPageOld'
 import LoadingPage from '@/pages/system/LoadingPage'
 
 // Рекурсивная функция построения маршрутов

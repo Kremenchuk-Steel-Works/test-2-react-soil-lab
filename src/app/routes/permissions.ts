@@ -1,9 +1,7 @@
 export const PERMISSIONS = {
   ADMIN: 'admin',
-  QUALITY_DASH_VIEW: 'quality_dash:view',
-  CALCULATOR_VIEW: 'calculator:view',
-  NDT_DOCUMENTS_VIEW: 'ndt_documents:view',
-  MATERIAL_CALCULATOR_VIEW: 'material_calculator:view',
+  SOIL_LAB_VIEW: 'soil_lab:view',
+  SOIL_LAB_UPDATE: 'soil_lab:update',
 } as const
 
 /**

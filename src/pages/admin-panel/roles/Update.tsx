@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
-import RolesForm from '@/entities/admin/roles/forms/form'
-import type { RolesFormFields } from '@/entities/admin/roles/forms/schema'
-import { roleQueryKeys } from '@/entities/admin/roles/services/keys'
-import { roleService } from '@/entities/admin/roles/services/service'
-import type { RoleDetailResponse } from '@/entities/admin/roles/types/response.dto'
+import RolesForm from '@/entities/admin-old/roles/forms/form'
+import type { RolesFormFields } from '@/entities/admin-old/roles/forms/schema'
+import { roleQueryKeys } from '@/entities/admin-old/roles/services/keys'
+import { roleService } from '@/entities/admin-old/roles/services/service'
+import type { RoleDetailResponse } from '@/entities/admin-old/roles/types/response.dto'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminRolesUpdate() {
