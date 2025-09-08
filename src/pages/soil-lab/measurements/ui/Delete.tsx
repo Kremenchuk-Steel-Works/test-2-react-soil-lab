@@ -7,7 +7,7 @@ export default function MeasurementsDeletePage() {
   const navigate = useNavigate()
 
   const onSuccess = useCallback(() => {
-    void navigate('..')
+    void navigate('../..')
   }, [navigate])
 
   return id && <MeasurementsDelete id={id} onSuccess={onSuccess} />

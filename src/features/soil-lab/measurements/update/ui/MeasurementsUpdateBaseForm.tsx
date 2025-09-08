@@ -1,12 +1,12 @@
 import { useMeasurementsFormFields } from '@/entities/soil-lab/measurements/ui/form/fields'
 import type { MeasurementsUpdateFormFields } from '@/features/soil-lab/measurements/update/model/schema'
-import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
+import type { MeasurementDetailResponse } from '@/shared/api/soil-lab/model'
 import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/useFormKit'
 import type { FormBaseProps } from '@/types/react-hook-form'
 
 export type MeasurementsUpdateBaseFormProps = FormBaseProps<
   MeasurementsUpdateFormFields,
-  MoldPassportDetailResponse
+  MeasurementDetailResponse
 >
 
 export function MeasurementsUpdateBaseForm({

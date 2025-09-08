@@ -6,5 +6,9 @@
   "mold-passport": {
     "url": "src/shared/api/mold-passport-openapi.json",
     "path": "src/shared/api/mold-passport"
+  },
+  "soil-lab": {
+    "url": "src/shared/api/soil-lab/soil_lab_openapi.json",
+    "path": "src/shared/api/soil-lab"
   }
 }

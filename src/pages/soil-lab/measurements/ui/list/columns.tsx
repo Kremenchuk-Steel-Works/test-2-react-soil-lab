@@ -1,15 +1,15 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import { MEASUREMENTS as FR } from '@/entities/soil-lab/measurements/model/fields-registry'
-import type { MoldPassportListItemResponse } from '@/shared/api/mold-passport/model'
+import type { MeasurementListItemResponse } from '@/shared/api/soil-lab/model'
 import { dateColumn, displayColumn, linkColumn } from '@/widgets/data-table'
 
-const columnHelper = createColumnHelper<MoldPassportListItemResponse>()
+const columnHelper = createColumnHelper<MeasurementListItemResponse>()
 
 export const measurementsColumns = [
   columnHelper.accessor(FR.moldingSandNumber.key, {
     header: FR.moldingSandNumber.label.default,
     size: 60,
-    ...linkColumn(),
+    ...linkColumn({ getHref: ({ row }) => row.original.id }),
   }),
 
   columnHelper.accessor(FR.moldingSandStrengthKgfCm2.key, {
@@ -30,15 +30,9 @@ export const measurementsColumns = [
     ...displayColumn(),
   }),
 
-  columnHelper.accessor(FR.performedAt.key, {
-    header: FR.performedAt.label.default,
+  columnHelper.accessor(FR.createdAt.key, {
+    header: FR.createdAt.label.default,
     size: 75,
     ...dateColumn(),
-  }),
-
-  columnHelper.accessor(FR.note.key, {
-    header: FR.note.label.default,
-    size: 70,
-    ...displayColumn(),
   }),
 ]

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import { userQueryKeys } from '@/entities/admin-old/users/services/keys'
 import { userService } from '@/entities/admin-old/users/services/service'
-import type { UserDetailResponse } from '@/entities/admin-old/users/types/response.dto'
+import type { UserDetailResponse } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminUsersDetails() {

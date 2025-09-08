@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { permissionQueryKeys } from '@/entities/admin-old/permissions/services/keys'
 import { permissionService } from '@/entities/admin-old/permissions/services/service'
-import type { PermissionLookupResponse } from '@/entities/admin-old/permissions/types/response.dto'
 import { rolesSchema, type RolesFormFields } from '@/entities/admin-old/roles/forms/schema'
+import type { PermissionLookupResponse } from '@/shared/api/soil-lab/model'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
@@ -63,11 +63,10 @@ export default function RolesForm({ defaultValues, onSubmit, submitBtnName }: Fo
   }
 
   // Options
-  const permissionsOptions: Option<number>[] =
-    permissionsData?.map((c) => ({
-      value: c.id,
-      label: c.name,
-    })) || []
+  const permissionsOptions: Option[] = (permissionsData ?? []).map(({ id, name }) => ({
+    value: String(id),
+    label: String(name),
+  }))
 
   return (
     <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>

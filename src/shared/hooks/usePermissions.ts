@@ -4,11 +4,11 @@ import { useAuth } from '@/app/providers/auth/context'
 import { APP_ROUTES } from '@/app/routes/routes'
 import type { AppRoute } from '@/app/routes/types'
 import { findRouteObjectByPath } from '@/app/routes/utils'
-import type { UserResponse } from '@/entities/admin-old/users/types/response.dto'
+import type { UserDetailResponse } from '@/shared/api/soil-lab/model'
 
 export function useUserPermissionNames(): string[] {
   const { currentUser } = useAuth()
-  return currentUser?.permissions.map((p) => p.name) ?? []
+  return currentUser?.permissions.map((p) => p.code) ?? []
 }
 
 export function useUserPermissionsSet(): Set<string> {
@@ -25,7 +25,7 @@ export function useUserPermissionsSet(): Set<string> {
  */
 export function checkAccessLogic(
   path: string,
-  user: UserResponse | null | undefined,
+  user: UserDetailResponse | null | undefined,
   permissions: Set<string>,
 ): boolean {
   // Находим объект маршрута

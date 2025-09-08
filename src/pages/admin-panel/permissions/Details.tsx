@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import { permissionQueryKeys } from '@/entities/admin-old/permissions/services/keys'
 import { permissionService } from '@/entities/admin-old/permissions/services/service'
-import type { PermissionDetailResponse } from '@/entities/admin-old/permissions/types/response.dto'
+import type { PermissionDetailResponse } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminPermissionsDetails() {
@@ -39,32 +39,14 @@ export default function AdminPermissionsDetails() {
             </div>
 
             <div>
+              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Код</dt>
+              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.code}</dd>
+            </div>
+
+            <div>
               <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Опис</dt>
               <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
                 {data.description || '—'}
-              </dd>
-            </div>
-
-            <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Відділ ID</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                {data.department.id}
-              </dd>
-            </div>
-
-            <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">
-                Відділ Назва
-              </dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                {data.department.name}
-              </dd>
-            </div>
-
-            <div>
-              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Відділ Опис</dt>
-              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">
-                {data.department.description || '—'}
               </dd>
             </div>
 

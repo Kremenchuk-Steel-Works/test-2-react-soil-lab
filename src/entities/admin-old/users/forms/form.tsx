@@ -8,8 +8,6 @@ import {
   type SubmitHandler,
 } from 'react-hook-form'
 import { ZodObject, type z, type ZodRawShape } from 'zod'
-import { personQueryKeys } from '@/entities/admin-old/people/services/keys'
-import { personService } from '@/entities/admin-old/people/services/service'
 import { permissionQueryKeys } from '@/entities/admin-old/permissions/services/keys'
 import { permissionService } from '@/entities/admin-old/permissions/services/service'
 import { roleQueryKeys } from '@/entities/admin-old/roles/services/keys'
@@ -17,6 +15,7 @@ import { roleService } from '@/entities/admin-old/roles/services/service'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
+import AutofillBait from '@/shared/ui/AutofillBait'
 import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import type { Option } from '@/shared/ui/select/ReactSelect'
@@ -74,10 +73,6 @@ export default function UsersForm<T extends AnyZodObject>({
   const queries = useQueries({
     queries: [
       {
-        queryKey: personQueryKeys.lookups(),
-        queryFn: () => personService.getLookup(),
-      },
-      {
         queryKey: roleQueryKeys.lookups(),
         queryFn: () => roleService.getLookup(),
       },
@@ -99,26 +94,18 @@ export default function UsersForm<T extends AnyZodObject>({
   }
 
   // Queries data
-  const [peopleQ, rolesQ, permissionsQ] = queries
+  const [rolesQ, permissionsQ] = queries
 
   // Options
-  const peopleOptions: Option[] =
-    peopleQ.data?.map((c) => ({
-      value: c.id,
-      label: c.fullName,
-    })) || []
+  const rolesOptions: Option[] = (rolesQ.data ?? []).map(({ id, name }) => ({
+    value: String(id),
+    label: String(name),
+  }))
 
-  const rolesOptions: Option[] =
-    rolesQ.data?.map((c) => ({
-      value: c.id,
-      label: c.name,
-    })) || []
-
-  const permissionsOptions: Option[] =
-    permissionsQ.data?.map((c) => ({
-      value: c.id,
-      label: c.name,
-    })) || []
+  const permissionsOptions: Option[] = (permissionsQ.data ?? []).map(({ id, name }) => ({
+    value: String(id),
+    label: String(name),
+  }))
 
   const onFormSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     void handleSubmit(submitHandler)(e)
@@ -126,25 +113,22 @@ export default function UsersForm<T extends AnyZodObject>({
 
   return (
     <FormLayout onSubmit={onFormSubmit}>
+      {/* Honeypots для сброса сохраняемых логин-паролей */}
+      <AutofillBait />
+
       <h5 className="layout-text">Користувач</h5>
 
-      {schemaKeys.includes('personId') && (
-        <Controller
-          name={`personId` as Path<z.infer<T>>}
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormSelectField
-              field={field}
-              fieldState={fieldState}
-              options={peopleOptions}
-              isVirtualized
-              isClearable
-              placeholder="Оберіть людину"
-              errorMessage={getNestedErrorMessage(errors, `personId` as Path<z.infer<T>>)}
-            />
-          )}
-        />
-      )}
+      <InputFieldWithError
+        label="Прізвище"
+        {...register('lastName' as Path<z.infer<T>>, formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'lastName' as Path<z.infer<T>>)}
+      />
+
+      <InputFieldWithError
+        label="Ім'я"
+        {...register('firstName' as Path<z.infer<T>>, formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'firstName' as Path<z.infer<T>>)}
+      />
 
       {schemaKeys.includes('email') && (
         <InputFieldWithError

@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios'
-import type { HttpValidationError } from '@/shared/api/mold-passport/model'
+import type { HttpValidationError } from '@/shared/api/soil-lab/model'
 
 type ErrorHandler = (error: AxiosError) => Error | false
 

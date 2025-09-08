@@ -1,18 +1,16 @@
+import { api } from '@/shared/api/client'
 import type {
-  UserCreateRequest,
-  UserUpdateRequest,
-} from '@/entities/admin-old/users/types/request.dto'
-import type {
+  UserCreate,
   UserDetailResponse,
   UserListResponse,
-} from '@/entities/admin-old/users/types/response.dto'
-import { api } from '@/shared/api/client'
+  UserUpdate,
+} from '@/shared/api/soil-lab/model'
 import { handleAxiosError } from '@/shared/lib/axios'
 import type { PageParams } from '@/types/pagination'
 
 export const userService = {
   // Request
-  async create(params: UserCreateRequest): Promise<UserDetailResponse> {
+  async create(params: UserCreate): Promise<UserDetailResponse> {
     try {
       const response = await api.post<UserDetailResponse>(`/users/`, params)
       return response.data
@@ -21,7 +19,7 @@ export const userService = {
     }
   },
 
-  async update(id: string, params: UserUpdateRequest): Promise<UserDetailResponse> {
+  async update(id: string, params: UserUpdate): Promise<UserDetailResponse> {
     try {
       const response = await api.put<UserDetailResponse>(`/users/${id}`, params)
       return response.data

@@ -1,6 +1,15 @@
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { api } from '@/shared/api/client'
 
+const normalizeUrl = (url?: string): string => {
+  const raw = url ?? ''
+  // убираем ведущие слэши, чтобы axios НЕ затирал path из baseURL
+  let u = raw.replace(/^\/+/, '')
+  // если orval дал 'api/v1/...', срезаем префикс — baseURL уже содержит '/api/v1'
+  if (u.startsWith('api/v1/')) u = u.slice('api/v1/'.length)
+  return u
+}
+
 /**
  * Функция-мутатор, которую будет вызывать orval.
  * Она принимает конфиг запроса от orval и делегирует его
@@ -9,42 +18,12 @@ import { api } from '@/shared/api/client'
  * а react-query ожидает "голые" данные. Поэтому мы делаем .then(res => res.data).
  */
 
-// export const customMutator = <T>(config: AxiosRequestConfig): Promise<T> => {
-//   return api(config).then((response) => response.data)
-// }
-
-// export default customMutator
-
 export const customMutator = <T>(config: AxiosRequestConfig): Promise<T> => {
-  const newConfig = { ...config }
-
-  // Если URL начинается с /api/v1, убираем этот префикс
-  if (newConfig.url?.startsWith('/api/v1')) {
-    newConfig.url = newConfig.url.replace('/api/v1', '')
-  }
-
-  // Берём базовый URL из нашего axios-инстанса и меняем порт на 8003
-  const base = api?.defaults?.baseURL
-
-  if (base) {
-    try {
-      const u = new URL(base)
-      // меняем только порт
-      u.port = '8003'
-      // u.host = 'localhost'
-      // без завершающего слэша (чтобы не словить //)
-      newConfig.baseURL = u.toString().replace(/\/$/, '')
-    } catch {
-      // если base невалидный (маловероятно), мягко откатываемся к строковой замене
-      newConfig.baseURL = base.replace(':8001', ':8003')
-    }
-  } else {
-    // на всякий случай: если вдруг base пустой — не ломаем запросы
-    // (axios тогда возьмёт baseURL из инстанса как раньше)
-  }
+  const newConfig: AxiosRequestConfig = { ...config }
+  newConfig.url = normalizeUrl(newConfig.url)
 
   // Передаем исправленный конфиг в инстанс axios
-  return api<T, AxiosResponse<T>>(newConfig).then((response) => response.data)
+  return api<T, AxiosResponse<T>>(newConfig).then((res) => res.data)
 }
 
 export default customMutator

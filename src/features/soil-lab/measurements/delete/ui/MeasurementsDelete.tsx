@@ -1,9 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { measurementsService } from '@/entities/soil-lab/measurements'
 import {
-  getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryKey,
-  getGetMoldPassportsListApiV1MoldPassportsGetQueryKey,
-} from '@/shared/api/mold-passport/endpoints/mold-passports/mold-passports'
+  getGetMeasurementApiV1MeasurementsMeasurementIdGetQueryKey,
+  getGetMeasurementsListApiV1MeasurementsGetQueryKey,
+} from '@/shared/api/soil-lab/endpoints/measurements/measurements'
 import { getErrorMessage } from '@/shared/lib/axios'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { ConfiguredButton } from '@/widgets/page/ConfiguredButton'
@@ -24,9 +24,9 @@ export default function MeasurementsDelete({ id, onSuccess, onError }: Measureme
   } = measurementsService.delete({
     mutation: {
       onSuccess: (res, variables) => {
-        const queryKeyList = getGetMoldPassportsListApiV1MoldPassportsGetQueryKey()
-        const queryKeyDetail = getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryKey(
-          variables.moldPassportId,
+        const queryKeyList = getGetMeasurementsListApiV1MeasurementsGetQueryKey()
+        const queryKeyDetail = getGetMeasurementApiV1MeasurementsMeasurementIdGetQueryKey(
+          variables.measurementId,
         )
 
         return Promise.all([
@@ -43,7 +43,7 @@ export default function MeasurementsDelete({ id, onSuccess, onError }: Measureme
   // Запрос на удаление
   const handleSubmit = () => {
     if (!id || isPending) return
-    mutate({ moldPassportId: id })
+    mutate({ measurementId: id })
   }
 
   return (

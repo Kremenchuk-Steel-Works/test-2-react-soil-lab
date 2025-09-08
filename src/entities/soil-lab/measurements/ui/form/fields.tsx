@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { MEASUREMENTS as FR } from '@/entities/soil-lab/measurements/model/fields-registry'
-import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
+import type { MeasurementDetailResponse } from '@/shared/api/soil-lab/model'
 import Button from '@/shared/ui/button/Button'
 import InputField from '@/shared/ui/input-field/InputField'
 import TextareaField from '@/shared/ui/input-field/TextareaField'
@@ -9,7 +9,7 @@ import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeFi
 import type { FormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
 import { makeBinders } from '@/utils/react-hook-form/makeBinders'
 
-type Ctx = { responseData?: MoldPassportDetailResponse }
+type Ctx = { responseData?: MeasurementDetailResponse }
 
 export function useMeasurementsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx: Ctx) {
   const ctxRef = useRef(ctx)
@@ -53,23 +53,23 @@ export function useMeasurementsFormFields<T extends FieldValues>(Form: FormKit<T
         </Form.Field>
       )),
 
-      [FR.performedAt.key]: F(FR.performedAt.key, (name) => (
+      [FR.note.key]: F(FR.note.key, (name) => (
+        <Form.Field name={name}>
+          {({ register }) => <TextareaField label={FR.note.label.default} {...register} />}
+        </Form.Field>
+      )),
+
+      [FR.createdAt.key]: F(FR.createdAt.key, (name) => (
         <Form.Controller name={name}>
           {({ field, fieldState }) => (
             <FormDateTimeField
               field={field}
               fieldState={fieldState}
               type="datetime"
-              label={FR.performedAt.label.default + ' *'}
+              label={FR.createdAt.label.default + ' *'}
             />
           )}
         </Form.Controller>
-      )),
-
-      [FR.note.key]: F(FR.note.key, (name) => (
-        <Form.Field name={name}>
-          {({ register }) => <TextareaField label={FR.note.label.default} {...register} />}
-        </Form.Field>
       )),
 
       SubmitButton: V(

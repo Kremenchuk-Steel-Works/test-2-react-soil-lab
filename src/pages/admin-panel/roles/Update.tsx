@@ -4,7 +4,7 @@ import RolesForm from '@/entities/admin-old/roles/forms/form'
 import type { RolesFormFields } from '@/entities/admin-old/roles/forms/schema'
 import { roleQueryKeys } from '@/entities/admin-old/roles/services/keys'
 import { roleService } from '@/entities/admin-old/roles/services/service'
-import type { RoleDetailResponse } from '@/entities/admin-old/roles/types/response.dto'
+import type { RoleDetailResponse, RoleUpdate } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminRolesUpdate() {
@@ -23,7 +23,13 @@ export default function AdminRolesUpdate() {
   })
 
   const handleSubmit = async (data: RolesFormFields) => {
-    await roleService.update(id!, data)
+    // Адаптер под обновление
+    const payload: RoleUpdate = {
+      ...data,
+      permissionIds: data.permissionIds ?? undefined,
+    }
+
+    await roleService.update(id!, payload)
     await navigate('..')
     return data
   }
@@ -32,7 +38,7 @@ export default function AdminRolesUpdate() {
   function mapToFormDefaults(obj: RoleDetailResponse): Partial<RolesFormFields> {
     return {
       ...obj,
-      permissionIds: obj.permissions?.map((perm) => perm.id) as [number, ...number[]] | undefined,
+      permissionIds: obj.permissions?.map((perm) => perm.id) as [string, ...string[]] | undefined,
     }
   }
 

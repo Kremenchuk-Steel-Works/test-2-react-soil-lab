@@ -14,7 +14,7 @@ export default function Login() {
     <LoginForm
       defaultValues={loginFormDefaultValues}
       onSubmit={handleSubmit}
-      submitBtnName="Додати"
+      submitBtnName="Вхід"
     />
   )
 }

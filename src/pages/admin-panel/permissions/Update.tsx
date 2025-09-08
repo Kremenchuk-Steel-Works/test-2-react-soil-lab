@@ -5,7 +5,7 @@ import PermissionsForm from '@/entities/admin-old/permissions/forms/form'
 import type { PermissionsFormFields } from '@/entities/admin-old/permissions/forms/schema'
 import { permissionQueryKeys } from '@/entities/admin-old/permissions/services/keys'
 import { permissionService } from '@/entities/admin-old/permissions/services/service'
-import type { PermissionDetailResponse } from '@/entities/admin-old/permissions/types/response.dto'
+import type { PermissionDetailResponse } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminPermissionsUpdate() {
@@ -35,7 +35,6 @@ export default function AdminPermissionsUpdate() {
   function mapToFormDefaults(obj: PermissionDetailResponse): Partial<PermissionsFormFields> {
     return {
       ...obj,
-      departmentId: obj.department?.id,
     }
   }
 

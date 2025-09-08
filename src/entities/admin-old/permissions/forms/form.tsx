@@ -1,19 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
-import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
-import { departmentQueryKeys } from '@/entities/admin-old/departments/services/keys'
-import { departmentService } from '@/entities/admin-old/departments/services/service'
-import type { DepartmentLookupResponse } from '@/entities/admin-old/departments/types/response.dto'
+import { useForm, type SubmitHandler } from 'react-hook-form'
 import {
   permissionsSchema,
   type PermissionsFormFields,
 } from '@/entities/admin-old/permissions/forms/schema'
 import { logger } from '@/shared/lib/logger'
 import { formTransformers, getNestedErrorMessage } from '@/shared/lib/react-hook-form/nested-error'
-import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
-import type { Option } from '@/shared/ui/select/ReactSelect'
 import { ButtonWithError, InputFieldWithError } from '@/shared/ui/with-error/fieldsWithError'
 
 type FormFields = PermissionsFormFields
@@ -27,7 +20,6 @@ interface FormProps {
 
 export default function PermissionsForm({ defaultValues, onSubmit, submitBtnName }: FormProps) {
   const {
-    control,
     register,
     handleSubmit,
     setError,
@@ -48,27 +40,6 @@ export default function PermissionsForm({ defaultValues, onSubmit, submitBtnName
     }
   }
 
-  const {
-    data: departmentsData,
-    isLoading,
-    isError,
-    error: queryError,
-  } = useQuery<DepartmentLookupResponse[], Error>({
-    queryKey: departmentQueryKeys.lookups(),
-    queryFn: () => departmentService.getLookup(),
-  })
-
-  const departmentsOptions: Option[] =
-    departmentsData?.map((c) => ({
-      value: c.id,
-      label: c.name,
-    })) || []
-
-  if (isLoading) return
-  if (isError) {
-    return <AlertMessage type={AlertType.ERROR} message={queryError.message} />
-  }
-
   return (
     <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
       <h5 className="layout-text">Права доступу</h5>
@@ -83,22 +54,6 @@ export default function PermissionsForm({ defaultValues, onSubmit, submitBtnName
         label="Опис"
         {...register('description', formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, 'description')}
-      />
-
-      <Controller
-        name="departmentId"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormSelectField
-            field={field}
-            fieldState={fieldState}
-            options={departmentsOptions}
-            isVirtualized
-            isClearable
-            placeholder="Оберіть відділ"
-            errorMessage={getNestedErrorMessage(errors, 'departmentId')}
-          />
-        )}
       />
 
       <ButtonWithError

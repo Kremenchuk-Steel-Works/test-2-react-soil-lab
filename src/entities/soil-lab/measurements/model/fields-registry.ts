@@ -16,7 +16,7 @@ export const MEASUREMENTS = createFieldRegistry({
   note: {
     label: { default: 'Примітка' },
   },
-  performedAt: {
+  createdAt: {
     label: { default: 'Дата й час вимірювання' },
   },
 } as const)

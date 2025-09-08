@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useState, type ReactNode } from 'react'
 import {
   AxiosHeaders,
   isAxiosError,
@@ -7,10 +7,10 @@ import {
 } from 'axios'
 import { AuthContext, type AuthContextType } from '@/app/providers/auth/context'
 import { userService } from '@/entities/admin-old/users/services/service'
-import type { UserDetailResponse } from '@/entities/admin-old/users/types/response.dto'
-import type { LoginFormFields } from '@/entities/auth-old/forms/schema'
-import { authService } from '@/entities/auth-old/services/service'
+import { authService } from '@/entities/auth/api/service'
+import type { LoginFormFields } from '@/features/auth/login/model/schema'
 import { api } from '@/shared/api/client'
+import type { UserDetailResponse } from '@/shared/api/soil-lab/model'
 import { logger } from '@/shared/lib/logger'
 
 // --- utils ---
@@ -52,11 +52,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [refreshToken, setRefreshToken] = useState<string | null>(() =>
     getStoredItem('refreshToken'),
   )
-  // Присваивается изначально undefined, пока пользователь не будет проверен (null => не авторизован, undefined => проверяется)
+
+  // undefined — проверяем; null — не авторизован
   const [currentUser, setCurrentUser] = useState<UserDetailResponse | null>()
 
-  // синхронный logout + совместимость по типу Promise<void>
-  const performLogout = (): void => {
+  // orval mutations
+  const { mutateAsync: loginMutate } = authService.login()
+  const { mutateAsync: refreshMutate } = authService.refresh()
+
+  // синхронный logout
+  const performLogout = useCallback((): void => {
     logger.debug('Выполняем выход из системы')
     setAccessToken(null)
     setRefreshToken(null)
@@ -66,24 +71,38 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     sessionStorage.removeItem('accessToken')
     sessionStorage.removeItem('refreshToken')
     clearLocalStorageByKeyPrefix('formCache:')
-  }
-  const logout = (): Promise<void> => {
+  }, [])
+
+  const logout = useCallback((): Promise<void> => {
     performLogout()
     return Promise.resolve()
-  }
+  }, [performLogout])
 
-  const login = async ({ email, password, rememberMe }: LoginFormFields) => {
-    logger.debug('Выполняем вход в систему')
-    const response = await authService.login({ email, password })
-    await logout()
+  const login = useCallback(
+    async ({ email, password, rememberMe }: LoginFormFields) => {
+      logger.debug('Выполняем вход в систему')
 
-    setAccessToken(response.accessToken)
-    setRefreshToken(response.refreshToken)
+      const response = await loginMutate({ data: { email, password } })
 
-    const storage = rememberMe ? localStorage : sessionStorage
-    storage.setItem('accessToken', response.accessToken)
-    storage.setItem('refreshToken', response.refreshToken)
-  }
+      const newAccess = response.accessToken
+      const newRefresh = response.refreshToken ?? null
+
+      // сбрасываем старые токены/состояние
+      await logout()
+
+      setAccessToken(newAccess)
+      setRefreshToken(newRefresh)
+
+      const storage = rememberMe ? localStorage : sessionStorage
+      storage.setItem('accessToken', newAccess)
+      if (newRefresh !== null) {
+        storage.setItem('refreshToken', newRefresh)
+      } else {
+        storage.removeItem('refreshToken')
+      }
+    },
+    [loginMutate, logout],
+  )
 
   // Добавление токена
   useLayoutEffect(() => {
@@ -96,13 +115,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (!cfg._retry && cfg.addAccessToken !== false && accessToken) {
         setHeader(cfg, 'Authorization', `Bearer ${accessToken}`)
-        logger.debug('Добавлен токен Authorization')
+        logger.debug('Добавлен токен Authorization', `Bearer ${accessToken}`)
 
         // КОСТЫЛЬ
-        if (currentUser?.id) {
-          setHeader(cfg, 'X-User-Id', String(currentUser.id))
-          logger.debug(`Добавлен X-User-Id → ${currentUser.id}`)
-        }
+        // if (currentUser?.id) {
+        //   setHeader(cfg, 'X-User-Id', String(currentUser.id))
+        //   logger.debug(`Добавлен X-User-Id → ${currentUser.id}`)
+        // }
       }
 
       return cfg
@@ -140,15 +159,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
               return Promise.reject(error)
             }
 
-            const res = await authService.refresh({ refreshToken })
-            logger.debug('Токен обновлен', res.accessToken)
+            // orval: refresh
+            const res = await refreshMutate({ data: { refreshToken } })
 
-            setAccessToken(res.accessToken)
+            const newAccess = res.accessToken
+
+            logger.debug('Токен обновлен', newAccess)
+
+            setAccessToken(newAccess)
             const storage =
               sessionStorage.getItem('accessToken') !== null ? sessionStorage : localStorage
-            storage.setItem('accessToken', res.accessToken)
+            storage.setItem('accessToken', newAccess)
 
-            setHeader(originalRequest, 'Authorization', `Bearer ${res.accessToken}`)
+            setHeader(originalRequest, 'Authorization', `Bearer ${newAccess}`)
             originalRequest._retry = true
 
             return api(originalRequest)
@@ -166,7 +189,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       api.interceptors.response.eject(refreshInterceptor)
     }
-  }, [refreshToken])
+  }, [refreshToken, refreshMutate])
 
   // Актуальные данные пользователя
   useEffect(() => {

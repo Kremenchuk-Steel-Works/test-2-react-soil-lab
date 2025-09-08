@@ -1,14 +1,14 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
-import type { LoginResponse } from '@/entities/auth-old/types/login/response.dto'
 import { FR_LOGIN as FR } from '@/entities/auth/login/model/fields-registry'
+import type { TokenPairResponse } from '@/shared/api/soil-lab/model'
 import Button from '@/shared/ui/button/Button'
 import Checkbox from '@/shared/ui/checkbox/Checkbox'
 import InputField from '@/shared/ui/input-field/InputField'
 import type { FormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
 import { makeBinders } from '@/utils/react-hook-form/makeBinders'
 
-type Ctx = { responseData?: LoginResponse }
+type Ctx = { responseData?: TokenPairResponse }
 
 export function useLoginFormFields<T extends FieldValues>(Form: FormKit<T>, ctx: Ctx) {
   const ctxRef = useRef(ctx)
@@ -26,7 +26,9 @@ export function useLoginFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
 
       [FR.password.key]: F(FR.password.key, (name) => (
         <Form.Field name={name}>
-          {({ register }) => <InputField label={FR.password.label.default + ' *'} {...register} />}
+          {({ register }) => (
+            <InputField type="password" label={FR.password.label.default + ' *'} {...register} />
+          )}
         </Form.Field>
       )),
 

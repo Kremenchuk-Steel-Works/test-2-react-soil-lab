@@ -1,13 +1,14 @@
-import { number, z } from 'zod'
+import { z } from 'zod'
 
 export const userSchema = z.object({
-  personId: z.string().nonempty(),
+  firstName: z.string().nonempty(),
+  lastName: z.string().nonempty(),
   email: z.string().email().nonempty(),
   rawPassword: z.string().nonempty(),
-  isActive: z.boolean(),
-  isSuperuser: z.boolean(),
-  rolesIds: z.array(number()).optional(),
-  permissionsIds: z.array(number()).optional(),
+  isActive: z.boolean().optional(),
+  isSuperuser: z.boolean().optional(),
+  rolesIds: z.array(z.string()).nullable().optional(),
+  permissionsIds: z.array(z.string()).nullable().optional(),
 })
 
 export const userUpdateSchema = userSchema.omit({

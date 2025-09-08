@@ -7,7 +7,7 @@ import {
 } from '@/entities/admin-old/users/forms/schema'
 import { userQueryKeys } from '@/entities/admin-old/users/services/keys'
 import { userService } from '@/entities/admin-old/users/services/service'
-import type { UserDetailResponse } from '@/entities/admin-old/users/types/response.dto'
+import type { UserDetailResponse } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminUsersUpdate() {

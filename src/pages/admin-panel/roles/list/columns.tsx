@@ -1,6 +1,5 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import type { PermissionListItemResponse } from '@/entities/admin-old/permissions/types/response.dto'
-import type { RoleListResponse } from '@/entities/admin-old/roles/types/response.dto'
+import type { PermissionShortResponse, RoleListResponse } from '@/shared/api/soil-lab/model'
 import type { ListDataType } from '@/types/pagination'
 import { displayColumn } from '@/widgets/data-table/columns/displayColumn'
 import { linkColumn } from '@/widgets/data-table/columns/linkColumn'
@@ -21,7 +20,7 @@ export const adminRolesColumns = [
   columnHelper.accessor('permissions', {
     header: 'Права доступу',
     size: 100,
-    ...listColumn<ListDataType<RoleListResponse>, PermissionListItemResponse>({
+    ...listColumn<ListDataType<RoleListResponse>, PermissionShortResponse>({
       formatter: (role) => role.name,
     }),
   }),

@@ -1,5 +1,5 @@
 import { createColumnHelper } from '@tanstack/react-table'
-import type { UserListResponse } from '@/entities/admin-old/users/types/response.dto'
+import type { PermissionDetailResponse, UserListResponse } from '@/shared/api/soil-lab/model'
 import type { ListDataType } from '@/types/pagination'
 import { booleanColumn } from '@/widgets/data-table/columns/booleanColumn'
 import { dateColumn } from '@/widgets/data-table/columns/dateColumn'
@@ -33,8 +33,14 @@ export const adminUsersColumns = [
     ...booleanColumn(),
   }),
 
-  columnHelper.accessor('fullName', {
-    header: "Повне ім'я",
+  columnHelper.accessor('lastName', {
+    header: 'Прізвище',
+    size: 145,
+    ...displayColumn(),
+  }),
+
+  columnHelper.accessor('firstName', {
+    header: "Ім'я",
     size: 145,
     ...displayColumn(),
   }),
@@ -45,15 +51,23 @@ export const adminUsersColumns = [
     ...dateColumn(),
   }),
 
-  columnHelper.accessor('roleNames', {
+  columnHelper.accessor('roles', {
     header: 'Роль',
     size: 95,
     ...listColumn(),
   }),
 
-  columnHelper.accessor('permissionNames', {
+  columnHelper.accessor('permissions', {
     header: 'Права доступу',
     size: 175,
     ...listColumn(),
+  }),
+
+  columnHelper.accessor('permissions', {
+    header: 'Права доступу',
+    size: 100,
+    ...listColumn<ListDataType<UserListResponse>, PermissionDetailResponse>({
+      formatter: (d) => d.name,
+    }),
   }),
 ]

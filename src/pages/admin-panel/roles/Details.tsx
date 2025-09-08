@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import { roleQueryKeys } from '@/entities/admin-old/roles/services/keys'
 import { roleService } from '@/entities/admin-old/roles/services/service'
-import type { RoleDetailResponse } from '@/entities/admin-old/roles/types/response.dto'
+import type { RoleDetailResponse } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminRolesDetails() {
@@ -39,6 +39,11 @@ export default function AdminRolesDetails() {
             </div>
 
             <div>
+              <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Код</dt>
+              <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.code}</dd>
+            </div>
+
+            <div>
               <dt className="text-sm font-medium text-gray-500 dark:text-slate-400">Опис</dt>
               <dd className="mt-1 text-sm text-gray-900 dark:text-slate-300">{data.description}</dd>
             </div>
@@ -67,9 +72,7 @@ export default function AdminRolesDetails() {
                     {data.permissions.map((perm) => (
                       <div key={perm.id}>
                         <span className="font-semibold">{perm.name}</span> —{' '}
-                        <span className="text-gray-600 dark:text-slate-400">
-                          {perm.departmentName}
-                        </span>
+                        <span className="text-gray-600 dark:text-slate-400">{perm.code}</span>
                       </div>
                     ))}
                   </ul>

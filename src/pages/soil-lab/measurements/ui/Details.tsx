@@ -67,11 +67,11 @@ export default function MeasurementsDetails() {
               </div>
             )}
 
-            {/* --- Час виконання --- */}
+            {/* --- Час додавання --- */}
             <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">Час виконання</dt>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Час додавання</dt>
               <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {new Date(responseData.performedAt).toLocaleString()}
+                {new Date(responseData.createdAt).toLocaleString()}
               </dd>
             </div>
           </dl>

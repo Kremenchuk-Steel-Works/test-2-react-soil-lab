@@ -1,6 +1,6 @@
 {
-  "mold-passport": {
-    "url": "src/shared/api/mold-passport-openapi.json",
-    "path": "src/shared/api/mold-passport"
+  "soil-lab": {
+    "url": "http://138.199.209.211:8100/openapi.json",
+    "path": "src/shared/api/soil-lab"
   }
 }

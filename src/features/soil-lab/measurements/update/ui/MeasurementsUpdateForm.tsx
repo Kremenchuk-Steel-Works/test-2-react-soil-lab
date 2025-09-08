@@ -6,7 +6,7 @@ import {
 } from '@/features/soil-lab/measurements/update/model/schema'
 import { MeasurementsUpdateFormKit } from '@/features/soil-lab/measurements/update/ui/formKit'
 import { MeasurementsUpdateBaseForm } from '@/features/soil-lab/measurements/update/ui/MeasurementsUpdateBaseForm'
-import type { MoldPassportDetailResponse } from '@/shared/api/mold-passport/model'
+import type { MeasurementDetailResponse } from '@/shared/api/soil-lab/model'
 import { createLogger } from '@/shared/lib/logger'
 import { FormKitProvider } from '@/shared/ui/react-hook-form/FormKit/FormKitProvider'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
@@ -17,7 +17,7 @@ const logger = createLogger('MeasurementsUpdateForm')
 type FormFields = MeasurementsUpdateFormFields
 const schema = measurementsUpdateFormSchema
 
-type MeasurementsFormProps = FormProps<FormFields, MoldPassportDetailResponse>
+type MeasurementsFormProps = FormProps<FormFields, MeasurementDetailResponse>
 
 const Form = MeasurementsUpdateFormKit
 

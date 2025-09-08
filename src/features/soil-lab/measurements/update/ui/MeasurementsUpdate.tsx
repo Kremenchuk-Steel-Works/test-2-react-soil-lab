@@ -1,16 +1,13 @@
 import { useCallback, useMemo } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { moldPassportService } from '@/entities/molding-shop-update/mold-passport'
+import { measurementsService } from '@/entities/soil-lab/measurements'
 import type { MeasurementsUpdateFormFields } from '@/features/soil-lab/measurements/update/model/schema'
 import { MeasurementsUpdateForm } from '@/features/soil-lab/measurements/update/ui/MeasurementsUpdateForm'
 import {
-  getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryKey,
-  getGetMoldPassportsListApiV1MoldPassportsGetQueryKey,
-} from '@/shared/api/mold-passport/endpoints/mold-passports/mold-passports'
-import type {
-  MoldPassportDetailResponse,
-  MoldPassportUpdate,
-} from '@/shared/api/mold-passport/model'
+  getGetMeasurementApiV1MeasurementsMeasurementIdGetQueryKey,
+  getGetMeasurementsListApiV1MeasurementsGetQueryKey,
+} from '@/shared/api/soil-lab/endpoints/measurements/measurements'
+import type { MeasurementDetailResponse, MeasurementUpdate } from '@/shared/api/soil-lab/model'
 import { getErrorMessage } from '@/shared/lib/axios'
 import { logger } from '@/shared/lib/logger'
 import { createUpdatePayload } from '@/shared/lib/react-hook-form/api-operations'
@@ -24,7 +21,7 @@ interface MeasurementsUpdateProps {
 
 // Адаптируем данные с запроса под форму
 function mapResponseToInitialData(
-  response: MoldPassportDetailResponse,
+  response: MeasurementDetailResponse,
 ): MeasurementsUpdateFormFields {
   return {
     ...response,
@@ -38,7 +35,7 @@ export default function MeasurementsUpdate({ id, onSuccess, onError }: Measureme
     data: responseData,
     isLoading,
     error: queryError,
-  } = moldPassportService.getById(id, {
+  } = measurementsService.getById(id, {
     query: { enabled: !!id },
   })
 
@@ -46,12 +43,12 @@ export default function MeasurementsUpdate({ id, onSuccess, onError }: Measureme
     mutateAsync,
     error: mutationError,
     isPending,
-  } = moldPassportService.update({
+  } = measurementsService.update({
     mutation: {
       onSuccess: (res, variables) => {
-        const queryKeyList = getGetMoldPassportsListApiV1MoldPassportsGetQueryKey()
-        const queryKeyDetail = getGetMoldPassportApiV1MoldPassportsMoldPassportIdGetQueryKey(
-          variables.moldPassportId,
+        const queryKeyList = getGetMeasurementsListApiV1MeasurementsGetQueryKey()
+        const queryKeyDetail = getGetMeasurementApiV1MeasurementsMeasurementIdGetQueryKey(
+          variables.measurementId,
         )
 
         return Promise.all([
@@ -76,11 +73,11 @@ export default function MeasurementsUpdate({ id, onSuccess, onError }: Measureme
       if (!responseData || !formDefaultValues || !id || isPending) return
 
       try {
-        const payload: MoldPassportUpdate = createUpdatePayload(formDefaultValues, formData)
+        const payload: MeasurementUpdate = createUpdatePayload(formDefaultValues, formData)
 
         logger.debug('[MeasurementsUpdate] payload', payload)
 
-        await mutateAsync({ moldPassportId: id, data: payload })
+        await mutateAsync({ measurementId: id, data: payload })
         return payload
       } catch (e) {
         logger.error('[MeasurementsUpdate] Mutation failed', e)

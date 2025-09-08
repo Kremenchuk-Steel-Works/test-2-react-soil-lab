@@ -5,7 +5,7 @@ import {
   type MeasurementsCreateFormFields,
 } from '@/features/soil-lab/measurements/create/model/schema'
 import { MeasurementsCreateForm } from '@/features/soil-lab/measurements/create/ui/MeasurementsCreateForm'
-import { getGetMoldPassportsListApiV1MoldPassportsGetQueryKey } from '@/shared/api/mold-passport/endpoints/mold-passports/mold-passports'
+import { getGetMeasurementsListApiV1MeasurementsGetQueryKey } from '@/shared/api/soil-lab/endpoints/measurements/measurements'
 
 interface MeasurementsCreateProps {
   onSuccess?: (res: unknown) => void
@@ -19,7 +19,7 @@ export default function MeasurementsCreate({ onSuccess, onError }: MeasurementsC
     mutation: {
       onSuccess: (res) => {
         void queryClient.invalidateQueries({
-          queryKey: getGetMoldPassportsListApiV1MoldPassportsGetQueryKey(),
+          queryKey: getGetMeasurementsListApiV1MeasurementsGetQueryKey(),
         })
         onSuccess?.(res)
       },

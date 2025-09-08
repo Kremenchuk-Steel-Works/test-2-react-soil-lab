@@ -1,15 +1,15 @@
 import {
-  useCreateMoldPassportApiV1MoldPassportsPost,
-  useDeleteMoldPassportApiV1MoldPassportsMoldPassportIdDelete,
-  useGetMoldPassportApiV1MoldPassportsMoldPassportIdGet,
-  useGetMoldPassportsListApiV1MoldPassportsGet,
-  useUpdateMoldPassportApiV1MoldPassportsMoldPassportIdPut,
-} from '@/shared/api/mold-passport/endpoints/mold-passports/mold-passports'
+  useCreateMeasurementApiV1MeasurementsPost,
+  useDeleteMeasurementApiV1MeasurementsMeasurementIdDelete,
+  useGetMeasurementApiV1MeasurementsMeasurementIdGet,
+  useGetMeasurementsListApiV1MeasurementsGet,
+  useUpdateMeasurementApiV1MeasurementsMeasurementIdPut,
+} from '@/shared/api/soil-lab/endpoints/measurements/measurements'
 
 export const measurementsService = {
-  getList: useGetMoldPassportsListApiV1MoldPassportsGet,
-  getById: useGetMoldPassportApiV1MoldPassportsMoldPassportIdGet,
-  create: useCreateMoldPassportApiV1MoldPassportsPost,
-  update: useUpdateMoldPassportApiV1MoldPassportsMoldPassportIdPut,
-  delete: useDeleteMoldPassportApiV1MoldPassportsMoldPassportIdDelete,
+  getList: useGetMeasurementsListApiV1MeasurementsGet,
+  getById: useGetMeasurementApiV1MeasurementsMeasurementIdGet,
+  create: useCreateMeasurementApiV1MeasurementsPost,
+  update: useUpdateMeasurementApiV1MeasurementsMeasurementIdPut,
+  delete: useDeleteMeasurementApiV1MeasurementsMeasurementIdDelete,
 }
