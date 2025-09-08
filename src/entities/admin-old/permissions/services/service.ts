@@ -51,7 +51,7 @@ export const permissionService = {
 
   async getLookup(): Promise<PermissionLookupResponse[]> {
     try {
-      const response = await api.get<PermissionLookupResponse[]>(`/lookups/permissions`)
+      const response = await api.get<PermissionLookupResponse[]>(`/permissions/lookups`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

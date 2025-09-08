@@ -50,7 +50,7 @@ export const roleService = {
 
   async getLookup(): Promise<RoleLookupResponse[]> {
     try {
-      const response = await api.get<RoleLookupResponse[]>(`/lookups/roles`)
+      const response = await api.get<RoleLookupResponse[]>(`/roles/lookups`)
       return response.data
     } catch (err) {
       handleAxiosError(err)

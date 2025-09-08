@@ -59,12 +59,6 @@ export const adminUsersColumns = [
 
   columnHelper.accessor('permissions', {
     header: 'Права доступу',
-    size: 175,
-    ...listColumn(),
-  }),
-
-  columnHelper.accessor('permissions', {
-    header: 'Права доступу',
     size: 100,
     ...listColumn<ListDataType<UserListResponse>, PermissionDetailResponse>({
       formatter: (d) => d.name,
