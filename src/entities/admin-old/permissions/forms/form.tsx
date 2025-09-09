@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 import {
@@ -29,16 +30,19 @@ export default function PermissionsForm({ defaultValues, onSubmit, submitBtnName
     defaultValues,
   })
 
-  const submitHandler: SubmitHandler<FormFields> = async (data) => {
-    try {
-      const response = await onSubmit(data)
-      logger.debug('Форма успешно выполнена', response)
-    } catch (err) {
-      const error = err as Error
-      setError('root', { message: error.message })
-      logger.error(err)
-    }
-  }
+  const submitHandler = useCallback<SubmitHandler<FormFields>>(
+    async (data) => {
+      try {
+        const response = await onSubmit(data)
+        logger.debug('Форма успешно выполнена', response)
+      } catch (err) {
+        const error = err as Error
+        setError('root', { message: error.message })
+        logger.error(err)
+      }
+    },
+    [onSubmit, setError],
+  )
 
   return (
     <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
@@ -48,6 +52,12 @@ export default function PermissionsForm({ defaultValues, onSubmit, submitBtnName
         label="Назва"
         {...register('name', formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, 'name')}
+      />
+
+      <InputFieldWithError
+        label="Код"
+        {...register('code', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'code')}
       />
 
       <InputFieldWithError

@@ -164,9 +164,9 @@ export default function UsersForm<T extends AnyZodObject>({
         />
       )}
 
-      {schemaKeys.includes('rolesIds') && (
+      {schemaKeys.includes('roleIds') && (
         <Controller
-          name={`rolesIds` as Path<z.infer<T>>}
+          name={`roleIds` as Path<z.infer<T>>}
           control={control}
           render={({ field, fieldState }) => (
             <FormSelectField
@@ -177,15 +177,15 @@ export default function UsersForm<T extends AnyZodObject>({
               isMulti
               isClearable
               placeholder="Оберіть ролі"
-              errorMessage={getNestedErrorMessage(errors, `rolesIds` as Path<z.infer<T>>)}
+              errorMessage={getNestedErrorMessage(errors, `roleIds` as Path<z.infer<T>>)}
             />
           )}
         />
       )}
 
-      {schemaKeys.includes('permissionsIds') && (
+      {schemaKeys.includes('permissionIds') && (
         <Controller
-          name={`permissionsIds` as Path<z.infer<T>>}
+          name={`permissionIds` as Path<z.infer<T>>}
           control={control}
           render={({ field, fieldState }) => (
             <FormSelectField
@@ -196,7 +196,7 @@ export default function UsersForm<T extends AnyZodObject>({
               isMulti
               isClearable
               placeholder="Оберіть права доступу"
-              errorMessage={getNestedErrorMessage(errors, `permissionsIds` as Path<z.infer<T>>)}
+              errorMessage={getNestedErrorMessage(errors, `permissionIds` as Path<z.infer<T>>)}
             />
           )}
         />

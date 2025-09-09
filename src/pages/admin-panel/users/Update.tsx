@@ -35,8 +35,8 @@ export default function AdminUsersUpdate() {
   function mapToFormDefaults(obj: UserDetailResponse): Partial<UserUpdateFormFields> {
     return {
       ...obj,
-      rolesIds: obj.roles?.map((rol) => rol.id) || [],
-      permissionsIds: obj.permissions?.map((perm) => perm.id) || [],
+      roleIds: obj.roles?.map((rol) => rol.id) || [],
+      permissionIds: obj.permissions?.map((perm) => perm.id) || [],
     }
   }
 

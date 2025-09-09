@@ -79,6 +79,12 @@ export default function RolesForm({ defaultValues, onSubmit, submitBtnName }: Fo
       />
 
       <InputFieldWithError
+        label="Код"
+        {...register('code', formTransformers.string)}
+        errorMessage={getNestedErrorMessage(errors, 'code')}
+      />
+
+      <InputFieldWithError
         label="Опис"
         {...register('description', formTransformers.string)}
         errorMessage={getNestedErrorMessage(errors, 'description')}
