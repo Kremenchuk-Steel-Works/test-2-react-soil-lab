@@ -7,7 +7,7 @@ import {
 } from '@/entities/admin-old/users/forms/schema'
 import { userQueryKeys } from '@/entities/admin-old/users/services/keys'
 import { userService } from '@/entities/admin-old/users/services/service'
-import type { UserDetailResponse } from '@/shared/api/soil-lab/model'
+import type { UserDetailResponse, UserUpdate } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 export default function AdminUsersUpdate() {
@@ -26,7 +26,13 @@ export default function AdminUsersUpdate() {
   })
 
   const handleSubmit = async (data: UserUpdateFormFields) => {
-    await userService.update(id!, data)
+    // Адаптер под обновление
+    const payload: UserUpdate = {
+      ...data,
+      roleIds: data.roleIds ?? undefined,
+      permissionIds: data.permissionIds ?? undefined,
+    }
+    await userService.update(id!, payload)
     await navigate('..')
     return data
   }
