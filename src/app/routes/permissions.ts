@@ -1,7 +1,9 @@
 export const PERMISSIONS = {
   ADMIN: 'admin',
-  SOIL_LAB_VIEW: 'soil_lab:view',
-  SOIL_LAB_UPDATE: 'soil_lab:update',
+  MEASUREMENTS: 'measurements',
+  MEASUREMENTS_CREATE: 'measurements.create',
+  MEASUREMENTS_UPDATE: 'measurements.update',
+  MEASUREMENTS_DELETE: 'measurements.delete',
 } as const
 
 /**

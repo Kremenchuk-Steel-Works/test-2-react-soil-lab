@@ -33,7 +33,7 @@ export const measurementsRoutes: AppRoute = {
       label: 'Додати',
       icon: CirclePlus,
       Component: MeasurementsAdd,
-      requiredPermissions: [PERMISSIONS.SOIL_LAB_UPDATE],
+      requiredPermissions: [PERMISSIONS.MEASUREMENTS_CREATE],
     },
     {
       key: 'MeasurementsDetail',
@@ -58,7 +58,7 @@ export const measurementsRoutes: AppRoute = {
           label: 'Видалити',
           icon: Trash,
           Component: MeasurementsDelete,
-          requiredPermissions: [PERMISSIONS.SOIL_LAB_UPDATE],
+          requiredPermissions: [PERMISSIONS.MEASUREMENTS_DELETE],
         },
         {
           key: 'MeasurementsUpdate',
@@ -66,7 +66,7 @@ export const measurementsRoutes: AppRoute = {
           label: 'Оновити',
           icon: RefreshCcw,
           Component: MeasurementsUpdate,
-          requiredPermissions: [PERMISSIONS.SOIL_LAB_UPDATE],
+          requiredPermissions: [PERMISSIONS.MEASUREMENTS_UPDATE],
         },
       ],
     },
