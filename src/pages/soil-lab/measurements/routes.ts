@@ -41,6 +41,7 @@ export const measurementsRoutes: AppRoute = {
       label: 'Деталі',
       icon: Info,
       Component: MeasurementsLayout,
+      requiredPermissions: [PERMISSIONS.MEASUREMENTS_READ],
       meta: {
         buttons: ['update'],
       },
