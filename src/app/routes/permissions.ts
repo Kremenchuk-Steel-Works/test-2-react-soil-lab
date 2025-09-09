@@ -1,6 +1,6 @@
 export const PERMISSIONS = {
   ADMIN: 'admin',
-  MEASUREMENTS: 'measurements',
+  MEASUREMENTS_READ: 'measurements.read',
   MEASUREMENTS_CREATE: 'measurements.create',
   MEASUREMENTS_UPDATE: 'measurements.update',
   MEASUREMENTS_DELETE: 'measurements.delete',
