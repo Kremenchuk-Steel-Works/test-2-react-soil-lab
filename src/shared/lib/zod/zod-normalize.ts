@@ -13,10 +13,16 @@ const stringNormalizeLogic = (value: unknown) => {
 const numberNormalizeLogic = (value: unknown) => {
   if (value === null) return null
   if (value === undefined) return undefined
+
   if (typeof value === 'string') {
+    // Убираем пробелы в начале и конце строки
     const trimmed = value.trim()
     if (trimmed === '') return undefined
-    return Number(trimmed)
+
+    // Заменяем "," на "."
+    const replaced = trimmed.replace(',', '.')
+
+    return Number(replaced)
   }
   return value
 }

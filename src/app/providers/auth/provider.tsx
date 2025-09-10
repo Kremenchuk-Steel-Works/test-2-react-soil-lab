@@ -144,7 +144,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         const originalRequest = error.config as ReqCfg | undefined
         const isTokenExpired =
-          error.response?.status === 401 && error.response?.data?.detail === 'Token has expired.'
+          error.response?.status === 401 &&
+          error.response?.data?.detail === 'Access token has expired'
 
         if (isTokenExpired) {
           try {
