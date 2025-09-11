@@ -1,6 +1,6 @@
 import { createFieldRegistry } from '@/utils/react-hook-form/createFieldRegistry'
 
-export const EXPERIMENTS = createFieldRegistry({
+export const experimentsFieldRegistry = createFieldRegistry({
   moldingSandNumber: {
     label: { default: '№ суміші' },
   },

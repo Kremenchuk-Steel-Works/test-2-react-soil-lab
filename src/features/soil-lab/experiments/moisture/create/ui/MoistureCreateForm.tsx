@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
-import type { TestMoistureResponse } from '@/entities/soil-lab/experiments/ui/form/fields'
+import type { TestMoistureResponse } from '@/entities/soil-lab/experiments/moisure/ui/form/fields'
 import {
   moistureCreateFormSchema,
   type MoistureCreateFormFields,

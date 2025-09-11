@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { type ArrayPath, type FieldValues } from 'react-hook-form'
-import { EXPERIMENTS as FR } from '@/entities/soil-lab/experiments/model/fields-registry'
-import type { ExperimentsMeasurementFormFields } from '@/entities/soil-lab/experiments/ui/form/schema'
+import { moistureFieldRegistry } from '@/entities/soil-lab/experiments/moisure/model/fields-registry'
+import type { ExperimentsMeasurementFormFields } from '@/entities/soil-lab/experiments/moisure/ui/form/schema'
 import { useScopedFieldName } from '@/shared/hooks/react-hook-form/useFieldName'
 import { createLogger } from '@/shared/lib/logger'
 import InputField from '@/shared/ui/input-field/InputField'
@@ -19,13 +19,15 @@ export function ExperimentsMeasurementFormComponent<T extends FieldValues, N ext
   const Form = useFormKit<T>()
   const fieldName = useScopedFieldName<T, ExperimentsMeasurementFormFields>(pathPrefix)
 
+  const { moistureContentPercent } = moistureFieldRegistry
+
   logger.debug('[ExperimentsMeasurementForm] render')
 
   return (
     <>
-      <Form.Field name={fieldName(FR.moistureContentPercent.key)}>
+      <Form.Field name={fieldName(moistureContentPercent.key)}>
         {({ register }) => (
-          <InputField label={FR.moistureContentPercent.label.default} {...register} />
+          <InputField label={moistureContentPercent.label.default} {...register} />
         )}
       </Form.Field>
     </>

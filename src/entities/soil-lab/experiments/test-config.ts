@@ -8,7 +8,7 @@ export const MIXTURES_CONFIG = {
   moisture: {
     [MIXTURES[13]]: {
       norm: {
-        temperature: {
+        moistureContentPercent: {
           '>=18': {
             min: 2.6,
             max: 3.1,
@@ -24,7 +24,7 @@ export const MIXTURES_CONFIG = {
     },
     [MIXTURES[14]]: {
       norm: {
-        temperature: {
+        moistureContentPercent: {
           '>=18': {
             min: 3.4,
             max: 3.7,
@@ -40,7 +40,7 @@ export const MIXTURES_CONFIG = {
     },
     [MIXTURES[15]]: {
       norm: {
-        temperature: {
+        moistureContentPercent: {
           '>=18': {
             min: 2.6,
             max: 3.1,
@@ -97,5 +97,56 @@ export const MIXTURES_CONFIG = {
       },
       differenceTreshold: { mode: 'relative', value: 10 },
     },
+  },
+}
+
+export const MOISTURE_CONFIG = {
+  [MIXTURES[13]]: {
+    norm: {
+      moistureContentPercent: {
+        '>=18': {
+          min: 2.6,
+          max: 3.1,
+        },
+        '<18': {
+          min: 2.5,
+          max: 3.0,
+        },
+      },
+    },
+    round: { digits: 2 },
+    differenceTreshold: { mode: 'absolute', value: 0.15 },
+  },
+  [MIXTURES[14]]: {
+    norm: {
+      moistureContentPercent: {
+        '>=18': {
+          min: 3.4,
+          max: 3.7,
+        },
+        '< 18': {
+          min: 3.3,
+          max: 3.5,
+        },
+      },
+    },
+    round: { digits: 2 },
+    differenceTreshold: { mode: 'absolute', value: 0.15 },
+  },
+  [MIXTURES[15]]: {
+    norm: {
+      moistureContentPercent: {
+        '>=18': {
+          min: 2.6,
+          max: 3.1,
+        },
+        '< 18': {
+          min: 2.5,
+          max: 3.1,
+        },
+      },
+    },
+    round: { digits: 2 },
+    differenceTreshold: { mode: 'absolute', value: 0.15 },
   },
 }
