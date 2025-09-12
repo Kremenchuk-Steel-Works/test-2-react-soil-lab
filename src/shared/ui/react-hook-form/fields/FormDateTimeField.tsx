@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { addYears, format, getYear, isValid, subYears } from 'date-fns'
+import { add, format, getYear, isValid, sub } from 'date-fns'
 import type {
   ControllerFieldState,
   ControllerRenderProps,
@@ -13,6 +13,13 @@ import {
 } from '@/shared/ui/input-field/DateTime/DateTimePicker'
 import { WithError } from '@/shared/ui/with-error/WithError'
 
+// Определяем тип для объекта смещения даты
+type DateOffset = {
+  years?: number
+  months?: number
+  days?: number
+}
+
 type FormDateTimeFieldProps<
   TFieldValues extends FieldValues,
   TName extends Path<TFieldValues>,
@@ -20,8 +27,8 @@ type FormDateTimeFieldProps<
   field: ControllerRenderProps<TFieldValues, TName>
   fieldState: ControllerFieldState
   type?: DateTimePickerType
-  yearOffsetPast?: number
-  yearOffsetFuture?: number
+  offsetPast?: DateOffset
+  offsetFuture?: DateOffset
   stringFormat?: string
   errorMessage?: string
 }
@@ -30,8 +37,8 @@ const FormDateTimeField = <TFieldValues extends FieldValues, TName extends Path<
   field,
   fieldState: _fieldState,
   type = 'date',
-  yearOffsetPast,
-  yearOffsetFuture,
+  offsetPast,
+  offsetFuture,
   stringFormat,
   errorMessage,
   ...rest
@@ -90,10 +97,10 @@ const FormDateTimeField = <TFieldValues extends FieldValues, TName extends Path<
 
   const { minDate, maxDate } = useMemo(() => {
     const now = new Date()
-    const min = yearOffsetPast !== undefined ? subYears(now, yearOffsetPast) : undefined
-    const max = yearOffsetFuture !== undefined ? addYears(now, yearOffsetFuture) : undefined
+    const min = offsetPast ? sub(now, offsetPast) : undefined
+    const max = offsetFuture ? add(now, offsetFuture) : undefined
     return { minDate: min, maxDate: max }
-  }, [yearOffsetPast, yearOffsetFuture])
+  }, [offsetPast, offsetFuture])
 
   const valueAsDate = parseValue(field.value)
 

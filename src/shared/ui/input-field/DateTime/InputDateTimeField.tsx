@@ -7,6 +7,7 @@ import { uk } from 'date-fns/locale'
 import { useCloseOnScrollOutside } from '@/shared/hooks/useCloseOnScrollOutside'
 import { getCorrectedDateTimeString } from '@/shared/lib/react-input-mask/corrected-date-time-string'
 import InputFieldWithMask from '@/shared/ui/input-field/DateTime/InputFieldWithMask'
+import { DatePickerPortal } from '@/shared/ui/input-field/DateTime/portal/DatePickerPortal'
 
 registerLocale('uk', uk)
 
@@ -86,6 +87,7 @@ const InputDateTimeField = forwardRef<HTMLInputElement, InputDateTimeFieldProps>
           onCalendarClose={() => setCalendarOpen(false)}
           onInputClick={() => datePickerRef.current?.setFocus()}
           popperClassName="react-datepicker-popper"
+          popperContainer={DatePickerPortal}
           selected={value}
           onChange={onChange}
           onChangeRaw={handleChangeRaw}

@@ -6,6 +6,7 @@ import { isValid, parse } from 'date-fns'
 import { uk } from 'date-fns/locale'
 import { useCloseOnScrollOutside } from '@/shared/hooks/useCloseOnScrollOutside'
 import InputFieldWithMask from '@/shared/ui/input-field/DateTime/InputFieldWithMask'
+import { DatePickerPortal } from '@/shared/ui/input-field/DateTime/portal/DatePickerPortal'
 
 registerLocale('uk', uk)
 
@@ -127,6 +128,7 @@ const InputYearField = forwardRef<HTMLInputElement, InputYearFieldProps>(
           wrapperClassName="w-full"
           calendarClassName="react-datepicker__calendar--themed"
           popperClassName="react-datepicker-popper"
+          popperContainer={DatePickerPortal}
         />
         {hasValue && !disabled && (
           <button

@@ -20,13 +20,16 @@ import {
   ChevronRight,
   ChevronsUpDown,
   ChevronUp,
+  Download,
   ListFilter,
   ListRestart,
 } from 'lucide-react'
 import type { SetURLSearchParams } from 'react-router-dom'
 import type { CSSObjectWithLabel } from 'react-select'
+import MeasurementsGenerateReport from '@/features/soil-lab/measurements/generate-report/ui/MeasurementsGenerateReport'
 import Button from '@/shared/ui/button/Button'
 import { EllipsisText } from '@/shared/ui/ellipsis/EllipsisText'
+import { TooltipWrapper } from '@/shared/ui/ellipsis/TooltipWrapper'
 import { AdaptiveInput } from '@/shared/ui/input-field/AdaptiveInput'
 import InputField from '@/shared/ui/input-field/InputField'
 import ModalTrigger from '@/shared/ui/modal/ModalTrigger'
@@ -246,14 +249,17 @@ export function DataTable<TData extends RowData>({
             }}
           />
 
+          {/* Фильтры */}
           <ModalTrigger
             trigger={(open) => (
-              <Button
-                className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
-                onClick={open}
-              >
-                <ListFilter className="h-5 w-5 text-slate-700 dark:text-slate-300" />
-              </Button>
+              <TooltipWrapper title={`Фільтри`}>
+                <Button
+                  className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+                  onClick={open}
+                >
+                  <ListFilter className="h-5 w-5 text-slate-700 dark:text-slate-300" />
+                </Button>
+              </TooltipWrapper>
             )}
             sheetProps={{
               label: <p className="text-lg font-semibold">Фільтри</p>,
@@ -280,44 +286,67 @@ export function DataTable<TData extends RowData>({
 
           {/* Кнопка сброса фильтров */}
           {table.getState().columnFilters.some((f) => f.value !== '') && (
-            <Button
-              className="gap-50. flex items-center justify-center bg-gray-200 py-1.5 whitespace-nowrap text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
-              onClick={() => table.resetColumnFilters()}
-            >
-              <ListRestart className="h-6 w-5" />
-            </Button>
+            <TooltipWrapper title={`Скинути фільтри`}>
+              <Button
+                className="gap-50. flex items-center justify-center bg-gray-200 py-1.5 whitespace-nowrap text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
+                onClick={() => table.resetColumnFilters()}
+              >
+                <ListRestart className="h-6 w-5" />
+              </Button>
+            </TooltipWrapper>
           )}
+
+          {/* Скачивание отчёта */}
+          <ModalTrigger
+            trigger={(open) => (
+              <TooltipWrapper title={`Завантажити звіт`}>
+                <Button
+                  className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+                  onClick={open}
+                >
+                  <Download className="h-5 w-5 text-slate-700 dark:text-slate-300" />
+                </Button>
+              </TooltipWrapper>
+            )}
+            sheetProps={{
+              label: <p className="text-lg font-semibold">Завантажити звіт</p>,
+            }}
+          >
+            {({ onSuccess }) => <MeasurementsGenerateReport onSuccess={onSuccess} />}
+          </ModalTrigger>
         </div>
 
         <div className="flex items-center gap-1">
           {/* Выбор числа строк */}
           <strong className="flex items-center">
-            <ReactSelectNoLabel
-              placeholder="Кількість"
-              customClassNames={{
-                control: () => 'border-0 bg-gray-200 dark:bg-gray-700',
-              }}
-              customStyles={reactStyles}
-              isClearable={false}
-              isSearchable={false}
-              options={pageSizeOptions}
-              value={pageSizeOptions.find(
-                (opt) => opt.value === table.getState().pagination.pageSize,
-              )}
-              onChange={(selectedOption) => {
-                const newSize = selectedOption?.value
-                if (!newSize) return
+            <TooltipWrapper title={`Вибір кількості елементів`}>
+              <ReactSelectNoLabel
+                placeholder="Кількість"
+                customClassNames={{
+                  control: () => 'border-0 bg-gray-200 dark:bg-gray-700',
+                }}
+                customStyles={reactStyles}
+                isClearable={false}
+                isSearchable={false}
+                options={pageSizeOptions}
+                value={pageSizeOptions.find(
+                  (opt) => opt.value === table.getState().pagination.pageSize,
+                )}
+                onChange={(selectedOption) => {
+                  const newSize = selectedOption?.value
+                  if (!newSize) return
 
-                setSearchParams(
-                  (prev) => {
-                    prev.set('perPage', String(newSize))
-                    prev.set('page', '1') // Сбрасываем на первую страницу
-                    return prev
-                  },
-                  { replace: true },
-                )
-              }}
-            />
+                  setSearchParams(
+                    (prev) => {
+                      prev.set('perPage', String(newSize))
+                      prev.set('page', '1') // Сбрасываем на первую страницу
+                      return prev
+                    },
+                    { replace: true },
+                  )
+                }}
+              />
+            </TooltipWrapper>
           </strong>
         </div>
       </div>
@@ -410,20 +439,25 @@ export function DataTable<TData extends RowData>({
       </div>
       {/* Кнопки назад/вперёд */}
       <div className="flex items-center gap-1">
-        <Button
-          className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.firstPage()}
-        >
-          <ChevronFirst className="h-5 w-5" />
-        </Button>
-        <Button
-          className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
-          disabled={!table.getCanPreviousPage()}
-          onClick={() => table.previousPage()}
-        >
-          <ChevronLeft className="h-5 w-5" />
-        </Button>
+        <TooltipWrapper title={`Перша сторінка`}>
+          <Button
+            className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
+            disabled={!table.getCanPreviousPage()}
+            onClick={() => table.firstPage()}
+          >
+            <ChevronFirst className="h-5 w-5" />
+          </Button>
+        </TooltipWrapper>
+
+        <TooltipWrapper title={`Попередня сторінка`}>
+          <Button
+            className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
+            disabled={!table.getCanPreviousPage()}
+            onClick={() => table.previousPage()}
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+        </TooltipWrapper>
 
         {/* Страницы */}
         <strong>
@@ -447,20 +481,25 @@ export function DataTable<TData extends RowData>({
           </div>
         </strong>
 
-        <Button
-          className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.nextPage()}
-        >
-          <ChevronRight className="h-5 w-5" />
-        </Button>
-        <Button
-          className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
-          disabled={!table.getCanNextPage()}
-          onClick={() => table.lastPage()}
-        >
-          <ChevronLast className="h-5 w-5" />
-        </Button>
+        <TooltipWrapper title={`Наступна сторінка`}>
+          <Button
+            className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
+            disabled={!table.getCanNextPage()}
+            onClick={() => table.nextPage()}
+          >
+            <ChevronRight className="h-5 w-5" />
+          </Button>
+        </TooltipWrapper>
+
+        <TooltipWrapper title={`Остання сторінка`}>
+          <Button
+            className="bg-gray-200 text-slate-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-slate-300 dark:hover:bg-gray-600"
+            disabled={!table.getCanNextPage()}
+            onClick={() => table.lastPage()}
+          >
+            <ChevronLast className="h-5 w-5" />
+          </Button>
+        </TooltipWrapper>
       </div>
     </>
   )

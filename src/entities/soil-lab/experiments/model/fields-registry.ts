@@ -14,8 +14,4 @@ export const experimentsFieldRegistry = createFieldRegistry({
   measurements: {
     label: { default: 'Значення' },
   },
-
-  moistureContentPercent: {
-    label: { default: 'Масова частка вологи (%)' },
-  },
 } as const)

@@ -12,13 +12,18 @@ const ModalTrigger: React.FC<ModalTriggerProps> = ({ trigger, sheetProps, childr
   const open = useCallback(() => setIsOpen(true), [])
   const close = useCallback(() => setIsOpen(false), [])
 
+  const finalSheetProps: typeof sheetProps = {
+    ...sheetProps,
+    className: sheetProps?.className ?? 'w-[95%] sm:max-w-md',
+  }
+
   const renderChildren = () =>
     typeof children === 'function' ? children({ onSuccess: close }) : children
 
   return (
     <>
       {trigger(open)}
-      <Modal isOpen={isOpen} onClose={close} {...sheetProps}>
+      <Modal isOpen={isOpen} onClose={close} {...finalSheetProps}>
         {renderChildren()}
       </Modal>
     </>

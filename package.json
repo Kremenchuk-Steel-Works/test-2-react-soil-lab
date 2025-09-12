@@ -7,17 +7,9 @@
     "dev": "vite --host",
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext .ts,.tsx --cache --cache-location ./.eslintcache",
-    "lint:fix": "eslint . --ext .ts,.tsx --fix",
     "preview": "vite preview",
     "spellcheck": "cspell \"**/*.{ts,tsx,md,json}\" --show-context",
     "index": "node scripts/generate-explicit-api.mjs",
-    "dto": "node scripts/generateDto.mjs",
-    "dto:schema": "node scripts/generateDtoSchema.mjs",
-    "api": "node ./scripts/generateApi.mjs",
-    "schema": "node ./scripts/generateApiSchema.mjs",
-    "api:main": "npm run api main",
-    "schema:main": "npm run schema main",
-    "openapi": "node scripts/generateCamelOpenapi.mjs",
     "generate:api": "tsx scripts/generate-api-orval.ts"
   },
   "dependencies": {

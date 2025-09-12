@@ -27,3 +27,13 @@ export const customMutator = <T>(config: AxiosRequestConfig): Promise<T> => {
 }
 
 export default customMutator
+
+/**
+ * Мутатор для файловых запросов.
+ * Возвращает полный `AxiosResponse` для доступа к заголовкам.
+ */
+export const fileMutator = <T>(config: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
+  const newConfig: AxiosRequestConfig = { ...config }
+  newConfig.url = normalizeUrl(newConfig.url)
+  return api<T, AxiosResponse<T>>(newConfig)
+}

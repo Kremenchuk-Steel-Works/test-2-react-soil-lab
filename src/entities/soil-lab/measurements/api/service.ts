@@ -3,6 +3,7 @@ import {
   useDeleteMeasurementApiV1MeasurementsMeasurementIdDelete,
   useGetMeasurementApiV1MeasurementsMeasurementIdGet,
   useGetMeasurementsListApiV1MeasurementsGet,
+  useGetMeasurementsReportApiV1MeasurementsGenerateReportPost,
   useUpdateMeasurementApiV1MeasurementsMeasurementIdPut,
 } from '@/shared/api/soil-lab/endpoints/measurements/measurements'
 
@@ -12,4 +13,5 @@ export const measurementsService = {
   create: useCreateMeasurementApiV1MeasurementsPost,
   update: useUpdateMeasurementApiV1MeasurementsMeasurementIdPut,
   delete: useDeleteMeasurementApiV1MeasurementsMeasurementIdDelete,
+  generateReport: useGetMeasurementsReportApiV1MeasurementsGenerateReportPost,
 }

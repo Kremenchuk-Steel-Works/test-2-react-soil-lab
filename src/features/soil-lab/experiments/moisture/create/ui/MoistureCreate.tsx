@@ -1,10 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { measurementsService } from '@/entities/soil-lab/measurements'
-import {
-  moistureCreateFormDefaultValues,
-  type MoistureCreateFormFields,
-} from '@/features/soil-lab/experiments/moisture/create/model/schema'
-import { MoistureCreateForm } from '@/features/soil-lab/experiments/moisture/create/ui/MoistureCreateForm'
+import { moistureCreateFormDefaultValues } from '@/features/soil-lab/experiments/moisture/create/model/schema'
+import type { MeasurementsCreateFormFields } from '@/features/soil-lab/measurements/create/model/schema'
+import { MeasurementsCreateForm } from '@/features/soil-lab/measurements/create/ui/MeasurementsCreateForm'
 import { getGetMeasurementsListApiV1MeasurementsGetQueryKey } from '@/shared/api/soil-lab/endpoints/measurements/measurements'
 
 interface MoistureCreateProps {
@@ -27,13 +25,15 @@ export default function MoistureCreate({ onSuccess, onError }: MoistureCreatePro
     },
   })
 
-  const handleSubmit = async (data: MoistureCreateFormFields) => {
+  // const handleSubmit = async (data: MoistureCreateFormFields) => {
+  const handleSubmit = async (data: MeasurementsCreateFormFields) => {
     await mutateAsync({ data })
     return data
   }
 
   return (
-    <MoistureCreateForm
+    // <MoistureCreateForm
+    <MeasurementsCreateForm
       defaultValues={moistureCreateFormDefaultValues}
       onSubmit={handleSubmit}
       submitBtnName="Додати"

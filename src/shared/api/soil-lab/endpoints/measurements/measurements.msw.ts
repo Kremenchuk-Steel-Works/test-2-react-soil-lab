@@ -272,6 +272,9 @@ export const getRestoreMeasurementApiV1MeasurementsMeasurementIdRestorePostRespo
   ...overrideResponse,
 })
 
+export const getGetMeasurementsReportApiV1MeasurementsGenerateReportPostResponseMock = (): Blob =>
+  new Blob(faker.helpers.arrayElements(faker.word.words(10).split(' ')))
+
 export const getGetPermissionLookupsListApiV1MeasurementsLookupsGetMockHandler = (
   overrideResponse?:
     | MeasurementLookupResponse[]
@@ -432,6 +435,27 @@ export const getRestoreMeasurementApiV1MeasurementsMeasurementIdRestorePostMockH
     )
   })
 }
+
+export const getGetMeasurementsReportApiV1MeasurementsGenerateReportPostMockHandler = (
+  overrideResponse?:
+    | Blob
+    | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<Blob> | Blob),
+) => {
+  return http.post('*/api/v1/measurements/generate-report', async (info) => {
+    await delay(1000)
+
+    return new HttpResponse(
+      JSON.stringify(
+        overrideResponse !== undefined
+          ? typeof overrideResponse === 'function'
+            ? await overrideResponse(info)
+            : overrideResponse
+          : getGetMeasurementsReportApiV1MeasurementsGenerateReportPostResponseMock(),
+      ),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
+    )
+  })
+}
 export const getMeasurementsMock = () => [
   getGetPermissionLookupsListApiV1MeasurementsLookupsGetMockHandler(),
   getGetMeasurementsListApiV1MeasurementsGetMockHandler(),
@@ -440,4 +464,5 @@ export const getMeasurementsMock = () => [
   getUpdateMeasurementApiV1MeasurementsMeasurementIdPutMockHandler(),
   getDeleteMeasurementApiV1MeasurementsMeasurementIdDeleteMockHandler(),
   getRestoreMeasurementApiV1MeasurementsMeasurementIdRestorePostMockHandler(),
+  getGetMeasurementsReportApiV1MeasurementsGenerateReportPostMockHandler(),
 ]

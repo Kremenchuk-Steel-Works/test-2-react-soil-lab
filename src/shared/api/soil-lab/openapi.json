@@ -1532,6 +1532,48 @@
           "measurements"
         ]
       }
+    },
+    "/api/v1/measurements/generate-report": {
+      "post": {
+        "operationId": "get_measurements_report_api_v1_measurements_generate_report_post",
+        "summary": "Get Measurements Report",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MeasurementsReportGenerationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "DOCX report file",
+            "content": {
+              "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpValidationError"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "measurements"
+        ]
+      }
     }
   },
   "components": {
@@ -1927,6 +1969,36 @@
         },
         "additionalProperties": false,
         "title": "MeasurementUpdate"
+      },
+      "MeasurementsReportGenerationRequest": {
+        "type": "object",
+        "properties": {
+          "dateFrom": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date From"
+          },
+          "dateTo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date To"
+          }
+        },
+        "title": "MeasurementsReportGenerationRequest"
       },
       "PermissionCreate": {
         "type": "object",

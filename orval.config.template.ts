@@ -1,4 +1,5 @@
 import type { Config } from 'orval'
+import { generateFileOverrides } from './orval-helpers'
 
 /**
  * Создает конфигурацию Orval для указанного сервиса.
@@ -8,6 +9,7 @@ import type { Config } from 'orval'
  */
 export const createOrvalConfig = (serviceName: string, servicePath: string): Config => {
   const input = `${servicePath}/openapi.json`
+  const fileOperationOverrides = generateFileOverrides(input)
 
   // Возвращаем чистый объект конфигурации без обертки defineConfig
   return {
@@ -23,6 +25,9 @@ export const createOrvalConfig = (serviceName: string, servicePath: string): Con
           mutator: {
             path: './src/shared/api/mutator.ts',
             name: 'customMutator',
+          },
+          operations: {
+            ...fileOperationOverrides,
           },
         },
       },

@@ -9,7 +9,7 @@ RUN npm ci --production=false
 COPY . .
 RUN npm run build
 
-# Этап продакшен-образа
+# Этап production-образа
 FROM nginx:1.28.0-alpine-slim AS production
 
 # Настраиваем пользовательские конфиги

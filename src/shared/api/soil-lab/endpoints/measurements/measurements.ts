@@ -20,7 +20,7 @@ import {
   type UseQueryOptions,
   type UseQueryResult,
 } from '@tanstack/react-query'
-import { customMutator } from '../../../mutator'
+import { customMutator, fileMutator } from '../../../mutator'
 import type {
   GetMeasurementsListApiV1MeasurementsGetParams,
   GetPermissionLookupsListApiV1MeasurementsLookupsGetParams,
@@ -29,6 +29,7 @@ import type {
   MeasurementDetailResponse,
   MeasurementListResponse,
   MeasurementLookupResponse,
+  MeasurementsReportGenerationRequest,
   MeasurementUpdate,
 } from '../../model'
 
@@ -818,6 +819,93 @@ export const useRestoreMeasurementApiV1MeasurementsMeasurementIdRestorePost = <
 > => {
   const mutationOptions =
     getRestoreMeasurementApiV1MeasurementsMeasurementIdRestorePostMutationOptions(options)
+
+  return useMutation(mutationOptions, queryClient)
+}
+/**
+ * @summary Get Measurements Report
+ */
+export const getMeasurementsReportApiV1MeasurementsGenerateReportPost = (
+  measurementsReportGenerationRequest: MeasurementsReportGenerationRequest,
+  signal?: AbortSignal,
+) => {
+  return fileMutator<Blob>({
+    url: `/api/v1/measurements/generate-report`,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    data: measurementsReportGenerationRequest,
+    responseType: 'blob',
+    signal,
+  })
+}
+
+export const getGetMeasurementsReportApiV1MeasurementsGenerateReportPostMutationOptions = <
+  TError = HttpValidationError,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof getMeasurementsReportApiV1MeasurementsGenerateReportPost>>,
+    TError,
+    { data: MeasurementsReportGenerationRequest },
+    TContext
+  >
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof getMeasurementsReportApiV1MeasurementsGenerateReportPost>>,
+  TError,
+  { data: MeasurementsReportGenerationRequest },
+  TContext
+> => {
+  const mutationKey = ['getMeasurementsReportApiV1MeasurementsGenerateReportPost']
+  const { mutation: mutationOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof getMeasurementsReportApiV1MeasurementsGenerateReportPost>>,
+    { data: MeasurementsReportGenerationRequest }
+  > = (props) => {
+    const { data } = props ?? {}
+
+    return getMeasurementsReportApiV1MeasurementsGenerateReportPost(data)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type GetMeasurementsReportApiV1MeasurementsGenerateReportPostMutationResult = NonNullable<
+  Awaited<ReturnType<typeof getMeasurementsReportApiV1MeasurementsGenerateReportPost>>
+>
+export type GetMeasurementsReportApiV1MeasurementsGenerateReportPostMutationBody =
+  MeasurementsReportGenerationRequest
+export type GetMeasurementsReportApiV1MeasurementsGenerateReportPostMutationError =
+  HttpValidationError
+
+/**
+ * @summary Get Measurements Report
+ */
+export const useGetMeasurementsReportApiV1MeasurementsGenerateReportPost = <
+  TError = HttpValidationError,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof getMeasurementsReportApiV1MeasurementsGenerateReportPost>>,
+      TError,
+      { data: MeasurementsReportGenerationRequest },
+      TContext
+    >
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof getMeasurementsReportApiV1MeasurementsGenerateReportPost>>,
+  TError,
+  { data: MeasurementsReportGenerationRequest },
+  TContext
+> => {
+  const mutationOptions =
+    getGetMeasurementsReportApiV1MeasurementsGenerateReportPostMutationOptions(options)
 
   return useMutation(mutationOptions, queryClient)
 }
