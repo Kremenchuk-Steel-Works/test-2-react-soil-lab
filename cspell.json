@@ -15,7 +15,8 @@
     "package-lock.json",
     "pnpm-lock.yaml",
     "tailwind.config.js",
-    "vite.config.ts"
+    "vite.config.ts",
+    ".gitignore"
   ],
   "words": [
     // Technical Terms & Libraries
@@ -38,12 +39,18 @@
     "Мемоизированная",
     "скролле",
     "гггг",
+    "рррр",
     "типобезопасна",
     "плейсхолдер",
     "маппируемых",
     "маппинга",
     "скролла",
     "селекта",
+    "фичах",
+    "бекенд",
+    "бекенда",
+    "деплой",
+    "деплоя",
 
     // Ukrainian/Russian words specific to the project's domain
     "Адмін",

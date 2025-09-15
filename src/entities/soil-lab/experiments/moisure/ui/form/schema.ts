@@ -1,17 +1,20 @@
 import type { DeepPartial } from 'react-hook-form'
 import z from 'zod'
 import { moistureFieldRegistry } from '@/entities/soil-lab/experiments/moisure/model/fields-registry'
-import { withNcm2ToKgfcm2Conversion } from '@/shared/lib/zod/zod-converters'
+import { PressureUnits } from '@/shared/lib/zod/pressure-conversion/pressure'
+import { withUnitConversion } from '@/shared/lib/zod/pressure-conversion/withUnitConversion'
 import { zn } from '@/shared/lib/zod/zod-normalize'
 
 const { moldingSandNumber, ambientTempMoldAssemblyArea, measurements, moistureContentPercent } =
   moistureFieldRegistry
 
 export const experimentsMeasurementFormSchema = z.object({
-  [moistureContentPercent.key]: withNcm2ToKgfcm2Conversion(zn(z.number()), {
+  [moistureContentPercent.key]: withUnitConversion(zn(z.number()), {
+    from: PressureUnits.N_PER_CM2,
+    to: PressureUnits.KGF_PER_CM2,
     min: 1,
     max: 5,
-    round: 5,
+    round: 2,
   }),
 })
 

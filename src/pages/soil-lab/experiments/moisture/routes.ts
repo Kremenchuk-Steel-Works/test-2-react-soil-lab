@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { CirclePlus, Database, Info, TestTubeDiagonal } from 'lucide-react'
+import { CirclePlus, Database, FlaskConical, Info } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 
@@ -12,7 +12,7 @@ export const moistureRoutes: AppRoute = {
   key: 'Moisture',
   path: 'moisture',
   label: 'Вимірювання вологості',
-  icon: TestTubeDiagonal,
+  icon: FlaskConical,
   Component: MoistureLayout,
   meta: {
     buttons: ['add'],

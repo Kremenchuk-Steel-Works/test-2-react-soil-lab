@@ -2,9 +2,9 @@ import { createFieldRegistry } from '@/utils/react-hook-form/createFieldRegistry
 
 export const measurementsGenerateReportFieldRegistry = createFieldRegistry({
   dateFrom: {
-    label: { default: 'Дата й час від' },
+    label: { default: 'Від (дд.мм.рррр)' },
   },
   dateTo: {
-    label: { default: 'Дата й час до' },
+    label: { default: 'До (дд.мм.рррр)' },
   },
 } as const)

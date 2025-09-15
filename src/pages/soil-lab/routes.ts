@@ -2,6 +2,7 @@ import { lazy } from 'react'
 import { FlaskConical, Users } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
+import { moistureRoutes } from '@/pages/soil-lab/experiments/moisture/routes'
 import { measurementsRoutes } from '@/pages/soil-lab/measurements/routes'
 
 const soilLabLayout = lazy(() => import('@/pages/soil-lab/Layout'))
@@ -24,6 +25,6 @@ export const soilLabRoutes: AppRoute = {
       inSidebar: false,
     },
     measurementsRoutes,
-    // moistureRoutes,
+    moistureRoutes,
   ],
 }
