@@ -1,6 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
 import type { TestMoistureResponse } from '@/entities/soil-lab/experiments/moisure/ui/form/fields'
+import { experimentsMoistureDynamicSections } from '@/entities/soil-lab/experiments/moisure/ui/form/lib/dynamic-sections'
 import {
   moistureCreateFormSchema,
   type MoistureCreateFormFields,
@@ -8,6 +8,8 @@ import {
 import { MoistureCreateFormKit } from '@/features/soil-lab/experiments/moisture/create/ui/formKit'
 import { MoistureCreateBaseForm } from '@/features/soil-lab/experiments/moisture/create/ui/MoistureCreateBaseForm'
 import { createLogger } from '@/shared/lib/logger'
+import { createDynamicEngine } from '@/shared/lib/zod/dynamic-resolver'
+import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import { FormKitProvider } from '@/shared/ui/react-hook-form/FormKit/FormKitProvider'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import type { FormProps } from '@/types/react-hook-form'
@@ -27,8 +29,13 @@ export function MoistureCreateForm({
   onSubmit,
   submitBtnName,
 }: MoistureFormProps) {
+  const { resolver, valueNormalizer } = createDynamicEngine<FormFields>(
+    schema,
+    experimentsMoistureDynamicSections,
+  )
+
   const form = useForm<FormFields>({
-    resolver: zodResolver(schema),
+    resolver,
     defaultValues,
   })
   const {
@@ -52,11 +59,17 @@ export function MoistureCreateForm({
     <FormProvider {...form}>
       <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
         <FormKitProvider value={Form}>
-          <MoistureCreateBaseForm
+          <DynamicFieldsProvider
+            sections={experimentsMoistureDynamicSections}
             responseData={responseData}
-            isSubmitting={isSubmitting}
-            submitBtnName={submitBtnName}
-          />
+            valueNormalizer={valueNormalizer}
+          >
+            <MoistureCreateBaseForm
+              responseData={responseData}
+              isSubmitting={isSubmitting}
+              submitBtnName={submitBtnName}
+            />
+          </DynamicFieldsProvider>
         </FormKitProvider>
       </FormLayout>
     </FormProvider>

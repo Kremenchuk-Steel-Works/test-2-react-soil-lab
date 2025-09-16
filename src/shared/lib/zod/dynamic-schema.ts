@@ -1,10 +1,14 @@
-import { z, ZodObject, type ZodRawShape } from 'zod'
+import { z, ZodObject, type ZodRawShape, type ZodTypeAny } from 'zod'
 import { logger } from '@/shared/lib/logger'
+import { getCoreSchema, normalizeBySchema } from '@/shared/lib/zod/zod-normalize'
 
 export const ANY_VALUE = '__ANY__' as const
 
+export type ConditionPredicateCtx = { form: Record<string, unknown> }
+export type ConditionPredicate = (value: unknown, ctx: ConditionPredicateCtx) => boolean
+
 type ConditionPrimitive = string | number | boolean
-type ConditionValue = ConditionPrimitive | ConditionPrimitive[]
+type ConditionValue = ConditionPrimitive | ConditionPrimitive[] | ConditionPredicate
 type ConditionsMap = Record<string, ConditionValue>
 
 export type BaseDynamicComponentProps = object
@@ -40,6 +44,33 @@ export type DynamicSectionsConfig<SectionKey extends string = string> = Readonly
   Record<SectionKey, DynamicFieldConfig>
 >
 
+export function createSectionsConfig<const T extends DynamicSectionsConfig<string>>(
+  sections: T,
+): T {
+  return sections
+}
+
+export function flattenRules(sections: DynamicSectionsConfig): DynamicFieldConfig {
+  return Object.values(sections).flat()
+}
+
+// Нормализатор значений для checkConditions
+export type ValueNormalizer = (key: string, value: unknown) => unknown
+const identityNormalizer: ValueNormalizer = (_key, v) => v
+
+/** Построить нормализатор значений на основе base-схемы (использует ту же логику, что zn) */
+export function buildValueNormalizerFromZod<T extends ZodObject<ZodRawShape>>(
+  base: T,
+): ValueNormalizer {
+  const shape = base.shape
+  const map = new Map<string, ZodTypeAny>()
+  for (const k of Object.keys(shape)) map.set(k, shape[k])
+  return (key: string, value: unknown) => {
+    const s = map.get(key)
+    return s ? normalizeBySchema(getCoreSchema(s), value) : value
+  }
+}
+
 function isPresent(v: unknown) {
   return v !== null && v !== undefined && v !== ''
 }
@@ -48,42 +79,69 @@ function isPresenceBased(cv: ConditionValue): boolean {
   return cv === ANY_VALUE || (Array.isArray(cv) && (cv as ConditionPrimitive[]).includes(ANY_VALUE))
 }
 
-function valueMatchesCondition(formValue: unknown, cv: ConditionValue): boolean {
-  if (isPresenceBased(cv)) return isPresent(formValue)
-  if (Array.isArray(cv))
-    return (cv as ConditionPrimitive[]).includes(formValue as ConditionPrimitive)
-  return formValue === cv
+function isPredicate(cv: ConditionValue): cv is ConditionPredicate {
+  return typeof cv === 'function'
 }
 
-export function checkConditions(formData: Record<string, unknown>, rule: DynamicRule): boolean {
+// Включаем нормализацию и предикаты
+function valueMatchesCondition(
+  formValueRaw: unknown,
+  cv: ConditionValue,
+  key: string,
+  normalize: ValueNormalizer,
+  formData: Record<string, unknown>,
+): boolean {
+  const formValue = normalize(key, formValueRaw)
+
+  // Если значения по факту нет — ни один предикат не должен срабатывать
+  if (isPredicate(cv)) {
+    if (formValue === '' || formValue === undefined || formValue === null) return false
+    return cv(formValue, { form: formData })
+  }
+
+  if (isPresenceBased(cv)) return isPresent(formValue)
+
+  if (Array.isArray(cv)) {
+    const normalized = (cv as ConditionPrimitive[]).map((x) => normalize(key, x))
+    return normalized.some((x) => Object.is(x, formValue))
+  }
+
+  const rhs = normalize(key, cv)
+  return Object.is(formValue, rhs)
+}
+
+export type CheckOptions = { normalize?: ValueNormalizer }
+
+export function checkConditions(
+  formData: Record<string, unknown>,
+  rule: DynamicRule,
+  opts?: CheckOptions,
+): boolean {
   const { conditions, exceptions } = rule
+  const normalize = opts?.normalize ?? identityNormalizer
+
   for (const name in conditions) {
     logger.debug(
-      `[dynamic-schema] Checking field: '${name}'. Form value is:`,
+      `[dynamic-schema] Checking field: '${name}'. Raw:`,
       formData[name],
-      `Type: ${typeof formData[name]}`,
+      `→ normalized:`,
+      normalize(name, formData[name]),
     )
-    if (!valueMatchesCondition(formData[name], conditions[name])) return false
+    if (!valueMatchesCondition(formData[name], conditions[name], name, normalize, formData)) {
+      return false
+    }
   }
   if (exceptions) {
     for (const name in exceptions) {
-      if (valueMatchesCondition(formData[name], exceptions[name])) return false
+      if (valueMatchesCondition(formData[name], exceptions[name], name, normalize, formData)) {
+        return false
+      }
     }
   }
   return true
 }
 
-/* Декларация секций с жёсткой типизацией ключей. */
-export function createSectionsConfig<const T extends DynamicSectionsConfig<string>>(
-  sections: T,
-): T {
-  return sections
-}
-
-/* Плоский список правил. */
-export function flattenRules(sections: DynamicSectionsConfig): DynamicFieldConfig {
-  return Object.values(sections).flat()
-}
+// === Ниже — прежняя логика динамической схемы, но с учётом normalize + предикатов ===
 
 /** Все ключи, валидируемые правилами. */
 function collectRuleKeys(rules: DynamicFieldConfig): Set<string> {
@@ -101,25 +159,19 @@ function relaxBaseForRuleKeys<T extends ZodObject<ZodRawShape>>(
   rules: DynamicFieldConfig,
 ): T {
   const ruleKeys = collectRuleKeys(rules)
-
   const patch: ZodRawShape = Object.create(null) as ZodRawShape
-
   const baseShape = base.shape
   for (const key of ruleKeys) {
     const def = baseShape[key]
-    // Добавляем только существующие в base ключи
-    if (def) {
-      patch[key] = def.optional()
-    }
+    if (def) patch[key] = def.optional()
   }
-
   return (base as ZodObject<ZodRawShape>).extend(patch) as unknown as T
 }
 
 type SignatureMode = 'presence' | 'value'
 type RuleCondEntry = { key: string; mode: SignatureMode }
 
-/** Подготовка entries для подписи каждого правила (dedup + «value» сильнее «presence» + сортировка). */
+/** Подготовка entries для подписи каждого правила (учитываем предикаты как 'value'). */
 function prepareRuleCondEntries(rules: DynamicFieldConfig): RuleCondEntry[][] {
   return rules.map((r) => {
     const dedup = new Map<string, SignatureMode>()
@@ -133,15 +185,13 @@ function prepareRuleCondEntries(rules: DynamicFieldConfig): RuleCondEntry[][] {
     }
     push(r.conditions)
     push(r.exceptions)
-
-    // Детерминированный порядок — по ключу
     return Array.from(dedup.entries())
       .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
       .map(([key, mode]) => ({ key, mode }))
   })
 }
 
-/** Безопасная сигнатура значения: без JSON.stringify, чтобы не падать на BigInt/циклах. */
+/** Безопасная сигнатура значения */
 function valueToSig(v: unknown): string {
   const t = typeof v
   if (v === null) return 'null'
@@ -155,7 +205,6 @@ function valueToSig(v: unknown): string {
   if (t === 'boolean') return `boolean:${(v as boolean) ? 'true' : 'false'}`
   if (t === 'undefined') return 'undefined:undefined'
   if (t === 'bigint') return `bigint:${(v as bigint).toString()}`
-  // object/function/symbol — нам достаточно факта типа + presence
   return t
 }
 
@@ -172,39 +221,26 @@ function buildRuleSignature(values: Record<string, unknown>, entries: RuleCondEn
   return buf
 }
 
-/**
- * Динамическая Zod-схема с покомпонентной мемоизацией:
- * - для каждого правила считаем свою подпись (presence/value);
- * - пересчитываем и логируем только правила с изменившейся подписью;
- * - удаляем ВСЕ поля неактивных правил (в т.ч. никогда не активировавшихся).
- *
- * ВАЖНО: схема содержит внутреннее состояние; создавай её на инстанс формы,
- * не шарь один и тот же объект схемы между конкурентными запросами/пользователями.
- */
+/** Динамическая Zod-схема + мемоизация (как было), но с нормализацией и предикатами */
 export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
   base: T,
   sections: DynamicSectionsConfig,
 ) {
   const rules = flattenRules(sections)
   const relaxedBase = relaxBaseForRuleKeys(base, rules)
+  const normalize = buildValueNormalizerFromZod(base)
 
   const ruleCondEntries = prepareRuleCondEntries(rules)
   const ruleSchemaKeys = rules.map((r) => Object.keys(r.schema.shape))
-
-  // Все rule-keys (нужны для корректного strip с самого старта)
   const allRuleKeys = new Set<string>(ruleSchemaKeys.flat())
 
-  // Кэш состояния
   let initialized = false
   let lastRuleSigs: string[] = []
   let activeRuleFlags: boolean[] = []
 
-  // Счётчики активности по ключам (ключ присутствует => cnt>0)
   const keyActiveCount = new Map<string, number>()
-  // Инициализируем НУЛЯМИ для всех rule-keys, чтобы strip работал даже если правило НИКОГДА не включалось
   for (const k of allRuleKeys) keyActiveCount.set(k, 0)
 
-  // Вычисляем map активности ключей (true, если cnt>0)
   const buildActiveKeyMap = (): Map<string, boolean> => {
     const m = new Map<string, boolean>()
     for (const k of allRuleKeys) m.set(k, (keyActiveCount.get(k) ?? 0) > 0)
@@ -216,67 +252,51 @@ export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
     if (typeof input !== 'object' || input === null) return input
     const rawValues = input as Record<string, unknown>
 
-    // Первый вызов — полная инициализация без двойного инкремента
     if (!initialized) {
       lastRuleSigs = rules.map((_, i) => buildRuleSignature(rawValues, ruleCondEntries[i]))
-      activeRuleFlags = rules.map((r) => checkConditions(rawValues, r))
-
-      // Счётчики ключей
+      activeRuleFlags = rules.map((r) => checkConditions(rawValues, r, { normalize }))
       for (let i = 0; i < rules.length; i++) {
         if (activeRuleFlags[i]) {
           for (const k of ruleSchemaKeys[i]) keyActiveCount.set(k, (keyActiveCount.get(k) ?? 0) + 1)
         }
       }
-
       activeKeyMap = buildActiveKeyMap()
       initialized = true
     } else {
-      // Частичный пересчёт активности правил по их индивидуальным подписям
       let anyRuleToggled = false
-
       for (let i = 0; i < rules.length; i++) {
         const sig = buildRuleSignature(rawValues, ruleCondEntries[i])
         if (sig === lastRuleSigs[i]) continue
         lastRuleSigs[i] = sig
 
         const prev = activeRuleFlags[i]
-        const next = checkConditions(rawValues, rules[i]) // лог сработает ТОЛЬКО при изменении подписи
+        const next = checkConditions(rawValues, rules[i], { normalize })
         if (prev !== next) {
           activeRuleFlags[i] = next
           anyRuleToggled = true
           const keys = ruleSchemaKeys[i]
-          if (next) {
-            for (const k of keys) keyActiveCount.set(k, (keyActiveCount.get(k) ?? 0) + 1)
-          } else {
+          if (next) for (const k of keys) keyActiveCount.set(k, (keyActiveCount.get(k) ?? 0) + 1)
+          else
             for (const k of keys)
               keyActiveCount.set(k, Math.max(0, (keyActiveCount.get(k) ?? 0) - 1))
-          }
         }
       }
-
-      // Обновляем карту активности ключей только при изменениях
-      if (anyRuleToggled) {
-        activeKeyMap = buildActiveKeyMap()
-      }
+      if (anyRuleToggled) activeKeyMap = buildActiveKeyMap()
     }
 
-    //  Стрип неактивных полей (включая те, что НИ РАЗУ не были активны)
     const stripped: Record<string, unknown> = { ...rawValues }
     for (const k of allRuleKeys) {
       const isActive = activeKeyMap.get(k) ?? false
       if (!isActive && k in stripped) delete stripped[k]
     }
 
-    // Валидируем только активные rule-схемы поверх base
     for (let i = 0; i < rules.length; i++) {
       if (!activeRuleFlags[i]) continue
       const r = rules[i].schema.safeParse(stripped)
       if (!r.success) r.error.issues.forEach((iss) => ctx.addIssue(iss))
     }
-
     return stripped
   }, relaxedBase)
 
-  // pipe — чтобы сохранить вывод base-типа
   return z.any().pipe(processed)
 }

@@ -1,11 +1,11 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
+import { experimentsMixturesOptions } from '@/entities/soil-lab/experiments/model/mixtures'
 import { moistureFieldRegistry } from '@/entities/soil-lab/experiments/moisure/model/fields-registry'
-import { ExperimentsMeasurementForm } from '@/entities/soil-lab/experiments/moisure/ui/form/ExperimentsMeasurementForm'
-import { experimentsMeasurementFormDefaultValues } from '@/entities/soil-lab/experiments/moisure/ui/form/schema'
 import Button from '@/shared/ui/button/Button'
 import InputField from '@/shared/ui/input-field/InputField'
-import { DynamicFieldArray } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArray'
+import { DynamicFieldArea } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArea'
+import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import type { FormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
 import { makeBinders } from '@/utils/react-hook-form/makeBinders'
 
@@ -20,19 +20,27 @@ export function useMoistureFormFields<T extends FieldValues>(Form: FormKit<T>, c
   ctxRef.current = ctx
 
   const Fields = useMemo(() => {
-    const { F, V } = makeBinders<T, Ctx>(ctxRef)
+    const { F, FA, V } = makeBinders<T, Ctx>(ctxRef)
 
-    const { moldingSandNumber, ambientTempMoldAssemblyArea, measurements } = moistureFieldRegistry
+    const { moldingSandNumber, ambientTempMoldAssemblyArea, moistureContentPercent } =
+      moistureFieldRegistry
 
     return Object.freeze({
-      Title: V('Title', () => <h5 className="layout-text">Визначення масової частки вологи </h5>),
+      Title: V('Title', () => <h5 className="layout-text">Визначення масової частки вологи</h5>),
 
       [moldingSandNumber.key]: F(moldingSandNumber.key, (name) => (
-        <Form.Field name={name}>
-          {({ register }) => (
-            <InputField label={moldingSandNumber.label.default + ' *'} {...register} />
+        <Form.Controller name={name}>
+          {({ field, fieldState }) => (
+            <FormSelectField
+              field={field}
+              fieldState={fieldState}
+              options={experimentsMixturesOptions}
+              isVirtualized
+              isClearable
+              placeholder={moldingSandNumber.label.default + ' *'}
+            />
           )}
-        </Form.Field>
+        </Form.Controller>
       )),
 
       [ambientTempMoldAssemblyArea.key]: F(ambientTempMoldAssemblyArea.key, (name) => (
@@ -43,17 +51,17 @@ export function useMoistureFormFields<T extends FieldValues>(Form: FormKit<T>, c
         </Form.Field>
       )),
 
-      [measurements.key]: F(measurements.key, (name, { responseData }) => (
-        <Form.WithError name={name}>
-          <DynamicFieldArray
-            title={measurements.label.default}
-            label="значення"
-            name={measurements.key}
-            form={ExperimentsMeasurementForm}
-            defaultItem={experimentsMeasurementFormDefaultValues}
-            itemsData={responseData?.measurements}
-          />
-        </Form.WithError>
+      moistureContentPercentDynamic: FA(
+        [ambientTempMoldAssemblyArea.key, moistureContentPercent.key] as const,
+        () => <DynamicFieldArea section={ambientTempMoldAssemblyArea.key} />,
+      ),
+
+      [moistureContentPercent.key]: F(moistureContentPercent.key, (name) => (
+        <Form.Field name={name}>
+          {({ register }) => (
+            <InputField label={moistureContentPercent.label.default + ' *'} {...register} />
+          )}
+        </Form.Field>
       )),
 
       SubmitButton: V(

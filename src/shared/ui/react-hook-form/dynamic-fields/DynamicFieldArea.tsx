@@ -1,5 +1,8 @@
 import { Fragment, useMemo, type ReactNode } from 'react'
-import { useActiveRules, useDynamicMeta } from './DynamicFieldsContext'
+import {
+  useActiveRules,
+  useDynamicMeta,
+} from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 
 interface DynamicFieldAreaProps {
   section: string

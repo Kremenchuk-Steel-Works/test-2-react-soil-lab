@@ -3,8 +3,8 @@ import {
   type ExperimentTypeConfig,
 } from '@/entities/soil-lab/experiments/types/experiments-config'
 
-export const MOISTURE_CONFIG: ExperimentTypeConfig = {
-  [MIXTURES[13]]: {
+export const experimentsMoistureConfig: ExperimentTypeConfig = {
+  [MIXTURES['13']]: {
     norm: {
       moistureContentPercent: {
         byRange: [
@@ -14,9 +14,8 @@ export const MOISTURE_CONFIG: ExperimentTypeConfig = {
       },
     },
     round: { digits: 2 },
-    differenceTreshold: { mode: 'absolute', value: 0.15 },
   },
-  [MIXTURES[14]]: {
+  [MIXTURES['14']]: {
     norm: {
       moistureContentPercent: {
         byRange: [
@@ -26,9 +25,8 @@ export const MOISTURE_CONFIG: ExperimentTypeConfig = {
       },
     },
     round: { digits: 2 },
-    differenceTreshold: { mode: 'absolute', value: 0.15 },
   },
-  [MIXTURES[15]]: {
+  [MIXTURES['15']]: {
     norm: {
       moistureContentPercent: {
         byRange: [
@@ -38,6 +36,5 @@ export const MOISTURE_CONFIG: ExperimentTypeConfig = {
       },
     },
     round: { digits: 2 },
-    differenceTreshold: { mode: 'absolute', value: 0.15 },
   },
 }

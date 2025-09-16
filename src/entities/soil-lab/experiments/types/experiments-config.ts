@@ -1,7 +1,7 @@
 export const MIXTURES = {
-  '13': 13,
-  '14': 14,
-  '15': 15,
+  '13': '13',
+  '14': '14',
+  '15': '15',
 } as const
 
 export type MixtureKey = (typeof MIXTURES)[keyof typeof MIXTURES]

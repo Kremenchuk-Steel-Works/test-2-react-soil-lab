@@ -28,7 +28,7 @@ export function MoistureCreateBaseForm({
 
       <F.ambientTempMoldAssemblyArea />
 
-      <F.measurements />
+      <F.moistureContentPercentDynamic />
 
       <F.SubmitButton text={submitBtnName} disabled={isSubmitting} />
     </>

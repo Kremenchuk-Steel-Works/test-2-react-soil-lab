@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, isAxiosError, type AxiosRequestConfig } from 'axios'
 import axiosCaseConverter from 'axios-case-converter'
 import { API_URL } from '@/shared/config/env'
 import { logger } from '@/shared/lib/logger'
@@ -30,6 +30,16 @@ const toLoggable = (value: unknown): unknown => {
     }
   }
   return value
+}
+
+// Проверяем, нужно ли нам логировать ошибку
+const shouldSilenceExpired401 = (error: AxiosError): boolean => {
+  const status = error.response?.status
+  const detail = (error.response?.data as { detail?: string } | undefined)?.detail
+
+  const cfg = error.config as (AxiosRequestConfig & { _retry?: boolean }) | undefined
+  // Первый 401 "Access token has expired" нам логировать не нужно — его перехватит refresh-интерцептор
+  return status === 401 && detail === 'Access token has expired' && !cfg?._retry
 }
 
 // Request Interceptor
@@ -72,6 +82,11 @@ api.interceptors.response.use(
     return response
   },
   (error: AxiosError) => {
+    // Тихо выходим для первого 401 "Access token has expired": пусть это обработает refresh-интерцептор.
+    if (isAxiosError(error) && shouldSilenceExpired401(error)) {
+      return Promise.reject(error)
+    }
+
     if (
       error.code === AxiosError.ERR_CANCELED ||
       axios.isCancel?.(error) ||

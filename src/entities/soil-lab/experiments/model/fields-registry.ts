@@ -10,8 +10,4 @@ export const experimentsFieldRegistry = createFieldRegistry({
       short: 'Температура (°C)',
     },
   },
-
-  measurements: {
-    label: { default: 'Значення' },
-  },
 } as const)

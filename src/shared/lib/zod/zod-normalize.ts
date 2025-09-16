@@ -1,7 +1,7 @@
 import { z, type ZodEffects, type ZodNumber, type ZodString, type ZodTypeAny } from 'zod'
 
 // Для строк
-const stringNormalizeLogic = (value: unknown) => {
+export const stringNormalizeLogic = (value: unknown) => {
   if (typeof value === 'string') {
     const trimmed = value.trim()
     return trimmed === '' ? undefined : trimmed
@@ -10,7 +10,7 @@ const stringNormalizeLogic = (value: unknown) => {
 }
 
 // Для чисел
-const numberNormalizeLogic = (value: unknown) => {
+export const numberNormalizeLogic = (value: unknown) => {
   if (value === null) return null
   if (value === undefined) return undefined
 
@@ -28,7 +28,7 @@ const numberNormalizeLogic = (value: unknown) => {
 }
 
 // Рекурсивно "разворачиваем" схему, чтобы найти ядро
-function getCoreSchema<T extends ZodTypeAny>(schema: T): ZodTypeAny {
+export function getCoreSchema<T extends ZodTypeAny>(schema: T): ZodTypeAny {
   if (schema instanceof z.ZodOptional || schema instanceof z.ZodNullable) {
     return getCoreSchema(schema.unwrap() as ZodTypeAny)
   }
@@ -36,6 +36,14 @@ function getCoreSchema<T extends ZodTypeAny>(schema: T): ZodTypeAny {
     return getCoreSchema(schema.innerType() as ZodTypeAny)
   }
   return schema
+}
+
+/** Нормализуем значение согласно типу ядра схемы (то же, что делает zn) */
+export function normalizeBySchema<T extends ZodTypeAny>(schema: T, value: unknown): unknown {
+  const core = getCoreSchema(schema)
+  if (core instanceof z.ZodString) return stringNormalizeLogic(value)
+  if (core instanceof z.ZodNumber) return numberNormalizeLogic(value)
+  return value
 }
 
 // Перегрузки

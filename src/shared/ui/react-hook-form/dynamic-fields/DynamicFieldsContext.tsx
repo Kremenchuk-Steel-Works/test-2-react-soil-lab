@@ -1,10 +1,17 @@
 import { createContext, memo, useContext, useEffect, useMemo, useRef, type ReactNode } from 'react'
-import { useFormContext, useWatch, type FieldPath, type FieldValues } from 'react-hook-form'
+import {
+  useFormContext,
+  useWatch,
+  type FieldPath,
+  type FieldValues,
+  type Mode,
+} from 'react-hook-form'
 import { createLogger } from '@/shared/lib/logger'
 import {
   checkConditions,
   flattenRules,
   type DynamicSectionsConfig,
+  type ValueNormalizer,
 } from '@/shared/lib/zod/dynamic-schema'
 
 const logger = createLogger('DynamicFields')
@@ -28,7 +35,22 @@ interface ProviderProps<
   sections: DynamicSectionsConfig<SectionKey>
   options?: TOptions
   responseData?: TResponseData
+  valueNormalizer?: ValueNormalizer
+  clearErrorsForUnrequired?: boolean
+  /** Опционально: форсировать режим (перекрывает auto-детект из RHF) */
+  forceValidationMode?: Mode
   children: ReactNode
+}
+
+/** Безопасно читаем режимы из RHF (внутреннее поле, но с защитой и без избыточных assertion) */
+type RHFPrivateOpts = { mode?: Mode; reValidateMode?: 'onChange' | 'onBlur' }
+function useResolvedModes(): { mode: Mode; reValidateMode: 'onChange' | 'onBlur' } {
+  const { control } = useFormContext()
+  const opts: RHFPrivateOpts | undefined = (control as unknown as { _options?: RHFPrivateOpts })
+    ?._options
+  const mode: Mode = opts?.mode ?? 'onSubmit'
+  const reValidateMode: 'onChange' | 'onBlur' = opts?.reValidateMode ?? 'onChange'
+  return { mode, reValidateMode }
 }
 
 export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
@@ -41,14 +63,29 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
   sections,
   options,
   responseData,
+  valueNormalizer,
+  clearErrorsForUnrequired = true,
+  forceValidationMode,
 }: ProviderProps<TOptions, TResponseData, SectionKey>) {
-  const { control, getValues, resetField } = useFormContext<TFieldValues>()
+  const { control, getValues, resetField, clearErrors, trigger, formState, getFieldState } =
+    useFormContext<TFieldValues>()
+
+  const { mode: autoMode } = useResolvedModes()
+  const validationMode: Mode = forceValidationMode ?? autoMode
+
   const allRules = useMemo(
     () => flattenRules(sections) as ReadonlyArray<Parameters<typeof checkConditions>[1]>,
     [sections],
   )
 
-  // Подписываемся на поля из conditions/exceptions
+  // ruleIndex -> keys[]
+  const ruleIdxToKeys = useMemo(() => {
+    return allRules.map((r) =>
+      Object.keys((r as { schema?: { shape?: Record<string, unknown> } }).schema?.shape ?? {}),
+    )
+  }, [allRules])
+
+  // Подписка только на поля, влияющие на условия/исключения
   const fieldsToWatch = useMemo(() => {
     const set = new Set<string>()
     for (const r of allRules) {
@@ -60,15 +97,15 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
 
   const tick = useWatch<TFieldValues>({ control, name: fieldsToWatch })
 
-  const prevRef = useRef<ActiveRulesState<string>>({})
+  // Вычисление активных правил
+  const prevActiveRef = useRef<ActiveRulesState<string>>({})
   const activeRules = useMemo<ActiveRulesState<string>>(() => {
-    Boolean(tick)
-
+    void tick
     const values = getValues()
     const next: ActiveRulesState<string> = {}
-    for (const r of allRules) next[r.id] = checkConditions(values, r)
-
-    const prev = prevRef.current
+    for (const r of allRules)
+      next[r.id] = checkConditions(values, r, { normalize: valueNormalizer })
+    const prev = prevActiveRef.current
     let changed = Object.keys(prev).length !== Object.keys(next).length
     if (!changed)
       for (const k in next)
@@ -77,41 +114,72 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
           break
         }
     if (!changed) return prev
-    prevRef.current = next
+    prevActiveRef.current = next
     return next
-  }, [tick, allRules, getValues])
+  }, [tick, allRules, getValues, valueNormalizer])
 
-  // При деактивации правила: сбрасываем поля только если этот ключ не нужен никаким другим активным правилам
+  // Чистка значений/ошибок при выключении правил
   const prevResetRef = useRef<ActiveRulesState<string>>({})
   useEffect(() => {
     logger.debug('[DynamicFields] activeRules changed', activeRules)
     const prev = prevResetRef.current
 
-    // Собираем ключи, которые нужны текущим активным правилам
     const keysRequiredByActive = new Set<string>()
-    for (const r of allRules) {
-      if (!activeRules[r.id]) continue
-      const shape = (r as { schema?: { shape?: Record<string, unknown> } }).schema?.shape ?? {}
-      const keys = Object.keys(shape)
-      keys.forEach((k) => keysRequiredByActive.add(k))
+    for (let i = 0; i < allRules.length; i++) {
+      if (!activeRules[allRules[i].id]) continue
+      for (const k of ruleIdxToKeys[i]) keysRequiredByActive.add(k)
     }
 
-    for (const r of allRules) {
-      const was = prev[r.id]
-      const now = activeRules[r.id]
+    for (let i = 0; i < allRules.length; i++) {
+      const id = allRules[i].id
+      const was = prev[id]
+      const now = activeRules[id]
       if (was && !now) {
-        const shape = (r as { schema?: { shape?: Record<string, unknown> } }).schema?.shape ?? {}
-        const fields = Object.keys(shape) as FieldPath<TFieldValues>[]
-        fields.forEach((name) => {
-          // Если ключ больше никем не требуется — очищаем значение и ошибку (keepError=false)
+        for (const name of ruleIdxToKeys[i] as FieldPath<TFieldValues>[]) {
           if (!keysRequiredByActive.has(String(name))) {
-            resetField(name, { keepError: false, keepDirty: false, keepTouched: false })
+            resetField(name, {
+              keepError: !clearErrorsForUnrequired,
+              keepDirty: false,
+              keepTouched: false,
+            })
+            if (clearErrorsForUnrequired) clearErrors(name)
           }
-        })
+        }
       }
     }
     prevResetRef.current = activeRules
-  }, [activeRules, allRules, resetField])
+  }, [activeRules, allRules, resetField, clearErrors, clearErrorsForUnrequired, ruleIdxToKeys])
+
+  // Авто-перевалидация зависимых полей при смене активных правил
+  const prevToggleRef = useRef<ActiveRulesState<string>>({})
+  useEffect(() => {
+    const prev = prevToggleRef.current
+    const toggledRuleIdxs: number[] = []
+    for (let i = 0; i < allRules.length; i++) {
+      const id = allRules[i].id
+      if (prev[id] !== undefined && prev[id] !== activeRules[id]) toggledRuleIdxs.push(i)
+    }
+    prevToggleRef.current = activeRules
+    if (toggledRuleIdxs.length === 0) return
+
+    // Кандидаты на перевалидацию
+    const names = new Set<string>()
+    for (const idx of toggledRuleIdxs) for (const k of ruleIdxToKeys[idx]) names.add(k)
+    let fieldsToRevalidate = Array.from(names) as FieldPath<TFieldValues>[]
+
+    // Поведение под режим (без "any" и без лишних assertions):
+    if (validationMode === 'onSubmit' && !formState.isSubmitted) return
+
+    if (validationMode === 'onBlur' || validationMode === 'onTouched') {
+      fieldsToRevalidate = fieldsToRevalidate.filter((name) => {
+        const st = getFieldState(name, formState)
+        return st.isTouched || !!st.error || formState.isSubmitted
+      })
+    }
+
+    if (fieldsToRevalidate.length === 0) return
+    void trigger(fieldsToRevalidate, { shouldFocus: false })
+  }, [activeRules, allRules, ruleIdxToKeys, validationMode, formState, trigger, getFieldState])
 
   const meta = useMemo(
     () => ({ sections, options, responseData }) as DynamicMeta<TOptions, TResponseData, SectionKey>,
