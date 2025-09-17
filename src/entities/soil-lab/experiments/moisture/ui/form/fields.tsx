@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { experimentsMixturesOptions } from '@/entities/soil-lab/experiments/model/mixtures'
-import { moistureFieldRegistry } from '@/entities/soil-lab/experiments/moisure/model/fields-registry'
+import { moistureFieldRegistry } from '@/entities/soil-lab/experiments/moisture/model/fields-registry'
 import Button from '@/shared/ui/button/Button'
 import InputField from '@/shared/ui/input-field/InputField'
 import { DynamicFieldArea } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArea'
@@ -52,8 +52,12 @@ export function useMoistureFormFields<T extends FieldValues>(Form: FormKit<T>, c
       )),
 
       moistureContentPercentDynamic: FA(
-        [ambientTempMoldAssemblyArea.key, moistureContentPercent.key] as const,
-        () => <DynamicFieldArea section={ambientTempMoldAssemblyArea.key} />,
+        [
+          moldingSandNumber.key,
+          ambientTempMoldAssemblyArea.key,
+          moistureContentPercent.key,
+        ] as const,
+        () => <DynamicFieldArea section={moistureContentPercent.key} />,
       ),
 
       [moistureContentPercent.key]: F(moistureContentPercent.key, (name) => (
@@ -66,7 +70,7 @@ export function useMoistureFormFields<T extends FieldValues>(Form: FormKit<T>, c
 
       SubmitButton: V(
         'SubmitButton',
-        ({ text, disabled }: { text: string; disabled?: boolean }) => (
+        ({ text, disabled }: { text?: string; disabled?: boolean }) => (
           <Form.WithError name="root">
             <Button className="w-full" type="submit" disabled={disabled}>
               {text}

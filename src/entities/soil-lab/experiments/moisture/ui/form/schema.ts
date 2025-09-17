@@ -1,5 +1,5 @@
 import z from 'zod'
-import { moistureFieldRegistry } from '@/entities/soil-lab/experiments/moisure/model/fields-registry'
+import { moistureFieldRegistry } from '@/entities/soil-lab/experiments/moisture/model/fields-registry'
 import { zn } from '@/shared/lib/zod/zod-normalize'
 
 const { moldingSandNumber, ambientTempMoldAssemblyArea, moistureContentPercent } =

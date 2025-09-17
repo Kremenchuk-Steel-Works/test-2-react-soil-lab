@@ -1,8 +1,8 @@
 import {
   useMoistureFormFields,
   type TestMoistureResponse,
-} from '@/entities/soil-lab/experiments/moisure/ui/form/fields'
-import type { MoistureContentPercentFormFields } from '@/entities/soil-lab/experiments/moisure/ui/form/lib/dynamic-sections'
+} from '@/entities/soil-lab/experiments/moisture/ui/form/fields'
+import type { MoistureContentPercentFormFields } from '@/entities/soil-lab/experiments/moisture/ui/form/lib/dynamic-sections'
 import { useDynamicMeta } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/useFormKit'
 

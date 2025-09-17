@@ -74,7 +74,7 @@ export function useMeasurementsFormFields<T extends FieldValues>(Form: FormKit<T
 
       SubmitButton: V(
         'SubmitButton',
-        ({ text, disabled }: { text: string; disabled?: boolean }) => (
+        ({ text, disabled }: { text?: string; disabled?: boolean }) => (
           <Form.WithError name="root">
             <Button className="w-full" type="submit" disabled={disabled}>
               {text}

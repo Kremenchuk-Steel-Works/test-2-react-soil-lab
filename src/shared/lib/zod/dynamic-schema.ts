@@ -9,7 +9,7 @@ export type ConditionPredicate = (value: unknown, ctx: ConditionPredicateCtx) =>
 
 type ConditionPrimitive = string | number | boolean
 type ConditionValue = ConditionPrimitive | ConditionPrimitive[] | ConditionPredicate
-type ConditionsMap = Record<string, ConditionValue>
+export type ConditionsMap = Record<string, ConditionValue>
 
 export type BaseDynamicComponentProps = object
 
@@ -44,10 +44,45 @@ export type DynamicSectionsConfig<SectionKey extends string = string> = Readonly
   Record<SectionKey, DynamicFieldConfig>
 >
 
-export function createSectionsConfig<const T extends DynamicSectionsConfig<string>>(
-  sections: T,
-): T {
-  return sections
+type DynamicRuleInput = Omit<DynamicRule, 'id'> & { id?: string }
+type DynamicFieldConfigInput = ReadonlyArray<DynamicRuleInput>
+type DynamicSectionsInput<S extends string = string> = Readonly<Record<S, DynamicFieldConfigInput>>
+
+/** Простой автогенератор id: <section>:<index> */
+function autoRuleId(section: string, index: number): string {
+  return `${section}:${index}`
+}
+
+/** Лёгкая проверка коллизий id внутри секции (warn) */
+function warnOnDuplicateIds(section: string, rules: DynamicRule[]): void {
+  const seen = new Set<string>()
+  for (const r of rules) {
+    if (seen.has(r.id)) {
+      logger.warn(`[dynamic-schema] Duplicate rule id in section '${section}': '${r.id}'`)
+    } else {
+      seen.add(r.id)
+    }
+  }
+}
+
+/** Создание секций с автоподстановкой id там, где он не указан. */
+export function createSectionsConfig<S extends string>(
+  sections: DynamicSectionsInput<S>,
+): DynamicSectionsConfig<S> {
+  const result: Record<S, DynamicRule[]> = {} as Record<S, DynamicRule[]>
+
+  // Object.keys безопасно приводим к S[]
+  for (const sectionKey of Object.keys(sections) as S[]) {
+    const src = sections[sectionKey] // тип: ReadonlyArray<DynamicRuleInput>
+    const mapped: DynamicRule[] = src.map((rule, idx) => ({
+      ...rule,
+      id: rule.id ?? autoRuleId(sectionKey, idx),
+    }))
+    warnOnDuplicateIds(sectionKey, mapped)
+    result[sectionKey] = mapped
+  }
+
+  return result as DynamicSectionsConfig<S>
 }
 
 export function flattenRules(sections: DynamicSectionsConfig): DynamicFieldConfig {

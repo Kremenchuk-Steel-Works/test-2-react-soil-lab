@@ -1,12 +1,12 @@
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
-import type { TestMoistureResponse } from '@/entities/soil-lab/experiments/moisture/ui/form/fields'
-import { experimentsMoistureDynamicSections } from '@/entities/soil-lab/experiments/moisture/ui/form/lib/dynamic-sections'
+import type { TestExperimentsResponse } from '@/entities/soil-lab/experiments/ui/form/fields'
+import { experimentsDynamicSections } from '@/entities/soil-lab/experiments/ui/form/lib/dynamic-sections'
 import {
-  moistureCreateFormSchema,
-  type MoistureCreateFormFields,
-} from '@/features/soil-lab/experiments/moisture/create/model/schema'
-import { MoistureCreateFormKit } from '@/features/soil-lab/experiments/moisture/create/ui/formKit'
-import { MoistureCreateBaseForm } from '@/features/soil-lab/experiments/moisture/create/ui/MoistureCreateBaseForm'
+  experimentsCreateFormSchema,
+  type ExperimentsCreateFormFields,
+} from '@/features/soil-lab/experiments/model/schema'
+import { ExperimentsCreateBaseForm } from '@/features/soil-lab/experiments/ui/ExperimentsCreateBaseForm'
+import { ExperimentsCreateFormKit } from '@/features/soil-lab/experiments/ui/formKit'
 import { createLogger } from '@/shared/lib/logger'
 import { createDynamicEngine } from '@/shared/lib/zod/dynamic-resolver'
 import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
@@ -14,35 +14,30 @@ import { FormKitProvider } from '@/shared/ui/react-hook-form/FormKit/FormKitProv
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import type { FormProps } from '@/types/react-hook-form'
 
-const logger = createLogger('MoistureCreateForm')
+const logger = createLogger('ExperimentsCreateForm')
 
-type FormFields = MoistureCreateFormFields
-const schema = moistureCreateFormSchema
+type FormFields = ExperimentsCreateFormFields
+const schema = experimentsCreateFormSchema
 
-type MoistureFormProps = FormProps<FormFields, TestMoistureResponse>
+type ExperimentsFormProps = FormProps<FormFields, TestExperimentsResponse>
 
-const Form = MoistureCreateFormKit
+const Form = ExperimentsCreateFormKit
 
-export function MoistureCreateForm({
+export function ExperimentsCreateForm({
   defaultValues,
   responseData,
   onSubmit,
-  submitBtnName,
-}: MoistureFormProps) {
+}: ExperimentsFormProps) {
   const { resolver, valueNormalizer } = createDynamicEngine<FormFields>(
     schema,
-    experimentsMoistureDynamicSections,
+    experimentsDynamicSections,
   )
 
   const form = useForm<FormFields>({
     resolver,
     defaultValues,
   })
-  const {
-    handleSubmit,
-    setError,
-    formState: { isSubmitting },
-  } = form
+  const { handleSubmit, setError } = form
   // Submit
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
@@ -60,15 +55,11 @@ export function MoistureCreateForm({
       <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
         <FormKitProvider value={Form}>
           <DynamicFieldsProvider
-            sections={experimentsMoistureDynamicSections}
+            sections={experimentsDynamicSections}
             responseData={responseData}
             valueNormalizer={valueNormalizer}
           >
-            <MoistureCreateBaseForm
-              responseData={responseData}
-              isSubmitting={isSubmitting}
-              submitBtnName={submitBtnName}
-            />
+            <ExperimentsCreateBaseForm responseData={responseData} />
           </DynamicFieldsProvider>
         </FormKitProvider>
       </FormLayout>

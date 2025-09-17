@@ -1,12 +1,12 @@
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
-import type { TestMoistureResponse } from '@/entities/soil-lab/experiments/moisture/ui/form/fields'
-import { experimentsMoistureDynamicSections } from '@/entities/soil-lab/experiments/moisture/ui/form/lib/dynamic-sections'
+import type { TestStrengthResponse } from '@/entities/soil-lab/experiments/strength/ui/form/fields'
+import { experimentsStrengthDynamicSections } from '@/entities/soil-lab/experiments/strength/ui/form/lib/dynamic-sections'
 import {
-  moistureCreateFormSchema,
-  type MoistureCreateFormFields,
-} from '@/features/soil-lab/experiments/moisture/create/model/schema'
-import { MoistureCreateFormKit } from '@/features/soil-lab/experiments/moisture/create/ui/formKit'
-import { MoistureCreateBaseForm } from '@/features/soil-lab/experiments/moisture/create/ui/MoistureCreateBaseForm'
+  strengthCreateFormSchema,
+  type StrengthCreateFormFields,
+} from '@/features/soil-lab/experiments/strength/create/model/schema'
+import { StrengthCreateFormKit } from '@/features/soil-lab/experiments/strength/create/ui/formKit'
+import { StrengthCreateBaseForm } from '@/features/soil-lab/experiments/strength/create/ui/StrengthCreateBaseForm'
 import { createLogger } from '@/shared/lib/logger'
 import { createDynamicEngine } from '@/shared/lib/zod/dynamic-resolver'
 import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
@@ -14,24 +14,24 @@ import { FormKitProvider } from '@/shared/ui/react-hook-form/FormKit/FormKitProv
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 import type { FormProps } from '@/types/react-hook-form'
 
-const logger = createLogger('MoistureCreateForm')
+const logger = createLogger('StrengthCreateForm')
 
-type FormFields = MoistureCreateFormFields
-const schema = moistureCreateFormSchema
+type FormFields = StrengthCreateFormFields
+const schema = strengthCreateFormSchema
 
-type MoistureFormProps = FormProps<FormFields, TestMoistureResponse>
+type StrengthFormProps = FormProps<FormFields, TestStrengthResponse>
 
-const Form = MoistureCreateFormKit
+const Form = StrengthCreateFormKit
 
-export function MoistureCreateForm({
+export function StrengthCreateForm({
   defaultValues,
   responseData,
   onSubmit,
   submitBtnName,
-}: MoistureFormProps) {
+}: StrengthFormProps) {
   const { resolver, valueNormalizer } = createDynamicEngine<FormFields>(
     schema,
-    experimentsMoistureDynamicSections,
+    experimentsStrengthDynamicSections,
   )
 
   const form = useForm<FormFields>({
@@ -60,11 +60,11 @@ export function MoistureCreateForm({
       <FormLayout onSubmit={(e) => void handleSubmit(submitHandler)(e)}>
         <FormKitProvider value={Form}>
           <DynamicFieldsProvider
-            sections={experimentsMoistureDynamicSections}
+            sections={experimentsStrengthDynamicSections}
             responseData={responseData}
             valueNormalizer={valueNormalizer}
           >
-            <MoistureCreateBaseForm
+            <StrengthCreateBaseForm
               responseData={responseData}
               isSubmitting={isSubmitting}
               submitBtnName={submitBtnName}

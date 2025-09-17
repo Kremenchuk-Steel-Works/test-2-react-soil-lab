@@ -4,10 +4,14 @@ export const experimentsFieldRegistry = createFieldRegistry({
   moldingSandNumber: {
     label: { default: '№ суміші' },
   },
+  machineType: {
+    label: {
+      default: 'Тип установки',
+    },
+  },
   ambientTempMoldAssemblyArea: {
     label: {
       default: 'Температура на дільниці (°C)',
-      short: 'Температура (°C)',
     },
   },
 } as const)

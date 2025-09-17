@@ -1,5 +1,7 @@
-import type { MixtureKey } from '@/entities/soil-lab/experiments/types/experiments-config'
 import type { Option } from '@/shared/ui/select/ReactSelect'
+
+export const MIXTURES = { '13': '13', '14': '14', '15': '15' } as const
+export type MixtureKey = (typeof MIXTURES)[keyof typeof MIXTURES]
 
 export const experimentsMixturesOptions: Option<MixtureKey>[] = [
   { value: '13', label: '13 (Наповнювальна)' },

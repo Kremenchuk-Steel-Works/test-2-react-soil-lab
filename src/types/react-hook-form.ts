@@ -27,7 +27,7 @@ export interface FormBaseProps<TFormFields, TResponseData = unknown> {
   responseData?: TResponseData
 
   /** Текст на кнопке отправки. */
-  submitBtnName: string
+  submitBtnName?: string
 
   isSubmitting?: boolean
 }

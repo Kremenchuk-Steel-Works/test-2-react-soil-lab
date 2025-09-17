@@ -1,7 +1,7 @@
 import {
   useMoistureFormFields,
   type TestMoistureResponse,
-} from '@/entities/soil-lab/experiments/moisure/ui/form/fields'
+} from '@/entities/soil-lab/experiments/moisture/ui/form/fields'
 import type { MoistureCreateFormFields } from '@/features/soil-lab/experiments/moisture/create/model/schema'
 import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/useFormKit'
 import type { FormBaseProps } from '@/types/react-hook-form'

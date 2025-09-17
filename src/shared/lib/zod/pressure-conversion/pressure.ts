@@ -1,6 +1,6 @@
 export const PressureUnits = {
-  N_PER_CM2: 'N/cm^2',
-  KGF_PER_CM2: 'kgf/cm^2',
+  N_PER_CM2: 'Н/см²',
+  KGF_PER_CM2: 'кгс/см²',
 } as const
 
 export type PressureUnit = (typeof PressureUnits)[keyof typeof PressureUnits]
