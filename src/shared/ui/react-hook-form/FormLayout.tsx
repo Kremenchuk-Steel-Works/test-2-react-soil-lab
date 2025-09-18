@@ -6,12 +6,16 @@ import { cn } from '@/utils/cn'
  * атрибуты тега <form>, например, onSubmit.
  */
 type FormLayoutProps = ComponentProps<'form'> & {
+  as?: 'form' | 'div'
   children: ReactNode
 }
 
-export function FormLayout({ children, className, ...props }: FormLayoutProps) {
-  return (
-    <form className={cn('mx-auto max-w-2xl space-y-3', className)} {...props}>
+export function FormLayout({ children, className, as = 'form', ...props }: FormLayoutProps) {
+  const cls = cn('mx-auto max-w-2xl space-y-3', className)
+  return as === 'div' ? (
+    <div className={cls}>{children}</div>
+  ) : (
+    <form className={cls} {...props}>
       {children}
     </form>
   )

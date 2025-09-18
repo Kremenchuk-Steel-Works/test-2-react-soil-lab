@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import ExperimentsCreate from '@/features/soil-lab/experiments/ui/ExperimentsCreate'
+import { ExperimentsCreateForm } from '@/features/soil-lab/experiments/ui/ExperimentsCreateForm'
 
 export default function ExperimentsAdd() {
   const navigate = useNavigate()
@@ -12,7 +12,7 @@ export default function ExperimentsAdd() {
   return (
     <div className="flex flex-wrap gap-x-2 gap-y-2">
       <div className="w-full">
-        <ExperimentsCreate onSuccess={onSuccess} />
+        <ExperimentsCreateForm submitBtnName="Додати" onSubmit={onSuccess} />
       </div>
     </div>
   )

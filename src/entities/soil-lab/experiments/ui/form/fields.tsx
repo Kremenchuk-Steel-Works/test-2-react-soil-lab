@@ -25,7 +25,7 @@ export function useExperimentsFormFields<T extends FieldValues>(Form: FormKit<T>
     const { moldingSandNumber, ambientTempMoldAssemblyArea, machineType } = experimentsFieldRegistry
 
     return Object.freeze({
-      Title: V('Title', () => <h5 className="layout-text">Эксперимент</h5>),
+      Title: V('Title', () => <h5 className="layout-text">Експеримент</h5>),
 
       [moldingSandNumber.key]: F(moldingSandNumber.key, (name) => (
         <Form.Controller name={name}>
@@ -66,7 +66,7 @@ export function useExperimentsFormFields<T extends FieldValues>(Form: FormKit<T>
       )),
 
       experimentsContentDynamic: FA(
-        [moldingSandNumber.key, ambientTempMoldAssemblyArea.key] as const,
+        [moldingSandNumber.key, machineType.key, ambientTempMoldAssemblyArea.key] as const,
         () => <DynamicFieldArea section={'experimentsContentDynamic'} />,
       ),
     } as const)

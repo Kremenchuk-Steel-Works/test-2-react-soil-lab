@@ -16,7 +16,7 @@ export interface FormProps<TFormFields, TResponseData = unknown> {
   onSubmit: SubmitHandler<TFormFields>
 
   /** Текст на кнопке отправки. */
-  submitBtnName: string
+  submitBtnName?: string
 }
 
 export interface FormBaseProps<TFormFields, TResponseData = unknown> {

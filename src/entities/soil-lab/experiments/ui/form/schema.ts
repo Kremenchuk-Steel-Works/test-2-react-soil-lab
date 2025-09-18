@@ -6,8 +6,8 @@ const { moldingSandNumber, ambientTempMoldAssemblyArea, machineType } = experime
 
 export const experimentsBaseFormSchema = z.object({
   [moldingSandNumber.key]: zn(z.string()),
-  [ambientTempMoldAssemblyArea.key]: zn(z.number()),
   [machineType.key]: zn(z.string()),
+  [ambientTempMoldAssemblyArea.key]: zn(z.number()),
 })
 
 export type ExperimentsBaseFormFields = z.infer<typeof experimentsBaseFormSchema>

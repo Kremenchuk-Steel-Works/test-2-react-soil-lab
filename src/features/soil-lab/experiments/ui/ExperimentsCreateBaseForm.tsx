@@ -22,7 +22,6 @@ export function ExperimentsCreateBaseForm({ responseData }: ExperimentsCreateBas
       <F.moldingSandNumber />
       <F.machineType />
       <F.ambientTempMoldAssemblyArea />
-      <F.experimentsContentDynamic />
     </>
   )
 }

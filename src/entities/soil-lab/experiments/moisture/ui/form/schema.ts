@@ -10,11 +10,3 @@ export const moistureBaseFormSchema = z.object({
   [ambientTempMoldAssemblyArea.key]: zn(z.number()),
   [moistureContentPercent.key]: zn(z.number().nullable().optional()),
 })
-
-// [moistureContentPercent.key]: withUnitConversion(zn(z.number()), {
-//   from: PressureUnits.N_PER_CM2,
-//   to: PressureUnits.KGF_PER_CM2,
-//   min: 1,
-//   max: 5,
-//   round: 2,
-// }),

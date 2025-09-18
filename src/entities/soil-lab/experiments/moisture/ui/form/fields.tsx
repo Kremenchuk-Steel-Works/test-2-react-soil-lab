@@ -70,9 +70,24 @@ export function useMoistureFormFields<T extends FieldValues>(Form: FormKit<T>, c
 
       SubmitButton: V(
         'SubmitButton',
-        ({ text, disabled }: { text?: string; disabled?: boolean }) => (
+        ({
+          text,
+          disabled,
+          mode = 'form',
+          onClick,
+        }: {
+          text?: string
+          disabled?: boolean
+          mode?: 'form' | 'section'
+          onClick?: () => void
+        }) => (
           <Form.WithError name="root">
-            <Button className="w-full" type="submit" disabled={disabled}>
+            <Button
+              className="w-full"
+              disabled={disabled}
+              type={mode === 'form' ? 'submit' : 'button'}
+              onClick={mode === 'section' ? onClick : undefined}
+            >
               {text}
             </Button>
           </Form.WithError>

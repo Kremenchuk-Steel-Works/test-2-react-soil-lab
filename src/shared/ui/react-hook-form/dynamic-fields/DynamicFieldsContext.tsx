@@ -154,17 +154,17 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
   const prevToggleRef = useRef<ActiveRulesState<string>>({})
   useEffect(() => {
     const prev = prevToggleRef.current
-    const toggledRuleIdxs: number[] = []
+    const toggledRuleIndexes: number[] = []
     for (let i = 0; i < allRules.length; i++) {
       const id = allRules[i].id
-      if (prev[id] !== undefined && prev[id] !== activeRules[id]) toggledRuleIdxs.push(i)
+      if (prev[id] !== undefined && prev[id] !== activeRules[id]) toggledRuleIndexes.push(i)
     }
     prevToggleRef.current = activeRules
-    if (toggledRuleIdxs.length === 0) return
+    if (toggledRuleIndexes.length === 0) return
 
     // Кандидаты на перевалидацию
     const names = new Set<string>()
-    for (const idx of toggledRuleIdxs) for (const k of ruleIdxToKeys[idx]) names.add(k)
+    for (const idx of toggledRuleIndexes) for (const k of ruleIdxToKeys[idx]) names.add(k)
     let fieldsToRevalidate = Array.from(names) as FieldPath<TFieldValues>[]
 
     // Поведение под режим (без "any" и без лишних assertions):

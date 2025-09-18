@@ -335,3 +335,31 @@ export function createDynamicSchema<T extends ZodObject<ZodRawShape>>(
 
   return z.any().pipe(processed)
 }
+
+// Вспомогательный тип: извлечь ключи секций из DynamicSectionsConfig<...>
+type SectionsKey<T> = T extends DynamicSectionsConfig<infer S> ? S : never
+
+/**
+ * Объединяет несколько наборов секций.
+ * Ключи результата — union всех ключей аргументов.
+ */
+export function mergeSections<T extends Array<DynamicSectionsConfig<string>>>(
+  ...all: T
+): DynamicSectionsConfig<SectionsKey<T[number]>> {
+  // внутренний словать без readonly — удобно собирать
+  const out: Record<string, DynamicFieldConfig> = {}
+
+  for (const sections of all) {
+    // приводим к индексируемому виду один раз, чтобы не использовать any/unsafe
+    const dict = sections as Record<string, DynamicFieldConfig>
+
+    for (const key of Object.keys(dict)) {
+      const current = out[key]
+      const next = dict[key]
+      out[key] = current ? [...current, ...next] : next.slice()
+    }
+  }
+
+  // строго типизируем возвращаемое значение по union ключей
+  return out as unknown as DynamicSectionsConfig<SectionsKey<T[number]>>
+}
