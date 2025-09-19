@@ -3,7 +3,7 @@ import { createFieldRegistry } from '@/utils/react-hook-form/createFieldRegistry
 
 const moisureBaseFieldRegistry = createFieldRegistry({
   compressiveStrength: {
-    label: { default: 'Міцність на стискання (Н/см2)' },
+    label: { default: 'Міцність на стискання (Н/см²)' },
   },
 } as const)
 

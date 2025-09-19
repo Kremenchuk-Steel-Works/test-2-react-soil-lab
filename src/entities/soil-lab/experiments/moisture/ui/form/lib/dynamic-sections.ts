@@ -1,11 +1,12 @@
 import z from 'zod'
+import { MACHINE_TYPES } from '@/entities/soil-lab/experiments/model/machineTypes'
 import { MIXTURES } from '@/entities/soil-lab/experiments/model/mixtures'
 import { moistureFieldRegistry } from '@/entities/soil-lab/experiments/moisture/model/fields-registry'
 import { MoistureContentPercentDynamicForm } from '@/entities/soil-lab/experiments/moisture/ui/form/components/MoistureContentPercentDynamicForm'
-import { createSectionsConfig } from '@/shared/lib/zod/dynamic-schema'
+import { createScopedSectionsConfig } from '@/shared/lib/zod/dynamic-sections-scoped'
 import { zn } from '@/shared/lib/zod/zod-normalize'
 
-const { moldingSandNumber, ambientTempMoldAssemblyArea, moistureContentPercent } =
+const { moldingSandNumber, machineType, ambientTempMoldAssemblyArea, moistureContentPercent } =
   moistureFieldRegistry
 
 export const moistureContentPercentFormSchema = z.object({
@@ -14,79 +15,105 @@ export const moistureContentPercentFormSchema = z.object({
 
 export type MoistureContentPercentFormFields = z.infer<typeof moistureContentPercentFormSchema>
 
-export const experimentsMoistureDynamicSections = createSectionsConfig({
-  // Секции
+export const experimentsMoistureDynamicSections = createScopedSectionsConfig({
   [moistureContentPercent.key]: [
-    // Смесь 13
+    // Суміш 13
     {
-      conditions: {
-        [moldingSandNumber.key]: (v) => v === MIXTURES['13'],
-        [ambientTempMoldAssemblyArea.key]: (v) => Number(v) >= 18,
-      },
-      schema: z.object({
-        [moistureContentPercent.key]: zn(z.number().min(2.6).max(3.1)),
-      }),
+      conditions: { [moldingSandNumber.key]: (v) => v === MIXTURES['13'] },
       Component: MoistureContentPercentDynamicForm,
+      children: [
+        // Змішувач
+        {
+          conditions: { [machineType.key]: (v) => v === MACHINE_TYPES.mixer },
+          children: [
+            {
+              conditions: { [ambientTempMoldAssemblyArea.key]: (v) => Number(v) >= 18 },
+              schema: z.object({
+                [moistureContentPercent.key]: zn(z.number().min(2.6).max(3.1)),
+              }),
+            },
+            {
+              conditions: { [ambientTempMoldAssemblyArea.key]: (v) => Number(v) < 18 },
+              schema: z.object({
+                [moistureContentPercent.key]: zn(z.number().min(2.5).max(3.0)),
+              }),
+            },
+          ],
+        },
+        // АФЛ
+        {
+          conditions: { [machineType.key]: [MACHINE_TYPES.afl2, MACHINE_TYPES.afl3] },
+          schema: z.object({
+            [moistureContentPercent.key]: zn(z.number().min(2.3).max(3)),
+          }),
+        },
+      ],
     },
+
+    // Суміш 14
     {
-      conditions: {
-        [moldingSandNumber.key]: (v) => v === MIXTURES['13'],
-        [ambientTempMoldAssemblyArea.key]: (v) => Number(v) < 18,
-      },
-      schema: z.object({
-        [moistureContentPercent.key]: zn(z.number().min(2.5).max(3.0)),
-      }),
+      conditions: { [moldingSandNumber.key]: (v) => v === MIXTURES['14'] },
       Component: MoistureContentPercentDynamicForm,
+      children: [
+        // Змішувач
+        {
+          conditions: { [machineType.key]: (v) => v === MACHINE_TYPES.mixer },
+          children: [
+            {
+              conditions: { [ambientTempMoldAssemblyArea.key]: (v) => Number(v) >= 18 },
+              schema: z.object({
+                [moistureContentPercent.key]: zn(z.number().min(3.4).max(3.7)),
+              }),
+            },
+            {
+              conditions: { [ambientTempMoldAssemblyArea.key]: (v) => Number(v) < 18 },
+              schema: z.object({
+                [moistureContentPercent.key]: zn(z.number().min(3.3).max(3.5)),
+              }),
+            },
+          ],
+        },
+        // АФЛ
+        {
+          conditions: { [machineType.key]: [MACHINE_TYPES.afl2, MACHINE_TYPES.afl3] },
+          schema: z.object({
+            [moistureContentPercent.key]: zn(z.number().min(3.2).max(3.5)),
+          }),
+        },
+      ],
     },
-    // Смесь 14
+
+    // Суміш 15
     {
-      conditions: {
-        [moldingSandNumber.key]: (v) => v === MIXTURES['14'],
-        [ambientTempMoldAssemblyArea.key]: (v) => Number(v) >= 18,
-      },
-      schema: z.object({
-        [moistureContentPercent.key]: zn(z.number().min(3.4).max(3.7)),
-      }),
+      conditions: { [moldingSandNumber.key]: (v) => v === MIXTURES['15'] },
       Component: MoistureContentPercentDynamicForm,
-    },
-    {
-      conditions: {
-        [moldingSandNumber.key]: (v) => v === MIXTURES['14'],
-        [ambientTempMoldAssemblyArea.key]: (v) => Number(v) < 18,
-      },
-      schema: z.object({
-        [moistureContentPercent.key]: zn(z.number().min(3.3).max(3.5)),
-      }),
-      Component: MoistureContentPercentDynamicForm,
-    },
-    // Смесь 15
-    {
-      conditions: {
-        [moldingSandNumber.key]: (v) => v === MIXTURES['15'],
-        [ambientTempMoldAssemblyArea.key]: (v) => Number(v) >= 18,
-      },
-      schema: z.object({
-        [moistureContentPercent.key]: zn(z.number().min(2.6).max(3.1)),
-      }),
-      Component: MoistureContentPercentDynamicForm,
-    },
-    {
-      conditions: {
-        [moldingSandNumber.key]: (v) => v === MIXTURES['15'],
-        [ambientTempMoldAssemblyArea.key]: (v) => Number(v) < 18,
-      },
-      schema: z.object({
-        [moistureContentPercent.key]: zn(z.number().min(2.5).max(3.0)),
-      }),
-      Component: MoistureContentPercentDynamicForm,
+      children: [
+        // Змішувач
+        {
+          conditions: { [machineType.key]: (v) => v === MACHINE_TYPES.mixer },
+          children: [
+            {
+              conditions: { [ambientTempMoldAssemblyArea.key]: (v) => Number(v) >= 18 },
+              schema: z.object({
+                [moistureContentPercent.key]: zn(z.number().min(2.6).max(3.1)),
+              }),
+            },
+            {
+              conditions: { [ambientTempMoldAssemblyArea.key]: (v) => Number(v) < 18 },
+              schema: z.object({
+                [moistureContentPercent.key]: zn(z.number().min(2.5).max(3.0)),
+              }),
+            },
+          ],
+        },
+        // АФЛ
+        {
+          conditions: { [machineType.key]: [MACHINE_TYPES.afl2, MACHINE_TYPES.afl3] },
+          schema: z.object({
+            [moistureContentPercent.key]: zn(z.number().min(2.3).max(3.3)),
+          }),
+        },
+      ],
     },
   ],
 })
-
-// export const experimentsMoistureDynamicSections: DynamicSectionsConfig =
-//   buildDynamicSectionsFromExperimentConfig(experimentsMoistureConfig, {
-//     mixtureFieldKey: moldingSandNumber.key,
-//     componentByField: {
-//       [moistureContentPercent.key]: MoistureContentPercentDynamicForm,
-//     },
-//   })

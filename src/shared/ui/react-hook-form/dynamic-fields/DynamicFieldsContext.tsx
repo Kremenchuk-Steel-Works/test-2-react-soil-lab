@@ -12,7 +12,8 @@ import {
   flattenRules,
   type DynamicSectionsConfig,
   type ValueNormalizer,
-} from '@/shared/lib/zod/dynamic-schema'
+} from '@/shared/lib/zod/dynamic-sections'
+import { selectCandidatesFromTree } from '@/shared/lib/zod/dynamic-sections-scoped'
 
 const logger = createLogger('DynamicFields')
 
@@ -85,7 +86,20 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     )
   }, [allRules])
 
-  // Подписка только на поля, влияющие на условия/исключения
+  // === ВАЖНО: мапа смещений секций → глобальный индекс (как в resolver) ===
+  const sectionToOffsets = useMemo(() => {
+    let offset = 0
+    const map = new Map<string, number>()
+    for (const [sectionKey, arr] of Object.entries(
+      sections as unknown as Record<string, unknown[]>,
+    )) {
+      map.set(sectionKey, offset)
+      offset += arr?.length ?? 0
+    }
+    return map
+  }, [sections])
+
+  // подписка только на поля, влияющие на условия/исключения (как было)
   const fieldsToWatch = useMemo(() => {
     const set = new Set<string>()
     for (const r of allRules) {
@@ -95,16 +109,48 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     return Array.from(set) as FieldPath<TFieldValues>[]
   }, [allRules])
 
-  const tick = useWatch<TFieldValues>({ control, name: fieldsToWatch })
+  const tick = useWatch<TFieldValues>({
+    control,
+    name: fieldsToWatch,
+    disabled: fieldsToWatch.length === 0,
+  })
 
-  // Вычисление активных правил
+  // === Оптимизация: считаем только кандидатов через дерево scoped ===
   const prevActiveRef = useRef<ActiveRulesState<string>>({})
   const activeRules = useMemo<ActiveRulesState<string>>(() => {
     void tick
     const values = getValues()
+
+    // 1) выберем кандидатов
+    const pairs =
+      selectCandidatesFromTree(
+        sections as unknown as DynamicSectionsConfig<string>,
+        values as Record<string, unknown>,
+        (k, v) => (valueNormalizer ? valueNormalizer(k, v) : v),
+      ) ?? null
+
+    const candidateIdxs = pairs
+      ? pairs
+          .map(({ section, indexInSection }) => {
+            const off = sectionToOffsets.get(section)
+            return typeof off === 'number' ? off + indexInSection : -1
+          })
+          .filter((i) => i >= 0)
+      : // если меты нет — проверяем всё, как раньше
+        allRules.map((_r, i) => i)
+
+    // 2) по умолчанию все false, а считаем только кандидатов
     const next: ActiveRulesState<string> = {}
-    for (const r of allRules)
-      next[r.id] = checkConditions(values, r, { normalize: valueNormalizer })
+    for (const r of allRules) next[r.id] = false
+    for (const i of candidateIdxs) {
+      const r = allRules[i]
+      next[r.id] = checkConditions(values, r, {
+        normalize: valueNormalizer,
+        tag: 'DynamicFieldsContext',
+      })
+    }
+
+    // 3) мемо: если не изменилось — вернём предыдущее
     const prev = prevActiveRef.current
     let changed = Object.keys(prev).length !== Object.keys(next).length
     if (!changed)
@@ -116,9 +162,10 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     if (!changed) return prev
     prevActiveRef.current = next
     return next
-  }, [tick, allRules, getValues, valueNormalizer])
+  }, [tick, allRules, getValues, valueNormalizer, sections, sectionToOffsets])
 
-  // Чистка значений/ошибок при выключении правил
+  // === Остальной код провайдера (reset/clearErrors/trigger) без изменений ===
+
   const prevResetRef = useRef<ActiveRulesState<string>>({})
   useEffect(() => {
     logger.debug('[DynamicFields] activeRules changed', activeRules)
@@ -150,7 +197,6 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     prevResetRef.current = activeRules
   }, [activeRules, allRules, resetField, clearErrors, clearErrorsForUnrequired, ruleIdxToKeys])
 
-  // Авто-перевалидация зависимых полей при смене активных правил
   const prevToggleRef = useRef<ActiveRulesState<string>>({})
   useEffect(() => {
     const prev = prevToggleRef.current
@@ -162,12 +208,10 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     prevToggleRef.current = activeRules
     if (toggledRuleIndexes.length === 0) return
 
-    // Кандидаты на перевалидацию
     const names = new Set<string>()
     for (const idx of toggledRuleIndexes) for (const k of ruleIdxToKeys[idx]) names.add(k)
     let fieldsToRevalidate = Array.from(names) as FieldPath<TFieldValues>[]
 
-    // Поведение под режим (без "any" и без лишних assertions):
     if (validationMode === 'onSubmit' && !formState.isSubmitted) return
 
     if (validationMode === 'onBlur' || validationMode === 'onTouched') {

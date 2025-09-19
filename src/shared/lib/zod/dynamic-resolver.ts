@@ -1,65 +1,40 @@
 import type { FieldValues, Resolver, ResolverResult } from 'react-hook-form'
-import { z, type ZodError, type ZodIssue, type ZodObject, type ZodRawShape } from 'zod'
+import { type ZodError, type ZodObject, type ZodRawShape } from 'zod'
 import {
   buildValueNormalizerFromZod,
   checkConditions,
   flattenRules,
   type DynamicSectionsConfig,
-} from '@/shared/lib/zod/dynamic-schema'
+} from '@/shared/lib/zod/dynamic-sections'
+import { selectCandidatesFromTree } from '@/shared/lib/zod/dynamic-sections-scoped'
 
-// Делаем relaxed-базу (rule-keys -> optional)
-function collectRuleKeys(rules: ReturnType<typeof flattenRules>): Set<string> {
-  const set = new Set<string>()
-  for (const r of rules) {
-    const shape = r.schema.shape
-    Object.keys(shape).forEach((k) => set.add(k))
-  }
-  return set
-}
-
-function relaxBaseForRuleKeys<T extends ZodObject<ZodRawShape>>(
-  base: T,
-  rules: ReturnType<typeof flattenRules>,
-): T {
-  const ruleKeys = collectRuleKeys(rules)
-  const patch: ZodRawShape = Object.create(null) as ZodRawShape
-  const baseShape = base.shape
-  for (const key of ruleKeys) {
-    const def = baseShape[key]
-    if (def) patch[key] = def.optional()
-  }
-  return (base as z.ZodObject<ZodRawShape>).extend(patch) as unknown as T
-}
-
-// Маппинг ошибок Zod -> формат RHF (плоские ключи с dot-notation) ----
-type FlatRHFError = { type: string; message?: string }
-function joinPath(path: Array<string | number>): string {
-  return path.map((p) => String(p)).join('.')
-}
-function pushIssues(target: Record<string, FlatRHFError>, issues: ZodIssue[], type = 'zod'): void {
-  for (const iss of issues) {
-    const name = joinPath(iss.path)
-    // Сохраняем первое сообщение по ключу, чтобы не «мигать» ошибками
-    if (!target[name]) target[name] = { type, message: iss.message }
-  }
-}
-function toResolverErrors<TFieldValues extends FieldValues>(
-  map: Record<string, FlatRHFError>,
-): ResolverResult<TFieldValues>['errors'] {
-  // RHF поддерживает плоские ключи с dot-notation, приведём тип безопасно
-  return map as unknown as ResolverResult<TFieldValues>['errors']
-}
-
-// Основной фабричный метод: кастомный resolver
 export function createDynamicResolver<TFieldValues extends FieldValues>(
   base: ZodObject<ZodRawShape>,
   sections: DynamicSectionsConfig,
 ): Resolver<TFieldValues> {
   const rules = flattenRules(sections)
-  const relaxedBase = relaxBaseForRuleKeys(base, rules)
+  const relaxedBase = (function relax(base0: ZodObject<ZodRawShape>) {
+    const set = new Set<string>()
+    for (const r of rules) for (const k of Object.keys(r.schema.shape)) set.add(k)
+    const patch: ZodRawShape = Object.create(null) as ZodRawShape
+    const baseShape = base0.shape
+    for (const key of set) if (baseShape[key]) patch[key] = baseShape[key].optional()
+    return base0.extend(patch) as unknown as ZodObject<ZodRawShape>
+  })(base)
+
   const normalize = buildValueNormalizerFromZod(base)
 
-  // Предрасчёт: какие ключи к каким rules относятся
+  // Для маппинга (section,indexInSection) → глобальный индекс rules[]
+  const sectionToOffsets = new Map<string, number>()
+  {
+    let offset = 0
+    for (const [sectionKey, arr] of Object.entries(sections as Record<string, unknown[]>)) {
+      sectionToOffsets.set(sectionKey, offset)
+      offset += arr.length
+    }
+  }
+
+  // Предрасчёт: какие ключи к каким rules относятся (как было)
   const ruleSchemaKeys = rules.map((r) => Object.keys(r.schema.shape))
   const keyToRuleIdx = new Map<string, number[]>()
   ruleSchemaKeys.forEach((keys, idx) => {
@@ -73,50 +48,66 @@ export function createDynamicResolver<TFieldValues extends FieldValues>(
   return (values, _context, _options) => {
     void _context
     void _options
-    // Вычисляем активные правила на нормализованных значениях
-    const activeFlags = rules.map((r) =>
-      checkConditions(values as Record<string, unknown>, r, { normalize }),
+
+    // Кандидаты через дерево (если мета есть)
+    const pairs = selectCandidatesFromTree(
+      sections as DynamicSectionsConfig<string>,
+      values as Record<string, unknown>,
+      normalize,
     )
 
-    // Удаляем значения ключей, которые не требуются ни одним активным правилом
+    const candidateIdxs = pairs
+      ? pairs
+          .map(({ section, indexInSection }) => {
+            const off = sectionToOffsets.get(section)
+            return typeof off === 'number' ? off + indexInSection : -1
+          })
+          .filter((x) => x >= 0)
+      : // если дерево не прикреплено — проверяем все
+        rules.map((_r, i) => i)
+
+    const activeFlags = new Array<boolean>(rules.length).fill(false)
+    for (const i of candidateIdxs) {
+      activeFlags[i] = checkConditions(values as Record<string, unknown>, rules[i], {
+        normalize,
+        tag: 'dynamic-resolver',
+      })
+    }
+
     const stripped: Record<string, unknown> = { ...(values as Record<string, unknown>) }
     for (const [key, owners] of keyToRuleIdx) {
       const isActiveForKey = owners.some((i) => activeFlags[i])
       if (!isActiveForKey) delete stripped[key]
     }
 
-    // Валидируем relaxed-базу (учитывает optional для rule-keys)
     const baseResult = relaxedBase.safeParse(stripped)
-    const errorsMap: Record<string, FlatRHFError> = {}
-
+    const errorsMap: Record<string, { type: string; message?: string }> = {}
     if (!baseResult.success) {
-      pushIssues(errorsMap, (baseResult as { error: ZodError }).error.issues, 'zod_base')
-    }
-
-    // Валидируем только АКТИВНЫЕ rule-схемы
-    for (let i = 0; i < rules.length; i++) {
-      if (!activeFlags[i]) continue
-      const r = rules[i].schema.safeParse(stripped)
-      if (!r.success)
-        pushIssues(errorsMap, (r as { error: ZodError }).error.issues, `zod_rule_${i}`)
-    }
-
-    // Возвращаем результат в формате RHF
-    const hasErrors = Object.keys(errorsMap).length > 0
-    if (hasErrors) {
-      return {
-        values: {} as TFieldValues, // RHF игнорит values при наличии errors
-        errors: toResolverErrors<TFieldValues>(errorsMap),
+      for (const iss of (baseResult as { error: ZodError }).error.issues) {
+        const name = iss.path.map(String).join('.')
+        if (!errorsMap[name]) errorsMap[name] = { type: 'zod_base', message: iss.message }
       }
     }
 
-    // Если базовая схема имеет трансформации — заберём нормализованные data
-    // Иначе оставим stripped.
-    const finalValues = baseResult.success
-      ? (baseResult.data as unknown as TFieldValues)
-      : (stripped as TFieldValues)
+    for (const i of candidateIdxs) {
+      if (!activeFlags[i]) continue
+      const r = rules[i].schema.safeParse(stripped)
+      if (!r.success) {
+        for (const iss of (r as { error: ZodError }).error.issues) {
+          const name = iss.path.map(String).join('.')
+          if (!errorsMap[name]) errorsMap[name] = { type: `zod_rule_${i}`, message: iss.message }
+        }
+      }
+    }
+
+    if (Object.keys(errorsMap).length > 0) {
+      return {
+        values: {} as TFieldValues,
+        errors: errorsMap as unknown as ResolverResult<TFieldValues>['errors'],
+      }
+    }
     return {
-      values: finalValues,
+      values: (baseResult.success ? baseResult.data : stripped) as unknown as TFieldValues,
       errors: {} as ResolverResult<TFieldValues>['errors'],
     }
   }

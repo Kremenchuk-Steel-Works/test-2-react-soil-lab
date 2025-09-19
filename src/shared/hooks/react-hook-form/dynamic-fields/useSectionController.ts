@@ -46,7 +46,7 @@ export function useSectionController<
 
   const { trigger, getValues, resetField, formState } = useFormContext<TValues>()
 
-  // === ВЫЧИСЛЯЕМ АКТИВНЫЕ ПРАВИЛА СЕКЦИИ И ЕЁ ПОЛЯ (без сторонних хуков) ===
+  // Вычисляем активные правила секции и её поля
   const { visible, sectionKeys } = useMemo(() => {
     const rules = sections[sectionKey] ?? []
     let isVisible = false
@@ -63,7 +63,7 @@ export function useSectionController<
     }
   }, [sections, active, sectionKey])
 
-  // === LIVE РЕЖИМ ПОСЛЕ ПЕРВОЙ ПОПЫТКИ САБМИТА ===
+  // Режим onChange после первой попытки отправки формы
   const [live, setLive] = useState(false)
 
   // Валидируем только базу + поля секции
@@ -78,7 +78,7 @@ export function useSectionController<
     disabled: !live || namesToValidate.length === 0,
   }) as unknown[]
 
-  const prevRef = useRef<unknown[] | undefined>(undefined) // 👈 инициализация исправляет TS ошибку
+  const prevRef = useRef<unknown[] | undefined>(undefined)
   const stableNames = useMemo(() => namesToValidate.slice(), [namesToValidate])
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export function useSectionController<
     void trigger(stableNames, { shouldFocus: false })
   }, [live, watched, stableNames, trigger])
 
-  // === SUBMIT СЕКЦИИ ===
+  // Submit секции
   const [isSubmitting, setIsSubmitting] = useState(false)
   const submit = useCallback(async () => {
     setLive(true) // включаем live с первой попытки
