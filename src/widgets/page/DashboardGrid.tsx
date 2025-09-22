@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { APP_ROUTES } from '@/app/routes/routes'
 import Button from '@/shared/ui/button/Button'
+import { EllipsisTextInline } from '@/shared/ui/ellipsis/EllipsisTextInline'
 import { findRouteByKey } from '@/utils/routes/routeUtils'
 import RouteTableView from '@/widgets/page/RouteTableView'
 
@@ -15,11 +16,12 @@ export function DashboardGrid({ parentRouteKey, variant = 'buttons' }: Dashboard
 
   if (!parentRoute?.children) return null
 
+  // Вариант с таблицей
   if (variant === 'table') {
     return <RouteTableView parentRouteKey={parentRouteKey} />
   }
 
-  // старый вариант с кнопками — оставил на всякий случай
+  // Вариант с кнопками
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-wrap gap-x-2 gap-y-2">
@@ -30,11 +32,10 @@ export function DashboardGrid({ parentRouteKey, variant = 'buttons' }: Dashboard
               key={childRoute.key}
               className="flex max-w-85 items-center justify-center gap-1 whitespace-nowrap"
               onClick={() => void navigate(childRoute.path)}
-              title={childRoute.label}
               aria-label={childRoute.label}
             >
               <childRoute.icon className="h-5 w-5 flex-shrink-0" />
-              <span className="truncate">{childRoute.label}</span>
+              <EllipsisTextInline title={childRoute.label}>{childRoute.label}</EllipsisTextInline>
             </Button>
           ))}
       </div>

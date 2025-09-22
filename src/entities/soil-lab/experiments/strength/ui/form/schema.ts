@@ -1,10 +1,17 @@
 import z from 'zod'
 import { strengthFieldRegistry } from '@/entities/soil-lab/experiments/strength/model/fields-registry'
+import { experimentsBaseFormSchema } from '@/entities/soil-lab/experiments/ui/form/schema'
 import { zn } from '@/shared/lib/zod/zod-normalize'
 
-const { moldingSandNumber, compressiveStrength } = strengthFieldRegistry
+const { moldingSandNumber, machineType, compressiveStrength } = strengthFieldRegistry
 
-export const strengthBaseFormSchema = z.object({
-  [moldingSandNumber.key]: zn(z.string()),
-  [compressiveStrength.key]: zn(z.number().nullable().optional()),
-})
+export const strengthBaseFormSchema = experimentsBaseFormSchema
+  .pick({
+    [moldingSandNumber.key]: true,
+    [machineType.key]: true,
+  } as const)
+  .merge(
+    z.object({
+      [compressiveStrength.key]: zn(z.number().nullable().optional()),
+    }),
+  )

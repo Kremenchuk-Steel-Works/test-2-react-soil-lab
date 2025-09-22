@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { CirclePlus, Database, FlaskConical, Info } from 'lucide-react'
+import { CirclePlus, Database, Gauge, Info } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 
@@ -11,8 +11,8 @@ const StrengthDetails = lazy(() => import('@/pages/soil-lab/experiments/strength
 export const strengthRoutes: AppRoute = {
   key: 'Strength',
   path: 'strength',
-  label: 'Вимірювання міцності суміші',
-  icon: FlaskConical,
+  label: 'Міцність',
+  icon: Gauge,
   Component: StrengthLayout,
   meta: {
     buttons: ['add'],

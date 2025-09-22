@@ -25,6 +25,7 @@ export function StrengthCreateBaseForm({
       <F.Title />
 
       <F.moldingSandNumber />
+      <F.machineType />
 
       <F.compressiveStrengthDynamic />
 

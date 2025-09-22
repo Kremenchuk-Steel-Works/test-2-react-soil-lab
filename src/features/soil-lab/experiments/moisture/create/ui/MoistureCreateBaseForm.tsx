@@ -25,7 +25,7 @@ export function MoistureCreateBaseForm({
       <F.Title />
 
       <F.moldingSandNumber />
-
+      <F.machineType />
       <F.ambientTempMoldAssemblyArea />
 
       <F.moistureContentPercentDynamic />

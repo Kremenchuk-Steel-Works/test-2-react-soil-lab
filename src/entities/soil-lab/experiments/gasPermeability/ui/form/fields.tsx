@@ -1,6 +1,6 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
-import { strengthFieldRegistry } from '@/entities/soil-lab/experiments/strength/model/fields-registry'
+import { gasPermeabilityFieldRegistry } from '@/entities/soil-lab/experiments/gasPermeability/model/fields-registry'
 import { useExperimentsFormFields } from '@/entities/soil-lab/experiments/ui/form/fields'
 import Button from '@/shared/ui/button/Button'
 import InputField from '@/shared/ui/input-field/InputField'
@@ -8,13 +8,13 @@ import { DynamicFieldArea } from '@/shared/ui/react-hook-form/dynamic-fields/Dyn
 import type { FormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
 import { makeBinders } from '@/utils/react-hook-form/makeBinders'
 
-export interface TestStrengthResponse {
-  measurements: { id: string; compressiveStrength: number }[]
+export interface TestGasPermeabilityResponse {
+  measurements: { id: string; gasPermeability: number }[]
 }
 
-type Ctx = { responseData?: TestStrengthResponse }
+type Ctx = { responseData?: TestGasPermeabilityResponse }
 
-export function useStrengthFormFields<T extends FieldValues>(Form: FormKit<T>, ctx: Ctx) {
+export function useGasPermeabilityFormFields<T extends FieldValues>(Form: FormKit<T>, ctx: Ctx) {
   const ctxRef = useRef(ctx)
   ctxRef.current = ctx
 
@@ -22,25 +22,24 @@ export function useStrengthFormFields<T extends FieldValues>(Form: FormKit<T>, c
   const Fields = useMemo(() => {
     const { F, FA, V } = makeBinders<T, Ctx>(ctxRef)
 
-    const { moldingSandNumber, machineType, compressiveStrength } = strengthFieldRegistry
+    const { moldingSandNumber, machineType, gasPermeability } = gasPermeabilityFieldRegistry
 
     return Object.freeze({
-      Title: V('Title', () => <h5 className="layout-text">Визначення міцності на стискання</h5>),
+      Title: V('Title', () => <h5 className="layout-text">Визначення газопроникності</h5>),
 
       // Common fields
       [moldingSandNumber.key]: CommonFields[moldingSandNumber.key],
       [machineType.key]: CommonFields[machineType.key],
 
       // Fields
-      compressiveStrengthDynamic: FA(
-        [moldingSandNumber.key, compressiveStrength.key] as const,
-        () => <DynamicFieldArea section={compressiveStrength.key} />,
-      ),
+      gasPermeabilityDynamic: FA([moldingSandNumber.key, gasPermeability.key] as const, () => (
+        <DynamicFieldArea section={gasPermeability.key} />
+      )),
 
-      [compressiveStrength.key]: F(compressiveStrength.key, (name) => (
+      [gasPermeability.key]: F(gasPermeability.key, (name) => (
         <Form.Field name={name}>
           {({ register }) => (
-            <InputField label={compressiveStrength.label.default + ' *'} {...register} />
+            <InputField label={gasPermeability.label.default + ' *'} {...register} />
           )}
         </Form.Field>
       )),

@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
 import { Breadcrumbs } from '@/shared/ui/Breadcrumbs/Breadcrumbs'
 import Button from '@/shared/ui/button/Button'
+import { EllipsisTextInline } from '@/shared/ui/ellipsis/EllipsisTextInline'
 import MainLayout from '@/widgets/page-layout/MainLayout'
 
 export default function MainPage() {
@@ -21,11 +22,10 @@ export default function MainPage() {
                 // Задаем максимальную ширину для кнопки
                 className="flex max-w-70 items-center justify-center gap-1 whitespace-nowrap"
                 onClick={() => void navigate(route.path)}
-                title={route.label}
                 aria-label={route.label}
               >
                 <route.icon className="h-5 w-5 flex-shrink-0" />
-                <span className="truncate">{route.label}</span>
+                <EllipsisTextInline title={route.label}>{route.label}</EllipsisTextInline>
               </Button>
             ))}
         </div>

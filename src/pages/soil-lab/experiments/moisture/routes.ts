@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { CirclePlus, Database, FlaskConical, Info } from 'lucide-react'
+import { CirclePlus, Database, Droplet, Info } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 
@@ -11,8 +11,8 @@ const MoistureDetails = lazy(() => import('@/pages/soil-lab/experiments/moisture
 export const moistureRoutes: AppRoute = {
   key: 'Moisture',
   path: 'moisture',
-  label: 'Вимірювання вологості',
-  icon: FlaskConical,
+  label: 'Волога',
+  icon: Droplet,
   Component: MoistureLayout,
   meta: {
     buttons: ['add'],

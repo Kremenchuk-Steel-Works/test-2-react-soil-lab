@@ -19,6 +19,7 @@ export function ExperimentsCreateBaseForm({ responseData }: ExperimentsCreateBas
   return (
     <>
       <F.Title />
+
       <F.moldingSandNumber />
       <F.machineType />
       <F.ambientTempMoldAssemblyArea />

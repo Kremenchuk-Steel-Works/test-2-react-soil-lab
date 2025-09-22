@@ -1,5 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form'
 import type { TestExperimentsResponse } from '@/entities/soil-lab/experiments/ui/form/fields'
+import GasPermeabilityCreateSection from '@/features/soil-lab/experiments/gasPermeability/create-section/ui/GasPermeabilityCreateSection'
 import { experimentsAllDynamicSections } from '@/features/soil-lab/experiments/model/dynamic-sections'
 import {
   experimentsCreateFormSchema,
@@ -47,6 +48,7 @@ export function ExperimentsCreateForm({ defaultValues, responseData }: Experimen
             {/* Секции */}
             <MoistureCreateSection />
             <StrengthCreateSection />
+            <GasPermeabilityCreateSection />
           </DynamicFieldsProvider>
         </FormKitProvider>
       </FormLayout>

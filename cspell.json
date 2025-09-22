@@ -32,6 +32,7 @@
     "enum",
     "wordprocessingml",
     "triethylamine",
+    "LPIR",
 
     // IT Jargon (Cyrillic)
     "пагинированный",
@@ -78,6 +79,7 @@
     // Compound or Specific Terms
     "financials",
     "dedup",
-    "unrequired"
+    "unrequired",
+    "idxs"
   ]
 }

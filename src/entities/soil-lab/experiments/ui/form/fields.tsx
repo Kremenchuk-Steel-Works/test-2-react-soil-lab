@@ -25,7 +25,7 @@ export function useExperimentsFormFields<T extends FieldValues>(Form: FormKit<T>
     const { moldingSandNumber, ambientTempMoldAssemblyArea, machineType } = experimentsFieldRegistry
 
     return Object.freeze({
-      Title: V('Title', () => <h5 className="layout-text">Експеримент</h5>),
+      Title: V('Title', () => <h5 className="layout-text">Випробування формувальної суміші</h5>),
 
       [moldingSandNumber.key]: F(moldingSandNumber.key, (name) => (
         <Form.Controller name={name}>

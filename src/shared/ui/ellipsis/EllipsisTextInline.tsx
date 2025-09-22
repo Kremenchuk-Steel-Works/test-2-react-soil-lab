@@ -4,11 +4,10 @@ import { useOverflowTitle } from './useOverflowTitle'
 type Props = {
   children: React.ReactNode
   className?: string
-  /** Можно передать явный текст тултипа. Иначе возьмём textContent. */
+  /** Явный текст тултипа (иначе возьмём textContent) */
   title?: string
 }
 
-// Универсальный merge для рефов без MutableRefObject
 function composeRefs<T>(...refs: Array<React.Ref<T> | undefined>): React.RefCallback<T> {
   return (node) => {
     for (const ref of refs) {
@@ -16,7 +15,6 @@ function composeRefs<T>(...refs: Array<React.Ref<T> | undefined>): React.RefCall
       if (typeof ref === 'function') {
         ref(node)
       } else {
-        // Избегаем MutableRefObject: структурный тип с current
         ;(ref as unknown as { current: T | null }).current = node
       }
     }
@@ -24,22 +22,22 @@ function composeRefs<T>(...refs: Array<React.Ref<T> | undefined>): React.RefCall
 }
 
 /**
- * Контейнер с truncate + умный title по overflow.
- * Без лишних зависимостей.
+ * Inline-вариант на <span> для использования внутри <button>.
+ * Ставит title только при реальном overflow.
  */
-export const EllipsisText = forwardRef<HTMLDivElement, Props>(
+export const EllipsisTextInline = forwardRef<HTMLSpanElement, Props>(
   ({ children, className, title }, forwardedRef) => {
-    const { ref: localRef, title: computed } = useOverflowTitle<HTMLDivElement>(title)
+    const { ref: localRef, title: computed } = useOverflowTitle<HTMLSpanElement>(title)
 
     return (
-      <div
+      <span
         ref={composeRefs(localRef, forwardedRef)}
         className={`min-w-0 truncate ${className ?? ''}`}
         title={computed}
       >
         {children}
-      </div>
+      </span>
     )
   },
 )
-EllipsisText.displayName = 'EllipsisText'
+EllipsisTextInline.displayName = 'EllipsisTextInline'
