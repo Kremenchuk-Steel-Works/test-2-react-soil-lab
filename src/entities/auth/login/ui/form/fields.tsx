@@ -20,14 +20,27 @@ export function useLoginFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
     return Object.freeze({
       [FR.email.key]: F(FR.email.key, (name) => (
         <Form.Field name={name}>
-          {({ register }) => <InputField label={FR.email.label.default + ' *'} {...register} />}
+          {({ register }) => (
+            <InputField
+              type="email"
+              autoComplete="email"
+              inputMode="email"
+              label={FR.email.label.default + ' *'}
+              {...register}
+            />
+          )}
         </Form.Field>
       )),
 
       [FR.password.key]: F(FR.password.key, (name) => (
         <Form.Field name={name}>
           {({ register }) => (
-            <InputField type="password" label={FR.password.label.default + ' *'} {...register} />
+            <InputField
+              type="password"
+              label={FR.password.label.default + ' *'}
+              autoComplete="current-password"
+              {...register}
+            />
           )}
         </Form.Field>
       )),

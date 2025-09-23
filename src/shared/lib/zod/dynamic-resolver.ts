@@ -118,8 +118,16 @@ export function createDynamicEngine<TFieldValues extends FieldValues>(
   base: ZodObject<ZodRawShape>,
   sections: DynamicSectionsConfig,
 ) {
-  return {
-    resolver: createDynamicResolver<TFieldValues>(base, sections),
-    valueNormalizer: buildValueNormalizerFromZod(base),
+  const resolver = createDynamicResolver<TFieldValues>(base, sections)
+  const valueNormalizer = buildValueNormalizerFromZod(base)
+
+  // Частичный парсинг по базе
+  const basePickParse = (keys: string[], input: Record<string, unknown>) => {
+    const pick = base.pick(Object.fromEntries(keys.map((k) => [k, true])) as Record<string, true>)
+    const subset = Object.fromEntries(keys.map((k) => [k, input[k]]))
+    const parsed = pick.safeParse(subset)
+    return parsed.success ? parsed.data : subset
   }
+
+  return { resolver, valueNormalizer, basePickParse }
 }

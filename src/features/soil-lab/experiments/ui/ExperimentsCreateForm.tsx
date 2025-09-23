@@ -24,7 +24,7 @@ type ExperimentsFormProps = FormProps<FormFields, TestExperimentsResponse>
 const Form = ExperimentsCreateFormKit
 
 export function ExperimentsCreateForm({ defaultValues, responseData }: ExperimentsFormProps) {
-  const { resolver, valueNormalizer } = createDynamicEngine<FormFields>(
+  const { resolver, valueNormalizer, basePickParse } = createDynamicEngine<FormFields>(
     schema,
     experimentsAllDynamicSections,
   )
@@ -42,6 +42,7 @@ export function ExperimentsCreateForm({ defaultValues, responseData }: Experimen
             sections={experimentsAllDynamicSections}
             responseData={responseData}
             valueNormalizer={valueNormalizer}
+            basePickParse={basePickParse}
           >
             <ExperimentsCreateBaseForm responseData={responseData} />
 

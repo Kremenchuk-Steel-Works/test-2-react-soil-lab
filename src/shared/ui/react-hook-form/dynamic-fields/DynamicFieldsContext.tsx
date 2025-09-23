@@ -23,6 +23,8 @@ type DynamicMeta<TOptions extends object, TResponseData, SectionKey extends stri
   sections: DynamicSectionsConfig<SectionKey>
   options?: TOptions
   responseData?: TResponseData
+  valueNormalizer?: ValueNormalizer
+  basePickParse?: (keys: string[], input: Record<string, unknown>) => Record<string, unknown>
 }
 
 const ActiveRulesContext = createContext<ActiveRulesState<string> | null>(null)
@@ -37,6 +39,7 @@ interface ProviderProps<
   options?: TOptions
   responseData?: TResponseData
   valueNormalizer?: ValueNormalizer
+  basePickParse?: (keys: string[], input: Record<string, unknown>) => Record<string, unknown>
   clearErrorsForUnrequired?: boolean
   /** Опционально: форсировать режим (перекрывает auto-детект из RHF) */
   forceValidationMode?: Mode
@@ -65,6 +68,7 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
   options,
   responseData,
   valueNormalizer,
+  basePickParse,
   clearErrorsForUnrequired = true,
   forceValidationMode,
 }: ProviderProps<TOptions, TResponseData, SectionKey>) {
@@ -226,8 +230,13 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
   }, [activeRules, allRules, ruleIdxToKeys, validationMode, formState, trigger, getFieldState])
 
   const meta = useMemo(
-    () => ({ sections, options, responseData }) as DynamicMeta<TOptions, TResponseData, SectionKey>,
-    [sections, options, responseData],
+    () =>
+      ({ sections, options, responseData, valueNormalizer, basePickParse }) as DynamicMeta<
+        TOptions,
+        TResponseData,
+        SectionKey
+      >,
+    [sections, options, responseData, valueNormalizer, basePickParse],
   )
 
   return (

@@ -56,12 +56,14 @@ export default function GasPermeabilityCreateSection() {
     <FieldsetWrapper title="Газопроникність">
       <F.gasPermeabilityDynamic />
 
-      <Button
-        className="flex items-center justify-center gap-1 whitespace-nowrap"
-        onClick={() => void submit()}
-      >
-        <Plus className="h-5 w-5" /> <span>{isSubmitting ? 'Відправка…' : 'Додати'}</span>
-      </Button>
+      <Form.WithError name="root">
+        <Button
+          className="flex items-center justify-center gap-1 whitespace-nowrap"
+          onClick={() => void submit()}
+        >
+          <Plus className="h-5 w-5" /> <span>{isSubmitting ? 'Відправка…' : 'Додати'}</span>
+        </Button>
+      </Form.WithError>
     </FieldsetWrapper>
   )
 }

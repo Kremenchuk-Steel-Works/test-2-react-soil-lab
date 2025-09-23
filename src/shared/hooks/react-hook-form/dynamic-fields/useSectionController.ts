@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext, useWatch, type FieldPath, type FieldValues } from 'react-hook-form'
+import { type ZodObject, type ZodRawShape } from 'zod'
+import { applyServerErrors } from '@/shared/lib/axios/applyServerErrors'
 import {
   useActiveRules,
   useDynamicMeta,
@@ -31,6 +33,12 @@ function shallowArrayEqual(a?: unknown[], b?: unknown[]) {
   return true
 }
 
+const toPickShape = (keys: string[]) =>
+  Object.fromEntries(keys.map((k) => [k, true])) as Record<string, true>
+
+const intersectKeysWithSchema = (keys: string[], schema: ZodObject<ZodRawShape>) =>
+  keys.filter((k) => Object.prototype.hasOwnProperty.call(schema.shape, k))
+
 export function useSectionController<
   TValues extends FieldValues,
   TPayload extends object = Record<string, unknown>,
@@ -41,38 +49,52 @@ export function useSectionController<
   buildPayload,
   resetAfter = true,
 }: UseSectionControllerArgs<TValues, TPayload>) {
-  const { sections } = useDynamicMeta()
+  const { sections, valueNormalizer, basePickParse } = useDynamicMeta()
   const active = useActiveRules()
+  const { trigger, getValues, resetField, setError, setFocus, getFieldState, formState } =
+    useFormContext<TValues>()
 
-  const { trigger, getValues, resetField, formState } = useFormContext<TValues>()
+  const normalizeObject = useCallback(
+    (obj: Record<string, unknown>) => {
+      if (!valueNormalizer) return obj
+      const out: Record<string, unknown> = {}
+      for (const [k, v] of Object.entries(obj)) out[k] = valueNormalizer(k, v)
+      return out
+    },
+    [valueNormalizer],
+  )
 
-  // Вычисляем активные правила секции и её поля
   const { visible, sectionKeys } = useMemo(() => {
-    const rules = sections[sectionKey] ?? []
+    const rules =
+      (sections as Record<string, ReadonlyArray<{ id: string; schema?: unknown }>>)[sectionKey] ??
+      []
     let isVisible = false
     const keys = new Set<string>()
     for (const r of rules) {
       if (!active[r.id]) continue
       isVisible = true
-      const shape = r.schema?.shape ?? {}
+      const shape = (r.schema as ZodObject<ZodRawShape> | undefined)?.shape ?? {}
       for (const k of Object.keys(shape)) keys.add(k)
     }
-    return {
-      visible: isVisible,
-      sectionKeys: Array.from(keys) as FieldPath<TValues>[],
-    }
+    return { visible: isVisible, sectionKeys: Array.from(keys) as FieldPath<TValues>[] }
   }, [sections, active, sectionKey])
 
-  // Режим onChange после первой попытки отправки формы
-  const [live, setLive] = useState(false)
+  const sectionRuleSchemas = useMemo(() => {
+    const rules =
+      (sections as Record<string, ReadonlyArray<{ id: string; schema?: unknown }>>)[sectionKey] ??
+      []
+    return rules
+      .filter(
+        (r) => active[r.id] && r.schema && (r.schema as ZodObject<ZodRawShape> | undefined)?.shape,
+      )
+      .map((r) => r.schema as ZodObject<ZodRawShape>)
+  }, [sections, active, sectionKey])
 
-  // Валидируем только базу + поля секции
+  const [live, setLive] = useState(false)
   const namesToValidate = useMemo(
     () => [...baseKeys, ...sectionKeys] as FieldPath<TValues>[],
     [baseKeys, sectionKeys],
   )
-
-  // Подписка появляется только в live и только на наши поля
   const watched = useWatch<TValues>({
     name: namesToValidate,
     disabled: !live || namesToValidate.length === 0,
@@ -88,33 +110,60 @@ export function useSectionController<
     void trigger(stableNames, { shouldFocus: false })
   }, [live, watched, stableNames, trigger])
 
-  // Submit секции
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const submit = useCallback(async () => {
-    setLive(true) // включаем live с первой попытки
 
+  const submit = useCallback(async () => {
+    setLive(true)
     const ok = await trigger(stableNames, { shouldFocus: true })
     if (!ok) return
 
-    const all = getValues()
+    const rawAll = getValues()
+    let merged: Record<string, unknown> = normalizeObject(
+      rawAll as unknown as Record<string, unknown>,
+    )
 
+    if (basePickParse && baseKeys.length) {
+      const baseKeyStrings = (baseKeys as ReadonlyArray<string>).map(String)
+      const parsedBase = basePickParse(baseKeyStrings, merged)
+      merged = { ...merged, ...parsedBase }
+    }
+
+    const sectionKeyStrings = (sectionKeys as string[]) ?? []
+    for (const schema of sectionRuleSchemas) {
+      const keysForRule = intersectKeysWithSchema(sectionKeyStrings, schema)
+      if (keysForRule.length === 0) continue
+      const pickSchema = schema.pick(toPickShape(keysForRule))
+      const subsetInput = Object.fromEntries(keysForRule.map((k) => [k, merged[k]]))
+      const parsed = pickSchema.safeParse(subsetInput)
+      if (parsed.success) merged = { ...merged, ...parsed.data }
+    }
+
+    const normalizedAll = merged as unknown as TValues
     const base: Record<string, unknown> = {}
-    for (const k of baseKeys) base[k as string] = all[k as keyof TValues]
-
+    for (const k of baseKeys) base[k as string] = normalizedAll[k as keyof TValues]
     const sect: Record<string, unknown> = {}
-    for (const k of sectionKeys) sect[k as string] = all[k as keyof TValues]
+    for (const k of sectionKeys) sect[k as string] = normalizedAll[k as keyof TValues]
 
     const payload =
-      buildPayload?.({ base, section: sect, all }) ?? ({ ...base, ...sect } as unknown as TPayload)
+      buildPayload?.({ base, section: sect, all: normalizedAll }) ??
+      ({ ...base, ...sect } as unknown as TPayload)
 
     try {
       setIsSubmitting(true)
       await onSubmit(payload)
       if (resetAfter) {
-        for (const k of sectionKeys) {
+        for (const k of sectionKeys)
           resetField(k, { keepDirty: false, keepError: false, keepTouched: false })
-        }
       }
+    } catch (err) {
+      applyServerErrors<TValues>({
+        err,
+        setError,
+        setFocus,
+        getFieldState,
+        formState,
+      })
+      return
     } finally {
       setIsSubmitting(false)
     }
@@ -128,12 +177,14 @@ export function useSectionController<
     onSubmit,
     resetAfter,
     resetField,
+    normalizeObject,
+    basePickParse,
+    sectionRuleSchemas,
+    setError,
+    setFocus,
+    getFieldState,
+    formState,
   ])
 
-  return {
-    visible,
-    submit,
-    isSubmitting,
-    isFormSubmitting: formState.isSubmitting,
-  }
+  return { visible, submit, isSubmitting, isFormSubmitting: formState.isSubmitting }
 }

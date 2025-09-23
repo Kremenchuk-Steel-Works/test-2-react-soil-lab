@@ -43,7 +43,9 @@ export function withNumberConversion<TDef extends ZodTypeDef, TIn>(
       if (min !== undefined && rounded < min) {
         const message =
           opts.makeMessage?.(rounded, range, unit) ??
-          `Результат повинен бути більше або дорівнювати ${fmt(min)}${u}. Поточне: ${fmt(rounded)}${u}`
+          `Результат повинен бути більше або дорівнювати ${fmt(min)}${u}. Поточне: ${fmt(
+            rounded,
+          )}${u}`
         ctx.addIssue({ code: z.ZodIssueCode.custom, message })
         return
       }
@@ -51,7 +53,9 @@ export function withNumberConversion<TDef extends ZodTypeDef, TIn>(
       if (max !== undefined && rounded > max) {
         const message =
           opts.makeMessage?.(rounded, range, unit) ??
-          `Результат повинен бути менше або дорівнювати ${fmt(max)}${u}. Поточне: ${fmt(rounded)}${u}`
+          `Результат повинен бути менше або дорівнювати ${fmt(max)}${u}. Поточне: ${fmt(
+            rounded,
+          )}${u}`
         ctx.addIssue({ code: z.ZodIssueCode.custom, message })
       }
     })

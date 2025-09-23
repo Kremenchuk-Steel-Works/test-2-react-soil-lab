@@ -10,5 +10,9 @@
   "soil-lab": {
     "url": "src/shared/api/soil-lab/soil_lab_openapi.json",
     "path": "src/shared/api/soil-lab"
+  },
+  "soil-lab-2": {
+    "url": "src/shared/api/soil-lab/soil-lab-openapi.json",
+    "path": "src/shared/api/soil-lab-2"
   }
 }

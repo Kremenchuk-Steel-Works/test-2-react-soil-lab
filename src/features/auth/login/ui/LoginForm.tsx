@@ -4,7 +4,7 @@ import { loginFormSchema, type LoginFormFields } from '@/features/auth/login/mod
 import { LoginFormKit } from '@/features/auth/login/ui/formKit'
 import { LoginBaseForm } from '@/features/auth/login/ui/LoginBaseForm'
 import type { TokenPairResponse } from '@/shared/api/soil-lab/model'
-import { parseApiError } from '@/shared/lib/axios/parseApiError'
+import { applyServerErrors } from '@/shared/lib/axios/applyServerErrors'
 import { createLogger } from '@/shared/lib/logger'
 import { FormKitProvider } from '@/shared/ui/react-hook-form/FormKit/FormKitProvider'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
@@ -32,6 +32,9 @@ export function LoginForm({
   const {
     handleSubmit,
     setError,
+    setFocus,
+    getFieldState,
+    formState,
     formState: { isSubmitting },
   } = form
   // Submit
@@ -40,13 +43,22 @@ export function LoginForm({
       const response = await onSubmit(data)
       logger.debug('Форма успешно выполнена', response)
     } catch (err) {
-      const parsed = parseApiError(err)
-      if (parsed.status === 401 && parsed.message === 'Invalid password') {
-        setError('password', { type: 'server', message: 'Невірний пароль' })
-      } else {
-        setError('root', { type: 'server', message: parsed.message })
-      }
-      logger.error('Ошибка при отправке формы:', 'err:', err, 'data:', data)
+      applyServerErrors({
+        err,
+        setError,
+        setFocus,
+        getFieldState,
+        formState,
+        overrides: [
+          (parsed) => {
+            if (parsed.status === 401 && parsed.message === 'Invalid password') {
+              setError('password', { type: 'server', message: 'Невірний пароль' })
+              return true
+            }
+            return false
+          },
+        ],
+      })
     }
   }
 

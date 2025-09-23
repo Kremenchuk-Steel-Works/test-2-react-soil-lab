@@ -4,7 +4,7 @@ import { GasPermabilityDynamicForm } from '@/entities/soil-lab/experiments/gasPe
 import { MACHINE_TYPES } from '@/entities/soil-lab/experiments/model/machineTypes'
 import { MIXTURES } from '@/entities/soil-lab/experiments/model/mixtures'
 import { createScopedSectionsConfig } from '@/shared/lib/zod/dynamic-sections-scoped'
-import { PermeabilityUnits } from '@/shared/lib/zod/unit-conversion/units/permeability'
+import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-types'
 import { withUnitConversion } from '@/shared/lib/zod/unit-conversion/withUnitConversion'
 import { zn } from '@/shared/lib/zod/zod-normalize'
 
@@ -28,11 +28,11 @@ export const experimentsGasPermeabilityDynamicSections = createScopedSectionsCon
           conditions: { [machineType.key]: (v) => v === MACHINE_TYPES.mixer },
           schema: z.object({
             [gasPermeability.key]: withUnitConversion(zn(z.number()), {
-              from: PermeabilityUnits.SI_E8,
-              to: PermeabilityUnits.PN,
+              from: Units.SI_E8,
+              to: Units.PN,
+              instrument: Instruments.LPIR1,
               min: 100,
-              max: 1,
-              round: 2,
+              round: 0,
             }),
           }),
         },
@@ -41,10 +41,11 @@ export const experimentsGasPermeabilityDynamicSections = createScopedSectionsCon
           conditions: { [machineType.key]: [MACHINE_TYPES.afl2, MACHINE_TYPES.afl3] },
           schema: z.object({
             [gasPermeability.key]: withUnitConversion(zn(z.number()), {
-              from: PermeabilityUnits.SI_E8,
-              to: PermeabilityUnits.PN,
+              from: Units.SI_E8,
+              to: Units.PN,
+              instrument: Instruments.LPIR1,
               min: 100,
-              round: 2,
+              round: 0,
             }),
           }),
         },
@@ -61,10 +62,11 @@ export const experimentsGasPermeabilityDynamicSections = createScopedSectionsCon
           conditions: { [machineType.key]: (v) => v === MACHINE_TYPES.mixer },
           schema: z.object({
             [gasPermeability.key]: withUnitConversion(zn(z.number()), {
-              from: PermeabilityUnits.SI_E8,
-              to: PermeabilityUnits.PN,
+              from: Units.SI_E8,
+              to: Units.PN,
+              instrument: Instruments.LPIR1,
               min: 100,
-              round: 2,
+              round: 0,
             }),
           }),
         },
@@ -73,10 +75,11 @@ export const experimentsGasPermeabilityDynamicSections = createScopedSectionsCon
           conditions: { [machineType.key]: [MACHINE_TYPES.afl2, MACHINE_TYPES.afl3] },
           schema: z.object({
             [gasPermeability.key]: withUnitConversion(zn(z.number()), {
-              from: PermeabilityUnits.SI_E8,
-              to: PermeabilityUnits.PN,
+              from: Units.SI_E8,
+              to: Units.PN,
+              instrument: Instruments.LPIR1,
               min: 100,
-              round: 2,
+              round: 0,
             }),
           }),
         },
@@ -93,10 +96,11 @@ export const experimentsGasPermeabilityDynamicSections = createScopedSectionsCon
           conditions: { [machineType.key]: (v) => v === MACHINE_TYPES.mixer },
           schema: z.object({
             [gasPermeability.key]: withUnitConversion(zn(z.number()), {
-              from: PermeabilityUnits.SI_E8,
-              to: PermeabilityUnits.PN,
+              from: Units.SI_E8,
+              to: Units.PN,
+              instrument: Instruments.LPIR1,
               min: 100,
-              round: 2,
+              round: 0,
             }),
           }),
         },
@@ -105,10 +109,11 @@ export const experimentsGasPermeabilityDynamicSections = createScopedSectionsCon
           conditions: { [machineType.key]: [MACHINE_TYPES.afl2, MACHINE_TYPES.afl3] },
           schema: z.object({
             [gasPermeability.key]: withUnitConversion(zn(z.number()), {
-              from: PermeabilityUnits.SI_E8,
-              to: PermeabilityUnits.PN,
+              from: Units.SI_E8,
+              to: Units.PN,
+              instrument: Instruments.LPIR1,
               min: 100,
-              round: 2,
+              round: 0,
             }),
           }),
         },
