@@ -24,7 +24,7 @@ export function SamplesCreateBaseForm({
 
       <F.moldingSandRecipe />
 
-      <F.receivedAt />
+      {/* <F.receivedAt /> */}
 
       <F.note />
 

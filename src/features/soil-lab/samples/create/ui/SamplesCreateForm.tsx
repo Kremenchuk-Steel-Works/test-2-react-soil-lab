@@ -39,6 +39,7 @@ export function SamplesCreateForm({
   // Submit
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {
+      data.receivedAt = new Date().toISOString()
       const response = await onSubmit(data)
       logger.debug('Форма успешно выполнена', response)
     } catch (err) {

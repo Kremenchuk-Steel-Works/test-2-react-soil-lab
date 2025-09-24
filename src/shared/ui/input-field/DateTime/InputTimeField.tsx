@@ -85,6 +85,7 @@ const InputTimeField = forwardRef<HTMLInputElement, InputTimeFieldProps>(
                 separate: true,
               }}
               correctionFn={getCorrectedTimeString}
+              disabled={disabled}
             />
           }
           showTimeSelect

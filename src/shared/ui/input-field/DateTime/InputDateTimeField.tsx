@@ -117,6 +117,7 @@ const InputDateTimeField = forwardRef<HTMLInputElement, InputDateTimeFieldProps>
                 separate: true,
               }}
               correctionFn={getCorrectedDateTimeString}
+              disabled={disabled}
             />
           }
           wrapperClassName="w-full"

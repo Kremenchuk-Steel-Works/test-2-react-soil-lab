@@ -1,11 +1,11 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
+import { samplesMixturesOptions } from '@/entities/soil-lab/samples/model/mixtures'
 import type { SampleDetailResponse } from '@/shared/api/soil-lab-2/model'
 import Button from '@/shared/ui/button/Button'
-import InputField from '@/shared/ui/input-field/InputField'
 import TextareaField from '@/shared/ui/input-field/TextareaField'
-import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
+import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import type { FormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
 import { makeBinders } from '@/utils/react-hook-form/makeBinders'
 
@@ -18,31 +18,39 @@ export function useSamplesFormFields<T extends FieldValues>(Form: FormKit<T>, ct
   const Fields = useMemo(() => {
     const { F, V } = makeBinders<T, Ctx>(ctxRef)
 
-    const { moldingSandRecipe, receivedAt, note } = samplesFieldRegistry
+    const { moldingSandRecipe, note } = samplesFieldRegistry
 
     return Object.freeze({
-      Title: V('Title', () => <h5 className="layout-text">Випробування формувальної суміші</h5>),
+      Title: V('Title', () => <h5 className="layout-text">Створення Sample</h5>),
 
       [moldingSandRecipe.key]: F(moldingSandRecipe.key, (name) => (
-        <Form.Field name={name}>
-          {({ register }) => (
-            <InputField label={moldingSandRecipe.label.default + ' *'} {...register} />
-          )}
-        </Form.Field>
-      )),
-
-      [receivedAt.key]: F(receivedAt.key, (name) => (
         <Form.Controller name={name}>
           {({ field, fieldState }) => (
-            <FormDateTimeField
+            <FormSelectField
               field={field}
               fieldState={fieldState}
-              type="datetime"
-              label={receivedAt.label.default + ' *'}
+              options={samplesMixturesOptions}
+              isVirtualized
+              isClearable
+              placeholder={moldingSandRecipe.label.default + ' *'}
             />
           )}
         </Form.Controller>
       )),
+
+      // [receivedAt.key]: F(receivedAt.key, (name) => (
+      //   <Form.Controller name={name}>
+      //     {({ field, fieldState }) => (
+      //       <FormDateTimeField
+      //         field={field}
+      //         fieldState={fieldState}
+      //         type="datetime"
+      //         label={receivedAt.label.default + ' *'}
+      //         disabled
+      //       />
+      //     )}
+      //   </Form.Controller>
+      // )),
 
       [note.key]: F(note.key, (name) => (
         <Form.Field name={name}>

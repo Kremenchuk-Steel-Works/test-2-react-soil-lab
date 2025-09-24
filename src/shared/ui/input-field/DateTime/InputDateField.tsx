@@ -111,6 +111,7 @@ const InputDateField = forwardRef<HTMLInputElement, InputDateFieldProps>(
                 separate: true,
               }}
               correctionFn={getCorrectedDateString}
+              disabled={disabled}
             />
           }
           dateFormat="dd.MM.yyyy"

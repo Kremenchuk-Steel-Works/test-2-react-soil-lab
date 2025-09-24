@@ -1,20 +1,20 @@
 import { lazy } from 'react'
-import { CirclePlus, Database, Info, RefreshCcw, TestTubeDiagonal } from 'lucide-react'
+import { CirclePlus, Database, FlaskConical, Info, RefreshCcw, Trash } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 
 const SamplesLayout = lazy(() => import('@/pages/soil-lab/samples/ui/Layout'))
 const SamplesList = lazy(() => import('@/pages/soil-lab/samples/ui/list/List'))
 const SamplesAdd = lazy(() => import('@/pages/soil-lab/samples/ui/Add'))
-// const SamplesDelete = lazy(() => import('@/pages/soil-lab/samples/ui/Delete'))
+const SamplesDelete = lazy(() => import('@/pages/soil-lab/samples/ui/Delete'))
 const SamplesDetails = lazy(() => import('@/pages/soil-lab/samples/ui/Details'))
 const SamplesUpdate = lazy(() => import('@/pages/soil-lab/samples/ui/Update'))
 
 export const samplesRoutes: AppRoute = {
   key: 'Samples',
   path: 'samples',
-  label: 'Вимірювання суміші',
-  icon: TestTubeDiagonal,
+  label: 'Sample',
+  icon: FlaskConical,
   Component: SamplesLayout,
   meta: {
     buttons: ['add'],
@@ -53,14 +53,14 @@ export const samplesRoutes: AppRoute = {
           icon: Info,
           Component: SamplesDetails,
         },
-        // {
-        //   key: 'SamplesDelete',
-        //   path: 'delete',
-        //   label: 'Видалити',
-        //   icon: Trash,
-        //   Component: SamplesDelete,
-        //   requiredPermissions: [PERMISSIONS.SAMPLES_DELETE],
-        // },
+        {
+          key: 'SamplesDelete',
+          path: 'delete',
+          label: 'Видалити',
+          icon: Trash,
+          Component: SamplesDelete,
+          requiredPermissions: [PERMISSIONS.SAMPLES_DELETE],
+        },
         {
           key: 'SamplesUpdate',
           path: 'update',

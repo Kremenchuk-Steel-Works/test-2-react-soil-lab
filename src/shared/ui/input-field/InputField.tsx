@@ -22,7 +22,7 @@ const filterInput = (type: string | undefined, e: React.FormEvent<HTMLInputEleme
 }
 
 const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
-  ({ label, type, id, isLoading = false, ...props }, ref) => {
+  ({ label, type, id, isLoading = false, disabled, ...props }, ref) => {
     const isPassword = type === 'password'
     const [visibleText, setVisibleText] = useState(false)
 
@@ -43,11 +43,12 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           type={currentType}
           onWheel={(e) => e.currentTarget.blur()}
           onBeforeInput={(e) => filterInput(type, e)}
+          disabled={disabled}
           {...props}
           // Добавляем отступ справа, если есть иконка
           className={`peer w-full rounded-md border border-gray-300 bg-gray-50 px-4 pt-5 pb-2 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 ${
             showRightIcon ? 'pr-11' : ''
-          }`}
+          } ${disabled ? 'opacity-50' : ''}`}
           placeholder=" "
         />
         <label
@@ -58,7 +59,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         </label>
 
         {/* Контейнер для иконок справа */}
-        <div className="absolute top-1/2 right-4 flex -translate-y-1/2 items-center">
+        <div className={`absolute top-1/2 right-4 flex -translate-y-1/2 items-center`}>
           {/* Индикатор загрузки (высший приоритет) */}
           {isLoading && (
             <Loader2 size={20} className="animate-spin text-gray-500 dark:text-gray-400" />
@@ -68,7 +69,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           {!isLoading && type === 'date' && (
             <button
               type="button"
-              className="pointer-events-none text-gray-500 focus:outline-none dark:text-gray-400"
+              className={`pointer-events-none text-gray-500 focus:outline-none dark:text-gray-400`}
             >
               <Calendar size={20} />
             </button>
