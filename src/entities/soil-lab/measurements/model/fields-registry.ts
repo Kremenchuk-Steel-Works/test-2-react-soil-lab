@@ -5,10 +5,10 @@ export const MEASUREMENTS = createFieldRegistry({
     label: { default: '№ суміші' },
   },
   moldingSandStrengthKgfCm2: {
-    label: { default: 'Міцність на стиск (кгс/см²)' },
+    label: { default: 'Міцність на стиск (кгс/см²)', nPerCm2: 'Міцність на стиск (Н/см²)' },
   },
   moldingSandGasPermeability: {
-    label: { default: 'Газопроникність (од.)' },
+    label: { default: 'Газопроникність (од.)', m2PerPas: 'Газопроникність · 10⁻⁸ (m²/Pa·S)' },
   },
   moldingSandMoisturePercent: {
     label: { default: 'Вологість (%)' },

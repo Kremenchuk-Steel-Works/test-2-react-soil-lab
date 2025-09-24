@@ -3,7 +3,7 @@ import { createFieldRegistry } from '@/utils/react-hook-form/createFieldRegistry
 
 const moisureBaseFieldRegistry = createFieldRegistry({
   moistureContentPercent: {
-    label: { default: 'Масова частка вологи (%)' },
+    label: { default: 'Вологість (%)' },
   },
 } as const)
 

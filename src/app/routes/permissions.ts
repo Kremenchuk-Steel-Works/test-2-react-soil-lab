@@ -4,6 +4,10 @@ export const PERMISSIONS = {
   MEASUREMENTS_CREATE: 'measurements.create',
   MEASUREMENTS_UPDATE: 'measurements.update',
   MEASUREMENTS_DELETE: 'measurements.delete',
+  SAMPLES_READ: 'samples.read',
+  SAMPLES_CREATE: 'samples.create',
+  SAMPLES_UPDATE: 'samples.update',
+  SAMPLES_DELETE: 'samples.delete',
 } as const
 
 /**

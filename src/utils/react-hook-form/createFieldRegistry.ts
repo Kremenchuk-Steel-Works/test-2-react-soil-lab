@@ -1,28 +1,30 @@
 import type { ReadonlyDeep } from 'type-fest'
 
 /**
- * Варианты текстовых подписей поля.
- * Используются для выбора отображаемой метки (по умолчанию, короткая, полная).
+ * База для всех меток: обязательный default и опциональные стандартные short/full.
+ * Плюс разрешаем добавлять любые свои варианты (индекс по string).
  */
-export type LabelVariant = 'default' | 'short' | 'full'
-export type LabelVariants = Readonly<{
+type LabelBase = Readonly<{
   default: string
   short?: string
   full?: string
 }>
 
+// Разрешаем дополнительные ключи, не теряя литеральность конкретных свойств.
+type ExtensibleLabels = Readonly<LabelBase & { [extra: string]: string | undefined }>
+
 /**
  * Форма входных данных для реестра:
  * объект, где ключ — системное имя поля, значение — метаданные (сейчас только `label`).
  */
-type LabelsShape = Record<string, { label: LabelVariants }>
+type LabelsShape = Record<string, { label: ExtensibleLabels }>
 
 /**
  * Токен (элемент реестра) для одного поля.
  * - `key` — литеральное имя поля (используется как ключ в формах/схемах).
  * - `label` — набор подписей для UI.
  */
-export type FieldToken<K extends string, L extends LabelVariants = LabelVariants> = Readonly<{
+export type FieldToken<K extends string, L extends ExtensibleLabels = ExtensibleLabels> = Readonly<{
   key: K
   label: L
 }>

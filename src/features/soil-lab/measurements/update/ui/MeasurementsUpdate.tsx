@@ -11,6 +11,8 @@ import type { MeasurementDetailResponse, MeasurementUpdate } from '@/shared/api/
 import { getErrorMessage } from '@/shared/lib/axios'
 import { logger } from '@/shared/lib/logger'
 import { createUpdatePayload } from '@/shared/lib/react-hook-form/api-operations'
+import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-types'
+import { withUnitConversion } from '@/shared/lib/zod/unit-conversion/withUnitConversion'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 interface MeasurementsUpdateProps {
@@ -25,6 +27,15 @@ function mapResponseToInitialData(
 ): MeasurementsUpdateFormFields {
   return {
     ...response,
+    moldingSandStrengthKgfCm2: withUnitConversion(response.moldingSandStrengthKgfCm2, {
+      from: Units.KGF_PER_CM2,
+      to: Units.N_PER_CM2,
+    }),
+    moldingSandGasPermeability: withUnitConversion(response.moldingSandGasPermeability, {
+      from: Units.PN,
+      to: Units.SI_E8,
+      instrument: Instruments.LPIR1,
+    }),
   }
 }
 

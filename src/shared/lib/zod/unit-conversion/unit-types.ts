@@ -17,6 +17,11 @@ export const Instruments = {
   LPIR1: 'LPiR-1',
 } as const
 
+// Карта пар, которые требуют instrument
+export type RequireInstrumentPairs =
+  | `${typeof Units.SI_E8}→${typeof Units.PN}`
+  | `${typeof Units.PN}→${typeof Units.SI_E8}`
+
 export type Unit = ValueOf<typeof Units>
 export type Instrument = ValueOf<typeof Instruments>
 

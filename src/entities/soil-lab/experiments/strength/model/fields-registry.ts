@@ -3,7 +3,7 @@ import { createFieldRegistry } from '@/utils/react-hook-form/createFieldRegistry
 
 const strengthBaseFieldRegistry = createFieldRegistry({
   compressiveStrength: {
-    label: { default: 'Міцність на стискання (Н/см²)' },
+    label: { default: 'Міцність на стиск (Н/см²)' },
   },
 } as const)
 

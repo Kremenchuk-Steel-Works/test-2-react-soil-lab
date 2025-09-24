@@ -4,8 +4,8 @@ import { MIXTURES } from '@/entities/soil-lab/experiments/model/mixtures'
 import { strengthFieldRegistry } from '@/entities/soil-lab/experiments/strength/model/fields-registry'
 import { CompressiveStrengthDynamicForm } from '@/entities/soil-lab/experiments/strength/ui/form/components/CompressiveStrengthDynamicForm'
 import { createScopedSectionsConfig } from '@/shared/lib/zod/dynamic-sections-scoped'
-import { PressureUnits } from '@/shared/lib/zod/pressure-conversion/pressure'
-import { withUnitConversion } from '@/shared/lib/zod/pressure-conversion/withUnitConversion'
+import { Units } from '@/shared/lib/zod/unit-conversion/unit-types'
+import { withUnitConversion } from '@/shared/lib/zod/unit-conversion/withUnitConversion'
 import { zn } from '@/shared/lib/zod/zod-normalize'
 
 const { moldingSandNumber, machineType, compressiveStrength } = strengthFieldRegistry
@@ -28,8 +28,8 @@ export const experimentsStrengthDynamicSections = createScopedSectionsConfig({
           conditions: { [machineType.key]: (v) => v === MACHINE_TYPES.mixer },
           schema: z.object({
             [compressiveStrength.key]: withUnitConversion(zn(z.number()), {
-              from: PressureUnits.N_PER_CM2,
-              to: PressureUnits.KGF_PER_CM2,
+              from: Units.N_PER_CM2,
+              to: Units.KGF_PER_CM2,
               min: 1.05,
               max: 1.2,
               round: 2,
@@ -41,8 +41,8 @@ export const experimentsStrengthDynamicSections = createScopedSectionsConfig({
           conditions: { [machineType.key]: [MACHINE_TYPES.afl2, MACHINE_TYPES.afl3] },
           schema: z.object({
             [compressiveStrength.key]: withUnitConversion(zn(z.number()), {
-              from: PressureUnits.N_PER_CM2,
-              to: PressureUnits.KGF_PER_CM2,
+              from: Units.N_PER_CM2,
+              to: Units.KGF_PER_CM2,
               min: 1.1,
               max: 1.25,
               round: 2,
@@ -51,7 +51,6 @@ export const experimentsStrengthDynamicSections = createScopedSectionsConfig({
         },
       ],
     },
-
     // Суміш 14
     {
       conditions: { [moldingSandNumber.key]: (v) => v === MIXTURES['14'] },
@@ -62,8 +61,8 @@ export const experimentsStrengthDynamicSections = createScopedSectionsConfig({
           conditions: { [machineType.key]: (v) => v === MACHINE_TYPES.mixer },
           schema: z.object({
             [compressiveStrength.key]: withUnitConversion(zn(z.number()), {
-              from: PressureUnits.N_PER_CM2,
-              to: PressureUnits.KGF_PER_CM2,
+              from: Units.N_PER_CM2,
+              to: Units.KGF_PER_CM2,
               min: 1.2,
               max: 1.3,
               round: 2,
@@ -75,8 +74,8 @@ export const experimentsStrengthDynamicSections = createScopedSectionsConfig({
           conditions: { [machineType.key]: [MACHINE_TYPES.afl2, MACHINE_TYPES.afl3] },
           schema: z.object({
             [compressiveStrength.key]: withUnitConversion(zn(z.number()), {
-              from: PressureUnits.N_PER_CM2,
-              to: PressureUnits.KGF_PER_CM2,
+              from: Units.N_PER_CM2,
+              to: Units.KGF_PER_CM2,
               min: 1.25,
               max: 1.4,
               round: 2,
@@ -85,7 +84,6 @@ export const experimentsStrengthDynamicSections = createScopedSectionsConfig({
         },
       ],
     },
-
     // Суміш 15
     {
       conditions: { [moldingSandNumber.key]: (v) => v === MIXTURES['15'] },
@@ -96,8 +94,8 @@ export const experimentsStrengthDynamicSections = createScopedSectionsConfig({
           conditions: { [machineType.key]: (v) => v === MACHINE_TYPES.mixer },
           schema: z.object({
             [compressiveStrength.key]: withUnitConversion(zn(z.number()), {
-              from: PressureUnits.N_PER_CM2,
-              to: PressureUnits.KGF_PER_CM2,
+              from: Units.N_PER_CM2,
+              to: Units.KGF_PER_CM2,
               min: 1.05,
               max: 1.2,
               round: 2,
@@ -109,8 +107,8 @@ export const experimentsStrengthDynamicSections = createScopedSectionsConfig({
           conditions: { [machineType.key]: [MACHINE_TYPES.afl2, MACHINE_TYPES.afl3] },
           schema: z.object({
             [compressiveStrength.key]: withUnitConversion(zn(z.number()), {
-              from: PressureUnits.N_PER_CM2,
-              to: PressureUnits.KGF_PER_CM2,
+              from: Units.N_PER_CM2,
+              to: Units.KGF_PER_CM2,
               min: 1.1,
               max: 1.25,
               round: 2,

@@ -32,7 +32,7 @@ export function useMeasurementsFormFields<T extends FieldValues>(Form: FormKit<T
       [FR.moldingSandStrengthKgfCm2.key]: F(FR.moldingSandStrengthKgfCm2.key, (name) => (
         <Form.Field name={name}>
           {({ register }) => (
-            <InputField label={FR.moldingSandStrengthKgfCm2.label.default + ' *'} {...register} />
+            <InputField label={FR.moldingSandStrengthKgfCm2.label.nPerCm2 + ' *'} {...register} />
           )}
         </Form.Field>
       )),
@@ -40,7 +40,7 @@ export function useMeasurementsFormFields<T extends FieldValues>(Form: FormKit<T
       [FR.moldingSandGasPermeability.key]: F(FR.moldingSandGasPermeability.key, (name) => (
         <Form.Field name={name}>
           {({ register }) => (
-            <InputField label={FR.moldingSandGasPermeability.label.default + ' *'} {...register} />
+            <InputField label={FR.moldingSandGasPermeability.label.m2PerPas + ' *'} {...register} />
           )}
         </Form.Field>
       )),
