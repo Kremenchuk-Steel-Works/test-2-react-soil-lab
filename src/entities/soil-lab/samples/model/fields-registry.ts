@@ -5,7 +5,7 @@ export const samplesFieldRegistry = createFieldRegistry({
     label: { default: '№ суміші' },
   },
   receivedAt: {
-    label: { default: 'Дата й час' },
+    label: { default: 'Створено' },
   },
   note: {
     label: { default: 'Примітка' },

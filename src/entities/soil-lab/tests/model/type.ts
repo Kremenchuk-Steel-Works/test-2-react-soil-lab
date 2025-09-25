@@ -4,7 +4,7 @@ import type { Option } from '@/shared/ui/select/ReactSelect'
 
 const { strength, gasPermeability, moisturePercent } = testsTypeFieldRegistry
 
-export const testsOptions: Option<TestType>[] = [
+export const testsTypeOptions: Option<TestType>[] = [
   { value: 'strength', label: strength.label.short },
   { value: 'gas_permeability', label: gasPermeability.label.short },
   { value: 'moisture_percent', label: moisturePercent.label.short },

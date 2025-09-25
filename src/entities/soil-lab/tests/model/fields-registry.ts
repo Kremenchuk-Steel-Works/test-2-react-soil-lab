@@ -1,6 +1,8 @@
+import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
 import { createFieldRegistry } from '@/utils/react-hook-form/createFieldRegistry'
 
 export const testsFieldRegistry = createFieldRegistry({
+  moldingSandRecipe: samplesFieldRegistry.moldingSandRecipe,
   sampleId: {
     label: { default: 'ID' },
   },
@@ -9,6 +11,19 @@ export const testsFieldRegistry = createFieldRegistry({
   },
   measurement1: {
     label: { default: 'Значення' },
+  },
+} as const)
+
+export const testsResponseFieldRegistry = createFieldRegistry({
+  type: testsFieldRegistry.type,
+  createdAt: {
+    label: { default: 'Створено' },
+  },
+  meanMeasurement: {
+    label: { default: 'Значення' },
+  },
+  status: {
+    label: { default: 'Статус' },
   },
 } as const)
 

@@ -8,7 +8,7 @@ const SamplesList = lazy(() => import('@/pages/soil-lab/samples/ui/list/List'))
 const SamplesAdd = lazy(() => import('@/pages/soil-lab/samples/ui/Add'))
 const SamplesDelete = lazy(() => import('@/pages/soil-lab/samples/ui/Delete'))
 const SamplesDetails = lazy(() => import('@/pages/soil-lab/samples/ui/Details'))
-const SamplesUpdate = lazy(() => import('@/pages/soil-lab/samples/ui/Update'))
+const TestsAdd = lazy(() => import('@/pages/soil-lab/tests/ui/Add'))
 
 export const samplesRoutes: AppRoute = {
   key: 'Samples',
@@ -66,8 +66,8 @@ export const samplesRoutes: AppRoute = {
           path: 'update',
           label: 'Оновити',
           icon: RefreshCcw,
-          Component: SamplesUpdate,
-          requiredPermissions: [PERMISSIONS.SAMPLES_UPDATE],
+          Component: TestsAdd,
+          requiredPermissions: [PERMISSIONS.SAMPLES_CREATE],
         },
       ],
     },

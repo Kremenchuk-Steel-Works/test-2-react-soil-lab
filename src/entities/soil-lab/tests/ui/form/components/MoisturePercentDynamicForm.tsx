@@ -4,12 +4,12 @@ import type { SampleDetailResponse } from '@/shared/api/soil-lab-2/model'
 import { useDynamicMeta } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/useFormKit'
 
-export function GasPermabilityDynamicForm() {
+export function MoisturePercentDynamicForm() {
   const Form = useFormKit<Measurement1FormFields>()
   const { responseData } = useDynamicMeta<Record<string, never>, SampleDetailResponse>()
   const F = useTestsFormFields(Form, {
     responseData,
   })
 
-  return <F.gasPermeability />
+  return <F.moisturePercent />
 }

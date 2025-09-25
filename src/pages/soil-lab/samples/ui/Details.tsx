@@ -1,17 +1,17 @@
 import { useParams } from 'react-router-dom'
-import { measurementsService } from '@/entities/soil-lab/measurements/api/service'
+import { samplesService } from '@/entities/soil-lab/samples/api/service'
 import { getErrorMessage } from '@/shared/lib/axios'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { ConfiguredButton } from '@/widgets/page/ConfiguredButton'
 
-export default function MeasurementsDetails() {
+export default function SamplesDetails() {
   const { id } = useParams<{ id: string }>()
 
   const {
     data: responseData,
     isLoading,
     error: queryError,
-  } = measurementsService.getById(id!, {
+  } = samplesService.getById(id!, {
     query: { enabled: !!id },
   })
 
@@ -23,38 +23,38 @@ export default function MeasurementsDetails() {
           <h5 className="layout-text">Деталі</h5>
 
           <dl className="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2">
-            {/* --- Номер суміші --- */}
+            {/* --- Рецепт суміші --- */}
             <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">Номер суміші</dt>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Рецепт суміші</dt>
               <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {responseData.moldingSandNumber}
+                {responseData.moldingSandRecipe}
               </dd>
             </div>
 
-            {/* --- Міцність --- */}
-            <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">Міцність (кгс/см²)</dt>
-              <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {responseData.moldingSandStrengthKgfCm2}
-              </dd>
-            </div>
-
-            {/* --- Газопроникність --- */}
+            {/* --- Дата отримання зразка --- */}
             <div>
               <dt className="font-medium text-gray-500 dark:text-slate-400">
-                Газопроникність (од.)
+                Дата отримання зразка
               </dt>
               <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {responseData.moldingSandGasPermeability}
+                {new Date(responseData.receivedAt).toLocaleString()}
               </dd>
             </div>
 
-            {/* --- Вологість --- */}
+            {/* --- Кількість випробувань --- */}
             <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">Вологість (%)</dt>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">
+                Кількість випробувань
+              </dt>
               <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {responseData.moldingSandMoisturePercent}
+                {responseData.tests.length}
               </dd>
+            </div>
+
+            {/* --- ID зразка --- */}
+            <div>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">ID зразка</dt>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">{responseData.id}</dd>
             </div>
 
             {/* --- Примітка (опційно) --- */}
@@ -67,13 +67,59 @@ export default function MeasurementsDetails() {
               </div>
             )}
 
-            {/* --- Час додавання --- */}
+            {/* --- Статус --- */}
             <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">Час додавання</dt>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Статус</dt>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                {responseData.isDeleted ? 'Видалено' : 'Активний'}
+              </dd>
+            </div>
+
+            {/* --- Час створення --- */}
+            <div>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Час створення</dt>
               <dd className="mt-1 text-gray-900 dark:text-slate-300">
                 {new Date(responseData.createdAt).toLocaleString()}
               </dd>
             </div>
+
+            {/* --- Оновлено --- */}
+            <div>
+              <dt className="font-medium text-gray-500 dark:text-slate-400">Оновлено</dt>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                {new Date(responseData.updatedAt).toLocaleString()}
+              </dd>
+            </div>
+
+            {/* --- Хто створив (опційно) --- */}
+            {responseData.createdById && (
+              <div>
+                <dt className="font-medium text-gray-500 dark:text-slate-400">Хто створив</dt>
+                <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                  {responseData.createdById}
+                </dd>
+              </div>
+            )}
+
+            {/* --- Хто оновив (опційно) --- */}
+            {responseData.updatedById && (
+              <div>
+                <dt className="font-medium text-gray-500 dark:text-slate-400">Хто оновив</dt>
+                <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                  {responseData.updatedById}
+                </dd>
+              </div>
+            )}
+
+            {/* --- Час видалення (опційно) --- */}
+            {responseData.deletedAt && (
+              <div>
+                <dt className="font-medium text-gray-500 dark:text-slate-400">Час видалення</dt>
+                <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                  {new Date(responseData.deletedAt).toLocaleString()}
+                </dd>
+              </div>
+            )}
           </dl>
 
           <div>
