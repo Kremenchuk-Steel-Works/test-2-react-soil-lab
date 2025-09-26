@@ -1,5 +1,6 @@
 import { keepPreviousData } from '@tanstack/react-query'
 import { samplesService } from '@/entities/soil-lab/samples/api/service'
+import SamplesGenerateReportPage from '@/pages/soil-lab/samples/ui/GenerateReport'
 import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import { getErrorMessage } from '@/shared/lib/axios'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
@@ -36,6 +37,7 @@ export default function SamplesList() {
           page={page}
           perPage={perPage}
           totalPages={responseData?.totalPages}
+          headerComponents={<SamplesGenerateReportPage />}
         />
       )}
     </>

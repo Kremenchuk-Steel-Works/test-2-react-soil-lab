@@ -1,6 +1,6 @@
 {
   "soil-lab-2": {
-    "url": "src/shared/api/soil-lab-openapi.json",
+    "url": "http://138.199.209.211:8200/openapi.json",
     "path": "src/shared/api/soil-lab-2"
   }
 }

@@ -5,10 +5,13 @@ import {
   type SamplesCreateFormFields,
 } from '@/features/soil-lab/samples/create/model/schema'
 import { SamplesCreateForm } from '@/features/soil-lab/samples/create/ui/SamplesCreateForm'
-import { getGetSamplesListApiV1SamplesGetQueryKey } from '@/shared/api/soil-lab-2/endpoints/samples/samples'
+import {
+  getGetSamplesListApiV1SamplesGetQueryKey,
+  type CreateSampleApiV1SamplesPostMutationResult,
+} from '@/shared/api/soil-lab-2/endpoints/samples/samples'
 
 interface SamplesCreateProps {
-  onSuccess?: (res: unknown) => void
+  onSuccess?: (res: CreateSampleApiV1SamplesPostMutationResult) => void
   onError?: (err: unknown) => void
 }
 

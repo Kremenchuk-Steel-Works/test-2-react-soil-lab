@@ -27,6 +27,10 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
     const { gasPermeability, moisturePercent, strength } = testsTypeFieldRegistry
 
     return Object.freeze({
+      Title: V('Title', ({ text }: { text?: string }) => (
+        <h5 className="layout-text">{`${text}`}</h5>
+      )),
+
       [sampleId.key]: F(sampleId.key, (name) => (
         <Form.Field name={name}>
           {({ register }) => (
@@ -45,7 +49,7 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
               isVirtualized
               isClearable
               isDisabled
-              placeholder={type.label.default + ' *'}
+              placeholder={moldingSandRecipe.label.default + ' *'}
             />
           )}
         </Form.Controller>

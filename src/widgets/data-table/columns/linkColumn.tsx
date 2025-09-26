@@ -11,6 +11,7 @@ export type LinkWrapOptions<TData, TValue> = {
 }
 
 /* ========= Перегрузки ========= */
+export function linkColumn<TData, TValue>(): Pick<ColumnDef<TData, TValue>, 'cell' | 'filterFn'>
 export function linkColumn<TData, TValue>(
   base: Pick<ColumnDef<TData, TValue>, 'cell' | 'filterFn'>,
   options: LinkWrapOptions<TData, TValue>,
@@ -21,7 +22,7 @@ export function linkColumn<TData, TValue>(
 
 /* ========= Реализация ========= */
 export function linkColumn<TData, TValue>(
-  baseOrOptions:
+  baseOrOptions?:
     | Pick<ColumnDef<TData, TValue>, 'cell' | 'filterFn'>
     | LinkWrapOptions<TData, TValue>,
   maybeOptions?: LinkWrapOptions<TData, TValue>,
@@ -36,7 +37,21 @@ export function linkColumn<TData, TValue>(
         cell: (ctx: CellContext<TData, TValue>) => toNode(ctx.getValue() as unknown) ?? '—',
       }
 
-  const options = (basePassed ? maybeOptions : baseOrOptions) as LinkWrapOptions<TData, TValue>
+  const rawOptions = (basePassed ? maybeOptions : baseOrOptions) as
+    | LinkWrapOptions<TData, TValue>
+    | undefined
+
+  // Дефолтный getHref: ссылка = значение ячейки
+  const defaultGetHref = (ctx: CellContext<TData, TValue>): string | null => {
+    const v = ctx.getValue() as unknown
+    if (typeof v === 'string' || typeof v === 'number' || typeof v === 'bigint') return String(v)
+    return null
+  }
+
+  const options: LinkWrapOptions<TData, TValue> = rawOptions ?? {
+    getHref: defaultGetHref,
+  }
+
   const { fallback = '—', getLinkProps, className, linkWhen } = options
 
   const cell: NonNullable<ColumnDef<TData, TValue>['cell']> = (ctx) => {

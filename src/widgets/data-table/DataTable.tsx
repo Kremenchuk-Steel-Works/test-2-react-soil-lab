@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from 'react'
+import { useId, useMemo, useState, type ReactNode } from 'react'
 import {
   flexRender,
   getCoreRowModel,
@@ -20,13 +20,11 @@ import {
   ChevronRight,
   ChevronsUpDown,
   ChevronUp,
-  Download,
   ListFilter,
   ListRestart,
 } from 'lucide-react'
 import type { SetURLSearchParams } from 'react-router-dom'
 import type { CSSObjectWithLabel } from 'react-select'
-import MeasurementsGenerateReport from '@/features/soil-lab/measurements/generate-report/ui/MeasurementsGenerateReport'
 import Button from '@/shared/ui/button/Button'
 import { EllipsisText } from '@/shared/ui/ellipsis/EllipsisText'
 import { TooltipWrapper } from '@/shared/ui/ellipsis/TooltipWrapper'
@@ -49,9 +47,10 @@ export type DataTableProps<TData extends RowData> = {
   enableSortingRemoval?: boolean
   totalPages?: number
   initialSorting?: SortingState
+  headerComponents?: ReactNode
 }
 
-/* Позволяет задать текст тултипа через columnDef.meta.title */
+/* Позволяет задать текст tooltip через columnDef.meta.title */
 type ColumnMeta<TData> = {
   /** Статичный заголовок/подсказка или генератор для ячеек */
   title?: string | ((row: TData, cell: Cell<TData, unknown>) => string)
@@ -66,6 +65,7 @@ export function DataTable<TData extends RowData>({
   setSearchParams,
   enableSortingRemoval = false,
   initialSorting,
+  headerComponents,
 }: DataTableProps<TData>) {
   const id = useId()
 
@@ -296,24 +296,10 @@ export function DataTable<TData extends RowData>({
             </TooltipWrapper>
           )}
 
-          {/* Скачивание отчёта */}
-          <ModalTrigger
-            trigger={(open) => (
-              <TooltipWrapper title={`Завантажити звіт`}>
-                <Button
-                  className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
-                  onClick={open}
-                >
-                  <Download className="h-5 w-5 text-slate-700 dark:text-slate-300" />
-                </Button>
-              </TooltipWrapper>
-            )}
-            sheetProps={{
-              label: <p className="text-lg font-semibold">Завантажити звіт</p>,
-            }}
-          >
-            {({ onSuccess }) => <MeasurementsGenerateReport onSuccess={onSuccess} />}
-          </ModalTrigger>
+          {/* Доп. элементы хедера от потребителя таблицы */}
+          {headerComponents ? (
+            <div className="flex items-center gap-1">{headerComponents}</div>
+          ) : null}
         </div>
 
         <div className="flex items-center gap-1">

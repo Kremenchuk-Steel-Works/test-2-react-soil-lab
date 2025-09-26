@@ -8,23 +8,23 @@ import {
 } from '@/shared/lib/zod/dynamic-sections'
 import { selectCandidatesFromTree } from '@/shared/lib/zod/dynamic-sections-scoped'
 
+/**
+ * Семантика:
+ *  - если правило для ключа АКТИВНО → базовая схема для этого ключа не применяется (полное перекрытие),
+ *    в т.ч. required/минимумы/максимумы; берём только динамическую схему.
+ *  - если правило НЕ активно → ключ валидируется базовой схемой (как есть).
+ */
 export function createDynamicResolver<TFieldValues extends FieldValues>(
   base: ZodObject<ZodRawShape>,
   sections: DynamicSectionsConfig,
 ): Resolver<TFieldValues> {
   const rules = flattenRules(sections)
-  const relaxedBase = (function relax(base0: ZodObject<ZodRawShape>) {
-    const set = new Set<string>()
-    for (const r of rules) for (const k of Object.keys(r.schema.shape)) set.add(k)
-    const patch: ZodRawShape = Object.create(null) as ZodRawShape
-    const baseShape = base0.shape
-    for (const key of set) if (baseShape[key]) patch[key] = baseShape[key].optional()
-    return base0.extend(patch) as unknown as ZodObject<ZodRawShape>
-  })(base)
-
   const normalize = buildValueNormalizerFromZod(base)
 
-  // Для маппинга (section,indexInSection) → глобальный индекс rules[]
+  // Предрассчёт
+  const ruleSchemaKeys = rules.map((r) => Object.keys(r.schema.shape))
+
+  // Смещения секций -> глобальный индекс правила
   const sectionToOffsets = new Map<string, number>()
   {
     let offset = 0
@@ -34,69 +34,95 @@ export function createDynamicResolver<TFieldValues extends FieldValues>(
     }
   }
 
-  // Предрасчёт: какие ключи к каким rules относятся (как было)
-  const ruleSchemaKeys = rules.map((r) => Object.keys(r.schema.shape))
-  const keyToRuleIdx = new Map<string, number[]>()
-  ruleSchemaKeys.forEach((keys, idx) => {
-    keys.forEach((k) => {
-      const arr = keyToRuleIdx.get(k)
-      if (arr) arr.push(idx)
-      else keyToRuleIdx.set(k, [idx])
-    })
-  })
+  return (values) => {
+    const v = values as Record<string, unknown>
 
-  return (values, _context, _options) => {
-    void _context
-    void _options
-
-    // Кандидаты через дерево (если мета есть)
-    const pairs = selectCandidatesFromTree(
-      sections as DynamicSectionsConfig<string>,
-      values as Record<string, unknown>,
-      normalize,
-    )
-
+    // Отбираем кандидатов и определяем активные правила
+    const pairs = selectCandidatesFromTree(sections as DynamicSectionsConfig<string>, v, normalize)
     const candidateIdxs = pairs
       ? pairs
           .map(({ section, indexInSection }) => {
             const off = sectionToOffsets.get(section)
             return typeof off === 'number' ? off + indexInSection : -1
           })
-          .filter((x) => x >= 0)
-      : // если дерево не прикреплено — проверяем все
-        rules.map((_r, i) => i)
+          .filter((i) => i >= 0)
+      : rules.map((_r, i) => i)
 
     const activeFlags = new Array<boolean>(rules.length).fill(false)
     for (const i of candidateIdxs) {
-      activeFlags[i] = checkConditions(values as Record<string, unknown>, rules[i], {
+      activeFlags[i] = checkConditions(v, rules[i], {
         normalize,
         tag: 'dynamic-resolver',
       })
     }
 
-    const stripped: Record<string, unknown> = { ...(values as Record<string, unknown>) }
-    for (const [key, owners] of keyToRuleIdx) {
-      const isActiveForKey = owners.some((i) => activeFlags[i])
-      if (!isActiveForKey) delete stripped[key]
+    // Множество динамических ключей, которые ПЕРЕКРЫВАЮТСЯ (только активные)
+    const activeDynamicKeys = new Set<string>()
+    for (let i = 0; i < rules.length; i++) {
+      if (!activeFlags[i]) continue
+      for (const k of ruleSchemaKeys[i]) activeDynamicKeys.add(k)
     }
 
-    const baseResult = relaxedBase.safeParse(stripped)
-    const errorsMap: Record<string, { type: string; message?: string }> = {}
-    if (!baseResult.success) {
-      for (const iss of (baseResult as { error: ZodError }).error.issues) {
-        const name = iss.path.map(String).join('.')
-        if (!errorsMap[name]) errorsMap[name] = { type: 'zod_base', message: iss.message }
+    // (опционально) детект конфликтов: один ключ обслуживают несколько активных правил
+    // если такое допустимо в твоей модели — можно убрать этот блок
+    for (const k of activeDynamicKeys) {
+      let owners = 0
+      for (let i = 0; i < rules.length; i++) {
+        if (activeFlags[i] && ruleSchemaKeys[i].includes(k)) owners++
+        if (owners > 1) {
+          const errors = {
+            [k]: {
+              type: 'dynamic_conflict',
+              message: `Поле "${k}" перекрыто несколькими активными правилами`,
+            },
+          } as unknown as ResolverResult<TFieldValues>['errors']
+          return { values: {} as TFieldValues, errors }
+        }
       }
     }
 
+    const errorsMap: Record<string, { type: string; message?: string }> = {}
+    const result: Record<string, unknown> = { ...v } // промежуточный буфер
+
+    // Валидируем ТОЛЬКО активные правила, применяем transform и перезаписываем их ключи
     for (const i of candidateIdxs) {
       if (!activeFlags[i]) continue
-      const r = rules[i].schema.safeParse(stripped)
-      if (!r.success) {
-        for (const iss of (r as { error: ZodError }).error.issues) {
+      const rule = rules[i]
+      const parsed = rule.schema.safeParse(result)
+      if (parsed.success) {
+        const data = parsed.data
+        for (const k of ruleSchemaKeys[i]) {
+          // Перекрываем базу: динамика полностью управляет этим ключом
+          result[k] = data[k]
+        }
+      } else {
+        for (const iss of (parsed as { error: ZodError }).error.issues) {
           const name = iss.path.map(String).join('.')
           if (!errorsMap[name]) errorsMap[name] = { type: `zod_rule_${i}`, message: iss.message }
         }
+      }
+    }
+
+    // Валидируем только те ключи, которые НЕ перекрыты динамикой
+    //    Т.е. для activeDynamicKeys база не применяется вообще.
+    const baseKeys = Object.keys(base.shape)
+    const baseKeysToValidate = baseKeys.filter((k) => !activeDynamicKeys.has(k))
+
+    // Если нечего проверять — пропускаем base.safeParse (экономим)
+    if (baseKeysToValidate.length > 0) {
+      const basePick = base.pick(
+        Object.fromEntries(baseKeysToValidate.map((k) => [k, true])) as Record<string, true>,
+      )
+      const baseParsed = basePick.safeParse(result)
+      if (!baseParsed.success) {
+        for (const iss of (baseParsed as { error: ZodError }).error.issues) {
+          const name = iss.path.map(String).join('.')
+          if (!errorsMap[name]) errorsMap[name] = { type: 'zod_base', message: iss.message }
+        }
+      } else {
+        // Применяем базовые transform только к НЕперекрытым ключам
+        const data = baseParsed.data as Record<string, unknown>
+        for (const k of baseKeysToValidate) result[k] = data[k]
       }
     }
 
@@ -106,8 +132,9 @@ export function createDynamicResolver<TFieldValues extends FieldValues>(
         errors: errorsMap as unknown as ResolverResult<TFieldValues>['errors'],
       }
     }
+
     return {
-      values: (baseResult.success ? baseResult.data : stripped) as unknown as TFieldValues,
+      values: result as unknown as TFieldValues,
       errors: {} as ResolverResult<TFieldValues>['errors'],
     }
   }
@@ -121,7 +148,6 @@ export function createDynamicEngine<TFieldValues extends FieldValues>(
   const resolver = createDynamicResolver<TFieldValues>(base, sections)
   const valueNormalizer = buildValueNormalizerFromZod(base)
 
-  // Частичный парсинг по базе
   const basePickParse = (keys: string[], input: Record<string, unknown>) => {
     const pick = base.pick(Object.fromEntries(keys.map((k) => [k, true])) as Record<string, true>)
     const subset = Object.fromEntries(keys.map((k) => [k, input[k]]))

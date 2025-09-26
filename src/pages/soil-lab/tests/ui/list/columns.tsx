@@ -16,7 +16,6 @@ export const testsColumns = [
       getHref: ({ row }) => row.original.id,
     }),
   }),
-
   columnHelper.accessor(status.key, {
     header: status.label.default,
     size: 55,

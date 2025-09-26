@@ -1,47 +1,54 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
-import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { samplesMixturesOptions } from '@/entities/soil-lab/samples/model/mixtures'
+import { samplesGenerateReportFieldRegistry } from '@/features/soil-lab/samples/generate-report/model/fields-registry'
 import type { SampleDetailResponse } from '@/shared/api/soil-lab-2/model'
 import Button from '@/shared/ui/button/Button'
-import TextareaField from '@/shared/ui/input-field/TextareaField'
-import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
+import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
 import type { FormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
 import { makeBinders } from '@/utils/react-hook-form/makeBinders'
 
 type Ctx = { responseData?: SampleDetailResponse }
 
-export function useSamplesFormFields<T extends FieldValues>(Form: FormKit<T>, ctx: Ctx) {
+export function useSamplesGenerateReportFormFields<T extends FieldValues>(
+  Form: FormKit<T>,
+  ctx: Ctx,
+) {
   const ctxRef = useRef(ctx)
   ctxRef.current = ctx
 
   const Fields = useMemo(() => {
     const { F, V } = makeBinders<T, Ctx>(ctxRef)
 
-    const { moldingSandRecipe, note } = samplesFieldRegistry
+    const { dateFrom, dateTo } = samplesGenerateReportFieldRegistry
 
     return Object.freeze({
-      Title: V('Title', () => <h5 className="layout-text">Створення Sample</h5>),
+      Title: V('Title', () => <h5 className="layout-text">Завантажити звіт </h5>),
 
-      [moldingSandRecipe.key]: F(moldingSandRecipe.key, (name) => (
+      [dateFrom.key]: F(dateFrom.key, (name) => (
         <Form.Controller name={name}>
           {({ field, fieldState }) => (
-            <FormSelectField
+            <FormDateTimeField
               field={field}
               fieldState={fieldState}
-              options={samplesMixturesOptions}
-              isVirtualized
-              isClearable
-              placeholder={moldingSandRecipe.label.default + ' *'}
+              type="date"
+              label={dateFrom.label.default}
             />
           )}
         </Form.Controller>
       )),
 
-      [note.key]: F(note.key, (name) => (
-        <Form.Field name={name}>
-          {({ register }) => <TextareaField label={note.label.default} {...register} />}
-        </Form.Field>
+      [dateTo.key]: F(dateTo.key, (name) => (
+        <Form.Controller name={name}>
+          {({ field, fieldState }) => (
+            <FormDateTimeField
+              field={field}
+              fieldState={fieldState}
+              type="date"
+              offsetFuture={{ days: 1 }}
+              label={dateTo.label.default}
+            />
+          )}
+        </Form.Controller>
       )),
 
       SubmitButton: V(

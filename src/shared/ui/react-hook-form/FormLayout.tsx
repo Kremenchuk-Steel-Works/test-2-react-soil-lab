@@ -11,7 +11,7 @@ type FormLayoutProps = ComponentProps<'form'> & {
 }
 
 export function FormLayout({ children, className, as = 'form', ...props }: FormLayoutProps) {
-  const cls = cn('mx-auto max-w-2xl space-y-3', className)
+  const cls = cn('mx-auto max-w-2xl space-y-3 mb-3 last:mb-0', className)
   return as === 'div' ? (
     <div className={cls}>{children}</div>
   ) : (

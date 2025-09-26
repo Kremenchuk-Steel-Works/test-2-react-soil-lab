@@ -6,26 +6,14 @@ import type { FormBaseProps } from '@/types/react-hook-form'
 
 export type TestsCreateBaseFormProps = FormBaseProps<TestsCreateFormFields, SampleDetailResponse>
 
-export function TestsCreateBaseForm({
-  isSubmitting,
-  responseData,
-  submitBtnName,
-}: TestsCreateBaseFormProps) {
+export function TestsCreateBaseForm({ responseData }: TestsCreateBaseFormProps) {
   const Form = useFormKit<TestsCreateFormFields>()
   const F = useTestsFormFields(Form, {
     responseData,
   })
   return (
     <>
-      <F.sampleId />
-
-      <F.moldingSandRecipe />
-
-      <F.type />
-
       <F.measurement1Dynamic />
-
-      <F.SubmitButton text={submitBtnName} disabled={isSubmitting} />
     </>
   )
 }

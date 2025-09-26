@@ -19,34 +19,40 @@ const logger = createLogger('DynamicFields')
 
 type ActiveRulesState<RuleKey extends string = string> = Record<RuleKey, boolean>
 
-type DynamicMeta<TOptions extends object, TResponseData, SectionKey extends string> = {
+type DynamicMeta<
+  TOptions extends object,
+  TResponseData,
+  TMeta extends object,
+  SectionKey extends string,
+> = {
   sections: DynamicSectionsConfig<SectionKey>
   options?: TOptions
+  meta?: TMeta
   responseData?: TResponseData
   valueNormalizer?: ValueNormalizer
   basePickParse?: (keys: string[], input: Record<string, unknown>) => Record<string, unknown>
 }
 
 const ActiveRulesContext = createContext<ActiveRulesState<string> | null>(null)
-const DynamicMetaContext = createContext<DynamicMeta<object, unknown, string> | null>(null)
+const DynamicMetaContext = createContext<DynamicMeta<object, unknown, object, string> | null>(null)
 
 interface ProviderProps<
   TOptions extends object,
   TResponseData,
+  TMeta extends object,
   SectionKey extends string = string,
 > {
   sections: DynamicSectionsConfig<SectionKey>
   options?: TOptions
+  meta?: TMeta
   responseData?: TResponseData
   valueNormalizer?: ValueNormalizer
   basePickParse?: (keys: string[], input: Record<string, unknown>) => Record<string, unknown>
   clearErrorsForUnrequired?: boolean
-  /** Опционально: форсировать режим (перекрывает auto-детект из RHF) */
   forceValidationMode?: Mode
   children: ReactNode
 }
 
-/** Безопасно читаем режимы из RHF (внутреннее поле, но с защитой и без избыточных assertion) */
 type RHFPrivateOpts = { mode?: Mode; reValidateMode?: 'onChange' | 'onBlur' }
 function useResolvedModes(): { mode: Mode; reValidateMode: 'onChange' | 'onBlur' } {
   const { control } = useFormContext()
@@ -61,17 +67,19 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
   TFieldValues extends FieldValues,
   TOptions extends object,
   TResponseData,
+  TMeta extends object,
   SectionKey extends string = string,
 >({
   children,
   sections,
   options,
+  meta,
   responseData,
   valueNormalizer,
   basePickParse,
   clearErrorsForUnrequired = true,
   forceValidationMode,
-}: ProviderProps<TOptions, TResponseData, SectionKey>) {
+}: ProviderProps<TOptions, TResponseData, TMeta, SectionKey>) {
   const { control, getValues, resetField, clearErrors, trigger, formState, getFieldState } =
     useFormContext<TFieldValues>()
 
@@ -83,14 +91,12 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     [sections],
   )
 
-  // ruleIndex -> keys[]
   const ruleIdxToKeys = useMemo(() => {
     return allRules.map((r) =>
       Object.keys((r as { schema?: { shape?: Record<string, unknown> } }).schema?.shape ?? {}),
     )
   }, [allRules])
 
-  // === ВАЖНО: мапа смещений секций → глобальный индекс (как в resolver) ===
   const sectionToOffsets = useMemo(() => {
     let offset = 0
     const map = new Map<string, number>()
@@ -103,7 +109,6 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     return map
   }, [sections])
 
-  // подписка только на поля, влияющие на условия/исключения (как было)
   const fieldsToWatch = useMemo(() => {
     const set = new Set<string>()
     for (const r of allRules) {
@@ -119,13 +124,11 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     disabled: fieldsToWatch.length === 0,
   })
 
-  // === Оптимизация: считаем только кандидатов через дерево scoped ===
   const prevActiveRef = useRef<ActiveRulesState<string>>({})
   const activeRules = useMemo<ActiveRulesState<string>>(() => {
     void tick
     const values = getValues()
 
-    // 1) выберем кандидатов
     const pairs =
       selectCandidatesFromTree(
         sections as unknown as DynamicSectionsConfig<string>,
@@ -140,10 +143,8 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
             return typeof off === 'number' ? off + indexInSection : -1
           })
           .filter((i) => i >= 0)
-      : // если меты нет — проверяем всё, как раньше
-        allRules.map((_r, i) => i)
+      : allRules.map((_r, i) => i)
 
-    // 2) по умолчанию все false, а считаем только кандидатов
     const next: ActiveRulesState<string> = {}
     for (const r of allRules) next[r.id] = false
     for (const i of candidateIdxs) {
@@ -154,7 +155,6 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
       })
     }
 
-    // 3) мемо: если не изменилось — вернём предыдущее
     const prev = prevActiveRef.current
     let changed = Object.keys(prev).length !== Object.keys(next).length
     if (!changed)
@@ -167,8 +167,6 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     prevActiveRef.current = next
     return next
   }, [tick, allRules, getValues, valueNormalizer, sections, sectionToOffsets])
-
-  // === Остальной код провайдера (reset/clearErrors/trigger) без изменений ===
 
   const prevResetRef = useRef<ActiveRulesState<string>>({})
   useEffect(() => {
@@ -229,18 +227,19 @@ export const DynamicFieldsProvider = memo(function DynamicFieldsProvider<
     void trigger(fieldsToRevalidate, { shouldFocus: false })
   }, [activeRules, allRules, ruleIdxToKeys, validationMode, formState, trigger, getFieldState])
 
-  const meta = useMemo(
+  const metaValue = useMemo(
     () =>
-      ({ sections, options, responseData, valueNormalizer, basePickParse }) as DynamicMeta<
+      ({ sections, options, meta, responseData, valueNormalizer, basePickParse }) as DynamicMeta<
         TOptions,
         TResponseData,
+        TMeta,
         SectionKey
       >,
-    [sections, options, responseData, valueNormalizer, basePickParse],
+    [sections, options, meta, responseData, valueNormalizer, basePickParse],
   )
 
   return (
-    <DynamicMetaContext.Provider value={meta}>
+    <DynamicMetaContext.Provider value={metaValue}>
       <ActiveRulesContext.Provider value={activeRules}>{children}</ActiveRulesContext.Provider>
     </DynamicMetaContext.Provider>
   )
@@ -257,9 +256,10 @@ export function useActiveRules() {
 export function useDynamicMeta<
   TOptions extends object = Record<string, never>,
   TResponseData = unknown,
+  TMeta extends object = Record<string, never>,
   SectionKey extends string = string,
 >() {
   const v = useContext(DynamicMetaContext)
   if (!v) throw new Error('useDynamicMeta must be used within a DynamicFieldsProvider')
-  return v as DynamicMeta<TOptions, TResponseData, SectionKey>
+  return v as DynamicMeta<TOptions, TResponseData, TMeta, SectionKey>
 }

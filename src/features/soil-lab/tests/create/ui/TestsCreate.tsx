@@ -5,7 +5,10 @@ import { samplesService } from '@/entities/soil-lab/samples/api/service'
 import { testsService } from '@/entities/soil-lab/tests/api/service'
 import type { TestsCreateFormFields } from '@/features/soil-lab/tests/create/model/schema'
 import { TestsCreateForm } from '@/features/soil-lab/tests/create/ui/TestsCreateForm'
-import { getGetTestsListApiV1TestsGetQueryKey } from '@/shared/api/soil-lab-2/endpoints/tests/tests'
+import {
+  getGetTestsListApiV1TestsGetQueryKey,
+  type CreateTestApiV1TestsPostMutationResult,
+} from '@/shared/api/soil-lab-2/endpoints/tests/tests'
 import { TestType, type SampleDetailResponse } from '@/shared/api/soil-lab-2/model'
 import { getErrorMessage } from '@/shared/lib/axios'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
@@ -13,7 +16,7 @@ import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 interface TestsCreateProps {
   id: string
   type: TestType
-  onSuccess?: (res: unknown) => void
+  onSuccess?: (res: CreateTestApiV1TestsPostMutationResult) => void
   onError?: (err: unknown) => void
 }
 
@@ -74,7 +77,7 @@ export default function TestsCreate({ id, type, onSuccess, onError }: TestsCreat
           onSubmit={handleSubmit}
           defaultValues={formDefaultValues}
           responseData={responseData}
-          submitBtnName="Оновити"
+          submitBtnName="Відправити"
         />
       )}
     </>

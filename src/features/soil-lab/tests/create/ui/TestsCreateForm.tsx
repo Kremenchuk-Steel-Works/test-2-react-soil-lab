@@ -29,7 +29,7 @@ export function TestsCreateForm({
   onSubmit,
   submitBtnName,
 }: TestsFormProps) {
-  const { resolver, valueNormalizer, basePickParse } = createDynamicEngine<FormFields>(
+  const { resolver, valueNormalizer } = createDynamicEngine<FormFields>(
     schema,
     testsDynamicSections,
   )
@@ -63,15 +63,11 @@ export function TestsCreateForm({
         <FormKitProvider value={Form}>
           <DynamicFieldsProvider
             sections={testsDynamicSections}
-            responseData={responseData}
             valueNormalizer={valueNormalizer}
-            basePickParse={basePickParse}
+            responseData={responseData}
+            meta={{ submitBtnName, isSubmitting }}
           >
-            <TestsCreateBaseForm
-              responseData={responseData}
-              isSubmitting={isSubmitting}
-              submitBtnName={submitBtnName}
-            />
+            <TestsCreateBaseForm responseData={responseData} />
           </DynamicFieldsProvider>
         </FormKitProvider>
       </FormLayout>

@@ -1,5 +1,6 @@
 import { usePageTitle } from '@/shared/hooks/usePageTitle'
 import Navbar from '@/widgets/page-layout/Navbar'
+import { PageHeader } from '@/widgets/page/PageHeader'
 import Sidebar from '@/widgets/sidebar/Sidebar'
 
 /**
@@ -14,7 +15,16 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <Navbar />
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <main className="h-full flex-1 overflow-auto p-4">{children}</main>
+
+        <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
+          {/* Breadcrumbs */}
+          <div className="sticky top-0 z-40 min-w-0 bg-gray-50 px-4 pt-4 dark:bg-gray-800">
+            <PageHeader />
+          </div>
+
+          {/* Прокручивание содержимого страницы */}
+          <div className="flex-1 overflow-auto p-4">{children}</div>
+        </main>
       </div>
     </div>
   )
