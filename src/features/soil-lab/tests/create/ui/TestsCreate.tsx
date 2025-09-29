@@ -6,6 +6,10 @@ import { testsService } from '@/entities/soil-lab/tests/api/service'
 import type { TestsCreateFormFields } from '@/features/soil-lab/tests/create/model/schema'
 import { TestsCreateForm } from '@/features/soil-lab/tests/create/ui/TestsCreateForm'
 import {
+  getGetSampleApiV1SamplesSampleIdGetQueryKey,
+  getGetSamplesListApiV1SamplesGetQueryKey,
+} from '@/shared/api/soil-lab/endpoints/samples/samples'
+import {
   getGetTestsListApiV1TestsGetQueryKey,
   type CreateTestApiV1TestsPostMutationResult,
 } from '@/shared/api/soil-lab/endpoints/tests/tests'
@@ -51,11 +55,20 @@ export default function TestsCreate({ id, type, onSuccess, onError }: TestsCreat
 
   const { mutateAsync } = testsService.create({
     mutation: {
-      onSuccess: (res) => {
-        void queryClient.invalidateQueries({
-          queryKey: getGetTestsListApiV1TestsGetQueryKey(),
+      onSuccess: (res, variables) => {
+        const queryKeyList = getGetTestsListApiV1TestsGetQueryKey()
+        const queryKeySampleList = getGetSamplesListApiV1SamplesGetQueryKey()
+        const queryKeySampleDetail = getGetSampleApiV1SamplesSampleIdGetQueryKey(
+          variables.data.sampleId,
+        )
+
+        return Promise.all([
+          queryClient.invalidateQueries({ queryKey: queryKeyList }),
+          queryClient.invalidateQueries({ queryKey: queryKeySampleList }),
+          queryClient.invalidateQueries({ queryKey: queryKeySampleDetail }),
+        ]).finally(() => {
+          onSuccess?.(res)
         })
-        onSuccess?.(res)
       },
       onError: (err) => onError?.(err),
     },

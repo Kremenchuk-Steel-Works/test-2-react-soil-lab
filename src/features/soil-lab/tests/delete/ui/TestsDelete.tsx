@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { testsService } from '@/entities/soil-lab/tests/api/service'
+import { getGetSamplesListApiV1SamplesGetQueryKey } from '@/shared/api/soil-lab/endpoints/samples/samples'
 import {
   getGetTestApiV1TestsTestIdGetQueryKey,
   getGetTestsListApiV1TestsGetQueryKey,
@@ -26,10 +27,12 @@ export default function TestsDelete({ id, onSuccess, onError }: TestsDeleteProps
       onSuccess: (res, variables) => {
         const queryKeyList = getGetTestsListApiV1TestsGetQueryKey()
         const queryKeyDetail = getGetTestApiV1TestsTestIdGetQueryKey(variables.testId)
+        const queryKeySampleList = getGetSamplesListApiV1SamplesGetQueryKey()
 
         return Promise.all([
           queryClient.invalidateQueries({ queryKey: queryKeyList }),
           queryClient.invalidateQueries({ queryKey: queryKeyDetail }),
+          queryClient.invalidateQueries({ queryKey: queryKeySampleList }),
         ]).finally(() => {
           onSuccess?.(res)
         })
