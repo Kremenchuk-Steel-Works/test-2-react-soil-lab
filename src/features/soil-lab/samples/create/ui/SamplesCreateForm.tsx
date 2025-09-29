@@ -6,7 +6,7 @@ import {
 } from '@/features/soil-lab/samples/create/model/schema'
 import { SamplesCreateFormKit } from '@/features/soil-lab/samples/create/ui/formKit'
 import { SamplesCreateBaseForm } from '@/features/soil-lab/samples/create/ui/SamplesCreateBaseForm'
-import type { SampleDetailResponse } from '@/shared/api/soil-lab-2/model'
+import type { SampleDetailResponse } from '@/shared/api/soil-lab/model'
 import { createLogger } from '@/shared/lib/logger'
 import { FormKitProvider } from '@/shared/ui/react-hook-form/FormKit/FormKitProvider'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'

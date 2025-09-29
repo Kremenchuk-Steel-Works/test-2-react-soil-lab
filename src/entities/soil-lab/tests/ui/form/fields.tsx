@@ -6,7 +6,7 @@ import {
   testsTypeFieldRegistry,
 } from '@/entities/soil-lab/tests/model/fields-registry'
 import { testsTypeOptions } from '@/entities/soil-lab/tests/model/type'
-import type { SampleDetailResponse } from '@/shared/api/soil-lab-2/model'
+import type { SampleDetailResponse } from '@/shared/api/soil-lab/model'
 import Button from '@/shared/ui/button/Button'
 import InputField from '@/shared/ui/input-field/InputField'
 import { DynamicFieldArea } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArea'

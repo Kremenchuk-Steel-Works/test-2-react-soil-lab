@@ -24,7 +24,7 @@ import { customMutator } from '../../../mutator'
 import type {
   GetUserLookupsListApiV1UsersLookupsGetParams,
   GetUsersListApiV1UsersGetParams,
-  HttpValidationError,
+  HTTPValidationError,
   UserCreate,
   UserDetailResponse,
   UserListResponse,
@@ -55,7 +55,7 @@ export const getGetUserLookupsListApiV1UsersLookupsGetQueryKey = (
 
 export const getGetUserLookupsListApiV1UsersLookupsGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getUserLookupsListApiV1UsersLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetUserLookupsListApiV1UsersLookupsGetParams,
   options?: {
@@ -87,11 +87,11 @@ export const getGetUserLookupsListApiV1UsersLookupsGetQueryOptions = <
 export type GetUserLookupsListApiV1UsersLookupsGetQueryResult = NonNullable<
   Awaited<ReturnType<typeof getUserLookupsListApiV1UsersLookupsGet>>
 >
-export type GetUserLookupsListApiV1UsersLookupsGetQueryError = HttpValidationError
+export type GetUserLookupsListApiV1UsersLookupsGetQueryError = HTTPValidationError
 
 export function useGetUserLookupsListApiV1UsersLookupsGet<
   TData = Awaited<ReturnType<typeof getUserLookupsListApiV1UsersLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params: undefined | GetUserLookupsListApiV1UsersLookupsGetParams,
   options: {
@@ -115,7 +115,7 @@ export function useGetUserLookupsListApiV1UsersLookupsGet<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserLookupsListApiV1UsersLookupsGet<
   TData = Awaited<ReturnType<typeof getUserLookupsListApiV1UsersLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetUserLookupsListApiV1UsersLookupsGetParams,
   options?: {
@@ -139,7 +139,7 @@ export function useGetUserLookupsListApiV1UsersLookupsGet<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserLookupsListApiV1UsersLookupsGet<
   TData = Awaited<ReturnType<typeof getUserLookupsListApiV1UsersLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetUserLookupsListApiV1UsersLookupsGetParams,
   options?: {
@@ -159,7 +159,7 @@ export function useGetUserLookupsListApiV1UsersLookupsGet<
 
 export function useGetUserLookupsListApiV1UsersLookupsGet<
   TData = Awaited<ReturnType<typeof getUserLookupsListApiV1UsersLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetUserLookupsListApiV1UsersLookupsGetParams,
   options?: {
@@ -200,7 +200,7 @@ export const getGetUsersListApiV1UsersGetQueryKey = (params?: GetUsersListApiV1U
 
 export const getGetUsersListApiV1UsersGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getUsersListApiV1UsersGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetUsersListApiV1UsersGetParams,
   options?: {
@@ -227,11 +227,11 @@ export const getGetUsersListApiV1UsersGetQueryOptions = <
 export type GetUsersListApiV1UsersGetQueryResult = NonNullable<
   Awaited<ReturnType<typeof getUsersListApiV1UsersGet>>
 >
-export type GetUsersListApiV1UsersGetQueryError = HttpValidationError
+export type GetUsersListApiV1UsersGetQueryError = HTTPValidationError
 
 export function useGetUsersListApiV1UsersGet<
   TData = Awaited<ReturnType<typeof getUsersListApiV1UsersGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params: undefined | GetUsersListApiV1UsersGetParams,
   options: {
@@ -251,7 +251,7 @@ export function useGetUsersListApiV1UsersGet<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUsersListApiV1UsersGet<
   TData = Awaited<ReturnType<typeof getUsersListApiV1UsersGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetUsersListApiV1UsersGetParams,
   options?: {
@@ -271,7 +271,7 @@ export function useGetUsersListApiV1UsersGet<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUsersListApiV1UsersGet<
   TData = Awaited<ReturnType<typeof getUsersListApiV1UsersGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetUsersListApiV1UsersGetParams,
   options?: {
@@ -287,7 +287,7 @@ export function useGetUsersListApiV1UsersGet<
 
 export function useGetUsersListApiV1UsersGet<
   TData = Awaited<ReturnType<typeof getUsersListApiV1UsersGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetUsersListApiV1UsersGetParams,
   options?: {
@@ -322,7 +322,7 @@ export const createUserApiV1UsersPost = (userCreate: UserCreate, signal?: AbortS
 }
 
 export const getCreateUserApiV1UsersPostMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -360,12 +360,12 @@ export type CreateUserApiV1UsersPostMutationResult = NonNullable<
   Awaited<ReturnType<typeof createUserApiV1UsersPost>>
 >
 export type CreateUserApiV1UsersPostMutationBody = UserCreate
-export type CreateUserApiV1UsersPostMutationError = HttpValidationError
+export type CreateUserApiV1UsersPostMutationError = HTTPValidationError
 
 /**
  * @summary Create User
  */
-export const useCreateUserApiV1UsersPost = <TError = HttpValidationError, TContext = unknown>(
+export const useCreateUserApiV1UsersPost = <TError = HTTPValidationError, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof createUserApiV1UsersPost>>,
@@ -513,7 +513,7 @@ export const getGetUserApiV1UsersUserIdGetQueryKey = (userId?: string) => {
 
 export const getGetUserApiV1UsersUserIdGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getUserApiV1UsersUserIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   userId: string,
   options?: {
@@ -540,11 +540,11 @@ export const getGetUserApiV1UsersUserIdGetQueryOptions = <
 export type GetUserApiV1UsersUserIdGetQueryResult = NonNullable<
   Awaited<ReturnType<typeof getUserApiV1UsersUserIdGet>>
 >
-export type GetUserApiV1UsersUserIdGetQueryError = HttpValidationError
+export type GetUserApiV1UsersUserIdGetQueryError = HTTPValidationError
 
 export function useGetUserApiV1UsersUserIdGet<
   TData = Awaited<ReturnType<typeof getUserApiV1UsersUserIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   userId: string,
   options: {
@@ -564,7 +564,7 @@ export function useGetUserApiV1UsersUserIdGet<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserApiV1UsersUserIdGet<
   TData = Awaited<ReturnType<typeof getUserApiV1UsersUserIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   userId: string,
   options?: {
@@ -584,7 +584,7 @@ export function useGetUserApiV1UsersUserIdGet<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetUserApiV1UsersUserIdGet<
   TData = Awaited<ReturnType<typeof getUserApiV1UsersUserIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   userId: string,
   options?: {
@@ -600,7 +600,7 @@ export function useGetUserApiV1UsersUserIdGet<
 
 export function useGetUserApiV1UsersUserIdGet<
   TData = Awaited<ReturnType<typeof getUserApiV1UsersUserIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   userId: string,
   options?: {
@@ -634,7 +634,7 @@ export const updateUserApiV1UsersUserIdPut = (userId: string, userUpdate: UserUp
 }
 
 export const getUpdateUserApiV1UsersUserIdPutMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -672,12 +672,12 @@ export type UpdateUserApiV1UsersUserIdPutMutationResult = NonNullable<
   Awaited<ReturnType<typeof updateUserApiV1UsersUserIdPut>>
 >
 export type UpdateUserApiV1UsersUserIdPutMutationBody = UserUpdate
-export type UpdateUserApiV1UsersUserIdPutMutationError = HttpValidationError
+export type UpdateUserApiV1UsersUserIdPutMutationError = HTTPValidationError
 
 /**
  * @summary Update User
  */
-export const useUpdateUserApiV1UsersUserIdPut = <TError = HttpValidationError, TContext = unknown>(
+export const useUpdateUserApiV1UsersUserIdPut = <TError = HTTPValidationError, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof updateUserApiV1UsersUserIdPut>>,
@@ -705,7 +705,7 @@ export const deleteUserApiV1UsersUserIdDelete = (userId: string) => {
 }
 
 export const getDeleteUserApiV1UsersUserIdDeleteMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -743,13 +743,13 @@ export type DeleteUserApiV1UsersUserIdDeleteMutationResult = NonNullable<
   Awaited<ReturnType<typeof deleteUserApiV1UsersUserIdDelete>>
 >
 
-export type DeleteUserApiV1UsersUserIdDeleteMutationError = HttpValidationError
+export type DeleteUserApiV1UsersUserIdDeleteMutationError = HTTPValidationError
 
 /**
  * @summary Delete User
  */
 export const useDeleteUserApiV1UsersUserIdDelete = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(
   options?: {
@@ -783,7 +783,7 @@ export const restoreUserApiV1UsersUserIdRestorePost = (userId: string, signal?: 
 }
 
 export const getRestoreUserApiV1UsersUserIdRestorePostMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -821,13 +821,13 @@ export type RestoreUserApiV1UsersUserIdRestorePostMutationResult = NonNullable<
   Awaited<ReturnType<typeof restoreUserApiV1UsersUserIdRestorePost>>
 >
 
-export type RestoreUserApiV1UsersUserIdRestorePostMutationError = HttpValidationError
+export type RestoreUserApiV1UsersUserIdRestorePostMutationError = HTTPValidationError
 
 /**
  * @summary Restore User
  */
 export const useRestoreUserApiV1UsersUserIdRestorePost = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(
   options?: {

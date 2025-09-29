@@ -1,5 +1,5 @@
 import { testsTypeFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
-import type { TestType } from '@/shared/api/soil-lab-2/model'
+import type { TestType } from '@/shared/api/soil-lab/model'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 
 const { strength, gasPermeability, moisturePercent } = testsTypeFieldRegistry

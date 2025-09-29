@@ -6,7 +6,7 @@ import {
 } from '@/features/soil-lab/tests/create/model/schema'
 import { TestsCreateFormKit } from '@/features/soil-lab/tests/create/ui/formKit'
 import { TestsCreateBaseForm } from '@/features/soil-lab/tests/create/ui/TestsCreateBaseForm'
-import type { SampleDetailResponse } from '@/shared/api/soil-lab-2/model'
+import type { SampleDetailResponse } from '@/shared/api/soil-lab/model'
 import { applyServerErrors } from '@/shared/lib/axios/applyServerErrors'
 import { createLogger } from '@/shared/lib/logger'
 import { createDynamicEngine } from '@/shared/lib/zod/dynamic-resolver'

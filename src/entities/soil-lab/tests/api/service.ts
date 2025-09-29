@@ -3,7 +3,7 @@ import {
   useDeleteTestApiV1TestsTestIdDelete,
   useGetTestApiV1TestsTestIdGet,
   useGetTestsListApiV1TestsGet,
-} from '@/shared/api/soil-lab-2/endpoints/tests/tests'
+} from '@/shared/api/soil-lab/endpoints/tests/tests'
 
 export const testsService = {
   getList: useGetTestsListApiV1TestsGet,

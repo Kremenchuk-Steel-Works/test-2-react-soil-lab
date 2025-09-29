@@ -4,7 +4,7 @@ import { createLogger } from '@/shared/lib/logger'
 const logger = createLogger('Mock')
 
 const modules = import.meta.glob<Record<string, () => RequestHandler[] | unknown>>(
-  '/src/shared/api/soil-lab-2/endpoints/**/*.msw.ts',
+  '/src/shared/api/soil-lab/endpoints/**/*.msw.ts',
   { eager: true },
 )
 

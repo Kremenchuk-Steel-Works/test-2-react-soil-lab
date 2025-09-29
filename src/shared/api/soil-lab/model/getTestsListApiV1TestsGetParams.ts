@@ -5,7 +5,7 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type GetPermissionsListApiV1PermissionsGetParams = {
+export type GetTestsListApiV1TestsGetParams = {
   /**
    * @minimum 1
    */

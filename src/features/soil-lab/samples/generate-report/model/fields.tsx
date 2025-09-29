@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { samplesGenerateReportFieldRegistry } from '@/features/soil-lab/samples/generate-report/model/fields-registry'
-import type { SampleDetailResponse } from '@/shared/api/soil-lab-2/model'
+import type { SampleDetailResponse } from '@/shared/api/soil-lab/model'
 import Button from '@/shared/ui/button/Button'
 import FormDateTimeField from '@/shared/ui/react-hook-form/fields/FormDateTimeField'
 import type { FormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'

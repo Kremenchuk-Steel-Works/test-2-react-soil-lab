@@ -13,50 +13,9 @@ import {
   type ParsedApiIssue,
 } from '@/shared/lib/axios/parseApiError'
 
-function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return Object.prototype.toString.call(value) === '[object Object]'
-}
-
-// Вставляем "_" между буквой и цифрой, приводим к snake_case.
-// Примеры: "measurement1" -> "measurement_1", "gasPermeability2Value" -> "gas_permeability_2_value"
-function toSnakeKey(key: string): string {
-  return key
-    .replace(/([A-Z])/g, '_$1') // camel -> snake на границе с заглавной
-    .replace(/([a-zA-Z])(\d+)/g, '$1_$2') // буква-цифра -> "_"
-    .replace(/-+/g, '_') // дефисы -> "_"
-    .replace(/__+/g, '_') // сжать двойные "_"
-    .toLowerCase()
-}
-
-function snakecaseKeysDeep<T>(input: T): T {
-  if (Array.isArray(input)) {
-    return input.map(snakecaseKeysDeep) as unknown as T
-  }
-  if (isPlainObject(input)) {
-    const out: Record<string, unknown> = {}
-    for (const [k, v] of Object.entries(input)) {
-      const nk = toSnakeKey(k)
-      out[nk] = snakecaseKeysDeep(v)
-    }
-    return out as T
-  }
-  return input
-}
-
 export const api = axios.create({
   baseURL: API_URL,
   timeout: 5_000,
-})
-
-api.interceptors.request.use((config) => {
-  // Конвертируем data и params в snake_case с учётом цифр
-  if (config.data && (isPlainObject(config.data) || Array.isArray(config.data))) {
-    config.data = snakecaseKeysDeep(config.data)
-  }
-  if (config.params && (isPlainObject(config.params) || Array.isArray(config.params))) {
-    config.params = snakecaseKeysDeep(config.params)
-  }
-  return config
 })
 
 function collectFieldPaths(obj: unknown, base = ''): string[] {

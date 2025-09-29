@@ -4,7 +4,7 @@ import { testsFieldRegistry } from '@/entities/soil-lab/tests/model/fields-regis
 import { GasPermabilityDynamicForm } from '@/entities/soil-lab/tests/ui/form/components/GasPermabilityDynamicForm'
 import { MoisturePercentDynamicForm } from '@/entities/soil-lab/tests/ui/form/components/MoisturePercentDynamicForm'
 import { StrengthDynamicForm } from '@/entities/soil-lab/tests/ui/form/components/StrengthDynamicForm'
-import { TestType } from '@/shared/api/soil-lab-2/model'
+import { TestType } from '@/shared/api/soil-lab/model'
 import { createScopedSectionsConfig } from '@/shared/lib/zod/dynamic-sections-scoped'
 import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-types'
 import { withUnitConversion } from '@/shared/lib/zod/unit-conversion/withUnitConversion'

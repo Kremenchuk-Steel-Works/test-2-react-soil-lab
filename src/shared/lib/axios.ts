@@ -1,5 +1,5 @@
 import axios, { AxiosError } from 'axios'
-import type { HttpValidationError } from '@/shared/api/soil-lab/model'
+import type { HTTPValidationError } from '@/shared/api/soil-lab/model'
 
 type ErrorHandler = (error: AxiosError) => Error | false
 
@@ -36,13 +36,13 @@ export function handleAxiosError(error: unknown, customHandler?: ErrorHandler): 
   }
 }
 
-// Тип-гард для HttpValidationError
-function isHttpValidationError(data: unknown): data is HttpValidationError {
+// Тип-гард для HTTPValidationError
+function isHTTPValidationError(data: unknown): data is HTTPValidationError {
   return (
     typeof data === 'object' &&
     data !== null &&
     'detail' in data &&
-    Array.isArray((data as HttpValidationError).detail)
+    Array.isArray((data as HTTPValidationError).detail)
   )
 }
 
@@ -55,7 +55,7 @@ export function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
     const responseData: unknown = error.response?.data
 
-    if (responseData && isHttpValidationError(responseData)) {
+    if (responseData && isHTTPValidationError(responseData)) {
       return responseData.detail?.[0]?.msg || 'Помилка валідації даних.'
     }
 

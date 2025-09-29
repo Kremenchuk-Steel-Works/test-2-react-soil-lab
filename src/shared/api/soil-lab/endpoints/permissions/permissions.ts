@@ -24,7 +24,7 @@ import { customMutator } from '../../../mutator'
 import type {
   GetPermissionLookupsListApiV1PermissionsLookupsGetParams,
   GetPermissionsListApiV1PermissionsGetParams,
-  HttpValidationError,
+  HTTPValidationError,
   PermissionCreate,
   PermissionDetailResponse,
   PermissionListResponse,
@@ -55,7 +55,7 @@ export const getGetPermissionLookupsListApiV1PermissionsLookupsGetQueryKey = (
 
 export const getGetPermissionLookupsListApiV1PermissionsLookupsGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getPermissionLookupsListApiV1PermissionsLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetPermissionLookupsListApiV1PermissionsLookupsGetParams,
   options?: {
@@ -87,11 +87,11 @@ export const getGetPermissionLookupsListApiV1PermissionsLookupsGetQueryOptions =
 export type GetPermissionLookupsListApiV1PermissionsLookupsGetQueryResult = NonNullable<
   Awaited<ReturnType<typeof getPermissionLookupsListApiV1PermissionsLookupsGet>>
 >
-export type GetPermissionLookupsListApiV1PermissionsLookupsGetQueryError = HttpValidationError
+export type GetPermissionLookupsListApiV1PermissionsLookupsGetQueryError = HTTPValidationError
 
 export function useGetPermissionLookupsListApiV1PermissionsLookupsGet<
   TData = Awaited<ReturnType<typeof getPermissionLookupsListApiV1PermissionsLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params: undefined | GetPermissionLookupsListApiV1PermissionsLookupsGetParams,
   options: {
@@ -115,7 +115,7 @@ export function useGetPermissionLookupsListApiV1PermissionsLookupsGet<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPermissionLookupsListApiV1PermissionsLookupsGet<
   TData = Awaited<ReturnType<typeof getPermissionLookupsListApiV1PermissionsLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetPermissionLookupsListApiV1PermissionsLookupsGetParams,
   options?: {
@@ -139,7 +139,7 @@ export function useGetPermissionLookupsListApiV1PermissionsLookupsGet<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPermissionLookupsListApiV1PermissionsLookupsGet<
   TData = Awaited<ReturnType<typeof getPermissionLookupsListApiV1PermissionsLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetPermissionLookupsListApiV1PermissionsLookupsGetParams,
   options?: {
@@ -159,7 +159,7 @@ export function useGetPermissionLookupsListApiV1PermissionsLookupsGet<
 
 export function useGetPermissionLookupsListApiV1PermissionsLookupsGet<
   TData = Awaited<ReturnType<typeof getPermissionLookupsListApiV1PermissionsLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetPermissionLookupsListApiV1PermissionsLookupsGetParams,
   options?: {
@@ -210,7 +210,7 @@ export const getGetPermissionsListApiV1PermissionsGetQueryKey = (
 
 export const getGetPermissionsListApiV1PermissionsGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getPermissionsListApiV1PermissionsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetPermissionsListApiV1PermissionsGetParams,
   options?: {
@@ -242,11 +242,11 @@ export const getGetPermissionsListApiV1PermissionsGetQueryOptions = <
 export type GetPermissionsListApiV1PermissionsGetQueryResult = NonNullable<
   Awaited<ReturnType<typeof getPermissionsListApiV1PermissionsGet>>
 >
-export type GetPermissionsListApiV1PermissionsGetQueryError = HttpValidationError
+export type GetPermissionsListApiV1PermissionsGetQueryError = HTTPValidationError
 
 export function useGetPermissionsListApiV1PermissionsGet<
   TData = Awaited<ReturnType<typeof getPermissionsListApiV1PermissionsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params: undefined | GetPermissionsListApiV1PermissionsGetParams,
   options: {
@@ -270,7 +270,7 @@ export function useGetPermissionsListApiV1PermissionsGet<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPermissionsListApiV1PermissionsGet<
   TData = Awaited<ReturnType<typeof getPermissionsListApiV1PermissionsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetPermissionsListApiV1PermissionsGetParams,
   options?: {
@@ -294,7 +294,7 @@ export function useGetPermissionsListApiV1PermissionsGet<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPermissionsListApiV1PermissionsGet<
   TData = Awaited<ReturnType<typeof getPermissionsListApiV1PermissionsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetPermissionsListApiV1PermissionsGetParams,
   options?: {
@@ -314,7 +314,7 @@ export function useGetPermissionsListApiV1PermissionsGet<
 
 export function useGetPermissionsListApiV1PermissionsGet<
   TData = Awaited<ReturnType<typeof getPermissionsListApiV1PermissionsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetPermissionsListApiV1PermissionsGetParams,
   options?: {
@@ -356,7 +356,7 @@ export const createPermissionApiV1PermissionsPost = (
 }
 
 export const getCreatePermissionApiV1PermissionsPostMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -394,13 +394,13 @@ export type CreatePermissionApiV1PermissionsPostMutationResult = NonNullable<
   Awaited<ReturnType<typeof createPermissionApiV1PermissionsPost>>
 >
 export type CreatePermissionApiV1PermissionsPostMutationBody = PermissionCreate
-export type CreatePermissionApiV1PermissionsPostMutationError = HttpValidationError
+export type CreatePermissionApiV1PermissionsPostMutationError = HTTPValidationError
 
 /**
  * @summary Create Permission
  */
 export const useCreatePermissionApiV1PermissionsPost = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(
   options?: {
@@ -442,7 +442,7 @@ export const getGetPermissionApiV1PermissionsPermissionIdGetQueryKey = (permissi
 
 export const getGetPermissionApiV1PermissionsPermissionIdGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getPermissionApiV1PermissionsPermissionIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   permissionId: string,
   options?: {
@@ -474,11 +474,11 @@ export const getGetPermissionApiV1PermissionsPermissionIdGetQueryOptions = <
 export type GetPermissionApiV1PermissionsPermissionIdGetQueryResult = NonNullable<
   Awaited<ReturnType<typeof getPermissionApiV1PermissionsPermissionIdGet>>
 >
-export type GetPermissionApiV1PermissionsPermissionIdGetQueryError = HttpValidationError
+export type GetPermissionApiV1PermissionsPermissionIdGetQueryError = HTTPValidationError
 
 export function useGetPermissionApiV1PermissionsPermissionIdGet<
   TData = Awaited<ReturnType<typeof getPermissionApiV1PermissionsPermissionIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   permissionId: string,
   options: {
@@ -502,7 +502,7 @@ export function useGetPermissionApiV1PermissionsPermissionIdGet<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPermissionApiV1PermissionsPermissionIdGet<
   TData = Awaited<ReturnType<typeof getPermissionApiV1PermissionsPermissionIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   permissionId: string,
   options?: {
@@ -526,7 +526,7 @@ export function useGetPermissionApiV1PermissionsPermissionIdGet<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPermissionApiV1PermissionsPermissionIdGet<
   TData = Awaited<ReturnType<typeof getPermissionApiV1PermissionsPermissionIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   permissionId: string,
   options?: {
@@ -546,7 +546,7 @@ export function useGetPermissionApiV1PermissionsPermissionIdGet<
 
 export function useGetPermissionApiV1PermissionsPermissionIdGet<
   TData = Awaited<ReturnType<typeof getPermissionApiV1PermissionsPermissionIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   permissionId: string,
   options?: {
@@ -590,7 +590,7 @@ export const updatePermissionApiV1PermissionsPermissionIdPut = (
 }
 
 export const getUpdatePermissionApiV1PermissionsPermissionIdPutMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -628,13 +628,13 @@ export type UpdatePermissionApiV1PermissionsPermissionIdPutMutationResult = NonN
   Awaited<ReturnType<typeof updatePermissionApiV1PermissionsPermissionIdPut>>
 >
 export type UpdatePermissionApiV1PermissionsPermissionIdPutMutationBody = PermissionUpdate
-export type UpdatePermissionApiV1PermissionsPermissionIdPutMutationError = HttpValidationError
+export type UpdatePermissionApiV1PermissionsPermissionIdPutMutationError = HTTPValidationError
 
 /**
  * @summary Update Permission
  */
 export const useUpdatePermissionApiV1PermissionsPermissionIdPut = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(
   options?: {
@@ -667,7 +667,7 @@ export const deletePermissionApiV1PermissionsPermissionIdDelete = (permissionId:
 }
 
 export const getDeletePermissionApiV1PermissionsPermissionIdDeleteMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -705,13 +705,13 @@ export type DeletePermissionApiV1PermissionsPermissionIdDeleteMutationResult = N
   Awaited<ReturnType<typeof deletePermissionApiV1PermissionsPermissionIdDelete>>
 >
 
-export type DeletePermissionApiV1PermissionsPermissionIdDeleteMutationError = HttpValidationError
+export type DeletePermissionApiV1PermissionsPermissionIdDeleteMutationError = HTTPValidationError
 
 /**
  * @summary Delete Permission
  */
 export const useDeletePermissionApiV1PermissionsPermissionIdDelete = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(
   options?: {
@@ -749,7 +749,7 @@ export const restorePermissionApiV1PermissionsPermissionIdRestorePost = (
 }
 
 export const getRestorePermissionApiV1PermissionsPermissionIdRestorePostMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -788,13 +788,13 @@ export type RestorePermissionApiV1PermissionsPermissionIdRestorePostMutationResu
 >
 
 export type RestorePermissionApiV1PermissionsPermissionIdRestorePostMutationError =
-  HttpValidationError
+  HTTPValidationError
 
 /**
  * @summary Restore Permission
  */
 export const useRestorePermissionApiV1PermissionsPermissionIdRestorePost = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(
   options?: {

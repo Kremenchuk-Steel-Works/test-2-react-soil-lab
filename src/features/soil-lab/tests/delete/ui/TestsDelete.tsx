@@ -3,7 +3,7 @@ import { testsService } from '@/entities/soil-lab/tests/api/service'
 import {
   getGetTestApiV1TestsTestIdGetQueryKey,
   getGetTestsListApiV1TestsGetQueryKey,
-} from '@/shared/api/soil-lab-2/endpoints/tests/tests'
+} from '@/shared/api/soil-lab/endpoints/tests/tests'
 import { getErrorMessage } from '@/shared/lib/axios'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { ConfiguredButton } from '@/widgets/page/ConfiguredButton'

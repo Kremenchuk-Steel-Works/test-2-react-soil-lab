@@ -24,7 +24,7 @@ import { customMutator } from '../../../mutator'
 import type {
   GetRoleLookupsListApiV1RolesLookupsGetParams,
   GetRolesListApiV1RolesGetParams,
-  HttpValidationError,
+  HTTPValidationError,
   RoleCreate,
   RoleDetailResponse,
   RoleListResponse,
@@ -55,7 +55,7 @@ export const getGetRoleLookupsListApiV1RolesLookupsGetQueryKey = (
 
 export const getGetRoleLookupsListApiV1RolesLookupsGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getRoleLookupsListApiV1RolesLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetRoleLookupsListApiV1RolesLookupsGetParams,
   options?: {
@@ -87,11 +87,11 @@ export const getGetRoleLookupsListApiV1RolesLookupsGetQueryOptions = <
 export type GetRoleLookupsListApiV1RolesLookupsGetQueryResult = NonNullable<
   Awaited<ReturnType<typeof getRoleLookupsListApiV1RolesLookupsGet>>
 >
-export type GetRoleLookupsListApiV1RolesLookupsGetQueryError = HttpValidationError
+export type GetRoleLookupsListApiV1RolesLookupsGetQueryError = HTTPValidationError
 
 export function useGetRoleLookupsListApiV1RolesLookupsGet<
   TData = Awaited<ReturnType<typeof getRoleLookupsListApiV1RolesLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params: undefined | GetRoleLookupsListApiV1RolesLookupsGetParams,
   options: {
@@ -115,7 +115,7 @@ export function useGetRoleLookupsListApiV1RolesLookupsGet<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetRoleLookupsListApiV1RolesLookupsGet<
   TData = Awaited<ReturnType<typeof getRoleLookupsListApiV1RolesLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetRoleLookupsListApiV1RolesLookupsGetParams,
   options?: {
@@ -139,7 +139,7 @@ export function useGetRoleLookupsListApiV1RolesLookupsGet<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetRoleLookupsListApiV1RolesLookupsGet<
   TData = Awaited<ReturnType<typeof getRoleLookupsListApiV1RolesLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetRoleLookupsListApiV1RolesLookupsGetParams,
   options?: {
@@ -159,7 +159,7 @@ export function useGetRoleLookupsListApiV1RolesLookupsGet<
 
 export function useGetRoleLookupsListApiV1RolesLookupsGet<
   TData = Awaited<ReturnType<typeof getRoleLookupsListApiV1RolesLookupsGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetRoleLookupsListApiV1RolesLookupsGetParams,
   options?: {
@@ -200,7 +200,7 @@ export const getGetRolesListApiV1RolesGetQueryKey = (params?: GetRolesListApiV1R
 
 export const getGetRolesListApiV1RolesGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getRolesListApiV1RolesGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetRolesListApiV1RolesGetParams,
   options?: {
@@ -227,11 +227,11 @@ export const getGetRolesListApiV1RolesGetQueryOptions = <
 export type GetRolesListApiV1RolesGetQueryResult = NonNullable<
   Awaited<ReturnType<typeof getRolesListApiV1RolesGet>>
 >
-export type GetRolesListApiV1RolesGetQueryError = HttpValidationError
+export type GetRolesListApiV1RolesGetQueryError = HTTPValidationError
 
 export function useGetRolesListApiV1RolesGet<
   TData = Awaited<ReturnType<typeof getRolesListApiV1RolesGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params: undefined | GetRolesListApiV1RolesGetParams,
   options: {
@@ -251,7 +251,7 @@ export function useGetRolesListApiV1RolesGet<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetRolesListApiV1RolesGet<
   TData = Awaited<ReturnType<typeof getRolesListApiV1RolesGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetRolesListApiV1RolesGetParams,
   options?: {
@@ -271,7 +271,7 @@ export function useGetRolesListApiV1RolesGet<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetRolesListApiV1RolesGet<
   TData = Awaited<ReturnType<typeof getRolesListApiV1RolesGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetRolesListApiV1RolesGetParams,
   options?: {
@@ -287,7 +287,7 @@ export function useGetRolesListApiV1RolesGet<
 
 export function useGetRolesListApiV1RolesGet<
   TData = Awaited<ReturnType<typeof getRolesListApiV1RolesGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   params?: GetRolesListApiV1RolesGetParams,
   options?: {
@@ -322,7 +322,7 @@ export const createRoleApiV1RolesPost = (roleCreate: RoleCreate, signal?: AbortS
 }
 
 export const getCreateRoleApiV1RolesPostMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -360,12 +360,12 @@ export type CreateRoleApiV1RolesPostMutationResult = NonNullable<
   Awaited<ReturnType<typeof createRoleApiV1RolesPost>>
 >
 export type CreateRoleApiV1RolesPostMutationBody = RoleCreate
-export type CreateRoleApiV1RolesPostMutationError = HttpValidationError
+export type CreateRoleApiV1RolesPostMutationError = HTTPValidationError
 
 /**
  * @summary Create Role
  */
-export const useCreateRoleApiV1RolesPost = <TError = HttpValidationError, TContext = unknown>(
+export const useCreateRoleApiV1RolesPost = <TError = HTTPValidationError, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof createRoleApiV1RolesPost>>,
@@ -402,7 +402,7 @@ export const getGetRoleApiV1RolesRoleIdGetQueryKey = (roleId?: string) => {
 
 export const getGetRoleApiV1RolesRoleIdGetQueryOptions = <
   TData = Awaited<ReturnType<typeof getRoleApiV1RolesRoleIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   roleId: string,
   options?: {
@@ -429,11 +429,11 @@ export const getGetRoleApiV1RolesRoleIdGetQueryOptions = <
 export type GetRoleApiV1RolesRoleIdGetQueryResult = NonNullable<
   Awaited<ReturnType<typeof getRoleApiV1RolesRoleIdGet>>
 >
-export type GetRoleApiV1RolesRoleIdGetQueryError = HttpValidationError
+export type GetRoleApiV1RolesRoleIdGetQueryError = HTTPValidationError
 
 export function useGetRoleApiV1RolesRoleIdGet<
   TData = Awaited<ReturnType<typeof getRoleApiV1RolesRoleIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   roleId: string,
   options: {
@@ -453,7 +453,7 @@ export function useGetRoleApiV1RolesRoleIdGet<
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetRoleApiV1RolesRoleIdGet<
   TData = Awaited<ReturnType<typeof getRoleApiV1RolesRoleIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   roleId: string,
   options?: {
@@ -473,7 +473,7 @@ export function useGetRoleApiV1RolesRoleIdGet<
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetRoleApiV1RolesRoleIdGet<
   TData = Awaited<ReturnType<typeof getRoleApiV1RolesRoleIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   roleId: string,
   options?: {
@@ -489,7 +489,7 @@ export function useGetRoleApiV1RolesRoleIdGet<
 
 export function useGetRoleApiV1RolesRoleIdGet<
   TData = Awaited<ReturnType<typeof getRoleApiV1RolesRoleIdGet>>,
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
 >(
   roleId: string,
   options?: {
@@ -523,7 +523,7 @@ export const updateRoleApiV1RolesRoleIdPut = (roleId: string, roleUpdate: RoleUp
 }
 
 export const getUpdateRoleApiV1RolesRoleIdPutMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -561,12 +561,12 @@ export type UpdateRoleApiV1RolesRoleIdPutMutationResult = NonNullable<
   Awaited<ReturnType<typeof updateRoleApiV1RolesRoleIdPut>>
 >
 export type UpdateRoleApiV1RolesRoleIdPutMutationBody = RoleUpdate
-export type UpdateRoleApiV1RolesRoleIdPutMutationError = HttpValidationError
+export type UpdateRoleApiV1RolesRoleIdPutMutationError = HTTPValidationError
 
 /**
  * @summary Update Role
  */
-export const useUpdateRoleApiV1RolesRoleIdPut = <TError = HttpValidationError, TContext = unknown>(
+export const useUpdateRoleApiV1RolesRoleIdPut = <TError = HTTPValidationError, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof updateRoleApiV1RolesRoleIdPut>>,
@@ -594,7 +594,7 @@ export const deleteRoleApiV1RolesRoleIdDelete = (roleId: string) => {
 }
 
 export const getDeleteRoleApiV1RolesRoleIdDeleteMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -632,13 +632,13 @@ export type DeleteRoleApiV1RolesRoleIdDeleteMutationResult = NonNullable<
   Awaited<ReturnType<typeof deleteRoleApiV1RolesRoleIdDelete>>
 >
 
-export type DeleteRoleApiV1RolesRoleIdDeleteMutationError = HttpValidationError
+export type DeleteRoleApiV1RolesRoleIdDeleteMutationError = HTTPValidationError
 
 /**
  * @summary Delete Role
  */
 export const useDeleteRoleApiV1RolesRoleIdDelete = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(
   options?: {
@@ -672,7 +672,7 @@ export const restoreRoleApiV1RolesRoleIdRestorePost = (roleId: string, signal?: 
 }
 
 export const getRestoreRoleApiV1RolesRoleIdRestorePostMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -710,13 +710,13 @@ export type RestoreRoleApiV1RolesRoleIdRestorePostMutationResult = NonNullable<
   Awaited<ReturnType<typeof restoreRoleApiV1RolesRoleIdRestorePost>>
 >
 
-export type RestoreRoleApiV1RolesRoleIdRestorePostMutationError = HttpValidationError
+export type RestoreRoleApiV1RolesRoleIdRestorePostMutationError = HTTPValidationError
 
 /**
  * @summary Restore Role
  */
 export const useRestoreRoleApiV1RolesRoleIdRestorePost = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(
   options?: {

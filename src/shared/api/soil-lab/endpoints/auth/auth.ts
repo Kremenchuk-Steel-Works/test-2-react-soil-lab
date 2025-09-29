@@ -13,7 +13,7 @@ import {
 } from '@tanstack/react-query'
 import { customMutator } from '../../../mutator'
 import type {
-  HttpValidationError,
+  HTTPValidationError,
   LoginRequest,
   LogoutRequest,
   TokenPairResponse,
@@ -36,7 +36,7 @@ export const loginApiV1AuthLoginPost = (loginRequest: LoginRequest, signal?: Abo
 }
 
 export const getLoginApiV1AuthLoginPostMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -74,12 +74,12 @@ export type LoginApiV1AuthLoginPostMutationResult = NonNullable<
   Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>
 >
 export type LoginApiV1AuthLoginPostMutationBody = LoginRequest
-export type LoginApiV1AuthLoginPostMutationError = HttpValidationError
+export type LoginApiV1AuthLoginPostMutationError = HTTPValidationError
 
 /**
  * @summary Login User
  */
-export const useLoginApiV1AuthLoginPost = <TError = HttpValidationError, TContext = unknown>(
+export const useLoginApiV1AuthLoginPost = <TError = HTTPValidationError, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof loginApiV1AuthLoginPost>>,
@@ -117,7 +117,7 @@ export const refreshAccessTokenApiV1AuthRefreshPost = (
 }
 
 export const getRefreshAccessTokenApiV1AuthRefreshPostMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -155,13 +155,13 @@ export type RefreshAccessTokenApiV1AuthRefreshPostMutationResult = NonNullable<
   Awaited<ReturnType<typeof refreshAccessTokenApiV1AuthRefreshPost>>
 >
 export type RefreshAccessTokenApiV1AuthRefreshPostMutationBody = TokenRefreshRequest
-export type RefreshAccessTokenApiV1AuthRefreshPostMutationError = HttpValidationError
+export type RefreshAccessTokenApiV1AuthRefreshPostMutationError = HTTPValidationError
 
 /**
  * @summary Refresh Access Token
  */
 export const useRefreshAccessTokenApiV1AuthRefreshPost = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(
   options?: {
@@ -198,7 +198,7 @@ export const logoutApiV1AuthLogoutPost = (logoutRequest: LogoutRequest, signal?:
 }
 
 export const getLogoutApiV1AuthLogoutPostMutationOptions = <
-  TError = HttpValidationError,
+  TError = HTTPValidationError,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -236,12 +236,12 @@ export type LogoutApiV1AuthLogoutPostMutationResult = NonNullable<
   Awaited<ReturnType<typeof logoutApiV1AuthLogoutPost>>
 >
 export type LogoutApiV1AuthLogoutPostMutationBody = LogoutRequest
-export type LogoutApiV1AuthLogoutPostMutationError = HttpValidationError
+export type LogoutApiV1AuthLogoutPostMutationError = HTTPValidationError
 
 /**
  * @summary Logout User
  */
-export const useLogoutApiV1AuthLogoutPost = <TError = HttpValidationError, TContext = unknown>(
+export const useLogoutApiV1AuthLogoutPost = <TError = HTTPValidationError, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof logoutApiV1AuthLogoutPost>>,

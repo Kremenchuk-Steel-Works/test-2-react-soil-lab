@@ -6,7 +6,7 @@ import {
 } from '@/features/soil-lab/samples/generate-report/model/schema'
 import { SamplesGenerateReportFormKit } from '@/features/soil-lab/samples/generate-report/ui/formKit'
 import { SamplesGenerateReportBaseForm } from '@/features/soil-lab/samples/generate-report/ui/SamplesGenerateReportBaseForm'
-import { parseApiError } from '@/shared/lib/axios/parseApiError'
+import { applyServerErrors } from '@/shared/lib/axios/applyServerErrors'
 import { createLogger } from '@/shared/lib/logger'
 import { FormKitProvider } from '@/shared/ui/react-hook-form/FormKit/FormKitProvider'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
@@ -34,6 +34,8 @@ export function SamplesGenerateReportForm({
   const {
     handleSubmit,
     setError,
+    setFocus,
+    getValues,
     formState: { isSubmitting },
   } = form
   // Submit
@@ -42,13 +44,16 @@ export function SamplesGenerateReportForm({
       const response = await onSubmit(data)
       logger.debug('Форма успешно выполнена', response)
     } catch (err) {
-      const parsed = parseApiError(err)
-      if (parsed.status === 404) {
-        setError('root', { type: 'server', message: 'Немає даних для створення звіту' })
-      } else {
-        setError('root', { type: 'server', message: parsed.message })
-      }
-      logger.error('Ошибка при отправке формы:', 'err:', err, 'data:', data)
+      applyServerErrors({
+        err,
+        getValues,
+        setError,
+        setFocus,
+        summary: {
+          includeKnownExtra: true,
+          noUnknownLabelPrefix: true,
+        },
+      })
     }
   }
 

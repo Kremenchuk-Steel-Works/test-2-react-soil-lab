@@ -1,6 +1,6 @@
 import { useSamplesFormFields } from '@/entities/soil-lab/samples/ui/form/fields'
 import type { SamplesCreateFormFields } from '@/features/soil-lab/samples/create/model/schema'
-import type { SampleDetailResponse } from '@/shared/api/soil-lab-2/model'
+import type { SampleDetailResponse } from '@/shared/api/soil-lab/model'
 import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/useFormKit'
 import type { FormBaseProps } from '@/types/react-hook-form'
 

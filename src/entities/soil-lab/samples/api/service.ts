@@ -4,7 +4,7 @@ import {
   useGetSampleApiV1SamplesSampleIdGet,
   useGetSamplesListApiV1SamplesGet,
   useGetSamplesReportApiV1SamplesGenerateReportPost,
-} from '@/shared/api/soil-lab-2/endpoints/samples/samples'
+} from '@/shared/api/soil-lab/endpoints/samples/samples'
 
 export const samplesService = {
   getList: useGetSamplesListApiV1SamplesGet,

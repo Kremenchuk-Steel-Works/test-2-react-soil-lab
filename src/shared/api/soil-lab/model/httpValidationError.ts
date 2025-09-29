@@ -6,6 +6,6 @@
  */
 import type { ValidationError } from './validationError'
 
-export interface HttpValidationError {
+export interface HTTPValidationError {
   detail?: ValidationError[]
 }

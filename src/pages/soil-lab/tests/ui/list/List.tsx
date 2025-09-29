@@ -16,7 +16,7 @@ export default function TestsList() {
     isLoading,
     error: queryError,
   } = testsService.getList(
-    { page: page, perPage: perPage },
+    { page: page, per_page: perPage },
     {
       query: {
         placeholderData: keepPreviousData,

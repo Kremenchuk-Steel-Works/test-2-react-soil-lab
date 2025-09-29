@@ -14,5 +14,5 @@ export type GetUsersListApiV1UsersGetParams = {
    * @minimum 1
    * @maximum 20
    */
-  perPage?: number
+  per_page?: number
 }

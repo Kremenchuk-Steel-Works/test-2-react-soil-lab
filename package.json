@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "spellcheck": "cspell \"**/*.{ts,tsx,md,json}\" --show-context",
     "index": "node scripts/generate-explicit-api.mjs",
-    "generate:api": "tsx scripts/generate-api-orval.ts"
+    "generate:api": "tsx scripts/generate-api-orval-new.ts"
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.8",

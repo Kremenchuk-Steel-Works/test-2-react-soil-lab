@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import TestsCreate from '@/features/soil-lab/tests/create/ui/TestsCreate'
-import type { CreateTestApiV1TestsPostMutationResult } from '@/shared/api/soil-lab-2/endpoints/tests/tests'
-import { TestStatus, TestType } from '@/shared/api/soil-lab-2/model'
+import type { CreateTestApiV1TestsPostMutationResult } from '@/shared/api/soil-lab/endpoints/tests/tests'
+import { TestStatus, TestType } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
 

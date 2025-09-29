@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SamplesCreate from '@/features/soil-lab/samples/create/ui/SamplesCreate'
-import type { SampleDetailResponse } from '@/shared/api/soil-lab-2/model'
+import type { SampleDetailResponse } from '@/shared/api/soil-lab/model'
 
 export default function SamplesAdd() {
   const navigate = useNavigate()

@@ -5,7 +5,7 @@ services:
       target: production
     image: test-react-soil-lab:${IMAGE_TAG:-latest}
     ports:
-      - '81:80'
+      - '82:80'
     restart: unless-stopped
     healthcheck:
       test: ['CMD', 'curl', '-f', 'http://localhost']

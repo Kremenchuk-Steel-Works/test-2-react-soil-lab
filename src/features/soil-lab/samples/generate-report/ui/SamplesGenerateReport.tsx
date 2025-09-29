@@ -1,15 +1,21 @@
-import { format } from 'date-fns'
+import { format, parseISO } from 'date-fns'
 import { samplesService } from '@/entities/soil-lab/samples/api/service'
 import {
   samplesGenerateReportFormDefaultValues,
   type SamplesGenerateReportFormFields,
 } from '@/features/soil-lab/samples/generate-report/model/schema'
 import { SamplesGenerateReportForm } from '@/features/soil-lab/samples/generate-report/ui/SamplesGenerateReportForm'
+import type { GetSamplesReportApiV1SamplesGenerateReportPostMutationResult } from '@/shared/api/soil-lab/endpoints/samples/samples'
+import type { HTTPValidationError } from '@/shared/api/soil-lab/model'
 import { downloadFile } from '@/shared/lib/axios/downloadFile'
 
 interface SamplesGenerateReportProps {
-  onSuccess?: (res: unknown) => void
-  onError?: (err: unknown) => void
+  onSuccess?: (res: GetSamplesReportApiV1SamplesGenerateReportPostMutationResult) => void
+  onError?: (err: HTTPValidationError) => void
+}
+
+function formatNullableDate(value: string | null): string | null {
+  return value ? format(parseISO(value), 'dd_MM_yyyy') : null
 }
 
 export default function SamplesGenerateReport({ onSuccess, onError }: SamplesGenerateReportProps) {
@@ -17,10 +23,8 @@ export default function SamplesGenerateReport({ onSuccess, onError }: SamplesGen
     mutation: {
       onSuccess: (res, { data }) => {
         // Форматируем даты, только если они существуют
-        const formattedDateFrom = data.dateFrom
-          ? format(new Date(data.dateFrom), 'dd_MM_yyyy')
-          : null
-        const formattedDateTo = data.dateTo ? format(new Date(data.dateTo), 'dd_MM_yyyy') : null
+        const formattedDateFrom = formatNullableDate(data.dateFrom)
+        const formattedDateTo = formatNullableDate(data.dateTo)
 
         let datePart = ''
 

@@ -8,7 +8,7 @@ import { SamplesCreateForm } from '@/features/soil-lab/samples/create/ui/Samples
 import {
   getGetSamplesListApiV1SamplesGetQueryKey,
   type CreateSampleApiV1SamplesPostMutationResult,
-} from '@/shared/api/soil-lab-2/endpoints/samples/samples'
+} from '@/shared/api/soil-lab/endpoints/samples/samples'
 
 interface SamplesCreateProps {
   onSuccess?: (res: CreateSampleApiV1SamplesPostMutationResult) => void

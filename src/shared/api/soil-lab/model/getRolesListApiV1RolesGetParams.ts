@@ -14,5 +14,5 @@ export type GetRolesListApiV1RolesGetParams = {
    * @minimum 1
    * @maximum 20
    */
-  perPage?: number
+  per_page?: number
 }

@@ -1,4 +1,4 @@
-import type { TestStatus } from '@/shared/api/soil-lab-2/model'
+import type { TestStatus } from '@/shared/api/soil-lab/model'
 import type { Option } from '@/shared/ui/select/ReactSelect'
 
 export const testsStatusOptions: Option<TestStatus>[] = [

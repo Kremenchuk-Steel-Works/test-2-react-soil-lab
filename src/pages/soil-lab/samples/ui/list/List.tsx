@@ -17,7 +17,7 @@ export default function SamplesList() {
     isLoading,
     error: queryError,
   } = samplesService.getList(
-    { page: page, perPage: perPage },
+    { page: page, per_page: perPage },
     {
       query: {
         placeholderData: keepPreviousData,

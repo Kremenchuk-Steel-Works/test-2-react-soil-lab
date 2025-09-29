@@ -51,7 +51,7 @@ export function useSectionController<
 }: UseSectionControllerArgs<TValues, TPayload>) {
   const { sections, valueNormalizer, basePickParse } = useDynamicMeta()
   const active = useActiveRules()
-  const { trigger, getValues, resetField, setError, setFocus, getFieldState, formState } =
+  const { trigger, getValues, resetField, setError, setFocus, formState } =
     useFormContext<TValues>()
 
   const normalizeObject = useCallback(
@@ -158,10 +158,9 @@ export function useSectionController<
     } catch (err) {
       applyServerErrors<TValues>({
         err,
+        getValues,
         setError,
         setFocus,
-        getFieldState,
-        formState,
       })
       return
     } finally {
@@ -182,8 +181,6 @@ export function useSectionController<
     sectionRuleSchemas,
     setError,
     setFocus,
-    getFieldState,
-    formState,
   ])
 
   return { visible, submit, isSubmitting, isFormSubmitting: formState.isSubmitting }
