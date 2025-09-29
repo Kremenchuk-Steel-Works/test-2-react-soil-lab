@@ -13,7 +13,7 @@ const TestsAdd = lazy(() => import('@/pages/soil-lab/tests/ui/Add'))
 export const samplesRoutes: AppRoute = {
   key: 'Samples',
   path: 'samples',
-  label: 'Зразок',
+  label: 'Зразки',
   icon: FlaskConical,
   Component: SamplesLayout,
   meta: {

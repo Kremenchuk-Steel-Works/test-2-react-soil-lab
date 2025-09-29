@@ -1,8 +1,20 @@
 import { useParams } from 'react-router-dom'
 import { testsService } from '@/entities/soil-lab/tests/api/service'
+import { testsStatusOptions } from '@/entities/soil-lab/tests/model/status'
+import { testsTypeOptions } from '@/entities/soil-lab/tests/model/type'
+import type { TestStatus, TestType } from '@/shared/api/soil-lab/model'
 import { getErrorMessage } from '@/shared/lib/axios'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
+import type { Option } from '@/shared/ui/select/ReactSelect'
 import { ConfiguredButton } from '@/widgets/page/ConfiguredButton'
+
+function getOptionLabel<T extends string>(
+  opts: ReadonlyArray<Option<T>>,
+  value: T,
+  fallback: string = value,
+): string {
+  return opts.find((o) => o.value === value)?.label ?? fallback
+}
 
 export default function TestsDetails() {
   const { id } = useParams<{ id: string }>()
@@ -29,18 +41,20 @@ export default function TestsDetails() {
               <dd className="mt-1 text-gray-900 dark:text-slate-300">{responseData.id}</dd>
             </div>
 
-            {/* --- Тип випробування --- */}
+            {/* --- Тип випробування (перекладений) --- */}
             <div>
               <dt className="font-medium text-gray-500 dark:text-slate-400">Тип</dt>
-              <dd className="mt-1 text-gray-900 dark:text-slate-300">{responseData.type}</dd>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                {getOptionLabel<TestType>(testsTypeOptions, responseData?.type)}
+              </dd>
             </div>
 
             {/* --- Зразок --- */}
             <div className="md:col-span-2">
               <dt className="font-medium text-gray-500 dark:text-slate-400">Зразок</dt>
               <dd className="mt-1 whitespace-pre-wrap text-gray-900 dark:text-slate-300">
-                {typeof responseData.sample === 'object'
-                  ? JSON.stringify(responseData.sample)
+                {typeof responseData.sample === 'object' && responseData.sample !== null
+                  ? JSON.stringify(responseData.sample, null, 2)
                   : String(responseData.sample)}
               </dd>
             </div>
@@ -115,10 +129,12 @@ export default function TestsDetails() {
               <dd className="mt-1 text-gray-900 dark:text-slate-300">{responseData.upperLimit}</dd>
             </div>
 
-            {/* --- Статус --- */}
+            {/* --- Статус (перекладений) --- */}
             <div>
               <dt className="font-medium text-gray-500 dark:text-slate-400">Статус</dt>
-              <dd className="mt-1 text-gray-900 dark:text-slate-300">{responseData.status}</dd>
+              <dd className="mt-1 text-gray-900 dark:text-slate-300">
+                {getOptionLabel<TestStatus>(testsStatusOptions, responseData?.status)}
+              </dd>
             </div>
 
             {/* --- Видалено --- */}
@@ -137,7 +153,7 @@ export default function TestsDetails() {
               </dd>
             </div>
 
-            {/* --- Хто створив (опційно) --- */}
+            {/* --- Створив (ID) --- */}
             {responseData.createdById && (
               <div>
                 <dt className="font-medium text-gray-500 dark:text-slate-400">Створив (ID)</dt>
@@ -155,7 +171,7 @@ export default function TestsDetails() {
               </dd>
             </div>
 
-            {/* --- Хто оновив (опційно) --- */}
+            {/* --- Оновив (ID) --- */}
             {responseData.updatedById && (
               <div>
                 <dt className="font-medium text-gray-500 dark:text-slate-400">Оновив (ID)</dt>
@@ -165,14 +181,12 @@ export default function TestsDetails() {
               </div>
             )}
 
-            {/* --- Час видалення (опційно) --- */}
+            {/* --- Час видалення --- */}
             {responseData.deletedAt != null && (
               <div className="md:col-span-2">
                 <dt className="font-medium text-gray-500 dark:text-slate-400">Час видалення</dt>
                 <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                  {typeof responseData.deletedAt === 'string'
-                    ? new Date(responseData.deletedAt).toLocaleString()
-                    : JSON.stringify(responseData.deletedAt)}
+                  {new Date(responseData.deletedAt).toLocaleString()}
                 </dd>
               </div>
             )}

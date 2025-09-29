@@ -9,7 +9,10 @@ export const samplesGenerateReportFormSchema = z.object({
   [dateFrom.key]: zn(z.string().date().nullable()),
   [dateTo.key]: zn(z.string().date().nullable()),
 })
+export type SamplesGenerateReportFormFields = z.infer<typeof samplesGenerateReportFormSchema>
 
 export const samplesGenerateReportFormDefaultValues: DeepPartial<SamplesGenerateReportFormFields> =
-  {}
-export type SamplesGenerateReportFormFields = z.infer<typeof samplesGenerateReportFormSchema>
+  {
+    dateFrom: null,
+    dateTo: null,
+  }
