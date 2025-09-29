@@ -11,7 +11,7 @@ const TestsDetails = lazy(() => import('@/pages/soil-lab/tests/ui/Details'))
 export const testsRoutes: AppRoute = {
   key: 'Tests',
   path: 'tests',
-  label: 'Test',
+  label: 'Іспити',
   icon: FlaskConical,
   Component: TestsLayout,
   children: [

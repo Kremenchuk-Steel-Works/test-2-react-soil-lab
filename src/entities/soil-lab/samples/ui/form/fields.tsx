@@ -21,7 +21,7 @@ export function useSamplesFormFields<T extends FieldValues>(Form: FormKit<T>, ct
     const { moldingSandRecipe, note } = samplesFieldRegistry
 
     return Object.freeze({
-      Title: V('Title', () => <h5 className="layout-text">Створення Sample</h5>),
+      Title: V('Title', () => <h5 className="layout-text">Створення зразка</h5>),
 
       [moldingSandRecipe.key]: F(moldingSandRecipe.key, (name) => (
         <Form.Controller name={name}>
