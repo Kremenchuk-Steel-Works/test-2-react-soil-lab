@@ -33,8 +33,7 @@ export function LoginForm({
     handleSubmit,
     setError,
     setFocus,
-    getFieldState,
-    formState,
+    getValues,
     formState: { isSubmitting },
   } = form
   // Submit
@@ -45,10 +44,9 @@ export function LoginForm({
     } catch (err) {
       applyServerErrors({
         err,
+        getValues,
         setError,
         setFocus,
-        getFieldState,
-        formState,
         overrides: [
           (parsed) => {
             if (parsed.status === 401 && parsed.message === 'Invalid password') {

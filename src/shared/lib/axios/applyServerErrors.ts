@@ -1,53 +1,77 @@
+import axios from 'axios'
 import type {
   FieldPath,
   FieldValues,
-  FormState,
-  UseFormGetFieldState,
   UseFormGetValues,
   UseFormSetError,
   UseFormSetFocus,
 } from 'react-hook-form'
+import { API_URL } from '@/shared/config/env'
 import {
   parseApiError,
   type ParsedApiError,
   type ParsedApiIssue,
 } from '@/shared/lib/axios/parseApiError'
 
-/** Безопасное приведение к строке — дружит с restrict-template-expressions */
-function toStringSafe(v: unknown): string {
-  if (typeof v === 'string') return v
-  if (v == null) return ''
-  if (typeof v === 'number' || typeof v === 'boolean') return String(v)
-  if (Array.isArray(v)) return v.map(toStringSafe).filter(Boolean).join('; ')
-  if (typeof v === 'object') {
-    const o = v as Record<string, unknown>
-    if (typeof o.message === 'string') return o.message
-    if (typeof o.msg === 'string') return o.msg
-    try {
-      return JSON.stringify(o)
-    } catch {
-      return ''
-    }
-  }
-  return ''
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return Object.prototype.toString.call(value) === '[object Object]'
 }
 
-/** Собираем пути значений: a.b[0].c (совместимо с RHF) */
+// Вставляем "_" между буквой и цифрой, приводим к snake_case.
+// Примеры: "measurement1" -> "measurement_1", "gasPermeability2Value" -> "gas_permeability_2_value"
+function toSnakeKey(key: string): string {
+  return key
+    .replace(/([A-Z])/g, '_$1') // camel -> snake на границе с заглавной
+    .replace(/([a-zA-Z])(\d+)/g, '$1_$2') // буква-цифра -> "_"
+    .replace(/-+/g, '_') // дефисы -> "_"
+    .replace(/__+/g, '_') // сжать двойные "_"
+    .toLowerCase()
+}
+
+function snakecaseKeysDeep<T>(input: T): T {
+  if (Array.isArray(input)) {
+    return input.map(snakecaseKeysDeep) as unknown as T
+  }
+  if (isPlainObject(input)) {
+    const out: Record<string, unknown> = {}
+    for (const [k, v] of Object.entries(input)) {
+      const nk = toSnakeKey(k)
+      out[nk] = snakecaseKeysDeep(v)
+    }
+    return out as T
+  }
+  return input
+}
+
+export const api = axios.create({
+  baseURL: API_URL,
+  timeout: 5_000,
+})
+
+api.interceptors.request.use((config) => {
+  // Конвертируем data и params в snake_case с учётом цифр
+  if (config.data && (isPlainObject(config.data) || Array.isArray(config.data))) {
+    config.data = snakecaseKeysDeep(config.data)
+  }
+  if (config.params && (isPlainObject(config.params) || Array.isArray(config.params))) {
+    config.params = snakecaseKeysDeep(config.params)
+  }
+  return config
+})
+
 function collectFieldPaths(obj: unknown, base = ''): string[] {
   const paths: string[] = []
   if (Array.isArray(obj)) {
     obj.forEach((v, i) => {
       const p = `${base}[${i}]`
-      paths.push(p)
-      paths.push(...collectFieldPaths(v, p))
+      paths.push(p, ...collectFieldPaths(v, p))
     })
     return paths
   }
   if (obj && typeof obj === 'object') {
     for (const [k, v] of Object.entries(obj as Record<string, unknown>)) {
       const p = base ? `${base}.${k}` : k
-      paths.push(p)
-      paths.push(...collectFieldPaths(v, p))
+      paths.push(p, ...collectFieldPaths(v, p))
     }
     return paths
   }
@@ -56,25 +80,16 @@ function collectFieldPaths(obj: unknown, base = ''): string[] {
 
 export type ApplyServerErrorsOptions<TValues extends FieldValues> = {
   err: unknown
-  /** Если не передан — возьмём все пути из getValues() */
   knownFields?: readonly FieldPath<TValues>[]
-  /** Дай из useFormContext — и мы сами соберём knownFields при необходимости */
   getValues?: UseFormGetValues<TValues>
-  setError?: UseFormSetError<TValues>
+  setError: UseFormSetError<TValues>
   setFocus?: UseFormSetFocus<TValues>
-  getFieldState?: UseFormGetFieldState<TValues>
-  formState?: FormState<TValues>
-  messages?: {
-    missing?: string
-    extra?: string
-  }
-  summary?: {
-    delimiter?: string
-    includeKnownExtra?: boolean
-    noUnknownLabelPrefix?: boolean
-  }
+  messages?: { missing?: string; extra?: string }
+  summary?: { delimiter?: string; includeKnownExtra?: boolean; noUnknownLabelPrefix?: boolean }
   overrides?: Array<(parsed: ParsedApiError) => boolean | void>
   mapFallbackField?: (parsed: ParsedApiError) => FieldPath<TValues> | undefined
+  /** Если true — missing не перетирается extra на том же поле в рамках одного ответа */
+  preferMissingOverExtra?: boolean
 }
 
 export function applyServerErrors<TValues extends FieldValues>(
@@ -86,36 +101,27 @@ export function applyServerErrors<TValues extends FieldValues>(
     getValues,
     setError,
     setFocus,
-    getFieldState,
-    formState,
     messages,
     summary,
     overrides,
     mapFallbackField,
+    preferMissingOverExtra = true,
   } = opts
 
-  if (!setError) {
-    throw new Error('applyServerErrors: setError is required')
-  }
-
   const parsed = parseApiError(err)
-
   if (overrides) {
     for (const rule of overrides) {
-      const stop = rule(parsed)
-      if (stop) return
+      if (rule(parsed)) return
     }
   }
 
-  // 1) Определяем разрешённые имена полей
+  // Какие имена считаем валидными для setError на поля формы
   let allowed: Set<string>
-  if (knownFields && knownFields.length) {
+  if (knownFields?.length) {
     allowed = new Set<string>(knownFields.map(String))
   } else if (getValues) {
-    const all = getValues()
-    allowed = new Set<string>(collectFieldPaths(all))
+    allowed = new Set<string>(collectFieldPaths(getValues()))
   } else {
-    // last resort: считаем известными те, что пришли в ошибках
     allowed = new Set<string>(parsed.issues.map((i) => i.field).filter(Boolean) as string[])
   }
 
@@ -128,8 +134,14 @@ export function applyServerErrors<TValues extends FieldValues>(
   const extraUnknown: string[] = []
   const extraKnown: string[] = summary?.includeKnownExtra ? [] : []
   const otherRoot: string[] = []
-  let focused = false
 
+  // Копим сообщения по полям с приоритетом (missing > extra > other)
+  type Priority = 0 | 1 | 2
+  const priorityOf = (k: ParsedApiIssue['kind']): Priority =>
+    k === 'missing' ? 2 : k === 'extra' ? 1 : 0
+  const perField = new Map<FieldPath<TValues>, { p: Priority; msg: string }>()
+
+  let focused = false
   const addRoot = (kind: ParsedApiIssue['kind'], label: string) => {
     if (kind === 'missing') missingUnknown.push(label)
     else if (kind === 'extra') extraUnknown.push(label)
@@ -137,31 +149,56 @@ export function applyServerErrors<TValues extends FieldValues>(
   }
 
   for (const issue of parsed.issues) {
-    const name =
-      issue.field && allowed.has(issue.field) ? (issue.field as FieldPath<TValues>) : undefined
+    // Если парсер дал "field" (мэппинг к имени формы) и/или "fieldRaw" (исходное API-имя)
+    const field = issue.field ?? ''
+    const fieldRaw = issue.fieldRaw ?? ''
 
-    if (name) {
+    const isKnownFormField = field && allowed.has(field)
+    const isRawKnownInForm = fieldRaw && allowed.has(fieldRaw)
+
+    // Особый случай: сервер говорит "missing measurement_1", а форма знает только "measurement1".
+    // Тогда: показываем missing по корню как неизвестное (именно measurement_1),
+    // но на поле measurement1 НЕ перезаписываем missing ошибку extra'ой ниже.
+    if (issue.kind === 'missing' && !isRawKnownInForm && isKnownFormField) {
+      // в root — сырой ключ API, чтобы пользователь видел "measurement_1 - не вказано"
+      const human = 'не вказано'
+      if (!fieldRaw && noUnknownLabelPrefix) {
+        otherRoot.push(human)
+      } else {
+        addRoot('missing', `${fieldRaw || 'Невідоме поле'} - ${human}`)
+      }
+      // Дополнительно можно подсветить само поле (опционально). Если не хочешь — закомментируй.
+      const p = priorityOf('missing')
+      if (
+        !perField.has(field as FieldPath<TValues>) ||
+        p > perField.get(field as FieldPath<TValues>)!.p
+      ) {
+        perField.set(field as FieldPath<TValues>, { p, msg: msgMissing })
+      }
+      continue
+    }
+
+    if (isKnownFormField) {
       const human =
         issue.kind === 'missing' ? msgMissing : issue.kind === 'extra' ? msgExtra : issue.message
+      const p = priorityOf(issue.kind)
 
-      if (getFieldState && formState) {
-        const { error } = getFieldState(name, formState)
-        const existing = toStringSafe(error?.message)
-        const combined = existing ? `${existing}; ${human}` : human
-        setError(name, { type: 'server', message: combined })
-      } else {
-        setError(name, { type: 'server', message: human })
+      const prev = perField.get(field as FieldPath<TValues>)
+      const shouldReplace = !prev || (preferMissingOverExtra ? p > prev.p : true)
+      if (shouldReplace) {
+        perField.set(field as FieldPath<TValues>, { p, msg: human })
       }
 
       if (!focused && setFocus) {
-        setFocus(name, { shouldSelect: true })
+        setFocus(field as FieldPath<TValues>, { shouldSelect: true })
         focused = true
       }
       if (issue.kind === 'extra' && summary?.includeKnownExtra) {
-        extraKnown.push(String(name))
+        extraKnown.push(String(field))
       }
     } else {
-      const label = issue.field ?? issue.fieldRaw
+      // Поле для формы неизвестно -> в root
+      const label = field || fieldRaw
       const human =
         issue.kind === 'missing'
           ? 'не вказано'
@@ -170,21 +207,27 @@ export function applyServerErrors<TValues extends FieldValues>(
             : issue.message || 'помилка'
 
       if (!label && noUnknownLabelPrefix) {
-        otherRoot.push(human) // общий detail без префикса
+        otherRoot.push(human)
       } else {
         addRoot(issue.kind, `${label ?? 'Невідоме поле'} - ${human}`)
       }
     }
   }
 
-  if (parsed.issues.length === 0 && parsed.message) {
+  // Выставляем ошибки на поля с учётом приоритета
+  for (const [name, { msg }] of perField.entries()) {
+    setError(name, { type: 'server', message: msg })
+  }
+
+  // Fallback: только message без issues
+  if (!parsed.issues.length && parsed.message) {
     const fallbackField = mapFallbackField?.(parsed)
     if (fallbackField) {
       setError(fallbackField, { type: 'server', message: parsed.message })
       if (!focused && setFocus) setFocus(fallbackField, { shouldSelect: true })
-      return
+    } else {
+      otherRoot.push(parsed.message)
     }
-    otherRoot.push(parsed.message)
   }
 
   const lines: string[] = []

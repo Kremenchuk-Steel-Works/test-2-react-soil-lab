@@ -1,5 +1,4 @@
 import axios, { AxiosError, isAxiosError, type AxiosRequestConfig } from 'axios'
-import axiosCaseConverter from 'axios-case-converter'
 import { API_URL } from '@/shared/config/env'
 import { logger } from '@/shared/lib/logger'
 
@@ -18,7 +17,8 @@ const baseApi = axios.create({
 })
 
 // Сначала применяем конвертер регистров
-export const api = axiosCaseConverter(baseApi)
+// export const api = axiosCaseConverter(baseApi)
+export const api = baseApi
 
 // Утилита безопасного получения логируемого значения
 const toLoggable = (value: unknown): unknown => {

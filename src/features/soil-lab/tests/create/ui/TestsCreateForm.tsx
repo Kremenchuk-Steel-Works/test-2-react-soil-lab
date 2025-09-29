@@ -7,6 +7,7 @@ import {
 import { TestsCreateFormKit } from '@/features/soil-lab/tests/create/ui/formKit'
 import { TestsCreateBaseForm } from '@/features/soil-lab/tests/create/ui/TestsCreateBaseForm'
 import type { SampleDetailResponse } from '@/shared/api/soil-lab-2/model'
+import { applyServerErrors } from '@/shared/lib/axios/applyServerErrors'
 import { createLogger } from '@/shared/lib/logger'
 import { createDynamicEngine } from '@/shared/lib/zod/dynamic-resolver'
 import { DynamicFieldsProvider } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
@@ -42,6 +43,8 @@ export function TestsCreateForm({
   const {
     handleSubmit,
     setError,
+    setFocus,
+    getValues,
     formState: { isSubmitting },
   } = form
 
@@ -51,9 +54,16 @@ export function TestsCreateForm({
       const response = await onSubmit(data)
       logger.debug('Форма успешно выполнена', response)
     } catch (err) {
-      const error = err as Error
-      setError('root', { message: error.message })
-      logger.error('Ошибка при отправке формы:', 'err:', err, 'data:', data)
+      applyServerErrors({
+        err,
+        getValues,
+        setError,
+        setFocus,
+        summary: {
+          includeKnownExtra: true,
+          noUnknownLabelPrefix: true,
+        },
+      })
     }
   }
 
