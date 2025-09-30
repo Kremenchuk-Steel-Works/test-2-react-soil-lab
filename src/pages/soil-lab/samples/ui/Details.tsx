@@ -1,19 +1,44 @@
-import { useParams } from 'react-router-dom'
+import { AlertTriangle, CheckCircle, ChevronRight } from 'lucide-react'
+import { Link, useParams } from 'react-router-dom'
 import { samplesService } from '@/entities/soil-lab/samples/api/service'
-import { testsStatusOptions } from '@/entities/soil-lab/tests/model/status'
-import { testsTypeOptions } from '@/entities/soil-lab/tests/model/type'
-import type { TestStatus, TestType } from '@/shared/api/soil-lab/model'
+import { samplesMixtures } from '@/entities/soil-lab/samples/model/mixtures'
+import { testTypeToUnit } from '@/entities/soil-lab/tests/lib/testTypeToUnit'
+import { testsStatus } from '@/entities/soil-lab/tests/model/status'
+import { testsType } from '@/entities/soil-lab/tests/model/type'
+import { TestStatus } from '@/shared/api/soil-lab/model'
 import { getErrorMessage } from '@/shared/lib/axios'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
-import type { Option } from '@/shared/ui/select/ReactSelect'
+import { InfoCard } from '@/shared/ui/InfoCard/InfoCard'
+import { labelFromDict } from '@/utils/dict'
 import { ConfiguredButton } from '@/widgets/page/ConfiguredButton'
 
-function getOptionLabel<T extends string>(
-  opts: ReadonlyArray<Option<T>>,
-  value: T,
-  fallback: string = value,
-): string {
-  return opts.find((o) => o.value === value)?.label ?? fallback
+const statusUI = (status: TestStatus, label: string) => {
+  switch (status) {
+    case TestStatus.passed:
+      return {
+        icon: <CheckCircle className="h-4 w-4" strokeWidth={1.6} />,
+        pill:
+          'bg-green-50 text-green-700 border border-green-300 ' +
+          'dark:bg-green-950 dark:text-green-300 dark:border-green-700',
+        label,
+      }
+    case TestStatus.failed:
+      return {
+        icon: <AlertTriangle className="h-4 w-4" strokeWidth={1.6} />,
+        pill:
+          'bg-yellow-50 text-yellow-800 border border-yellow-400/70 ' +
+          'dark:bg-yellow-950 dark:text-yellow-300 dark:border-yellow-600',
+        label,
+      }
+    default:
+      return {
+        icon: <CheckCircle className="h-4 w-4" strokeWidth={1.6} />,
+        pill:
+          'bg-slate-100 text-slate-700 border border-slate-300 ' +
+          'dark:bg-slate-800 dark:text-slate-300 dark:border-slate-600',
+        label,
+      }
+  }
 }
 
 export default function SamplesDetails() {
@@ -30,154 +55,86 @@ export default function SamplesDetails() {
   return (
     <>
       {queryError && <AlertMessage type={AlertType.ERROR} message={getErrorMessage(queryError)} />}
+
       {!isLoading && !queryError && responseData && (
         <>
           <h5 className="layout-text">Деталі</h5>
 
-          <dl className="grid grid-cols-1 gap-x-6 gap-y-4 md:grid-cols-2">
-            {/* --- Рецепт суміші --- */}
-            <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">Рецепт суміші</dt>
-              <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {responseData.moldingSandRecipe}
-              </dd>
-            </div>
+          {/* Карточки с полями */}
+          <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            <InfoCard label="Рецепт суміші">
+              {labelFromDict(samplesMixtures, responseData.moldingSandRecipe)}
+            </InfoCard>
 
-            {/* --- Дата отримання зразка --- */}
-            <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">
-                Дата отримання зразка
-              </dt>
-              <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {new Date(responseData.receivedAt).toLocaleString()}
-              </dd>
-            </div>
+            <InfoCard label="Дата отримання зразка">
+              {new Date(responseData.receivedAt).toLocaleString()}
+            </InfoCard>
 
-            {/* --- Кількість випробувань --- */}
-            <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">
-                Кількість випробувань
-              </dt>
-              <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {responseData.tests.length}
-              </dd>
-            </div>
-
-            {/* --- ID зразка --- */}
-            <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">ID зразка</dt>
-              <dd className="mt-1 text-gray-900 dark:text-slate-300">{responseData.id}</dd>
-            </div>
-
-            {/* --- Перелік випробувань (детально з посиланнями) --- */}
-            <div className="md:col-span-2">
-              <dt className="font-medium text-gray-500 dark:text-slate-400">Перелік випробувань</dt>
-              <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {responseData.tests.length === 0 ? (
-                  <span className="text-gray-500 dark:text-slate-400">Немає</span>
-                ) : (
-                  <ul className="divide-y divide-gray-200 dark:divide-slate-700">
-                    {responseData.tests.map((test) => {
-                      const typeLabel = getOptionLabel<TestType>(testsTypeOptions, test.type)
-                      const statusLabel = getOptionLabel<TestStatus>(
-                        testsStatusOptions,
-                        test.status,
-                      )
-                      return (
-                        <li key={test.id} className="py-2">
-                          <a
-                            href={`../tests/${test.id}`}
-                            className="text-blue-600 hover:underline dark:text-blue-400"
-                          >
-                            {typeLabel}
-                          </a>
-                          <span className="ml-2 text-gray-500 dark:text-slate-400">•</span>
-                          <span className="ml-2">
-                            Середнє значення:{' '}
-                            <span className="font-medium">{test.meanMeasurement}</span>
-                          </span>
-                          <span className="ml-2 text-gray-500 dark:text-slate-400">•</span>
-                          <span className="ml-2">
-                            Статус: <span className="font-medium">{statusLabel}</span>
-                          </span>
-                          <span className="ml-2 text-gray-500 dark:text-slate-400">•</span>
-                          <span className="ml-2">
-                            ID: <span className="font-mono">{test.id}</span>
-                          </span>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                )}
-              </dd>
-            </div>
-
-            {/* --- Примітка (опційно) --- */}
             {(responseData.note ?? '') !== '' && (
-              <div className="md:col-span-2">
-                <dt className="font-medium text-gray-500 dark:text-slate-400">Примітка</dt>
-                <dd className="mt-1 whitespace-pre-wrap text-gray-900 dark:text-slate-300">
+              <InfoCard label="Примітка" className="sm:col-span-2 xl:col-span-3">
+                <p className="whitespace-pre-wrap text-slate-900 dark:text-slate-100">
                   {responseData.note}
-                </dd>
-              </div>
+                </p>
+              </InfoCard>
             )}
+          </section>
 
-            {/* --- Статус зразка --- */}
-            <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">Статус</dt>
-              <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {responseData.isDeleted ? 'Видалено' : 'Активний'}
-              </dd>
-            </div>
+          {/* Перелік випробувань */}
+          {responseData.tests.length > 0 && (
+            <section className="mt-2">
+              <h6 className="mb-2 text-base font-medium text-gray-500 dark:text-slate-400">
+                Перелік випробувань
+              </h6>
 
-            {/* --- Час створення --- */}
-            <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">Час створення</dt>
-              <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {new Date(responseData.createdAt).toLocaleString()}
-              </dd>
-            </div>
+              <ul role="list" className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                {responseData.tests.map((test) => {
+                  const typeLabel = labelFromDict(testsType, test.type)
+                  const statusLabel = labelFromDict(testsStatus, test.status)
+                  const unit = testTypeToUnit(test.type)
+                  const s = statusUI(test.status, statusLabel)
 
-            {/* --- Створив (ID) --- */}
-            {responseData.createdById && (
-              <div>
-                <dt className="font-medium text-gray-500 dark:text-slate-400">Створив (ID)</dt>
-                <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                  {responseData.createdById}
-                </dd>
-              </div>
-            )}
+                  return (
+                    <li key={test.id}>
+                      <Link
+                        to={`/soil-lab/tests/${test.id}`}
+                        className="group block rounded-xl border border-slate-200 bg-white/60 p-3 shadow-sm transition hover:shadow focus:ring-2 focus:ring-blue-500 focus:outline-none sm:p-4 dark:border-slate-700 dark:bg-slate-800/40"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <h6 className="font-medium text-slate-900 transition group-hover:text-blue-600 dark:text-slate-100">
+                            {typeLabel}
+                          </h6>
 
-            {/* --- Час оновлення --- */}
-            <div>
-              <dt className="font-medium text-gray-500 dark:text-slate-400">Час оновлення</dt>
-              <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                {new Date(responseData.updatedAt).toLocaleString()}
-              </dd>
-            </div>
+                          <span
+                            className={
+                              'inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-base font-medium' +
+                              s.pill
+                            }
+                          >
+                            {s.icon}
+                            <span>{s.label}</span>
+                          </span>
+                        </div>
 
-            {/* --- Оновив (ID) --- */}
-            {responseData.updatedById && (
-              <div>
-                <dt className="font-medium text-gray-500 dark:text-slate-400">Оновив (ID)</dt>
-                <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                  {responseData.updatedById}
-                </dd>
-              </div>
-            )}
+                        <div className="mt-2 text-base text-slate-500 dark:text-slate-400">
+                          Середнє значення
+                        </div>
+                        <div className="mt-0.5 text-base font-semibold text-slate-900 dark:text-slate-100">
+                          {test.meanMeasurement} {unit}
+                        </div>
 
-            {/* --- Час видалення (опційно) --- */}
-            {responseData.deletedAt != null && (
-              <div>
-                <dt className="font-medium text-gray-500 dark:text-slate-400">Час видалення</dt>
-                <dd className="mt-1 text-gray-900 dark:text-slate-300">
-                  {new Date(responseData.deletedAt).toLocaleString()}
-                </dd>
-              </div>
-            )}
-          </dl>
+                        <div className="mt-3 hidden items-center text-base text-slate-400 sm:flex">
+                          Дивитися деталі
+                          <ChevronRight className="ml-1 h-3.5 w-3.5" />
+                        </div>
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            </section>
+          )}
 
-          <div>
+          <div className="mt-2">
             <ConfiguredButton btnType="delete" disabled={isLoading} />
           </div>
         </>

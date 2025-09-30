@@ -1,7 +1,9 @@
 import type { TestStatus } from '@/shared/api/soil-lab/model'
-import type { Option } from '@/shared/ui/select/ReactSelect'
+import { dictToOptions } from '@/utils/dict'
 
-export const testsStatusOptions: Option<TestStatus>[] = [
-  { value: 'passed', label: 'Пройдено' },
-  { value: 'failed', label: 'Не пройдено' },
-] as const
+export const testsStatus: Record<TestStatus, string> = {
+  passed: 'Пройдено',
+  failed: 'Не пройдено',
+} as const
+
+export const testsStatusOptions = dictToOptions(testsStatus)

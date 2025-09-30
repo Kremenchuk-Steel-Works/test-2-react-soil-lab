@@ -38,6 +38,7 @@ export default function SamplesList() {
           perPage={perPage}
           totalPages={responseData?.totalPages}
           headerComponents={<SamplesGenerateReportPage />}
+          hideEmptyColumns={true}
         />
       )}
     </>

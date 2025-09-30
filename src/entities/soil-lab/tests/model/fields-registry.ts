@@ -31,6 +31,7 @@ export const testsTypeFieldRegistry = createFieldRegistry({
   strength: {
     label: {
       default: 'Міцність на стиск (кгс/см²)',
+      defaultUnit: 'кгс/см²',
       nPerCm2: 'Міцність на стиск (Н/см²)',
       short: 'Міцність на стиск',
     },
@@ -38,11 +39,12 @@ export const testsTypeFieldRegistry = createFieldRegistry({
   gasPermeability: {
     label: {
       default: 'Газопроникність (од.)',
+      defaultUnit: 'од.',
       m2PerPas: 'Газопроникність · 10⁻⁸ (m²/Pa·S)',
       short: 'Газопроникність',
     },
   },
   moisturePercent: {
-    label: { default: 'Вологість (%)', short: 'Вологість' },
+    label: { default: 'Вологість (%)', defaultUnit: '%', short: 'Вологість' },
   },
 } as const)

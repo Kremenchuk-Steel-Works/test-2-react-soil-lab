@@ -35,8 +35,8 @@ import { VirtualizedMenuList } from '@/shared/ui/select/VirtualizedMenuList'
 
 const CreatableAsyncPaginate = withAsyncPaginate(CreatableSelect)
 
-export type Option<ValueType = string | number | boolean> = {
-  value: ValueType
+export type Option<Value = string | number | boolean> = {
+  value: Value
   label: string
 }
 

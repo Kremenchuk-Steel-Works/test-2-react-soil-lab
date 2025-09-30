@@ -1,3 +1,4 @@
+import { addDays, format } from 'date-fns'
 import type { DeepPartial } from 'react-hook-form'
 import z from 'zod'
 import { samplesGenerateReportFieldRegistry } from '@/features/soil-lab/samples/generate-report/model/fields-registry'
@@ -13,6 +14,6 @@ export type SamplesGenerateReportFormFields = z.infer<typeof samplesGenerateRepo
 
 export const samplesGenerateReportFormDefaultValues: DeepPartial<SamplesGenerateReportFormFields> =
   {
-    dateFrom: null,
-    dateTo: null,
+    dateFrom: format(new Date(), 'yyyy-MM-dd'),
+    dateTo: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
   }

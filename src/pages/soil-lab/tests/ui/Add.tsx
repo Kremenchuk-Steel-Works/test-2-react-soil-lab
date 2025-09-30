@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { testTypeToUnit } from '@/entities/soil-lab/tests/lib/testTypeToUnit'
 import TestsCreate from '@/features/soil-lab/tests/create/ui/TestsCreate'
 import type { CreateTestApiV1TestsPostMutationResult } from '@/shared/api/soil-lab/endpoints/tests/tests'
 import { TestStatus, TestType } from '@/shared/api/soil-lab/model'
@@ -10,17 +11,19 @@ type AlertState = { type: AlertType; message: string } | null
 const TYPES: readonly TestType[] = Object.values(TestType) as TestType[]
 
 function statusToAlert(res: CreateTestApiV1TestsPostMutationResult): AlertState {
-  const status = res.status
-  switch (status) {
+  const unit = testTypeToUnit(res.type)
+  const result = `${res.meanMeasurement} ${unit}`
+  const range = `від ${res.lowerLimit} до ${res.upperLimit} ${unit}`
+  switch (res.status) {
     case TestStatus.passed:
       return {
         type: AlertType.SUCCESS,
-        message: `Пройдено, результат: ${res.meanMeasurement}`,
+        message: `Пройдено, результат: ${result}. Норма: ${range}`,
       }
     case TestStatus.failed:
       return {
         type: AlertType.WARNING,
-        message: `Провалено, результат: ${res.meanMeasurement}`,
+        message: `Провалено, результат: ${result}. Норма: ${range}`,
       }
     default:
       return null

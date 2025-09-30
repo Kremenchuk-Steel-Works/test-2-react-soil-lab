@@ -1,12 +1,13 @@
 import { createColumnHelper } from '@tanstack/react-table'
+import { testTypeToUnit } from '@/entities/soil-lab/tests/lib/testTypeToUnit'
 import { testsResponseFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
-import { testsStatusOptions } from '@/entities/soil-lab/tests/model/status'
 import { testsTypeOptions } from '@/entities/soil-lab/tests/model/type'
-import type { TestListItemResponse } from '@/shared/api/soil-lab/model'
+import { TestStatus, type TestListItemResponse } from '@/shared/api/soil-lab/model'
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { dateColumn, displayColumn, linkColumn, optionColumn } from '@/widgets/data-table'
 
 const columnHelper = createColumnHelper<TestListItemResponse>()
-const { createdAt, status, type, meanMeasurement } = testsResponseFieldRegistry
+const { createdAt, type, meanMeasurement } = testsResponseFieldRegistry
 
 export const testsColumns = [
   columnHelper.accessor(createdAt.key, {
@@ -15,11 +16,6 @@ export const testsColumns = [
     ...linkColumn(dateColumn(), {
       getHref: ({ row }) => row.original.id,
     }),
-  }),
-  columnHelper.accessor(status.key, {
-    header: status.label.default,
-    size: 55,
-    ...optionColumn(testsStatusOptions),
   }),
 
   columnHelper.accessor(type.key, {
@@ -31,6 +27,13 @@ export const testsColumns = [
   columnHelper.accessor(meanMeasurement.key, {
     header: meanMeasurement.label.default,
     size: 75,
-    ...displayColumn(),
+    ...displayColumn<TestListItemResponse, number>({
+      formatter: (value, row) =>
+        row.status === TestStatus.passed ? (
+          <AlertMessage type={AlertType.SUCCESS} message={`${value} ${testTypeToUnit(row.type)}`} />
+        ) : (
+          <AlertMessage type={AlertType.WARNING} message={`${value} ${testTypeToUnit(row.type)}`} />
+        ),
+    }),
   }),
 ]

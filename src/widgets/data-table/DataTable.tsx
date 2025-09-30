@@ -1,4 +1,4 @@
-import { useId, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useId, useMemo, useState, type ReactNode } from 'react'
 import {
   flexRender,
   getCoreRowModel,
@@ -48,6 +48,7 @@ export type DataTableProps<TData extends RowData> = {
   totalPages?: number
   initialSorting?: SortingState
   headerComponents?: ReactNode
+  hideEmptyColumns?: boolean
 }
 
 /* Позволяет задать текст tooltip через columnDef.meta.title */
@@ -66,6 +67,7 @@ export function DataTable<TData extends RowData>({
   enableSortingRemoval = false,
   initialSorting,
   headerComponents,
+  hideEmptyColumns = false,
 }: DataTableProps<TData>) {
   const id = useId()
 
@@ -183,6 +185,43 @@ export function DataTable<TData extends RowData>({
     manualPagination: true,
     enableSortingRemoval,
   })
+
+  // Автоскрытие пустых accessor-колонок
+  useEffect(() => {
+    if (!hideEmptyColumns) return
+
+    const rows = table.getRowModel().rows
+    // Не скрываем, если данных нет — иначе спрячем всё.
+    if (rows.length === 0) return
+
+    const emptyIds: string[] = []
+
+    for (const col of table.getAllLeafColumns()) {
+      if (!col.getCanHide()) continue
+
+      const def = col.columnDef as { accessorKey?: string; accessorFn?: unknown }
+      const isAccessor = typeof def.accessorKey === 'string' || typeof def.accessorFn === 'function'
+      if (!isAccessor) continue
+
+      const allEmpty = rows.every((r) => r.getValue(col.id) == null)
+      if (allEmpty) emptyIds.push(col.id)
+    }
+
+    if (emptyIds.length === 0) return
+
+    setColumnVisibility((prev) => {
+      let changed = false
+      const next = { ...prev }
+      for (const id of emptyIds) {
+        if (next[id] !== false) {
+          next[id] = false
+          changed = true
+        }
+      }
+      return changed ? next : prev
+    })
+    // Тригерим при изменении данных, колонок и фильтров (фильтры могут "опустошить" колонку)
+  }, [hideEmptyColumns, data, columns, columnFilters, table])
 
   const reactStyles = {
     control: (base: CSSObjectWithLabel) => ({

@@ -53,6 +53,15 @@ export function SamplesGenerateReportForm({
           includeKnownExtra: true,
           noUnknownLabelPrefix: true,
         },
+        overrides: [
+          (parsed) => {
+            if (parsed.status === 404) {
+              setError('root', { type: 'server', message: 'Дані не знайдені' })
+              return true
+            }
+            return false
+          },
+        ],
       })
     }
   }

@@ -1,9 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
-
-export type Option<TValue> = {
-  value: TValue
-  label: string
-}
+import type { Option } from '@/shared/ui/select/ReactSelect'
 
 /**
  * Создает конфигурацию колонки для отображения значений, маппируемых на основе предоставленных опций.

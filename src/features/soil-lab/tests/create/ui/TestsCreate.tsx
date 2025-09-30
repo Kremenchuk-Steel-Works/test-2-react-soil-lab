@@ -43,7 +43,6 @@ function mapResponseToInitialData(
 
 export default function TestsCreate({ id, type, onSuccess, onError }: TestsCreateProps) {
   const queryClient = useQueryClient()
-  console.log('ID', id)
 
   const {
     data: responseData,

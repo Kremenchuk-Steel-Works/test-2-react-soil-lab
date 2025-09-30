@@ -3,7 +3,6 @@
  */
 
 export type { DataTableProps } from './DataTable'
-export type { Option } from './columns/optionColumn'
 export { DataTable } from './DataTable'
 export { booleanColumn } from './columns/booleanColumn'
 export { dateColumn } from './columns/dateColumn'

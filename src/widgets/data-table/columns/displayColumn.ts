@@ -1,38 +1,34 @@
 import type { ReactNode } from 'react'
-import type { ColumnDef } from '@tanstack/react-table'
+import type { CellContext, ColumnDef } from '@tanstack/react-table'
 
-interface DisplayColumnOptions<TValue> {
+interface DisplayColumnOptions<TData, TValue> {
   placeholder?: ReactNode
-  formatter?: (value: TValue) => ReactNode
+  // Можно передавать только value, а можно и value + row + ctx
+  formatter?: (value: TValue, row: TData, ctx: CellContext<TData, TValue>) => ReactNode
 }
 
 /**
- * Создает универсальную конфигурацию колонки для отображения данных.
- * Если значение отсутствует (null, undefined, пустая строка), отображает плейсхолдер.
- * Позволяет кастомизировать плейсхолдер и форматирование значения.
- *
- * @param options - Опции для кастомизации.
+ * Универсальная колонка отображения.
+ * Теперь formatter получает value + весь row.original + контекст ячейки.
  */
 export function displayColumn<TData, TValue>(
-  options?: DisplayColumnOptions<TValue>,
+  options?: DisplayColumnOptions<TData, TValue>,
 ): Pick<ColumnDef<TData, TValue>, 'cell'> {
   const { placeholder = '—', formatter } = options ?? {}
 
   return {
-    cell: ({ getValue }) => {
-      const value = getValue()
-
-      // Проверяем на самые частые случаи "отсутствия" значения
+    cell: (ctx) => {
+      const value = ctx.getValue() as TValue
+      // частые "пустые" значения
       if (value === null || value === undefined || value === '') {
         return placeholder
       }
 
-      // Если есть функция-форматтер, используем ее
       if (formatter) {
-        return formatter(value)
+        // пробрасываем всю строку (сырой ответ бекенда) и контекст
+        return formatter(value, ctx.row.original, ctx)
       }
 
-      // В противном случае, возвращаем само значение.
       return value as ReactNode
     },
   }
