@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { CirclePlus, Database, FlaskConical, Info, RefreshCcw, Trash } from 'lucide-react'
+import { CirclePlus, ClipboardList, Database, Info, RefreshCcw, Trash } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 
@@ -14,7 +14,7 @@ export const samplesRoutes: AppRoute = {
   key: 'Samples',
   path: 'samples',
   label: 'Зразки',
-  icon: FlaskConical,
+  icon: ClipboardList,
   Component: SamplesLayout,
   meta: {
     buttons: ['add'],

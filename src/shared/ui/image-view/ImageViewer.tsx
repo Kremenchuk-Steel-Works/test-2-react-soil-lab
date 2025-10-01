@@ -212,7 +212,7 @@ function ImageViewerDesktop({
   }, [safe])
 
   const toolbarBtn =
-    'h-9 w-9 grid place-items-center rounded-md transition ' +
+    'h-9 w-9 grid place-items-center rounded-xl transition ' +
     'bg-gray-200 hover:bg-gray-300 text-slate-700 ' +
     'dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-slate-300 ' +
     'focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500'
@@ -245,7 +245,7 @@ function ImageViewerDesktop({
         </button>
 
         <div
-          className="grid h-9 min-w-12 place-items-center rounded-md bg-gray-200 px-2 text-sm font-medium text-slate-700 dark:bg-gray-700 dark:text-slate-300"
+          className="grid h-9 min-w-12 place-items-center rounded-xl bg-gray-200 px-2 text-sm font-medium text-slate-700 dark:bg-gray-700 dark:text-slate-300"
           aria-label="Поточний масштаб"
           role="status"
         >

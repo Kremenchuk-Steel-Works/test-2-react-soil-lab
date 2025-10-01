@@ -31,7 +31,7 @@ export type ClassNamesConfig = Partial<{
 export const baseClassNames: ClassNamesConfig = {
   control: ({ isFocused, isDisabled }) =>
     twMerge(
-      'relative border rounded-md px-4 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600',
+      'relative border rounded-xl px-4 bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600',
       'flex',
       isFocused && 'ring-2 ring-blue-500',
       isDisabled && 'opacity-50',
@@ -57,7 +57,7 @@ export const baseClassNames: ClassNamesConfig = {
       !isSelected && !isFocused && 'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300',
     ),
   menu: () =>
-    'mt-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 shadow-lg',
+    'mt-1 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 shadow-lg',
   multiValue: () =>
     twMerge(
       'bg-gray-200 dark:bg-gray-600 rounded pl-2 mx-0.5 my-0.5 flex items-center',
@@ -66,7 +66,7 @@ export const baseClassNames: ClassNamesConfig = {
   multiValueLabel: () => 'py-0.5',
   multiValueRemove: () =>
     twMerge(
-      'ml-1 p-[5px] cursor-pointer rounded-md',
+      'ml-1 p-[5px] cursor-pointer rounded-xl',
       'text-gray-400 dark:text-gray-400',
       'hover:bg-red-200 dark:hover:bg-red-800',
       'hover:text-red-800 dark:hover:text-red-300',

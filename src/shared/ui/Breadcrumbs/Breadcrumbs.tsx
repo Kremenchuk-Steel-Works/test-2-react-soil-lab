@@ -40,7 +40,7 @@ export function Breadcrumbs() {
               <Link
                 to={crumb.pathname}
                 aria-current={isLast ? 'page' : undefined}
-                className={`hover:text-blue-600 ${isLast ? 'pointer-events-none text-gray-800 dark:text-gray-200' : ''}`}
+                className={`link-hover ${isLast ? 'pointer-events-none text-gray-800 dark:text-gray-200' : ''}`}
               >
                 {crumb.label}
               </Link>

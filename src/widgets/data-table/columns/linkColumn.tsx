@@ -1,6 +1,7 @@
 import { isValidElement, type ReactNode } from 'react'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 import { Link, type LinkProps } from 'react-router-dom'
+import { twMerge } from 'tailwind-merge'
 
 export type LinkWrapOptions<TData, TValue> = {
   getHref: (ctx: CellContext<TData, TValue>) => string | null | undefined
@@ -73,9 +74,7 @@ export function linkColumn<TData, TValue>(
     }
 
     const extra = getLinkProps?.(ctx)
-    const mergedClassName = ['text-blue-600 hover:underline', extra?.className, className]
-      .filter((x): x is string => Boolean(x))
-      .join(' ')
+    const mergedClassName = twMerge('link', extra?.className, className)
 
     return (
       <Link {...extra} className={mergedClassName} to={maybeHref}>

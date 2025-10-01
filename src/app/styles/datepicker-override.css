@@ -2,7 +2,7 @@
 -------------------------------------------------------------------------- */
 
 .react-datepicker.react-datepicker__calendar--themed {
-  @apply rounded-md border-0 bg-white shadow-[0_8px_24px_rgba(0,0,0,0.4)] dark:bg-gray-800 dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)];
+  @apply rounded-xl border-0 bg-white shadow-[0_8px_24px_rgba(0,0,0,0.4)] dark:bg-gray-800 dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)];
 }
 
 .react-datepicker-popper {
@@ -67,7 +67,7 @@
 /* Выпадающие списки для выбора месяца и года */
 .react-datepicker__month-read-view--selected-month,
 .react-datepicker__year-read-view--selected-year {
-  @apply rounded-md bg-transparent p-2 text-base font-bold text-gray-800 transition-colors hover:bg-gray-300/50 dark:bg-transparent dark:text-slate-200 dark:hover:bg-slate-800;
+  @apply rounded-xl bg-transparent p-2 text-base font-bold text-gray-800 transition-colors hover:bg-gray-300/50 dark:bg-transparent dark:text-slate-200 dark:hover:bg-slate-800;
 }
 
 .react-datepicker__calendar--themed .react-datepicker__navigation-icon::before {
@@ -104,7 +104,7 @@
 
 /* Базовый стиль для ячейки с днем */
 .react-datepicker__calendar--themed .react-datepicker__day {
-  @apply m-0.5 h-9 w-9 rounded-md text-base leading-9 font-semibold text-gray-800 transition-colors dark:text-slate-300;
+  @apply m-0.5 h-9 w-9 rounded-xl text-base leading-9 font-semibold text-gray-800 transition-colors dark:text-slate-300;
 }
 
 /* Стиль для наведения на обычный день */
@@ -332,7 +332,7 @@
 
 /* Базовый стиль для ячейки с годом */
 .react-datepicker__calendar--themed .react-datepicker__year-text {
-  @apply flex h-10 w-14 items-center justify-center rounded-md text-base font-semibold text-gray-800 transition-colors dark:text-slate-300;
+  @apply flex h-10 w-14 items-center justify-center rounded-xl text-base font-semibold text-gray-800 transition-colors dark:text-slate-300;
 }
 
 /* Активный (не disabled) год.

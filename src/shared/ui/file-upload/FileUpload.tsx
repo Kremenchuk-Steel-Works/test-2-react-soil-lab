@@ -140,7 +140,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
   const containerClassName = useMemo(() => {
     const baseClasses =
-      'peer relative flex w-full items-start rounded-md border bg-gray-50 px-4 pt-5 pb-2 text-base text-gray-900 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-gray-50 min-h-[54px]'
+      'peer relative flex w-full items-start rounded-xl border bg-gray-50 px-4 pt-5 pb-2 text-base text-gray-900 transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-gray-50 min-h-[54px]'
     const stateClasses = {
       default:
         'cursor-pointer border-gray-300 hover:border-gray-400 dark:border-gray-600 focus:ring-blue-500',
@@ -192,7 +192,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
           )}
 
           {isDragging && (
-            <div className="pointer-events-none absolute inset-0 z-20 flex flex-row items-center justify-center rounded-md bg-gray-900/60 backdrop-blur-sm">
+            <div className="pointer-events-none absolute inset-0 z-20 flex flex-row items-center justify-center rounded-xl bg-gray-900/60 backdrop-blur-sm">
               {isDragReject ? (
                 <>
                   <CircleMinus size={22} className="mr-2 text-red-400" />

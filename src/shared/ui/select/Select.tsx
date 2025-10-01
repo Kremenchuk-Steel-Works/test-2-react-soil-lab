@@ -75,7 +75,7 @@ const Select: React.FC<SelectProps> = ({
     >
       <div
         className={twMerge(
-          'flex w-full items-center justify-between rounded-md border px-4',
+          'flex w-full items-center justify-between rounded-xl border px-4',
           heightClass,
           'border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-700',
           'focus:ring-2 focus:ring-blue-500 focus:outline-none',
@@ -121,7 +121,7 @@ const Select: React.FC<SelectProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.15 }}
-            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-200 bg-white shadow-lg focus:outline-none dark:border-gray-600 dark:bg-gray-700"
+            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-gray-200 bg-white shadow-lg focus:outline-none dark:border-gray-600 dark:bg-gray-700"
           >
             {options.map((opt) => (
               <li

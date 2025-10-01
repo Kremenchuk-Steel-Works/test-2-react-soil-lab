@@ -48,7 +48,7 @@ const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
           id={finalId}
           {...props}
           style={{ height, resize: 'none' }}
-          className={`peer min-h-[78px] w-full resize-y rounded-md border border-gray-300 bg-gray-50 px-4 pt-5 pb-2 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 ${className || ''} `}
+          className={`peer min-h-[78px] w-full resize-y rounded-xl border border-gray-300 bg-gray-50 px-4 pt-5 pb-2 text-base focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 ${className || ''} `}
           placeholder=" "
         />
 

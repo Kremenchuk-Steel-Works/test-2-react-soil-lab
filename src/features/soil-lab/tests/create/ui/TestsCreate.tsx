@@ -19,6 +19,8 @@ import {
   type SampleDetailResponse,
 } from '@/shared/api/soil-lab/model'
 import { getErrorMessage } from '@/shared/lib/axios'
+import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-types'
+import { withUnitConversion } from '@/shared/lib/zod/unit-conversion/withUnitConversion'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
 interface TestsCreateProps {
@@ -33,11 +35,36 @@ function mapResponseToInitialData(
   response: SampleDetailResponse,
   type: TestType,
 ): DeepPartial<TestsCreateFormFields> {
+  const test = response.tests.find((t) => t.type === type)
+  const meanMeasurement = test?.meanMeasurement
   return {
     sampleId: response.id,
-    // moldingSandRecipe: response.moldingSandRecipe,
-    moldingSandRecipe: '13',
+    moldingSandRecipe: response.moldingSandRecipe,
     type: type,
+    measurement1: convertApiToUi(meanMeasurement, type),
+  }
+}
+
+function convertApiToUi(value: number | undefined, type: TestType): number | undefined {
+  if (value == null) return undefined
+
+  switch (type) {
+    case TestType.gas_permeability:
+      return withUnitConversion(value, {
+        from: Units.PN,
+        to: Units.SI_E8,
+        instrument: Instruments.LPIR1,
+        round: 0,
+      })
+    case TestType.strength:
+      return withUnitConversion(value, {
+        from: Units.KGF_PER_CM2,
+        to: Units.N_PER_CM2,
+        round: 2,
+      })
+    case TestType.moisture_percent:
+    default:
+      return value
   }
 }
 

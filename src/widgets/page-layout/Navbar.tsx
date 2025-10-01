@@ -50,10 +50,10 @@ const Navbar: React.FC = () => {
             )}
 
             {/* Имя / фамилия */}
-            <div className="flex min-w-0 flex-shrink-0 cursor-default items-center gap-1 overflow-hidden whitespace-nowrap">
+            <div className="flex min-w-0 items-center gap-1 overflow-hidden">
               <User className="h-4 w-4 flex-shrink-0" />
-              <span className="truncate">
-                <span className="hidden sm:inline">{currentUser?.email}&nbsp;</span>
+              <span className="min-w-0 flex-1 truncate" title={currentUser?.email ?? ''}>
+                {currentUser?.email}
               </span>
             </div>
 

@@ -450,7 +450,7 @@ export function DataTable<TData extends RowData>({
                   <td
                     key={cell.id}
                     style={{ width: cell.column.getSize() }}
-                    className="overflow-hidden px-4 py-2 text-ellipsis whitespace-nowrap"
+                    className="overflow-hidden px-4 py-2 align-middle text-ellipsis whitespace-nowrap"
                   >
                     <EllipsisText title={getCellTooltip(cell)}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}

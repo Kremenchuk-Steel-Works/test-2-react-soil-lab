@@ -51,7 +51,7 @@ function AnimatedMenu<
           {...safeInnerProps}
           className={cx(
             { menu: true },
-            'mt-1 rounded-md border p-0 shadow-lg',
+            'mt-1 rounded-xl border p-0 shadow-lg',
             'border-gray-200 bg-white',
             'dark:border-gray-700 dark:bg-gray-700',
             className,

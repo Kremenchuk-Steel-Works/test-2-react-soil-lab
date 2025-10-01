@@ -46,7 +46,7 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           disabled={disabled}
           {...props}
           // Добавляем отступ справа, если есть иконка
-          className={`peer w-full rounded-md border border-gray-300 bg-gray-50 px-4 pt-5 pb-2 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 ${
+          className={`peer w-full rounded-xl border border-gray-300 bg-gray-50 px-4 pt-5 pb-2 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:border-gray-600 dark:bg-gray-700 ${
             showRightIcon ? 'pr-11' : ''
           } ${disabled ? 'opacity-50' : ''}`}
           placeholder=" "

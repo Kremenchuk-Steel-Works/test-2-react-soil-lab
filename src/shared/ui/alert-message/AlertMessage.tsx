@@ -15,7 +15,7 @@ type AlertMessageProps = {
 }
 
 const baseStyle =
-  'flex items-center gap-2 p-2.5 rounded-md text-sm border break-words whitespace-normal'
+  'flex items-center gap-2 p-2.5 rounded-xl text-sm border break-words whitespace-normal'
 
 const alertConfigs: Record<AlertType, { icon: React.ReactNode; style: string }> = {
   SUCCESS: {

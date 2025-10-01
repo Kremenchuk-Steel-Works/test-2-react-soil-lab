@@ -125,7 +125,7 @@ function ReactSelectNoLabel<
 const baseClassNames: ReactSelectNoLabelClassNamesConfig = {
   control: ({ isFocused }) =>
     twMerge(
-      'border rounded-md px-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600',
+      'border rounded-xl px-4 bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600',
       'py-1',
       'flex items-center',
       isFocused && 'ring-2 ring-blue-500',
@@ -142,7 +142,7 @@ const baseClassNames: ReactSelectNoLabelClassNamesConfig = {
       !isSelected && !isFocused && 'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300',
     ),
   menu: () =>
-    'mt-1 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 shadow-lg',
+    'mt-1 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 shadow-lg',
   multiValue: () =>
     twMerge(
       'bg-gray-200 dark:bg-gray-600 rounded pl-2 mx-0.5 my-0.5 flex items-center',
@@ -151,7 +151,7 @@ const baseClassNames: ReactSelectNoLabelClassNamesConfig = {
   multiValueLabel: () => 'py-1',
   multiValueRemove: () =>
     twMerge(
-      'ml-1 p-[5px] cursor-pointer rounded-md',
+      'ml-1 p-[5px] cursor-pointer rounded-xl',
       'text-gray-400 dark:text-gray-400',
       'hover:bg-red-200 dark:hover:bg-red-800',
       'hover:text-red-800 dark:hover:text-red-300',

@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { Database, FlaskConical, Info, Trash } from 'lucide-react'
+import { ClipboardCheck, Database, Info, Trash } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 
@@ -12,7 +12,7 @@ export const testsRoutes: AppRoute = {
   key: 'Tests',
   path: 'tests',
   label: 'Іспити',
-  icon: FlaskConical,
+  icon: ClipboardCheck,
   Component: TestsLayout,
   children: [
     {

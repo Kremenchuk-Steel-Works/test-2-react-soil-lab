@@ -18,7 +18,7 @@ const InputFieldNoLabel: React.FC<InputFieldProps> = ({
   const finalId = id || generatedId
 
   const baseStyles = `relative w-full`
-  const inputBaseStyles = `peer w-full px-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500`
+  const inputBaseStyles = `peer w-full px-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500`
   return (
     <div className={twMerge(baseStyles, className)}>
       <input
