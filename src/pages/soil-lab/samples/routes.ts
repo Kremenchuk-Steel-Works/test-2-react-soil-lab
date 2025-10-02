@@ -16,6 +16,7 @@ export const samplesRoutes: AppRoute = {
   label: 'Зразки',
   icon: ClipboardList,
   Component: SamplesLayout,
+  requiredPermissions: [PERMISSIONS.SAMPLES_READ],
   meta: {
     buttons: ['add'],
   },

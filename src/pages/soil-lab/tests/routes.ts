@@ -14,6 +14,7 @@ export const testsRoutes: AppRoute = {
   label: 'Іспити',
   icon: ClipboardCheck,
   Component: TestsLayout,
+  requiredPermissions: [PERMISSIONS.TESTS_READ],
   children: [
     {
       key: 'testsList',
