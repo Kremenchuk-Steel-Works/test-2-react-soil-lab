@@ -1,4 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
+import { formatUiDate } from '@/shared/lib/datetime/formatUiDate'
 import { toLowerSafe } from '@/shared/lib/strings/toLowerSafe'
 
 interface DateColumnOptions {
@@ -17,7 +18,7 @@ export function dateColumn<TData>(
   options?: DateColumnOptions,
 ): Pick<ColumnDef<TData, string | undefined | null>, 'cell' | 'filterFn'> {
   // Устанавливаем значения по умолчанию, если они не предоставлены
-  const { placeholder = '—', formatter = (date: Date) => date.toLocaleString() } = options ?? {}
+  const { placeholder = '—', formatter = (date: Date) => formatUiDate(date) } = options ?? {}
 
   return {
     cell: ({ getValue }) => {

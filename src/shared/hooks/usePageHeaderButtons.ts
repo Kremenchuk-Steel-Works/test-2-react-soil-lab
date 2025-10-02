@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/app/providers/auth/context'
-import { findRouteObjectByPath } from '@/app/routes/utils'
+import { findRouteObjectByPath } from '@/app/routes/utils/utils'
 import { checkAccessLogic, useUserPermissionsSet } from '@/shared/hooks/usePermissions'
 import { prepareButtonLogic, type PreparedButtonProps } from '@/utils/prepareButtonLogic'
 

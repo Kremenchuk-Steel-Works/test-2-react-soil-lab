@@ -1,16 +1,23 @@
+import type { SampleCreate, SampleDetailResponse } from '@/shared/api/soil-lab/model'
 import { createFieldRegistry } from '@/utils/react-hook-form/createFieldRegistry'
 
-export const samplesFieldRegistry = createFieldRegistry({
+export const samplesFieldRegistry = createFieldRegistry.forType<SampleCreate>()({
   moldingSandRecipe: {
-    label: { default: '№ суміші' },
+    label: { default: 'Формувальна суміш' },
   },
   receivedAt: {
-    label: { default: 'Створено' },
+    label: { default: 'Дата створення' },
   },
   note: {
     label: { default: 'Примітка' },
   },
+} as const)
+
+export const samplesResponseFieldRegistry = createFieldRegistry.forType<SampleDetailResponse>()({
+  moldingSandRecipe: samplesFieldRegistry.moldingSandRecipe,
+  receivedAt: samplesFieldRegistry.receivedAt,
+  note: samplesFieldRegistry.receivedAt,
   tests: {
-    label: { default: 'Тести' },
+    label: { default: 'Перелік випробувань' },
   },
 } as const)

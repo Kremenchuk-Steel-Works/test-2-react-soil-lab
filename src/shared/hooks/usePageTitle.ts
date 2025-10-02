@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { APP_ROUTES } from '@/app/routes/routes'
-import { findRouteObjectByPath } from '@/app/routes/utils'
+import { findRouteObjectByPath } from '@/app/routes/utils/utils'
 
 const BASE_TITLE = 'KSZ'
 

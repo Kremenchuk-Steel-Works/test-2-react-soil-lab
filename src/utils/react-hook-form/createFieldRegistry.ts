@@ -1,83 +1,97 @@
 import type { ReadonlyDeep } from 'type-fest'
 
-/**
- * База для всех меток: обязательный default и опциональные стандартные short/full.
- * Плюс разрешаем добавлять любые свои варианты (индекс по string).
- */
+/** Строковые ключи из типа T */
+export type KeysOf<T> = Extract<keyof T, string>
+
+/** База для меток */
 type LabelBase = Readonly<{
   default: string
   short?: string
   full?: string
 }>
-
-// Разрешаем дополнительные ключи, не теряя литеральность конкретных свойств.
 type ExtensibleLabels = Readonly<LabelBase & { [extra: string]: string | undefined }>
 
-/**
- * Форма входных данных для реестра:
- * объект, где ключ — системное имя поля, значение — метаданные (сейчас только `label`).
- */
-type LabelsShape = Record<string, { label: ExtensibleLabels }>
-
-/**
- * Токен (элемент реестра) для одного поля.
- * - `key` — литеральное имя поля (используется как ключ в формах/схемах).
- * - `label` — набор подписей для UI.
- */
+/** Токен (элемент реестра) */
 export type FieldToken<K extends string, L extends ExtensibleLabels = ExtensibleLabels> = Readonly<{
   key: K
   label: L
 }>
 
-/**
- * Тип возвращаемого реестра: отображение исходных ключей на токены.
- * Гарантирует, что автоподсказки будут по всем ключам из входного `labels`.
- */
-export type Registry<M extends LabelsShape> = {
-  readonly [K in Extract<keyof M, string>]: FieldToken<K, M[K]['label']>
-}
-/**
- * Создаёт неизменяемый реестр полей для типобезопасного использования в коде.
- *
- * Назначение:
- * - Централизовать описание ключей полей и их меток (для форм, схем валидации и UI).
- * - Сохранить литеральные типы ключей (например, `"moldingSandNumber"`), чтобы работало автодополнение.
- * - Обеспечить иммутабельность структуры (Object.freeze), исключив случайные мутации.
- *
- * Параметры:
- * @param labels — источник правды по полям (ключи + наборы меток). Принимается как ReadonlyDeep<M> для лучшей дисциплины неизменяемости.
- *
- * Возвращает:
- * @returns Реестр (Registry<M>), в котором:
- *  - каждый токен имеет вид `{ key: <literal>, label: { default, short?, full? } }`,
- *  - сам токен и весь реестр — замороженные объекты (immutable).
- *
- * Гарантии и детали реализации:
- * - Сохраняет литеральность ключей через `as const`-совместимый generic M.
- * - Время выполнения O(n) по количеству полей.
- * - Нет побочных эффектов, кроме создания нового объекта-реестра.
- *
- * Пример использования:
- *  const FR = createFieldRegistry({
- *    moldingSandNumber: { label: { default: '№ суміші', short: '№' } },
- *  } as const)
- *  // FR.moldingSandNumber.key  -> "moldingSandNumber"
- *  // FR.moldingSandNumber.label.default -> "№ суміші"
- *  // FR.moldingSandNumber.label.short   -> "№" | undefined
- */
-export function createFieldRegistry<const M extends LabelsShape>(
-  labels: ReadonlyDeep<M>,
-): Registry<M> {
-  type Key = Extract<keyof M, string>
-  const out: { [K in Key]?: FieldToken<K, M[K]['label']> } = {}
+/** Вход: сырые метки или готовый токен */
+type FieldInput<L extends ExtensibleLabels = ExtensibleLabels> =
+  | Readonly<{ label: L }>
+  | FieldToken<string, L>
 
-  ;(Object.keys(labels) as Key[]).forEach((k) => {
-    const { label } = labels[k]
+/** Форма входа. K — допустимый набор ключей. */
+type LabelsShape<
+  K extends string = string,
+  L extends ExtensibleLabels = ExtensibleLabels,
+> = Readonly<Record<K, FieldInput<L>>>
+
+/** Результат: отображение ключей на токены */
+export type Registry<M extends LabelsShape> = {
+  readonly [K in Extract<keyof M, string>]: FieldToken<
+    K,
+    M[K] extends FieldInput<infer L> ? Readonly<L & ExtensibleLabels> : never
+  >
+}
+
+/** Хелпер-проверка: ключи M должны быть подмножеством Allowed */
+type EnforceKeysSubset<M extends LabelsShape, Allowed extends string> =
+  Extract<keyof M, string> extends Allowed ? M : never
+
+/** Сигнатура публичной фабрики */
+type CreateFieldRegistry = {
+  <const M extends LabelsShape>(labels: ReadonlyDeep<M>): Registry<M>
+
+  /** Ограничить ключи до подмножества KeysOf<T> */
+  forType<T>(): <const M extends LabelsShape>(
+    labels: ReadonlyDeep<EnforceKeysSubset<M, KeysOf<T>>>,
+  ) => Registry<M>
+
+  /** Ограничить ключи до подмножества произвольного union-а */
+  forKeys<Allowed extends string>(): <const M extends LabelsShape>(
+    labels: ReadonlyDeep<EnforceKeysSubset<M, Allowed>>,
+  ) => Registry<M>
+}
+
+/** Реализация базовой фабрики */
+function _createFieldRegistry<const M extends LabelsShape>(labels: ReadonlyDeep<M>): Registry<M> {
+  type Key = Extract<keyof M, string>
+  type Out = {
+    [K in Key]: FieldToken<
+      K,
+      M[K] extends FieldInput<infer L> ? Readonly<L & ExtensibleLabels> : never
+    >
+  }
+
+  const out = {} as Partial<Out>
+
+  for (const k of Object.keys(labels) as Key[]) {
+    const { label } = labels[k] as FieldInput
     out[k] = Object.freeze({
       key: k,
       label: Object.freeze(label),
-    }) as FieldToken<Key, M[Key]['label']>
-  })
+    }) as Out[typeof k]
+  }
 
-  return Object.freeze(out) as Registry<M>
+  return Object.freeze(out) as Out
 }
+
+/** Экспорт без namespace + «статические» методы через Object.assign */
+export const createFieldRegistry: CreateFieldRegistry = Object.assign(_createFieldRegistry, {
+  forType<T>() {
+    return function <const M extends LabelsShape>(
+      labels: ReadonlyDeep<EnforceKeysSubset<M, KeysOf<T>>>,
+    ): Registry<M> {
+      return _createFieldRegistry(labels)
+    }
+  },
+  forKeys<Allowed extends string>() {
+    return function <const M extends LabelsShape>(
+      labels: ReadonlyDeep<EnforceKeysSubset<M, Allowed>>,
+    ): Registry<M> {
+      return _createFieldRegistry(labels)
+    }
+  },
+})

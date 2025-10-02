@@ -9,21 +9,21 @@ const TestsDelete = lazy(() => import('@/pages/soil-lab/tests/ui/Delete'))
 const TestsDetails = lazy(() => import('@/pages/soil-lab/tests/ui/Details'))
 
 export const testsRoutes: AppRoute = {
-  key: 'Tests',
+  key: 'tests',
   path: 'tests',
   label: 'Іспити',
   icon: ClipboardCheck,
   Component: TestsLayout,
   children: [
     {
-      key: 'TestsList',
+      key: 'testsList',
       path: '',
       label: 'Список',
       icon: Database,
       Component: TestsList,
     },
     {
-      key: 'TestsDetail',
+      key: 'testsDetail',
       path: ':id',
       label: 'Деталі',
       icon: Info,
@@ -31,14 +31,14 @@ export const testsRoutes: AppRoute = {
       requiredPermissions: [PERMISSIONS.TESTS_READ],
       children: [
         {
-          key: 'TestsIndex',
+          key: 'testsIndex',
           path: '',
           label: 'Деталі',
           icon: Info,
           Component: TestsDetails,
         },
         {
-          key: 'TestsDelete',
+          key: 'testsDelete',
           path: 'delete',
           label: 'Видалити',
           icon: Trash,

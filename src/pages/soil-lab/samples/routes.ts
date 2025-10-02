@@ -11,7 +11,7 @@ const SamplesDetails = lazy(() => import('@/pages/soil-lab/samples/ui/Details'))
 const TestsAdd = lazy(() => import('@/pages/soil-lab/tests/ui/Add'))
 
 export const samplesRoutes: AppRoute = {
-  key: 'Samples',
+  key: 'samples',
   path: 'samples',
   label: 'Зразки',
   icon: ClipboardList,
@@ -21,14 +21,14 @@ export const samplesRoutes: AppRoute = {
   },
   children: [
     {
-      key: 'SamplesList',
+      key: 'samplesList',
       path: '',
       label: 'Список',
       icon: Database,
       Component: SamplesList,
     },
     {
-      key: 'SamplesAdd',
+      key: 'samplesAdd',
       path: 'add',
       label: 'Додати',
       icon: CirclePlus,
@@ -36,7 +36,7 @@ export const samplesRoutes: AppRoute = {
       requiredPermissions: [PERMISSIONS.SAMPLES_CREATE],
     },
     {
-      key: 'SamplesDetail',
+      key: 'samplesDetail',
       path: ':id',
       label: 'Деталі',
       icon: Info,
@@ -47,14 +47,14 @@ export const samplesRoutes: AppRoute = {
       },
       children: [
         {
-          key: 'SamplesIndex',
+          key: 'samplesIndex',
           path: '',
           label: 'Деталі',
           icon: Info,
           Component: SamplesDetails,
         },
         {
-          key: 'SamplesDelete',
+          key: 'samplesDelete',
           path: 'delete',
           label: 'Видалити',
           icon: Trash,
@@ -62,7 +62,7 @@ export const samplesRoutes: AppRoute = {
           requiredPermissions: [PERMISSIONS.SAMPLES_DELETE],
         },
         {
-          key: 'SamplesUpdate',
+          key: 'samplesUpdate',
           path: 'update',
           label: 'Оновити',
           icon: RefreshCcw,

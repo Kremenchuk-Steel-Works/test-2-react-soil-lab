@@ -48,3 +48,6 @@ export function makeDict<const D extends Record<string, string>>(
 
   return { options, label, isKey }
 }
+
+export const dictTypedKeys = <T extends object>(obj: T) =>
+  Object.keys(obj) as Array<Extract<keyof T, string>>

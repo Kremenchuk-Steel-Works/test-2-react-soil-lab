@@ -1,5 +1,6 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
+import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
 import { samplesMixturesOptions } from '@/entities/soil-lab/samples/model/mixtures'
 import {
   testsFieldRegistry,
@@ -23,7 +24,8 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
   const Fields = useMemo(() => {
     const { F, V } = makeBinders<T, Ctx>(ctxRef)
 
-    const { sampleId, type, measurement1, moldingSandRecipe } = testsFieldRegistry
+    const { moldingSandRecipe } = samplesFieldRegistry
+    const { sampleId, type, measurement1 } = testsFieldRegistry
     const { gasPermeability, moisturePercent, strength } = testsTypeFieldRegistry
 
     return Object.freeze({

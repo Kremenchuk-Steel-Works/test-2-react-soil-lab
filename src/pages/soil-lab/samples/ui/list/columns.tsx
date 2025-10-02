@@ -20,14 +20,14 @@ const testTypes = Object.keys(testsType) as TestType[]
 export const samplesColumns = [
   columnHelper.accessor(receivedAt.key, {
     header: receivedAt.label.default,
-    size: 180,
+    size: 190,
     ...linkColumn(dateColumn(), {
       getHref: ({ row }) => row.original.id,
     }),
   }),
   columnHelper.accessor(moldingSandRecipe.key, {
     header: moldingSandRecipe.label.default,
-    size: 200,
+    size: 220,
     ...displayColumn({
       formatter: (value) => <>{labelFromDict(samplesMixtures, value)}</>,
     }),

@@ -1,14 +1,16 @@
-import { useCallback, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { getPathByKey } from '@/app/routes/utils/utils'
 import { testTypeToUnit } from '@/entities/soil-lab/tests/lib/testTypeToUnit'
+import { testsType } from '@/entities/soil-lab/tests/model/type'
 import TestsCreate from '@/features/soil-lab/tests/create/ui/TestsCreate'
 import type { CreateTestApiV1TestsPostMutationResult } from '@/shared/api/soil-lab/endpoints/tests/tests'
 import { TestStatus, TestType } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { FormLayout } from '@/shared/ui/react-hook-form/FormLayout'
+import { dictTypedKeys } from '@/utils/dict'
 
 type AlertState = { type: AlertType; message: string } | null
-const TYPES: readonly TestType[] = Object.values(TestType) as TestType[]
 
 function statusToAlert(res: CreateTestApiV1TestsPostMutationResult): AlertState {
   const unit = testTypeToUnit(res.type)
@@ -46,11 +48,32 @@ export default function TestsAddPage() {
     [],
   )
 
-  if (!id) return null
+  const testKeys = dictTypedKeys(testsType)
+  const allDone = useMemo(() => testKeys.every((t) => alerts[t] !== undefined), [alerts, testKeys])
+  const navigate = useNavigate()
+
+  const redirectedRef = useRef(false)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => {
+    if (allDone && !redirectedRef.current) {
+      redirectedRef.current = true
+      timeoutRef.current = setTimeout(() => {
+        void navigate(getPathByKey('samplesAdd'))
+      }, 1000)
+    }
+
+    return () => {
+      if (timeoutRef.current !== null) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [allDone, navigate])
+
+  if (!id) return <AlertMessage type={AlertType.ERROR} message="Відсутній параметр id" />
 
   return (
     <div className="flex flex-wrap gap-x-2 gap-y-2">
-      {TYPES.map((type) => (
+      {dictTypedKeys(testsType).map((type) => (
         <div key={type} className="w-full">
           <TestsCreate id={id} type={type} onSuccess={onSuccess(type)} />
 

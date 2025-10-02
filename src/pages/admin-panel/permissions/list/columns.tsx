@@ -16,4 +16,9 @@ export const adminPermissionsColumns = [
     size: 100,
     ...displayColumn(),
   }),
+  columnHelper.accessor('code', {
+    header: 'Код',
+    size: 100,
+    ...displayColumn(),
+  }),
 ]

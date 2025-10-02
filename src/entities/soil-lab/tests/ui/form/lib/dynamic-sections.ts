@@ -1,4 +1,5 @@
 import z from 'zod'
+import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
 import { MIXTURES } from '@/entities/soil-lab/samples/model/mixtures'
 import { testsFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
 import { GasPermabilityDynamicForm } from '@/entities/soil-lab/tests/ui/form/components/GasPermabilityDynamicForm'
@@ -10,7 +11,8 @@ import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-types'
 import { withUnitConversion } from '@/shared/lib/zod/unit-conversion/withUnitConversion'
 import { zn } from '@/shared/lib/zod/zod-normalize'
 
-const { measurement1, type, moldingSandRecipe } = testsFieldRegistry
+const { moldingSandRecipe } = samplesFieldRegistry
+const { measurement1, type } = testsFieldRegistry
 
 export const measurement1FormSchema = z.object({
   [measurement1.key]: zn(z.number()),
