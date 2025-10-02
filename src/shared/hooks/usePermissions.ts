@@ -101,7 +101,7 @@ export function filterRoutes(
       // иначе рекурсивно фильтруем children и возвращаем новый объект
       return {
         ...r,
-        children: filterRoutes(r.children, perms),
+        children: filterRoutes(r.children, perms, isSuperuser),
       }
     })
 }

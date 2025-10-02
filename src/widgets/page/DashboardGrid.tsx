@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { APP_ROUTES } from '@/app/routes/routes'
+import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
 import Button from '@/shared/ui/button/Button'
 import { EllipsisTextInline } from '@/shared/ui/ellipsis/EllipsisTextInline'
 import { findRouteByKey } from '@/utils/routes/routeUtils'
@@ -12,7 +12,8 @@ type DashboardGridProps = {
 
 export function DashboardGrid({ parentRouteKey, variant = 'buttons' }: DashboardGridProps) {
   const navigate = useNavigate()
-  const parentRoute = findRouteByKey(APP_ROUTES, parentRouteKey)
+  const visibleRoutes = useVisibleRoutes()
+  const parentRoute = findRouteByKey(visibleRoutes, parentRouteKey)
 
   if (!parentRoute?.children) return null
 
@@ -21,23 +22,27 @@ export function DashboardGrid({ parentRouteKey, variant = 'buttons' }: Dashboard
     return <RouteTableView parentRouteKey={parentRouteKey} />
   }
 
+  const visibleChildren = parentRoute.children.filter(
+    (child) => Array.isArray(child.children) && child.children.length > 0,
+  )
+
+  if (visibleChildren.length === 0) return null
+
   // Вариант с кнопками
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-wrap gap-x-2 gap-y-2">
-        {parentRoute.children
-          .filter((childRoute) => childRoute.children && childRoute.children.length > 0)
-          .map((childRoute) => (
-            <Button
-              key={childRoute.key}
-              className="flex max-w-85 items-center justify-center gap-1 whitespace-nowrap"
-              onClick={() => void navigate(childRoute.path)}
-              aria-label={childRoute.label}
-            >
-              <childRoute.icon className="h-5 w-5 flex-shrink-0" />
-              <EllipsisTextInline title={childRoute.label}>{childRoute.label}</EllipsisTextInline>
-            </Button>
-          ))}
+        {visibleChildren.map((childRoute) => (
+          <Button
+            key={childRoute.key}
+            className="flex max-w-85 items-center justify-center gap-1 whitespace-nowrap"
+            onClick={() => void navigate(childRoute.path)}
+            aria-label={childRoute.label}
+          >
+            <childRoute.icon className="h-5 w-5 flex-shrink-0" />
+            <EllipsisTextInline title={childRoute.label}>{childRoute.label}</EllipsisTextInline>
+          </Button>
+        ))}
       </div>
     </div>
   )
