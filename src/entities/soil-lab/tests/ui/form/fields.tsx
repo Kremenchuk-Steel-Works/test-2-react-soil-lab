@@ -77,25 +77,28 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
         <DynamicFieldArea section={measurement1.key} />
       )),
 
-      [moisturePercent.key]: F(measurement1.key, (name) => (
-        <Form.Field name={name}>
-          {({ register }) => (
-            <InputField label={moisturePercent.label.default + ' *'} {...register} />
-          )}
-        </Form.Field>
-      )),
-
+      // TestsType
       [gasPermeability.key]: F(measurement1.key, (name) => (
         <Form.Field name={name}>
           {({ register }) => (
-            <InputField label={gasPermeability.label.m2PerPas + ' *'} {...register} />
+            <InputField label={gasPermeability.label.m2PerPas + ' *'} type="float" {...register} />
           )}
         </Form.Field>
       )),
 
       [strength.key]: F(measurement1.key, (name) => (
         <Form.Field name={name}>
-          {({ register }) => <InputField label={strength.label.nPerCm2 + ' *'} {...register} />}
+          {({ register }) => (
+            <InputField label={strength.label.nPerCm2 + ' *'} type="float" {...register} />
+          )}
+        </Form.Field>
+      )),
+
+      [moisturePercent.key]: F(measurement1.key, (name) => (
+        <Form.Field name={name}>
+          {({ register }) => (
+            <InputField label={moisturePercent.label.default + ' *'} type="float" {...register} />
+          )}
         </Form.Field>
       )),
 

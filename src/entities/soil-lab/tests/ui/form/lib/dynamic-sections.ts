@@ -26,6 +26,20 @@ export const testsDynamicSections = createScopedSectionsConfig({
     {
       conditions: { [moldingSandRecipe.key]: (v) => v === MIXTURES['13'] },
       children: [
+        // Міцність
+        {
+          conditions: { [type.key]: (v) => v === TestType.strength },
+          Component: StrengthDynamicForm,
+          schema: z.object({
+            [measurement1.key]: withUnitConversion(zn(z.number()), {
+              from: Units.N_PER_CM2,
+              to: Units.KGF_PER_CM2,
+              round: 2,
+              min: 0.1,
+              max: 5,
+            }),
+          }),
+        },
         // Газопроникність
         {
           conditions: { [type.key]: (v) => v === TestType.gas_permeability },
@@ -36,6 +50,8 @@ export const testsDynamicSections = createScopedSectionsConfig({
               to: Units.PN,
               instrument: Instruments.LPIR1,
               round: 0,
+              min: 50,
+              max: 250,
             }),
           }),
         },
@@ -44,19 +60,7 @@ export const testsDynamicSections = createScopedSectionsConfig({
           conditions: { [type.key]: (v) => v === TestType.moisture_percent },
           Component: MoisturePercentDynamicForm,
           schema: z.object({
-            [measurement1.key]: zn(z.number()),
-          }),
-        },
-        // Міцність
-        {
-          conditions: { [type.key]: (v) => v === TestType.strength },
-          Component: StrengthDynamicForm,
-          schema: z.object({
-            [measurement1.key]: withUnitConversion(zn(z.number()), {
-              from: Units.N_PER_CM2,
-              to: Units.KGF_PER_CM2,
-              round: 2,
-            }),
+            [measurement1.key]: zn(z.number().min(0.1).max(5)),
           }),
         },
       ],
@@ -65,6 +69,20 @@ export const testsDynamicSections = createScopedSectionsConfig({
     {
       conditions: { [moldingSandRecipe.key]: (v) => v === MIXTURES['14'] },
       children: [
+        // Міцність
+        {
+          conditions: { [type.key]: (v) => v === TestType.strength },
+          Component: StrengthDynamicForm,
+          schema: z.object({
+            [measurement1.key]: withUnitConversion(zn(z.number()), {
+              from: Units.N_PER_CM2,
+              to: Units.KGF_PER_CM2,
+              round: 2,
+              min: 0.1,
+              max: 5,
+            }),
+          }),
+        },
         // Газопроникність
         {
           conditions: { [type.key]: (v) => v === TestType.gas_permeability },
@@ -75,6 +93,8 @@ export const testsDynamicSections = createScopedSectionsConfig({
               to: Units.PN,
               instrument: Instruments.LPIR1,
               round: 0,
+              min: 50,
+              max: 250,
             }),
           }),
         },
@@ -83,19 +103,7 @@ export const testsDynamicSections = createScopedSectionsConfig({
           conditions: { [type.key]: (v) => v === TestType.moisture_percent },
           Component: MoisturePercentDynamicForm,
           schema: z.object({
-            [measurement1.key]: zn(z.number()),
-          }),
-        },
-        // Міцність
-        {
-          conditions: { [type.key]: (v) => v === TestType.strength },
-          Component: StrengthDynamicForm,
-          schema: z.object({
-            [measurement1.key]: withUnitConversion(zn(z.number()), {
-              from: Units.N_PER_CM2,
-              to: Units.KGF_PER_CM2,
-              round: 2,
-            }),
+            [measurement1.key]: zn(z.number().min(0.1).max(5)),
           }),
         },
       ],
@@ -104,6 +112,20 @@ export const testsDynamicSections = createScopedSectionsConfig({
     {
       conditions: { [moldingSandRecipe.key]: (v) => v === MIXTURES['15'] },
       children: [
+        // Міцність
+        {
+          conditions: { [type.key]: (v) => v === TestType.strength },
+          Component: StrengthDynamicForm,
+          schema: z.object({
+            [measurement1.key]: withUnitConversion(zn(z.number()), {
+              from: Units.N_PER_CM2,
+              to: Units.KGF_PER_CM2,
+              round: 2,
+              min: 0.1,
+              max: 5,
+            }),
+          }),
+        },
         // Газопроникність
         {
           conditions: { [type.key]: (v) => v === TestType.gas_permeability },
@@ -114,6 +136,8 @@ export const testsDynamicSections = createScopedSectionsConfig({
               to: Units.PN,
               instrument: Instruments.LPIR1,
               round: 0,
+              min: 50,
+              max: 250,
             }),
           }),
         },
@@ -122,19 +146,7 @@ export const testsDynamicSections = createScopedSectionsConfig({
           conditions: { [type.key]: (v) => v === TestType.moisture_percent },
           Component: MoisturePercentDynamicForm,
           schema: z.object({
-            [measurement1.key]: zn(z.number()),
-          }),
-        },
-        // Міцність
-        {
-          conditions: { [type.key]: (v) => v === TestType.strength },
-          Component: StrengthDynamicForm,
-          schema: z.object({
-            [measurement1.key]: withUnitConversion(zn(z.number()), {
-              from: Units.N_PER_CM2,
-              to: Units.KGF_PER_CM2,
-              round: 2,
-            }),
+            [measurement1.key]: zn(z.number().min(0.1).max(5)),
           }),
         },
       ],

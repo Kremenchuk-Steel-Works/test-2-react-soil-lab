@@ -9,12 +9,36 @@ export type InputFieldProps = {
 
 // Определяем разрешённые символы по кастомным типам
 const allowedInputMap: Record<string, RegExp> = {
-  strDate: /^[0-9.]$/,
+  number: /^-?$|^-?\d+$/,
+  float: /^-?$|^-?\d+(?:[.,]\d*)?$/,
 }
 
 // Универсальный фильтр для onBeforeInput
 const filterInput = (type: string | undefined, e: React.FormEvent<HTMLInputElement>) => {
   const inputEvent = e as unknown as InputEvent
+  const target = e.currentTarget
+
+  // Собственная валидация для number/float
+  if (type === 'number' || type === 'float') {
+    // не мешаем удалениям/IME-композиции
+    const it = (inputEvent as unknown as { inputType?: string }).inputType ?? ''
+    if (it.startsWith('delete') || it === 'insertCompositionText') return
+
+    const data = (inputEvent as unknown as { data?: string | null }).data ?? ''
+    if (data === '') return // непечатные/IME кейсы — пропускаем
+
+    // будущая строка с учётом каретки/выделения
+    const from = target.selectionStart ?? target.value.length
+    const to = target.selectionEnd ?? target.value.length
+    const next = target.value.slice(0, from) + data + target.value.slice(to)
+
+    const pattern = allowedInputMap[type]
+    if (!pattern.test(next)) {
+      e.preventDefault()
+    }
+    return
+  }
+
   const regex = type && allowedInputMap[type]
   if (regex && inputEvent.data && !regex.test(inputEvent.data)) {
     e.preventDefault()
@@ -35,12 +59,18 @@ const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     // Определяем, будет ли справа отображаться какая-либо иконка
     const showRightIcon = isLoading || isPassword || type === 'date'
 
+    // Number и float рендерим в DOM как text, чтобы снести нативную валидацию
+    const domType = type === 'number' || type === 'float' ? 'text' : currentType
+    const domInputMode =
+      type === 'float' ? 'decimal' : type === 'number' ? 'numeric' : props.inputMode
+
     return (
       <div className="relative w-full">
         <input
           ref={ref}
           id={finalId}
-          type={currentType}
+          type={domType}
+          inputMode={domInputMode}
           onWheel={(e) => e.currentTarget.blur()}
           onBeforeInput={(e) => filterInput(type, e)}
           disabled={disabled}
