@@ -12,4 +12,11 @@ export const TestType = {
   strength: 'strength',
   gas_permeability: 'gas_permeability',
   moisture_percent: 'moisture_percent',
+  // new
+  tensile_strength: 'tensile_strength',
+  tensile_strength_0h: 'tensile_strength_0h',
+  tensile_strength_1h: 'tensile_strength_1h',
+  tensile_strength_3h: 'tensile_strength_3h',
+  tensile_strength_24h: 'tensile_strength_24h',
+  gas_evolution: 'gas_evolution',
 } as const

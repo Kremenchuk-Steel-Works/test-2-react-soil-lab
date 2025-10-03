@@ -2,11 +2,11 @@ import { ChevronRight } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { samplesService } from '@/entities/soil-lab/samples/api/service'
 import { samplesResponseFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { samplesMixtures } from '@/entities/soil-lab/samples/model/mixtures'
+import { samplesMoldingSandRecipeLabels } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
 import { testTypeToUnit } from '@/entities/soil-lab/tests/lib/testTypeToUnit'
 import { testsResponseFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
-import { testsStatus } from '@/entities/soil-lab/tests/model/status'
-import { testsType } from '@/entities/soil-lab/tests/model/type'
+import { testsStatusLabels } from '@/entities/soil-lab/tests/model/status'
+import { testsTypeLabels } from '@/entities/soil-lab/tests/model/type'
 import { TestStatusPill } from '@/entities/soil-lab/tests/ui/status-pill/TestStatusPill'
 import LoadingPage from '@/pages/system/LoadingPage'
 import { getErrorMessage } from '@/shared/lib/axios'
@@ -48,7 +48,7 @@ export default function SamplesDetails() {
     <>
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
         <InfoCard label={moldingSandRecipe.label.default}>
-          {labelFromDict(samplesMixtures, responseData.moldingSandRecipe)}
+          {labelFromDict(samplesMoldingSandRecipeLabels, responseData.moldingSandRecipe)}
         </InfoCard>
 
         <InfoCard label={receivedAt.label.default}>
@@ -73,8 +73,8 @@ export default function SamplesDetails() {
 
           <ul role="list" className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
             {responseData.tests.map((test) => {
-              const typeLabel = labelFromDict(testsType, test.type)
-              const statusLabel = labelFromDict(testsStatus, test.status)
+              const typeLabel = labelFromDict(testsTypeLabels, test.type)
+              const statusLabel = labelFromDict(testsStatusLabels, test.status)
               const unit = testTypeToUnit(test.type)
 
               return (

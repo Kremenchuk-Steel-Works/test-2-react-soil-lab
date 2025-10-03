@@ -1,7 +1,7 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { samplesMixturesOptions } from '@/entities/soil-lab/samples/model/mixtures'
+import { samplesMoldingSandRecipeOptions } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
 import type { SampleDetailResponse } from '@/shared/api/soil-lab/model'
 import Button from '@/shared/ui/button/Button'
 import TextareaField from '@/shared/ui/input-field/TextareaField'
@@ -29,7 +29,7 @@ export function useSamplesFormFields<T extends FieldValues>(Form: FormKit<T>, ct
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              options={samplesMixturesOptions}
+              options={samplesMoldingSandRecipeOptions}
               isVirtualized
               isClearable
               placeholder={moldingSandRecipe.label.default + ' *'}

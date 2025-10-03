@@ -1,4 +1,4 @@
-import type { ComponentProps, ReactNode } from 'react'
+import { Children, type ComponentProps, type ReactNode } from 'react'
 import { cn } from '@/utils/cn'
 
 /**
@@ -11,10 +11,20 @@ type FormLayoutProps = ComponentProps<'form'> & {
 }
 
 export function FormLayout({ children, className, as = 'form', ...props }: FormLayoutProps) {
+  const hasChildren = Children.toArray(children).some((c) =>
+    typeof c === 'string' ? c.trim() !== '' : true,
+  )
+
+  if (!hasChildren) return null
+
   const cls = cn('mx-auto max-w-2xl space-y-3 mb-3 last:mb-0', className)
-  return as === 'div' ? (
-    <div className={cls}>{children}</div>
-  ) : (
+
+  if (as === 'div') {
+    return <div className={cls}>{children}</div>
+  }
+
+  // Ветка <form> (default)
+  return (
     <form className={cls} {...props}>
       {children}
     </form>

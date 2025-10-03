@@ -1,9 +1,9 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { samplesMixtures } from '@/entities/soil-lab/samples/model/mixtures'
+import { samplesMoldingSandRecipeLabels } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
 import { testTypeToUnit } from '@/entities/soil-lab/tests/lib/testTypeToUnit'
-import { testsStatus } from '@/entities/soil-lab/tests/model/status'
-import { testsType } from '@/entities/soil-lab/tests/model/type'
+import { testsStatusLabels } from '@/entities/soil-lab/tests/model/status'
+import { testsTypeLabels } from '@/entities/soil-lab/tests/model/type'
 import { TestStatusPill } from '@/entities/soil-lab/tests/ui/status-pill/TestStatusPill'
 import {
   TestType,
@@ -15,7 +15,7 @@ import { dateColumn, displayColumn, linkColumn } from '@/widgets/data-table'
 
 const columnHelper = createColumnHelper<SampleListItemResponse>()
 const { moldingSandRecipe, receivedAt } = samplesFieldRegistry
-const testTypes = Object.keys(testsType) as TestType[]
+const testTypes = Object.keys(testsTypeLabels) as TestType[]
 
 export const samplesColumns = [
   columnHelper.accessor(receivedAt.key, {
@@ -29,13 +29,13 @@ export const samplesColumns = [
     header: moldingSandRecipe.label.default,
     size: 220,
     ...displayColumn({
-      formatter: (value) => <>{labelFromDict(samplesMixtures, value)}</>,
+      formatter: (value) => <>{labelFromDict(samplesMoldingSandRecipeLabels, value)}</>,
     }),
   }),
 
   ...testTypes.map((type) =>
     columnHelper.accessor((row) => row.tests?.find((t) => t.type === type) ?? null, {
-      header: labelFromDict(testsType, type),
+      header: labelFromDict(testsTypeLabels, type),
       size: 220,
       ...displayColumn<SampleListItemResponse, TestShortResponse | null>({
         formatter: (test) => {
@@ -43,7 +43,7 @@ export const samplesColumns = [
 
           const unit = testTypeToUnit(type)
           const unitValue = `${test.meanMeasurement} ${unit}`
-          const title = labelFromDict(testsStatus, test.status)
+          const title = labelFromDict(testsStatusLabels, test.status)
 
           return (
             <TestStatusPill status={test.status}>

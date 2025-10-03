@@ -1,13 +1,14 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { samplesMixturesOptions } from '@/entities/soil-lab/samples/model/mixtures'
+import { samplesMoldingSandRecipeOptions } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
 import {
   testsFieldRegistry,
   testsTypeFieldRegistry,
 } from '@/entities/soil-lab/tests/model/fields-registry'
 import { testsTypeOptions } from '@/entities/soil-lab/tests/model/type'
-import type { SampleDetailResponse } from '@/shared/api/soil-lab/model'
+import { TestType, type SampleDetailResponse } from '@/shared/api/soil-lab/model'
+import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 import InputField from '@/shared/ui/input-field/InputField'
 import { DynamicFieldArea } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldArea'
@@ -26,7 +27,17 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
 
     const { moldingSandRecipe } = samplesFieldRegistry
     const { sampleId, type, measurement1 } = testsFieldRegistry
-    const { gasPermeability, moisturePercent, strength } = testsTypeFieldRegistry
+    const {
+      gasPermeability,
+      moisturePercent,
+      strength,
+      tensileStrength,
+      tensileStrength0h,
+      tensileStrength1h,
+      tensileStrength3h,
+      tensileStrength24h,
+      gasEvolution,
+    } = testsTypeFieldRegistry
 
     return Object.freeze({
       Title: V('Title', ({ text }: { text?: string }) => (
@@ -47,7 +58,7 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              options={samplesMixturesOptions}
+              options={samplesMoldingSandRecipeOptions}
               isVirtualized
               isClearable
               isDisabled
@@ -78,27 +89,82 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
       )),
 
       // TestsType
-      [gasPermeability.key]: F(measurement1.key, (name) => (
+      [measurement1.key]: F(measurement1.key, (name, { type }: { type: TestType }) => (
         <Form.Field name={name}>
-          {({ register }) => (
-            <InputField label={gasPermeability.label.m2PerPas + ' *'} type="float" {...register} />
-          )}
-        </Form.Field>
-      )),
-
-      [strength.key]: F(measurement1.key, (name) => (
-        <Form.Field name={name}>
-          {({ register }) => (
-            <InputField label={strength.label.nPerCm2 + ' *'} type="float" {...register} />
-          )}
-        </Form.Field>
-      )),
-
-      [moisturePercent.key]: F(measurement1.key, (name) => (
-        <Form.Field name={name}>
-          {({ register }) => (
-            <InputField label={moisturePercent.label.default + ' *'} type="float" {...register} />
-          )}
+          {({ register }) => {
+            switch (type) {
+              case TestType.gas_permeability:
+                return (
+                  <InputField
+                    label={`${gasPermeability.label.m2PerPas} *`}
+                    type="float"
+                    {...register}
+                  />
+                )
+              case TestType.strength:
+                return (
+                  <InputField label={`${strength.label.nPerCm2} *`} type="float" {...register} />
+                )
+              case TestType.moisture_percent:
+                return (
+                  <InputField
+                    label={`${moisturePercent.label.default} *`}
+                    type="float"
+                    {...register}
+                  />
+                )
+              case TestType.tensile_strength:
+                return (
+                  <InputField
+                    label={`${tensileStrength.label.default} *`}
+                    type="float"
+                    {...register}
+                  />
+                )
+              case TestType.tensile_strength_0h:
+                return (
+                  <InputField
+                    label={`${tensileStrength0h.label.default} *`}
+                    type="float"
+                    {...register}
+                  />
+                )
+              case TestType.tensile_strength_1h:
+                return (
+                  <InputField
+                    label={`${tensileStrength1h.label.default} *`}
+                    type="float"
+                    {...register}
+                  />
+                )
+              case TestType.tensile_strength_3h:
+                return (
+                  <InputField
+                    label={`${tensileStrength3h.label.default} *`}
+                    type="float"
+                    {...register}
+                  />
+                )
+              case TestType.tensile_strength_24h:
+                return (
+                  <InputField
+                    label={`${tensileStrength24h.label.default} *`}
+                    type="float"
+                    {...register}
+                  />
+                )
+              case TestType.gas_evolution:
+                return (
+                  <InputField
+                    label={`${gasEvolution.label.default} *`}
+                    type="float"
+                    {...register}
+                  />
+                )
+              default:
+                return <AlertMessage type={AlertType.WARNING} message="Тип тесту не визначено" />
+            }
+          }}
         </Form.Field>
       )),
 

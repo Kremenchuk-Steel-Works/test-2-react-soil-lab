@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import { testTypeToUnit } from '@/entities/soil-lab/tests/lib/testTypeToUnit'
 import { testsResponseFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
-import { testsStatus } from '@/entities/soil-lab/tests/model/status'
+import { testsStatusLabels } from '@/entities/soil-lab/tests/model/status'
 import { testsTypeOptions } from '@/entities/soil-lab/tests/model/type'
 import { TestStatusPill } from '@/entities/soil-lab/tests/ui/status-pill/TestStatusPill'
 import { type TestListItemResponse } from '@/shared/api/soil-lab/model'
@@ -35,7 +35,7 @@ export const testsColumns = [
 
         const unit = testTypeToUnit(row.type)
         const unitValue = `${value} ${unit}`
-        const title = labelFromDict(testsStatus, row.status)
+        const title = labelFromDict(testsStatusLabels, row.status)
 
         return (
           <TestStatusPill status={row.status}>

@@ -1,11 +1,11 @@
 import { Link, useParams } from 'react-router-dom'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { samplesMixtures } from '@/entities/soil-lab/samples/model/mixtures'
+import { samplesMoldingSandRecipeLabels } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
 import { testsService } from '@/entities/soil-lab/tests/api/service'
 import { testTypeToUnit } from '@/entities/soil-lab/tests/lib/testTypeToUnit'
 import { testsResponseFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
-import { testsStatus } from '@/entities/soil-lab/tests/model/status'
-import { testsType } from '@/entities/soil-lab/tests/model/type'
+import { testsStatusLabels } from '@/entities/soil-lab/tests/model/status'
+import { testsTypeLabels } from '@/entities/soil-lab/tests/model/type'
 import { TestStatusPill } from '@/entities/soil-lab/tests/ui/status-pill/TestStatusPill'
 import LoadingPage from '@/pages/system/LoadingPage'
 import { getErrorMessage } from '@/shared/lib/axios'
@@ -63,7 +63,7 @@ export default function TestsDetails() {
         {/* --- Статус --- */}
         <InfoCard label={status.label.default}>
           <TestStatusPill status={responseData.status}>
-            {labelFromDict(testsStatus, responseData.status)}
+            {labelFromDict(testsStatusLabels, responseData.status)}
           </TestStatusPill>
         </InfoCard>
 
@@ -73,13 +73,13 @@ export default function TestsDetails() {
             to={`/soil-lab/samples/${responseData.sample.id}`}
             className="text-blue-600 hover:underline dark:text-blue-400"
           >
-            {labelFromDict(samplesMixtures, responseData.sample.moldingSandRecipe)}
+            {labelFromDict(samplesMoldingSandRecipeLabels, responseData.sample.moldingSandRecipe)}
           </Link>
         </InfoCard>
 
         {/* --- Тип випробування --- */}
         <InfoCard label={type.label.default}>
-          {labelFromDict(testsType, responseData.type)}
+          {labelFromDict(testsTypeLabels, responseData.type)}
         </InfoCard>
 
         {/* --- Дата створення --- */}

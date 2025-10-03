@@ -69,4 +69,46 @@ export const testsTypeFieldRegistry = createFieldRegistry.forKeys<SnakeToCamel<T
   moisturePercent: {
     label: { default: 'Вологість (%)', defaultUnit: '%', short: 'Вологість' },
   },
+  tensileStrength: {
+    label: {
+      default: 'Міцність на розрив у висушеному стані (МПа)',
+      defaultUnit: 'МПа',
+      short: 'Міцність на розрив у висушеному стані',
+    },
+  },
+  tensileStrength0h: {
+    label: {
+      default: 'Міцність на розрив одразу  (МПа)',
+      defaultUnit: 'МПа',
+      short: 'Міцність на розрив одразу',
+    },
+  },
+  tensileStrength1h: {
+    label: {
+      default: 'Міцність на розрив через 1 годину (МПа)',
+      defaultUnit: 'МПа',
+      short: 'Міцність на розрив через 1 годину',
+    },
+  },
+  tensileStrength3h: {
+    label: {
+      default: 'Міцність на розрив через 3 години (МПа)',
+      defaultUnit: 'МПа',
+      short: 'Міцність на розрив через 3 години',
+    },
+  },
+  tensileStrength24h: {
+    label: {
+      default: 'Міцність на розрив через 24 години (МПа)',
+      defaultUnit: 'МПа',
+      short: 'Міцність на розрив через 24 години',
+    },
+  },
+  gasEvolution: {
+    label: {
+      default: 'Газоутворююча властивість (МПа)',
+      defaultUnit: 'МПа',
+      short: 'Газоутворююча властивість',
+    },
+  },
 } as const)
