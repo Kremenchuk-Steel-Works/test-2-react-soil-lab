@@ -3,7 +3,7 @@ import { createFieldRegistry } from '@/utils/react-hook-form/createFieldRegistry
 
 export const samplesFieldRegistry = createFieldRegistry.forType<SampleCreate>()({
   moldingSandRecipe: {
-    label: { default: 'Формувальна суміш' },
+    label: { default: 'Номер суміші' },
   },
   receivedAt: {
     label: { default: 'Дата створення' },

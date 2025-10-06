@@ -9,13 +9,13 @@ import type { Option } from '@/shared/ui/select/ReactSelect'
 const {
   gasPermeability,
   moisturePercent,
-  strength,
+  compressiveStrength,
   tensileStrength,
-  tensileStrength0h,
-  tensileStrength1h,
-  tensileStrength24h,
-  tensileStrength3h,
-  gasEvolution,
+  tensileStrengthAfter0Hours,
+  tensileStrengthAfter1Hour,
+  tensileStrengthAfter24Hours,
+  tensileStrengthAfter3Hours,
+  gasFormingProperty,
 } = testsTypeFieldRegistry
 
 type Meta = {
@@ -68,8 +68,8 @@ export function MoisturePercentDynamicForm() {
 
 export function StrengthDynamicForm() {
   return Measurement1DynamicForm({
-    title: strength.label.short,
-    type: TestType.strength,
+    title: compressiveStrength.label.short,
+    type: TestType.compressive_strength,
   })
 }
 
@@ -80,42 +80,47 @@ export function TensileStrengthDynamicForm() {
   })
 }
 
-export function GasEvolutionDynamicForm() {
-  return <Measurement1DynamicForm title={gasEvolution.label.short} type={TestType.gas_evolution} />
-}
-
-export function TensileStrength0hDynamicForm() {
+export function GasFormingPropertyDynamicForm() {
   return (
     <Measurement1DynamicForm
-      title={tensileStrength0h.label.short}
-      type={TestType.tensile_strength_0h}
+      title={gasFormingProperty.label.short}
+      type={TestType.gas_forming_property}
     />
   )
 }
 
-export function TensileStrength1hDynamicForm() {
+export function TensileStrengthAfter0HoursDynamicForm() {
   return (
     <Measurement1DynamicForm
-      title={tensileStrength1h.label.short}
-      type={TestType.tensile_strength_1h}
+      title={tensileStrengthAfter0Hours.label.short}
+      type={TestType.tensile_strength_after_0_hours}
     />
   )
 }
 
-export function TensileStrength24hDynamicForm() {
+export function TensileStrengthAfter1HourDynamicForm() {
   return (
     <Measurement1DynamicForm
-      title={tensileStrength24h.label.short}
-      type={TestType.tensile_strength_24h}
+      title={tensileStrengthAfter1Hour.label.short}
+      type={TestType.tensile_strength_after_1_hour}
     />
   )
 }
 
-export function TensileStrength3hDynamicForm() {
+export function TensileStrengthAfter24HoursDynamicForm() {
   return (
     <Measurement1DynamicForm
-      title={tensileStrength3h.label.short}
-      type={TestType.tensile_strength_3h}
+      title={tensileStrengthAfter24Hours.label.short}
+      type={TestType.tensile_strength_after_24_hours}
+    />
+  )
+}
+
+export function TensileStrengthAfter3HoursDynamicForm() {
+  return (
+    <Measurement1DynamicForm
+      title={tensileStrengthAfter3Hours.label.short}
+      type={TestType.tensile_strength_after_3_hours}
     />
   )
 }

@@ -17,7 +17,7 @@ export interface UserListItemResponse {
   email: string
   isActive: boolean
   isSuperuser: boolean
-  lastLoginAt?: UserListItemResponseLastLoginAt
+  lastLoginAt: UserListItemResponseLastLoginAt
   roles: RoleDetailResponse[]
   permissions: PermissionDetailResponse[]
   readonly isDeleted: boolean

@@ -3,27 +3,27 @@ import type { TestType } from '@/shared/api/soil-lab/model'
 import { dictToOptions } from '@/utils/dict'
 
 const {
-  strength,
+  compressiveStrength,
   gasPermeability,
   moisturePercent,
   tensileStrength,
-  tensileStrength0h,
-  tensileStrength1h,
-  tensileStrength3h,
-  tensileStrength24h,
-  gasEvolution,
+  tensileStrengthAfter0Hours,
+  tensileStrengthAfter1Hour,
+  tensileStrengthAfter3Hours,
+  tensileStrengthAfter24Hours,
+  gasFormingProperty,
 } = testsTypeFieldRegistry
 
 export const testsTypeLabels: Record<TestType, string> = {
-  strength: strength.label.short,
+  compressive_strength: compressiveStrength.label.short,
   gas_permeability: gasPermeability.label.short,
   moisture_percent: moisturePercent.label.short,
   tensile_strength: tensileStrength.label.short,
-  tensile_strength_0h: tensileStrength0h.label.short,
-  tensile_strength_1h: tensileStrength1h.label.short,
-  tensile_strength_3h: tensileStrength3h.label.short,
-  tensile_strength_24h: tensileStrength24h.label.short,
-  gas_evolution: gasEvolution.label.short,
+  tensile_strength_after_0_hours: tensileStrengthAfter0Hours.label.short,
+  tensile_strength_after_1_hour: tensileStrengthAfter1Hour.label.short,
+  tensile_strength_after_3_hours: tensileStrengthAfter3Hours.label.short,
+  tensile_strength_after_24_hours: tensileStrengthAfter24Hours.label.short,
+  gas_forming_property: gasFormingProperty.label.short,
 } as const
 
 export const testsTypeOptions = dictToOptions(testsTypeLabels)

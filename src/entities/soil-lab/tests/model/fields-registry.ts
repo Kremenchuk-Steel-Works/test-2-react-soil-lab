@@ -50,20 +50,20 @@ export const testsResponseFieldRegistry = createFieldRegistry.forType<TestDetail
 } as const)
 
 export const testsTypeFieldRegistry = createFieldRegistry.forKeys<SnakeToCamel<TestType>>()({
-  strength: {
+  compressiveStrength: {
     label: {
       default: 'Міцність на стиск (кгс/см²)',
+      short: 'Міцність на стиск',
       defaultUnit: 'кгс/см²',
       nPerCm2: 'Міцність на стиск (Н/см²)',
-      short: 'Міцність на стиск',
     },
   },
   gasPermeability: {
     label: {
       default: 'Газопроникність (од.)',
+      short: 'Газопроникність',
       defaultUnit: 'од.',
       m2PerPas: 'Газопроникність · 10⁻⁸ (m²/Pa·S)',
-      short: 'Газопроникність',
     },
   },
   moisturePercent: {
@@ -72,43 +72,43 @@ export const testsTypeFieldRegistry = createFieldRegistry.forKeys<SnakeToCamel<T
   tensileStrength: {
     label: {
       default: 'Міцність на розрив у висушеному стані (МПа)',
-      defaultUnit: 'МПа',
       short: 'Міцність на розрив у висушеному стані',
+      defaultUnit: 'МПа',
     },
   },
-  tensileStrength0h: {
+  tensileStrengthAfter0Hours: {
     label: {
       default: 'Міцність на розрив одразу  (МПа)',
-      defaultUnit: 'МПа',
       short: 'Міцність на розрив одразу',
+      defaultUnit: 'МПа',
     },
   },
-  tensileStrength1h: {
+  tensileStrengthAfter1Hour: {
     label: {
       default: 'Міцність на розрив через 1 годину (МПа)',
-      defaultUnit: 'МПа',
       short: 'Міцність на розрив через 1 годину',
+      defaultUnit: 'МПа',
     },
   },
-  tensileStrength3h: {
+  tensileStrengthAfter3Hours: {
     label: {
       default: 'Міцність на розрив через 3 години (МПа)',
-      defaultUnit: 'МПа',
       short: 'Міцність на розрив через 3 години',
+      defaultUnit: 'МПа',
     },
   },
-  tensileStrength24h: {
+  tensileStrengthAfter24Hours: {
     label: {
       default: 'Міцність на розрив через 24 години (МПа)',
-      defaultUnit: 'МПа',
       short: 'Міцність на розрив через 24 години',
+      defaultUnit: 'МПа',
     },
   },
-  gasEvolution: {
+  gasFormingProperty: {
     label: {
       default: 'Газоутворююча властивість (МПа)',
-      defaultUnit: 'МПа',
       short: 'Газоутворююча властивість',
+      defaultUnit: 'МПа',
     },
   },
 } as const)

@@ -8,6 +8,6 @@ import type { SamplesReportGenerationRequestDateFrom } from './samplesReportGene
 import type { SamplesReportGenerationRequestDateTo } from './samplesReportGenerationRequestDateTo'
 
 export interface SamplesReportGenerationRequest {
-  dateFrom: SamplesReportGenerationRequestDateFrom
-  dateTo: SamplesReportGenerationRequestDateTo
+  dateFrom?: SamplesReportGenerationRequestDateFrom
+  dateTo?: SamplesReportGenerationRequestDateTo
 }

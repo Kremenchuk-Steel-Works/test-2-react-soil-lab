@@ -14,7 +14,7 @@ interface SamplesGenerateReportProps {
   onError?: (err: HTTPValidationError) => void
 }
 
-function formatNullableDate(value: string | null): string | null {
+function formatNullableDate(value: string | null | undefined): string | null | undefined {
   return value ? format(parseISO(value), 'dd_MM_yyyy') : null
 }
 

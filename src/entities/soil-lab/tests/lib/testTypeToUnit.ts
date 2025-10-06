@@ -4,26 +4,26 @@ import { TestType } from '@/shared/api/soil-lab/model'
 const {
   gasPermeability,
   moisturePercent,
-  strength,
+  compressiveStrength,
   tensileStrength,
-  tensileStrength0h,
-  tensileStrength1h,
-  tensileStrength3h,
-  tensileStrength24h,
-  gasEvolution,
+  tensileStrengthAfter0Hours,
+  tensileStrengthAfter1Hour,
+  tensileStrengthAfter3Hours,
+  tensileStrengthAfter24Hours,
+  gasFormingProperty,
 } = testsTypeFieldRegistry
 
 // enum -> ключ в Field Registry
 const FR_KEY_BY_TYPE: Readonly<Record<TestType, keyof typeof testsTypeFieldRegistry>> = {
   [TestType.gas_permeability]: gasPermeability.key,
   [TestType.moisture_percent]: moisturePercent.key,
-  [TestType.strength]: strength.key,
+  [TestType.compressive_strength]: compressiveStrength.key,
   [TestType.tensile_strength]: tensileStrength.key,
-  [TestType.tensile_strength_0h]: tensileStrength0h.key,
-  [TestType.tensile_strength_1h]: tensileStrength1h.key,
-  [TestType.tensile_strength_3h]: tensileStrength3h.key,
-  [TestType.tensile_strength_24h]: tensileStrength24h.key,
-  [TestType.gas_evolution]: gasEvolution.key,
+  [TestType.tensile_strength_after_0_hours]: tensileStrengthAfter0Hours.key,
+  [TestType.tensile_strength_after_1_hour]: tensileStrengthAfter1Hour.key,
+  [TestType.tensile_strength_after_3_hours]: tensileStrengthAfter3Hours.key,
+  [TestType.tensile_strength_after_24_hours]: tensileStrengthAfter24Hours.key,
+  [TestType.gas_forming_property]: gasFormingProperty.key,
 } as const
 
 // Достаём символ единицы из FR

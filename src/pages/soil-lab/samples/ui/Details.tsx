@@ -89,7 +89,9 @@ export default function SamplesDetails() {
                         {typeLabel}
                       </h6>
 
-                      <TestStatusPill status={test.status}>{statusLabel}</TestStatusPill>
+                      <div className="shrink-0 whitespace-nowrap">
+                        <TestStatusPill status={test.status}>{statusLabel}</TestStatusPill>
+                      </div>
                     </div>
 
                     <div className="mt-2 text-base text-slate-500 dark:text-slate-400">

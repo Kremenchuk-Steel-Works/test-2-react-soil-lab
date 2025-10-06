@@ -30,13 +30,13 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
     const {
       gasPermeability,
       moisturePercent,
-      strength,
+      compressiveStrength,
       tensileStrength,
-      tensileStrength0h,
-      tensileStrength1h,
-      tensileStrength3h,
-      tensileStrength24h,
-      gasEvolution,
+      tensileStrengthAfter0Hours,
+      tensileStrengthAfter1Hour,
+      tensileStrengthAfter3Hours,
+      tensileStrengthAfter24Hours,
+      gasFormingProperty,
     } = testsTypeFieldRegistry
 
     return Object.freeze({
@@ -101,9 +101,13 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
                     {...register}
                   />
                 )
-              case TestType.strength:
+              case TestType.compressive_strength:
                 return (
-                  <InputField label={`${strength.label.nPerCm2} *`} type="float" {...register} />
+                  <InputField
+                    label={`${compressiveStrength.label.nPerCm2} *`}
+                    type="float"
+                    {...register}
+                  />
                 )
               case TestType.moisture_percent:
                 return (
@@ -121,42 +125,42 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
                     {...register}
                   />
                 )
-              case TestType.tensile_strength_0h:
+              case TestType.tensile_strength_after_0_hours:
                 return (
                   <InputField
-                    label={`${tensileStrength0h.label.default} *`}
+                    label={`${tensileStrengthAfter0Hours.label.default} *`}
                     type="float"
                     {...register}
                   />
                 )
-              case TestType.tensile_strength_1h:
+              case TestType.tensile_strength_after_1_hour:
                 return (
                   <InputField
-                    label={`${tensileStrength1h.label.default} *`}
+                    label={`${tensileStrengthAfter1Hour.label.default} *`}
                     type="float"
                     {...register}
                   />
                 )
-              case TestType.tensile_strength_3h:
+              case TestType.tensile_strength_after_3_hours:
                 return (
                   <InputField
-                    label={`${tensileStrength3h.label.default} *`}
+                    label={`${tensileStrengthAfter3Hours.label.default} *`}
                     type="float"
                     {...register}
                   />
                 )
-              case TestType.tensile_strength_24h:
+              case TestType.tensile_strength_after_24_hours:
                 return (
                   <InputField
-                    label={`${tensileStrength24h.label.default} *`}
+                    label={`${tensileStrengthAfter24Hours.label.default} *`}
                     type="float"
                     {...register}
                   />
                 )
-              case TestType.gas_evolution:
+              case TestType.gas_forming_property:
                 return (
                   <InputField
-                    label={`${gasEvolution.label.default} *`}
+                    label={`${gasFormingProperty.label.default} *`}
                     type="float"
                     {...register}
                   />

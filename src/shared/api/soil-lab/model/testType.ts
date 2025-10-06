@@ -9,14 +9,13 @@ export type TestType = (typeof TestType)[keyof typeof TestType]
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TestType = {
-  strength: 'strength',
+  compressive_strength: 'compressive_strength',
+  tensile_strength: 'tensile_strength',
+  tensile_strength_after_0_hours: 'tensile_strength_after_0_hours',
+  tensile_strength_after_1_hour: 'tensile_strength_after_1_hour',
+  tensile_strength_after_3_hours: 'tensile_strength_after_3_hours',
+  tensile_strength_after_24_hours: 'tensile_strength_after_24_hours',
   gas_permeability: 'gas_permeability',
   moisture_percent: 'moisture_percent',
-  // new
-  tensile_strength: 'tensile_strength',
-  tensile_strength_0h: 'tensile_strength_0h',
-  tensile_strength_1h: 'tensile_strength_1h',
-  tensile_strength_3h: 'tensile_strength_3h',
-  tensile_strength_24h: 'tensile_strength_24h',
-  gas_evolution: 'gas_evolution',
+  gas_forming_property: 'gas_forming_property',
 } as const

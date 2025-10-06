@@ -3,14 +3,14 @@ import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-r
 import { SamplesMoldingSandRecipe } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
 import { testsFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
 import {
-  GasEvolutionDynamicForm,
+  GasFormingPropertyDynamicForm,
   GasPermabilityDynamicForm,
   MoisturePercentDynamicForm,
   StrengthDynamicForm,
-  TensileStrength0hDynamicForm,
-  TensileStrength1hDynamicForm,
-  TensileStrength3hDynamicForm,
-  TensileStrength24hDynamicForm,
+  TensileStrengthAfter0HoursDynamicForm,
+  TensileStrengthAfter1HourDynamicForm,
+  TensileStrengthAfter3HoursDynamicForm,
+  TensileStrengthAfter24HoursDynamicForm,
   TensileStrengthDynamicForm,
 } from '@/entities/soil-lab/tests/ui/form/components/Measurement1DynamicForm'
 import { TestType } from '@/shared/api/soil-lab/model'
@@ -37,7 +37,7 @@ export const testsDynamicSections = createScopedSectionsConfig({
       children: [
         // Міцність
         {
-          conditions: { [type.key]: (v) => v === TestType.strength },
+          conditions: { [type.key]: (v) => v === TestType.compressive_strength },
           Component: StrengthDynamicForm,
           schema: z.object({
             [measurement1.key]: withUnitConversion(zn(z.number()), {
@@ -80,7 +80,7 @@ export const testsDynamicSections = createScopedSectionsConfig({
       children: [
         // Міцність
         {
-          conditions: { [type.key]: (v) => v === TestType.strength },
+          conditions: { [type.key]: (v) => v === TestType.compressive_strength },
           Component: StrengthDynamicForm,
           schema: z.object({
             [measurement1.key]: withUnitConversion(zn(z.number()), {
@@ -123,7 +123,7 @@ export const testsDynamicSections = createScopedSectionsConfig({
       children: [
         // Міцність
         {
-          conditions: { [type.key]: (v) => v === TestType.strength },
+          conditions: { [type.key]: (v) => v === TestType.compressive_strength },
           Component: StrengthDynamicForm,
           schema: z.object({
             [measurement1.key]: withUnitConversion(zn(z.number()), {
@@ -202,49 +202,49 @@ export const testsDynamicSections = createScopedSectionsConfig({
     {
       conditions: {
         [moldingSandRecipe.key]: [
-          SamplesMoldingSandRecipe['1s'],
-          SamplesMoldingSandRecipe['1hs'],
-          SamplesMoldingSandRecipe['1s1s'],
-          SamplesMoldingSandRecipe['1s2s'],
+          SamplesMoldingSandRecipe['1C'],
+          SamplesMoldingSandRecipe['1XC'],
+          SamplesMoldingSandRecipe['1C1C'],
+          SamplesMoldingSandRecipe['1C2C'],
         ],
       },
       children: [
         // Міцність на розрив зразу
         {
-          conditions: { [type.key]: (v) => v === TestType.tensile_strength_0h },
-          Component: TensileStrength0hDynamicForm,
+          conditions: { [type.key]: (v) => v === TestType.tensile_strength_after_0_hours },
+          Component: TensileStrengthAfter0HoursDynamicForm,
           schema: z.object({
             [measurement1.key]: zn(z.number()),
           }),
         },
         // Міцність на розрив через 1 год
         {
-          conditions: { [type.key]: (v) => v === TestType.tensile_strength_1h },
-          Component: TensileStrength1hDynamicForm,
+          conditions: { [type.key]: (v) => v === TestType.tensile_strength_after_1_hour },
+          Component: TensileStrengthAfter1HourDynamicForm,
           schema: z.object({
             [measurement1.key]: zn(z.number()),
           }),
         },
         // Міцність на розрив через 3 год
         {
-          conditions: { [type.key]: (v) => v === TestType.tensile_strength_3h },
-          Component: TensileStrength3hDynamicForm,
+          conditions: { [type.key]: (v) => v === TestType.tensile_strength_after_3_hours },
+          Component: TensileStrengthAfter3HoursDynamicForm,
           schema: z.object({
             [measurement1.key]: zn(z.number()),
           }),
         },
         // Міцність на розрив через 24 год
         {
-          conditions: { [type.key]: (v) => v === TestType.tensile_strength_24h },
-          Component: TensileStrength24hDynamicForm,
+          conditions: { [type.key]: (v) => v === TestType.tensile_strength_after_24_hours },
+          Component: TensileStrengthAfter24HoursDynamicForm,
           schema: z.object({
             [measurement1.key]: zn(z.number()),
           }),
         },
         // Газоутворююча властивість
         {
-          conditions: { [type.key]: (v) => v === TestType.gas_evolution },
-          Component: GasEvolutionDynamicForm,
+          conditions: { [type.key]: (v) => v === TestType.gas_forming_property },
+          Component: GasFormingPropertyDynamicForm,
           schema: z.object({
             [measurement1.key]: zn(z.number()),
           }),

@@ -56,7 +56,7 @@ function convertApiToUi(value: number | undefined, type: TestType): number | und
         instrument: Instruments.LPIR1,
         round: 0,
       })
-    case TestType.strength:
+    case TestType.compressive_strength:
       return withUnitConversion(value, {
         from: Units.KGF_PER_CM2,
         to: Units.N_PER_CM2,

@@ -7,8 +7,8 @@ import { zn } from '@/shared/lib/zod/zod-normalize'
 const { dateFrom, dateTo } = samplesGenerateReportFieldRegistry
 
 export const samplesGenerateReportFormSchema = z.object({
-  [dateFrom.key]: zn(z.string().date().nullable()),
-  [dateTo.key]: zn(z.string().date().nullable()),
+  [dateFrom.key]: zn(z.string().date().nullable().optional()),
+  [dateTo.key]: zn(z.string().date().nullable().optional()),
 })
 export type SamplesGenerateReportFormFields = z.infer<typeof samplesGenerateReportFormSchema>
 

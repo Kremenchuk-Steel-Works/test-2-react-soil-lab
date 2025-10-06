@@ -23,7 +23,7 @@ export interface UserDetailResponse {
   email: string
   isActive: boolean
   isSuperuser: boolean
-  lastLoginAt?: UserDetailResponseLastLoginAt
+  lastLoginAt: UserDetailResponseLastLoginAt
   roles: RoleDetailResponse[]
   permissions: PermissionDetailResponse[]
   readonly isDeleted: boolean

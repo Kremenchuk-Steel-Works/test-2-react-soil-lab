@@ -33,8 +33,8 @@ export const getGetUsersListApiV1UsersGetResponseMock = (
     isActive: faker.datatype.boolean(),
     isSuperuser: faker.datatype.boolean(),
     lastLoginAt: faker.helpers.arrayElement([
-      faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]),
-      undefined,
+      `${faker.date.past().toISOString().split('.')[0]}Z`,
+      null,
     ]),
     roles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
       () => ({
@@ -112,8 +112,8 @@ export const getCreateUserApiV1UsersPostResponseMock = (
   isActive: faker.datatype.boolean(),
   isSuperuser: faker.datatype.boolean(),
   lastLoginAt: faker.helpers.arrayElement([
-    faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]),
-    undefined,
+    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    null,
   ]),
   roles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
     archivedAt: faker.helpers.arrayElement([
@@ -184,8 +184,8 @@ export const getGetMeApiV1UsersMeGetResponseMock = (
   isActive: faker.datatype.boolean(),
   isSuperuser: faker.datatype.boolean(),
   lastLoginAt: faker.helpers.arrayElement([
-    faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]),
-    undefined,
+    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    null,
   ]),
   roles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
     archivedAt: faker.helpers.arrayElement([
@@ -256,8 +256,8 @@ export const getGetUserApiV1UsersUserIdGetResponseMock = (
   isActive: faker.datatype.boolean(),
   isSuperuser: faker.datatype.boolean(),
   lastLoginAt: faker.helpers.arrayElement([
-    faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]),
-    undefined,
+    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    null,
   ]),
   roles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
     archivedAt: faker.helpers.arrayElement([
@@ -328,8 +328,8 @@ export const getUpdateUserApiV1UsersUserIdPutResponseMock = (
   isActive: faker.datatype.boolean(),
   isSuperuser: faker.datatype.boolean(),
   lastLoginAt: faker.helpers.arrayElement([
-    faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]),
-    undefined,
+    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    null,
   ]),
   roles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
     archivedAt: faker.helpers.arrayElement([
@@ -400,8 +400,8 @@ export const getDeleteUserApiV1UsersUserIdDeleteResponseMock = (
   isActive: faker.datatype.boolean(),
   isSuperuser: faker.datatype.boolean(),
   lastLoginAt: faker.helpers.arrayElement([
-    faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]),
-    undefined,
+    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    null,
   ]),
   roles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
     archivedAt: faker.helpers.arrayElement([
@@ -472,8 +472,8 @@ export const getRestoreUserApiV1UsersUserIdRestorePostResponseMock = (
   isActive: faker.datatype.boolean(),
   isSuperuser: faker.datatype.boolean(),
   lastLoginAt: faker.helpers.arrayElement([
-    faker.helpers.arrayElement([`${faker.date.past().toISOString().split('.')[0]}Z`, null]),
-    undefined,
+    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    null,
   ]),
   roles: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(() => ({
     archivedAt: faker.helpers.arrayElement([
