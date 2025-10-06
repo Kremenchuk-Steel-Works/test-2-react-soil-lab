@@ -18,7 +18,7 @@ export default function SamplesGenerateReportPage() {
         </TooltipWrapper>
       )}
       sheetProps={{
-        label: <p className="text-lg font-semibold">Завантажити звіт</p>,
+        label: <h5 className="layout-text">Завантажити звіт</h5>,
       }}
     >
       {({ onSuccess }) => <SamplesGenerateReport onSuccess={onSuccess} />}

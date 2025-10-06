@@ -8,11 +8,13 @@ import { testsResponseFieldRegistry } from '@/entities/soil-lab/tests/model/fiel
 import { testsStatusLabels } from '@/entities/soil-lab/tests/model/status'
 import { testsTypeLabels } from '@/entities/soil-lab/tests/model/type'
 import { TestStatusPill } from '@/entities/soil-lab/tests/ui/status-pill/TestStatusPill'
+import SamplesDeletePage from '@/pages/soil-lab/samples/ui/Delete'
 import LoadingPage from '@/pages/system/LoadingPage'
 import { getErrorMessage } from '@/shared/lib/axios'
 import { formatUiDate } from '@/shared/lib/datetime/formatUiDate'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { InfoCard } from '@/shared/ui/InfoCard/InfoCard'
+import ModalTrigger from '@/shared/ui/modal/ModalTrigger'
 import { labelFromDict } from '@/utils/dict'
 import { ConfiguredButton } from '@/widgets/page/ConfiguredButton'
 
@@ -26,11 +28,10 @@ export default function SamplesDetails() {
     error: queryError,
     isLoading,
     isPending,
-    isFetching,
     isFetched,
   } = samplesService.getById(id)
 
-  if (isLoading || isPending || isFetching) {
+  if (isLoading || isPending) {
     return <LoadingPage />
   }
 
@@ -111,7 +112,16 @@ export default function SamplesDetails() {
       )}
 
       <div className="mt-2">
-        <ConfiguredButton btnType="delete" disabled={isLoading} />
+        <ModalTrigger
+          trigger={(open) => (
+            <ConfiguredButton btnType="delete" onClick={open} disabled={isLoading} />
+          )}
+          sheetProps={{
+            label: <h5 className="layout-text">Видалення</h5>,
+          }}
+        >
+          {() => <SamplesDeletePage />}
+        </ModalTrigger>
       </div>
     </>
   )

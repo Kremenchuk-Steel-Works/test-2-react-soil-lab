@@ -7,7 +7,7 @@ export default function SamplesDeletePage() {
   const navigate = useNavigate()
 
   const onSuccess = useCallback(() => {
-    void navigate('../..')
+    void navigate('..')
   }, [navigate])
 
   return id && <SamplesDelete id={id} onSuccess={onSuccess} />

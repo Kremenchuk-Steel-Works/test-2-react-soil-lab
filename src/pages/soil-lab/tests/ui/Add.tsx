@@ -76,7 +76,6 @@ export default function TestsAddPage() {
     error: queryError,
     isLoading,
     isPending,
-    isFetching,
     isFetched,
   } = samplesService.getById(id!, {
     query: { enabled: Boolean(id) },
@@ -125,7 +124,7 @@ export default function TestsAddPage() {
 
   if (!id) return <AlertMessage type={AlertType.ERROR} message="Відсутній параметр id" />
 
-  if (isLoading || isPending || isFetching) {
+  if (isLoading || isPending) {
     return <LoadingPage />
   }
 

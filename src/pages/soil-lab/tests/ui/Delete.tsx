@@ -7,7 +7,7 @@ export default function TestsDeletePage() {
   const navigate = useNavigate()
 
   const onSuccess = useCallback(() => {
-    void navigate('../..')
+    void navigate('..')
   }, [navigate])
 
   return id && <TestsDelete id={id} onSuccess={onSuccess} />

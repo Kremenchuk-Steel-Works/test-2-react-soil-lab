@@ -46,9 +46,9 @@ export default function SamplesDelete({ id, onSuccess, onError }: SamplesDeleteP
 
   return (
     <>
-      <h5 className="layout-text">Ви впевнені, що хочете видалити?</h5>
+      <h6 className="layout-text">Ви впевнені?</h6>
 
-      <div>
+      <div className="mt-2">
         <ConfiguredButton btnType="delete" onClick={handleSubmit} disabled={isPending} />
       </div>
 
