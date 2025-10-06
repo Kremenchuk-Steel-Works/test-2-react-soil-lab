@@ -15,9 +15,6 @@ export const samplesMaterialCategoryRoutes: AppRoute = {
   icon: ClipboardList,
   Component: SamplesLayout,
   requiredPermissions: [PERMISSIONS.SAMPLES_READ],
-  meta: {
-    buttons: ['add'],
-  },
   children: [
     {
       key: '',
