@@ -1,40 +1,59 @@
 import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '@/app/providers/auth/context'
+import type { Permission } from '@/app/routes/permissions'
 import type { PageButtonType } from '@/app/routes/types'
-import { checkAccessLogic, useUserPermissionsSet } from '@/shared/hooks/usePermissions'
 import Button, { type ButtonProps } from '@/shared/ui/button/Button'
+import { CanAccess } from '@/shared/ui/permission/CanAccess'
 import { prepareButtonLogic, type PreparedButtonProps } from '@/utils/prepareButtonLogic'
 
 type ConfiguredButtonProps = {
+  /** Тип кнопки, совпадает с action в meta.actionPermissions */
   btnType: PageButtonType
   /** Куда навигировать. По умолчанию `${pathname}/${btnType}` */
   to?: string | ((pathname: string) => string)
+  /** Кастомный обработчик клика. Если не задан — навигация на `to` */
   onClick?: () => void
-  /** Путь, по которому проверять доступ (если отличается от to) */
-  permissionPathOverride?: string
+  /**
+   * Явный список прав для проверки (OR-логика).
+   * Если не указан — берём правило из meta.actionPermissions текущего роута
+   * или fallback по targetPathForAction.
+   */
+  requiredPermissions?: Permission[] | Permission
+  /**
+   * Для действий, которые ведут на страницу (add/update), можно подсказать путь
+   * целевого роута как fallback, если в meta нет actionPermissions.
+   * Соответствует логике CanAccess/useCan.
+   */
+  targetPathForAction?: string
 } & Omit<ButtonProps, 'onClick'>
 
-// гарантируем, что сегмент не продублируется id/delete/delete -> id/delete
+// Гарантируем, что сегмент не продублируется: id/delete/delete -> id/delete
 function joinPathWithAction(pathname: string, action: string) {
   const base = pathname.replace(/\/+$/, '')
   const suffix = `/${action}`
   return base.endsWith(suffix) ? base : `${base}${suffix}`
 }
 
+/**
+ * Кнопка, чья доступность определяется логикой CanAccess:
+ * - либо по meta.actionPermissions[currentRoute][btnType]
+ * - либо по явно переданным requiredPermissions
+ * - при отсутствии правила в meta можно указать targetPathForAction (fallback).
+ *
+ * Кнопка отрисовывается ТОЛЬКО если доступ разрешён.
+ */
 export function ConfiguredButton({
   btnType,
   to,
   onClick,
-  permissionPathOverride,
+  requiredPermissions,
+  targetPathForAction,
   className,
   disabled,
   ...rest
 }: ConfiguredButtonProps) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { currentUser } = useAuth()
-  const userPermissions = useUserPermissionsSet()
 
   const targetPath = useMemo(() => {
     if (typeof to === 'function') return to(pathname)
@@ -42,15 +61,11 @@ export function ConfiguredButton({
     return joinPathWithAction(pathname, btnType)
   }, [to, pathname, btnType])
 
-  const hasAccess = useMemo(
-    () => checkAccessLogic(permissionPathOverride ?? targetPath, currentUser, userPermissions),
-    [permissionPathOverride, targetPath, currentUser, userPermissions],
-  )
-
   const prepared = useMemo<PreparedButtonProps | null>(() => {
     const clickHandler = onClick ?? (() => navigate(targetPath))
-    return prepareButtonLogic(btnType, hasAccess, clickHandler)
-  }, [btnType, hasAccess, onClick, navigate, targetPath])
+    // Визуальные пропсы формируем сразу. Сам доступ контролируется CanAccess.
+    return prepareButtonLogic(btnType, true, clickHandler)
+  }, [btnType, onClick, navigate, targetPath])
 
   if (!prepared) return null
 
@@ -58,14 +73,20 @@ export function ConfiguredButton({
   void _ignoreKey
 
   return (
-    <Button
-      {...defButtonProps}
-      {...rest}
-      className={[defClass, className].filter(Boolean).join(' ')}
-      disabled={disabled ?? defButtonProps.disabled}
+    <CanAccess
+      action={btnType}
+      requiredPermissions={requiredPermissions}
+      targetPathForAction={targetPathForAction}
     >
-      <Icon className="h-5 w-5" />
-      <span className="hidden md:inline">{label}</span>
-    </Button>
+      <Button
+        {...defButtonProps}
+        {...rest}
+        className={[defClass, className].filter(Boolean).join(' ')}
+        disabled={disabled ?? defButtonProps.disabled}
+      >
+        <Icon className="h-5 w-5" />
+        <span className="hidden md:inline">{label}</span>
+      </Button>
+    </CanAccess>
   )
 }

@@ -1,12 +1,12 @@
 import { keepPreviousData } from '@tanstack/react-query'
 import { testsService } from '@/entities/soil-lab/tests/api/service'
+import { testsColumns } from '@/pages/soil-lab/tests/ui/list/columns'
 import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import { getErrorMessage } from '@/shared/lib/axios'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DataTable } from '@/widgets/data-table'
-import { testsColumns } from './columns'
 
-export default function TestsList() {
+export default function TestsListPage() {
   // Состояние из URL
   const { page, perPage, setSearchParams } = useUrlPagination()
 

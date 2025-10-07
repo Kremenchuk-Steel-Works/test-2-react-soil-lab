@@ -2,10 +2,16 @@ import type { ComponentType, LazyExoticComponent } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import type { Permission } from '@/app/routes/permissions'
 
-export type PageButtonType = 'add' | 'update' | 'delete'
+export const PageButtonType = {
+  add: 'add',
+  update: 'update',
+  delete: 'delete',
+} as const
+export type PageButtonType = keyof typeof PageButtonType
 
 export interface RouteMeta {
   buttons?: PageButtonType[]
+  actionPermissions?: Partial<Record<PageButtonType, Permission[]>>
 }
 
 /**

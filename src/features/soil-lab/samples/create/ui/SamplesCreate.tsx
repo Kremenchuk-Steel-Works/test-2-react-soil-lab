@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { samplesService } from '@/entities/soil-lab/samples/api/service'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
+import type { SamplesCreateOptions } from '@/entities/soil-lab/samples/ui/form/fields'
 import {
   samplesCreateFormDefaultValues,
   type SamplesCreateFormFields,
@@ -12,10 +13,10 @@ import {
 } from '@/shared/api/soil-lab/endpoints/samples/samples'
 import { CachedForm, type CacheConfig } from '@/shared/ui/react-hook-form/cached-form/CachedForm'
 
-interface SamplesCreateProps {
+type SamplesCreateProps = {
   onSuccess?: (res: CreateSampleApiV1SamplesPostMutationResult) => void
   onError?: (err: unknown) => void
-}
+} & SamplesCreateOptions
 
 const { moldingSandRecipe } = samplesFieldRegistry
 
@@ -26,7 +27,7 @@ const cacheConfig: CacheConfig<SamplesCreateFormFields> = {
   ttl: 16 * 60 * 60 * 1000,
 }
 
-export default function SamplesCreate({ onSuccess, onError }: SamplesCreateProps) {
+export default function SamplesCreate({ onSuccess, onError, options }: SamplesCreateProps) {
   const queryClient = useQueryClient()
 
   const { mutateAsync } = samplesService.create({
@@ -55,6 +56,7 @@ export default function SamplesCreate({ onSuccess, onError }: SamplesCreateProps
       {({ defaultValues, onSubmit }) => (
         <SamplesCreateForm
           defaultValues={defaultValues}
+          options={options}
           onSubmit={onSubmit}
           submitBtnName="Додати"
         />

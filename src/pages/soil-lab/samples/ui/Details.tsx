@@ -1,5 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
+import { PageButtonType } from '@/app/routes/types'
 import { samplesService } from '@/entities/soil-lab/samples/api/service'
 import { samplesResponseFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
 import { samplesMoldingSandRecipeLabels } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
@@ -18,7 +19,7 @@ import ModalTrigger from '@/shared/ui/modal/ModalTrigger'
 import { labelFromDict } from '@/utils/dict'
 import { ConfiguredButton } from '@/widgets/page/ConfiguredButton'
 
-export default function SamplesDetails() {
+export default function SamplesDetailsPage() {
   const { id } = useParams<{ id: string }>()
 
   if (!id) return <AlertMessage type={AlertType.ERROR} message="Відсутній параметр id" />
@@ -116,7 +117,7 @@ export default function SamplesDetails() {
       <div className="mt-2">
         <ModalTrigger
           trigger={(open) => (
-            <ConfiguredButton btnType="delete" onClick={open} disabled={isLoading} />
+            <ConfiguredButton btnType={PageButtonType.delete} onClick={open} disabled={isLoading} />
           )}
           sheetProps={{
             label: <h5 className="layout-text">Видалення</h5>,

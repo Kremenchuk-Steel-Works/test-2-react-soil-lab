@@ -3,18 +3,16 @@ import { FlaskConical, Users } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 import { samplesMaterialCategoryRoutes } from '@/pages/soil-lab/material-category/routes'
-import { samplesRoutes } from '@/pages/soil-lab/samples/routes'
-import { testsRoutes } from '@/pages/soil-lab/tests/routes'
 
-const soilLabLayout = lazy(() => import('@/pages/soil-lab/Layout'))
-const soilLabMain = lazy(() => import('@/pages/soil-lab/Main'))
+const SoilLabLayoutPage = lazy(() => import('@/pages/soil-lab/ui/Layout'))
+const SoilLabMainPage = lazy(() => import('@/pages/soil-lab/ui/Main'))
 
 export const soilLabRoutes: AppRoute = {
   key: 'soilLab',
   path: '/soil-lab',
   label: 'Лабораторія сумішей',
   icon: FlaskConical,
-  Component: soilLabLayout,
+  Component: SoilLabLayoutPage,
   requiredPermissions: [PERMISSIONS.SAMPLES_READ, PERMISSIONS.TESTS_READ],
   children: [
     {
@@ -22,11 +20,9 @@ export const soilLabRoutes: AppRoute = {
       path: '',
       label: '',
       icon: Users,
-      Component: soilLabMain,
+      Component: SoilLabMainPage,
       inSidebar: false,
     },
-    samplesMaterialCategoryRoutes,
-    samplesRoutes,
-    testsRoutes,
+    ...samplesMaterialCategoryRoutes,
   ],
 }

@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import { PageButtonType } from '@/app/routes/types'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
 import { samplesMoldingSandRecipeLabels } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
 import { testsService } from '@/entities/soil-lab/tests/api/service'
@@ -17,7 +18,7 @@ import ModalTrigger from '@/shared/ui/modal/ModalTrigger'
 import { labelFromDict } from '@/utils/dict'
 import { ConfiguredButton } from '@/widgets/page/ConfiguredButton'
 
-export default function TestsDetails() {
+export default function TestsDetailsPage() {
   const { id } = useParams<{ id: string }>()
 
   if (!id) return <AlertMessage type={AlertType.ERROR} message="Відсутній параметр id" />
@@ -131,7 +132,7 @@ export default function TestsDetails() {
       <div className="mt-2">
         <ModalTrigger
           trigger={(open) => (
-            <ConfiguredButton btnType="delete" onClick={open} disabled={isLoading} />
+            <ConfiguredButton btnType={PageButtonType.delete} onClick={open} disabled={isLoading} />
           )}
           sheetProps={{
             label: <h5 className="layout-text">Видалення</h5>,
