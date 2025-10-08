@@ -1,31 +1,32 @@
 import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
-import type { PageButtonType } from '@/app/routes/types'
+import type { Permission } from '@/app/routes/permissions'
+import type { PageAction } from '@/app/routes/types'
 import { findRouteObjectByPath } from '@/app/routes/utils/utils'
 
 /**
- * Возвращает список действий для заголовка страницы ТОЛЬКО из meta.actionPermissions.
- * Доступ здесь НЕ проверяем (это делает CanAccess в самих кнопках).
- * Порядок — из meta.buttons (если задан), иначе по ключам actionPermissions.
+ * Возвращает порядок действий для хедера ТОЛЬКО из meta.buttons,
+ * причём оставляет лишь те, для кого есть правило в meta.actionPermissions.
+ * Если meta.buttons отсутствует или пуст — ничего не показываем ( [] ).
+ * Доступ здесь НЕ проверяем — это делает CanAccess в самих кнопках.
  */
-export function usePageHeaderActions(): PageButtonType[] {
+export function usePageHeaderActions(): PageAction[] {
   const { pathname } = useLocation()
   const currentRoute = useMemo(() => findRouteObjectByPath(pathname), [pathname])
 
   return useMemo(() => {
-    const map = currentRoute?.meta?.actionPermissions as
-      | Partial<Record<PageButtonType, unknown>>
+    const meta = currentRoute?.meta
+    const buttons = meta?.buttons
+    if (!buttons || buttons.length === 0) return []
+
+    const actionPerms = meta?.actionPermissions as
+      | Partial<Record<PageAction, Permission[] | Permission>>
       | undefined
-    if (!map) return []
+    if (!actionPerms) return []
 
-    const declared = Object.keys(map) as PageButtonType[]
+    const declared = new Set(Object.keys(actionPerms) as PageAction[])
 
-    const orderFromMeta = currentRoute?.meta?.buttons
-    if (orderFromMeta?.length) {
-      // оставляем только те, что реально описаны в actionPermissions
-      return orderFromMeta.filter((a) => declared.includes(a))
-    }
-
-    return declared
+    // Показываем только те кнопки, которые явно перечислены в buttons и имеют правило в actionPermissions
+    return buttons.filter((btn) => declared.has(btn))
   }, [currentRoute])
 }

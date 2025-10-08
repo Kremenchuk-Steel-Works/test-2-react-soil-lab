@@ -1,5 +1,5 @@
 import { Pen, Plus, Trash, type LucideIcon } from 'lucide-react'
-import type { PageButtonType } from '@/app/routes/types'
+import { PageAction } from '@/app/routes/types'
 import type { ButtonProps } from '@/shared/ui/button/Button'
 
 export type ButtonDefinition = ButtonProps & {
@@ -7,19 +7,19 @@ export type ButtonDefinition = ButtonProps & {
   Icon: LucideIcon
 }
 
-export const BUTTON_DEFINITIONS: Record<PageButtonType, ButtonDefinition> = {
-  add: {
+export const BUTTON_DEFINITIONS: Record<PageAction, ButtonDefinition> = {
+  [PageAction.create]: {
     label: 'Додати',
     Icon: Plus,
     className: 'flex items-center justify-center gap-1 whitespace-nowrap',
   },
-  update: {
+  [PageAction.update]: {
     label: 'Редагувати',
     Icon: Pen,
     className: 'flex items-center justify-center gap-1 whitespace-nowrap',
     customColor: 'orange',
   },
-  delete: {
+  [PageAction.delete]: {
     label: 'Видалити',
     Icon: Trash,
     className: 'flex items-center justify-center gap-1 whitespace-nowrap',

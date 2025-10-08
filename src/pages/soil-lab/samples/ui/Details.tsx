@@ -1,6 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
-import { PageButtonType } from '@/app/routes/types'
+import { PageAction } from '@/app/routes/types'
 import { samplesService } from '@/entities/soil-lab/samples/api/service'
 import { samplesResponseFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
 import { samplesMoldingSandRecipeLabels } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
@@ -117,7 +117,7 @@ export default function SamplesDetailsPage() {
       <div className="mt-2">
         <ModalTrigger
           trigger={(open) => (
-            <ConfiguredButton btnType={PageButtonType.delete} onClick={open} disabled={isLoading} />
+            <ConfiguredButton btnType={PageAction.delete} onClick={open} disabled={isLoading} />
           )}
           sheetProps={{
             label: <h5 className="layout-text">Видалення</h5>,

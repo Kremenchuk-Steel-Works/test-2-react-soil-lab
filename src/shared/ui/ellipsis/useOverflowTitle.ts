@@ -2,7 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 
 /**
  * Навешивает title только если контент переполнен (scrollWidth > clientWidth).
- * Избегаем лишних тултипов и перерисовок.
+ * Избегаем лишних tooltip и перерисовок.
  */
 export function useOverflowTitle<T extends HTMLElement>(explicit?: string) {
   const ref = useRef<T | null>(null)

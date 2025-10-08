@@ -1,6 +1,27 @@
 import { compile, match } from 'path-to-regexp'
 import { APP_ROUTES } from '@/app/routes/routes'
-import type { AppRoute } from '@/app/routes/types'
+import type { AppRoute, IndexRoute, NonIndexRoute } from '@/app/routes/types'
+
+/** Является ли маршрут индексным */
+export const isIndexRoute = <P = Record<string, never>>(
+  route: AppRoute<P>,
+): route is IndexRoute<P> => (route as IndexRoute<P>).index === true
+
+export const isNonIndexRoute = <P = Record<string, never>>(
+  route: AppRoute<P>,
+): route is NonIndexRoute<P> => !isIndexRoute(route)
+
+/** Безопасно получить строку пути (для индексных вернёт '') */
+const getRoutePath = (route: AppRoute): string =>
+  'path' in route && typeof route.path === 'string' ? route.path : ''
+
+/** Склейка basePath и текущего пути в "чистый" абсолютный путь без лишних слэшей. */
+const joinAsFullPath = (basePath: string, currentPath: string): string => {
+  const joined = currentPath === '' ? basePath || '/' : `${basePath}/${currentPath}`
+  let full = joined.replace(/\/+/g, '/')
+  if (full.length > 1 && full.endsWith('/')) full = full.slice(0, -1)
+  return full
+}
 
 /**
  * Рекурсивно находит объект маршрута, соответствующий указанному URL-пути.
@@ -18,23 +39,16 @@ export function findRouteObjectByPath(
   basePath = '',
 ): AppRoute | undefined {
   for (const route of routes) {
-    // Собираем полный путь, учитывая вложенность.
-    const fullPath = `${basePath}/${route.path}`.replace(/\/+/g, '/')
+    const fullPath = joinAsFullPath(basePath, getRoutePath(route))
 
     // Создаем матчер, требующий полного совпадения пути (`end: true`).
     const matcher = match(fullPath, { decode: decodeURIComponent, end: true })
-    const matchResult = matcher(pathname)
-
-    if (matchResult) {
-      return route
-    }
+    if (matcher(pathname)) return route
 
     // Если точного совпадения нет, но есть дочерние маршруты, ищем в них.
-    if (route.children && route.children.length > 0) {
+    if (!isIndexRoute(route) && route.children?.length) {
       const foundChild = findRouteObjectByPath(pathname, route.children, fullPath)
-      if (foundChild) {
-        return foundChild
-      }
+      if (foundChild) return foundChild
     }
   }
 
@@ -54,29 +68,26 @@ function toPathParams(params?: ParamsInput): Record<string, string | string[]> {
   if (!params) return out
 
   for (const [k, v] of Object.entries(params)) {
-    if (v == null) continue // пропускаем undefined/null, пусть compile валидирует обязательные
-    if (Array.isArray(v)) {
-      out[k] = v.map((x) => String(x))
-    } else {
-      out[k] = String(v)
-    }
+    if (v == null) continue
+    out[k] = Array.isArray(v) ? v.map(String) : String(v)
   }
   return out
 }
 
-/** Ищем маршрут по ключу и возвращаем (route, fullPath) */
+/** Ищем маршрут по ключу и возвращаем (route, fullPath) — только среди НЕ индексных роутов */
 function findRouteByKey(
   key: string,
   routes: AppRoute[] = APP_ROUTES,
   basePath = '',
 ): { route: AppRoute; fullPath: string } | undefined {
   for (const route of routes) {
-    const fullPath =
-      route.path === '' ? basePath || '/' : `${basePath}/${route.path}`.replace(/\/+/g, '/')
+    const fullPath = joinAsFullPath(basePath, getRoutePath(route))
 
-    if (route.key === key) return { route, fullPath }
+    if (!isIndexRoute(route) && route.key === key) {
+      return { route, fullPath }
+    }
 
-    if (route.children?.length) {
+    if (!isIndexRoute(route) && route.children?.length) {
       const found = findRouteByKey(key, route.children, fullPath)
       if (found) return found
     }

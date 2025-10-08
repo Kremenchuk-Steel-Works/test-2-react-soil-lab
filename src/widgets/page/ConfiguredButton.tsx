@@ -1,14 +1,14 @@
 import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import type { Permission } from '@/app/routes/permissions'
-import type { PageButtonType } from '@/app/routes/types'
+import { segment, type PageAction } from '@/app/routes/types'
 import Button, { type ButtonProps } from '@/shared/ui/button/Button'
 import { CanAccess } from '@/shared/ui/permission/CanAccess'
 import { prepareButtonLogic, type PreparedButtonProps } from '@/utils/prepareButtonLogic'
 
 type ConfiguredButtonProps = {
   /** Тип кнопки, совпадает с action в meta.actionPermissions */
-  btnType: PageButtonType
+  btnType: PageAction
   /** Куда навигировать. По умолчанию `${pathname}/${btnType}` */
   to?: string | ((pathname: string) => string)
   /** Кастомный обработчик клика. Если не задан — навигация на `to` */
@@ -28,9 +28,9 @@ type ConfiguredButtonProps = {
 } & Omit<ButtonProps, 'onClick'>
 
 // Гарантируем, что сегмент не продублируется: id/delete/delete -> id/delete
-function joinPathWithAction(pathname: string, action: string) {
+function joinPathWithAction(pathname: string, action: PageAction) {
   const base = pathname.replace(/\/+$/, '')
-  const suffix = `/${action}`
+  const suffix = `/${segment(action)}`
   return base.endsWith(suffix) ? base : `${base}${suffix}`
 }
 
@@ -40,7 +40,7 @@ function joinPathWithAction(pathname: string, action: string) {
  * - либо по явно переданным requiredPermissions
  * - при отсутствии правила в meta можно указать targetPathForAction (fallback).
  *
- * Кнопка отрисовывается ТОЛЬКО если доступ разрешён.
+ * Кнопка отображается ТОЛЬКО если доступ разрешён.
  */
 export function ConfiguredButton({
   btnType,

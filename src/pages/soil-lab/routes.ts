@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { FlaskConical, Users } from 'lucide-react'
+import { FlaskConical } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 import { samplesMaterialCategoryRoutes } from '@/pages/soil-lab/material-category/routes'
@@ -16,12 +16,8 @@ export const soilLabRoutes: AppRoute = {
   requiredPermissions: [PERMISSIONS.SAMPLES_READ, PERMISSIONS.TESTS_READ],
   children: [
     {
-      key: '',
-      path: '',
-      label: '',
-      icon: Users,
+      index: true,
       Component: SoilLabMainPage,
-      inSidebar: false,
     },
     ...samplesMaterialCategoryRoutes,
   ],

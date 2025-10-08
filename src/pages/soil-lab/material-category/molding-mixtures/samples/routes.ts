@@ -1,7 +1,7 @@
 import { lazy } from 'react'
-import { CirclePlus, ClipboardList, Database, Info, RefreshCcw } from 'lucide-react'
+import { CirclePlus, ClipboardList, Info, RefreshCcw } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
-import { PageButtonType, type AppRoute } from '@/app/routes/types'
+import { PageAction, segment, type AppRoute } from '@/app/routes/types'
 
 const SamplesListPage = lazy(() => import('./ui/list/List'))
 const SamplesAddPage = lazy(() => import('./ui/Add'))
@@ -17,22 +17,19 @@ export const moldingMixturesSamplesRoutes: AppRoute = {
   Component: SamplesLayoutPage,
   requiredPermissions: [PERMISSIONS.SAMPLES_READ],
   meta: {
-    buttons: [PageButtonType.add],
+    buttons: [PageAction.create],
     actionPermissions: {
-      add: [PERMISSIONS.SAMPLES_CREATE],
+      [PageAction.create]: [PERMISSIONS.SAMPLES_CREATE],
     },
   },
   children: [
     {
-      key: '',
-      path: '',
-      label: '',
-      icon: Database,
+      index: true,
       Component: SamplesListPage,
     },
     {
       key: 'moldingMixturesSamplesAdd',
-      path: 'add',
+      path: segment(PageAction.create),
       label: 'Додати',
       icon: CirclePlus,
       Component: SamplesAddPage,
@@ -46,23 +43,20 @@ export const moldingMixturesSamplesRoutes: AppRoute = {
       Component: SamplesLayoutPage,
       requiredPermissions: [PERMISSIONS.SAMPLES_READ],
       meta: {
-        buttons: [PageButtonType.update],
+        buttons: [PageAction.update],
         actionPermissions: {
-          update: [PERMISSIONS.SAMPLES_CREATE],
-          delete: [PERMISSIONS.SAMPLES_DELETE],
+          [PageAction.update]: [PERMISSIONS.SAMPLES_CREATE],
+          [PageAction.delete]: [PERMISSIONS.SAMPLES_DELETE],
         },
       },
       children: [
         {
-          key: '',
-          path: '',
-          label: '',
-          icon: Info,
+          index: true,
           Component: SamplesDetailsPage,
         },
         {
           key: 'moldingMixturesSamplesUpdate',
-          path: 'update',
+          path: segment(PageAction.update),
           label: 'Оновити',
           icon: RefreshCcw,
           Component: TestsAddPage,

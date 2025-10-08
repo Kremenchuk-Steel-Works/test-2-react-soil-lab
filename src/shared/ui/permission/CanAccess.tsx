@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react'
 import type { Permission } from '@/app/routes/permissions'
-import type { PageButtonType } from '@/app/routes/types'
+import type { PageAction } from '@/app/routes/types'
 import { useCan } from '@/shared/hooks/usePermissions'
 
 type CanAccessProps = {
   requiredPermissions?: Permission[] | Permission
-  action?: PageButtonType
+  action?: PageAction
   /** Для действий, которые ведут на страницу (add/update), можно подсказать путь fallBack-роута */
   targetPathForAction?: string
   fallback?: ReactNode

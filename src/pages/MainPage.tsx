@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { isNonIndexRoute } from '@/app/routes/utils/utils'
 import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
 import Button from '@/shared/ui/button/Button'
 import { EllipsisTextInline } from '@/shared/ui/ellipsis/EllipsisTextInline'
@@ -12,6 +13,7 @@ export default function MainPage() {
     <MainLayout>
       <div className="flex flex-wrap gap-x-2 gap-y-2">
         {visibleRoutes
+          .filter(isNonIndexRoute)
           .filter((route) => route.inSidebar !== false)
           .map((route) => (
             <Button

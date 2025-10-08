@@ -16,7 +16,10 @@
     "pnpm-lock.yaml",
     "tailwind.config.js",
     "vite.config.ts",
-    ".gitignore"
+    ".gitignore",
+    // OpenAPI | Orval
+    "src/shared/api/**",
+    "**/openapi.{json,yml,yaml}"
   ],
   "words": [
     // Technical Terms & Libraries
@@ -33,6 +36,8 @@
     "wordprocessingml",
     "triethylamine",
     "LPIR",
+    "APIV",
+    "lerp",
 
     // IT Jargon (Cyrillic)
     "пагинированный",
@@ -55,6 +60,22 @@
     "деплой",
     "деплоя",
     "валидируется",
+    "роут",
+    "роута",
+    "дебаунсинг",
+    "дебаунсинга",
+    "скролл",
+    "лейбл",
+    "лейбла",
+    "типобезопасно",
+    "типобезопасный",
+    "мемоизированный",
+    "проп",
+    "пропс",
+    "пропсы",
+    "рендерятся",
+    "рендер",
+    "фолбэк",
 
     // Ukrainian/Russian words specific to the project's domain
     "Адмін",
@@ -69,6 +90,10 @@
     "твердіюча",
     "опційно",
     "газоутворююча",
+    "валідація",
+    "валідації",
+    "підключення",
+    "підключитися",
 
     // Foreign Words & Names
     "İstanbul",

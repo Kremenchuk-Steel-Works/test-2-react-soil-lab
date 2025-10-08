@@ -268,7 +268,7 @@ export default function RouteTableView({ parentRouteKey, rowClickNavigates = tru
                           </div>
                         </div>
                       )}
-                      {/* Ресайзер колонки */}
+                      {/* Элемент для изменения ширины столбца */}
                       {canResize && (
                         <div
                           onMouseDown={(e) => {

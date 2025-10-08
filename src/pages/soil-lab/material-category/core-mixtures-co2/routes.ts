@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { ClipboardList, Users } from 'lucide-react'
+import { ClipboardList } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 import { coreMixturesCO2SamplesRoutes } from '@/pages/soil-lab/material-category/core-mixtures-co2/samples/routes'
@@ -19,12 +19,8 @@ export const materialCategoryCoreMixturesCO2Routes: AppRoute = {
   requiredPermissions: [PERMISSIONS.SAMPLES_READ],
   children: [
     {
-      key: '',
-      path: '',
-      label: '',
-      icon: Users,
+      index: true,
       Component: CoreMixturesCO2MainPage,
-      inSidebar: false,
     },
     coreMixturesCO2SamplesRoutes,
     coreMixturesCO2TestsRoutes,

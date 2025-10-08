@@ -27,7 +27,7 @@ type AsyncPaginateMenuListProps<
 }
 
 /**
- * JS-фолбэк для блокировки прокрутки страницы,
+ * JS-резервный механизм блокировки прокрутки страницы,
  * если CSS `overscroll-behavior` не поддерживается.
  */
 function useScrollLockFallback(elementRef: RefObject<HTMLElement | null>) {

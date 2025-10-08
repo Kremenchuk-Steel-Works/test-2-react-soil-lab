@@ -219,7 +219,7 @@ function ImageViewerDesktop({
 
   return (
     <figure className={`relative overflow-hidden ${className ?? ''}`}>
-      {/* Тулбар (десктоп) */}
+      {/* Панель инструментов (десктоп) */}
       <div
         className="pointer-events-auto absolute top-2 right-2 z-10 flex items-center gap-1 rounded-xl px-1.5 py-1 shadow-md backdrop-blur"
         onPointerDown={(e) => e.stopPropagation()}

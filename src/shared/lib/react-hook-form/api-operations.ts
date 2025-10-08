@@ -139,7 +139,7 @@ export type TransformMap<T> = {
 /**
  * Рекурсивно обрабатывает массив: вложенные операции добавляем ТОЛЬКО в update.
  * Для create оставляем сырые данные сущности (Omit<T,'id'>).
- * Плюс: вычищаем из update-диффа сырые массивы (которые заменяются ...Operations).
+ * Плюс: вычищаем из update diff сырые массивы (которые заменяются ...Operations).
  * Дополнительно: отсекаем update c пустым data, если после чистки/вложенных операций ничего не осталось.
  */
 function processArrayRecursively<TItem extends { id: Id }>(
@@ -181,7 +181,7 @@ function processArrayRecursively<TItem extends { id: Id }>(
 
 /**
  * Главная функция: собирает payload на основе diff + правил трансформации.
- * initial и form — одного шэйпа (нормализованные данные формы).
+ * initial и form — одной структуры (нормализованные данные формы).
  */
 export function createUpdatePayload<T extends AnyRecord>(
   initialData: T,

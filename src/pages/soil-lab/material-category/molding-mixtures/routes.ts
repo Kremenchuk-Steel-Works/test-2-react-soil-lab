@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { ClipboardList, Users } from 'lucide-react'
+import { ClipboardList } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 import { moldingMixturesSamplesRoutes } from '@/pages/soil-lab/material-category/molding-mixtures/samples/routes'
@@ -19,12 +19,8 @@ export const materialCategoryMoldingMixturesRoutes: AppRoute = {
   requiredPermissions: [PERMISSIONS.SAMPLES_READ],
   children: [
     {
-      key: '',
-      path: '',
-      label: '',
-      icon: Users,
+      index: true,
       Component: MoldingMixturesMainPage,
-      inSidebar: false,
     },
     moldingMixturesSamplesRoutes,
     moldingMixturesTestsRoutes,

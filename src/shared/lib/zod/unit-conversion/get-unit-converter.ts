@@ -6,11 +6,18 @@ import type {
 } from '@/shared/lib/zod/unit-conversion/unit-types'
 import { ALL_CONVERSIONS } from './units'
 
+/**
+ * Опции подбора конвертера единиц измерения.
+ */
 export type UnitConverterOptions = {
   /** Прибор, для которого нужна специфичная формула (если есть) */
   instrument?: Instrument
 }
 
+/**
+ * Проверяет, соответствует ли целевой прибор условию `instrument`
+ * в конфигурации (одно значение или массив значений).
+ */
 function matchesInstrument(
   candidate: UnitConversionConfig['instrument'],
   target: Instrument,
@@ -19,9 +26,12 @@ function matchesInstrument(
   return Array.isArray(candidate) ? candidate.includes(target) : candidate === target
 }
 
-function listInstruments(cands: readonly UnitConversionConfig[]): Instrument[] {
+/**
+ * Возвращает уникальный список приборов, упомянутых в переданных конфигурациях.
+ */
+function listInstruments(candidates: readonly UnitConversionConfig[]): Instrument[] {
   const acc: Instrument[] = []
-  for (const c of cands) {
+  for (const c of candidates) {
     const ins = c.instrument
     if (!ins) continue
     if (Array.isArray(ins)) {
@@ -33,6 +43,17 @@ function listInstruments(cands: readonly UnitConversionConfig[]): Instrument[] {
   return acc
 }
 
+/**
+ * Подбирает функцию-конвертер для пары единиц `from → to` с учётом прибора.
+ *
+ * Правила:
+ * - Если `from === to` — возвращается тождественная функция.
+ * - Если указан `instrument` — ищется точное совпадение по прибору.
+ * - Если есть хотя бы одна «приборная» формула, но прибор не указан — просим указать прибор.
+ * - Иначе берётся универсальная формула (без привязки к прибору).
+ *
+ * Бросает ошибку, если подходящей формулы нет.
+ */
 export function getUnitConverter(
   from: Unit,
   to: Unit,

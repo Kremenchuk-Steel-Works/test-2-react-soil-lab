@@ -1,5 +1,6 @@
 import { lazy } from 'react'
-import { Shield, Users } from 'lucide-react'
+import { Shield } from 'lucide-react'
+import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
 import { permissionsRoutes } from '@/entities/admin-old/permissions/routes'
 import { rolesRoutes } from '@/entities/admin-old/roles/routes'
@@ -14,15 +15,11 @@ export const adminRoutes: AppRoute = {
   label: 'Адмін панель',
   icon: Shield,
   Component: AdminPanelLayout,
-  requiredPermissions: ['admin'],
+  requiredPermissions: [PERMISSIONS.ADMIN],
   children: [
     {
-      key: 'adminPanel',
-      path: '',
-      label: '',
-      icon: Users,
+      index: true,
       Component: AdminPanelMain,
-      inSidebar: false,
     },
     usersRoutes,
     rolesRoutes,

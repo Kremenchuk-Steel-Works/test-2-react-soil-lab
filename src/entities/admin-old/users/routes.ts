@@ -1,6 +1,7 @@
 import { lazy } from 'react'
-import { CirclePlus, Database, Info, RefreshCcw, Users } from 'lucide-react'
-import type { AppRoute } from '@/app/routes/types'
+import { CirclePlus, Info, RefreshCcw, Users } from 'lucide-react'
+import { PERMISSIONS } from '@/app/routes/permissions'
+import { PageAction, segment, type AppRoute } from '@/app/routes/types'
 
 const AdminUsersLayout = lazy(() => import('@/pages/admin-panel/users/Layout'))
 const AdminUsersList = lazy(() => import('@/pages/admin-panel/users/list/List'))
@@ -15,19 +16,19 @@ export const usersRoutes: AppRoute = {
   icon: Users,
   Component: AdminUsersLayout,
   meta: {
-    buttons: ['add'],
+    buttons: [PageAction.create],
+    actionPermissions: {
+      [PageAction.create]: [PERMISSIONS.ADMIN],
+    },
   },
   children: [
     {
-      key: 'adminUsersList',
-      path: '',
-      label: 'Список',
-      icon: Database,
+      index: true,
       Component: AdminUsersList,
     },
     {
       key: 'adminUsersAdd',
-      path: 'add',
+      path: segment(PageAction.create),
       label: 'Додати',
       icon: CirclePlus,
       Component: AdminUsersAdd,
@@ -39,12 +40,15 @@ export const usersRoutes: AppRoute = {
       icon: Info,
       Component: AdminUsersDetails,
       meta: {
-        buttons: ['update'],
+        buttons: [PageAction.update],
+        actionPermissions: {
+          [PageAction.update]: [PERMISSIONS.ADMIN],
+        },
       },
     },
     {
       key: 'adminUsersUpdate',
-      path: ':id/update',
+      path: `:id/${segment(PageAction.update)}`,
       label: 'Оновити',
       icon: RefreshCcw,
       Component: AdminUsersUpdate,

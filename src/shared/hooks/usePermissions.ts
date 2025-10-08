@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { useAuth } from '@/app/providers/auth/context'
 import type { Permission } from '@/app/routes/permissions'
 import { APP_ROUTES } from '@/app/routes/routes'
-import type { AppRoute, PageButtonType } from '@/app/routes/types'
+import type { AppRoute, PageAction } from '@/app/routes/types'
 import { findRouteObjectByPath } from '@/app/routes/utils/utils'
 import type { UserDetailResponse } from '@/shared/api/soil-lab/model'
 
@@ -17,7 +17,7 @@ export function useUserPermissionsSet(): Set<string> {
 }
 
 /**
- * Чистая функция, проверяющая доступ к пути на основе данных пользователя и его прав.
+ * Функция, проверяющая доступ к пути на основе данных пользователя и его прав.
  * Не является хуком.
  * @param path - Путь для проверки.
  * @param user - Объект текущего пользователя.
@@ -163,7 +163,7 @@ function canByPermissions(
  */
 function resolveActionPermissions(
   currentRoute: AppRoute | undefined,
-  action: PageButtonType,
+  action: PageAction,
   targetPath?: string,
 ): Permission[] | undefined {
   const fromMeta = currentRoute?.meta?.actionPermissions?.[action]
@@ -194,7 +194,7 @@ export function useCanByRequired(required?: Permission[] | Permission): boolean 
  * opts.override — принудительно задать список прав, минуя meta/targetPath.
  */
 export function useCanAction(
-  action: PageButtonType,
+  action: PageAction,
   opts?: { targetPath?: string; override?: Permission[] | Permission; allowIfMissing?: boolean },
 ): boolean {
   const { currentUser } = useAuth()
@@ -217,7 +217,7 @@ export function useCanAction(
  */
 export function useCan(params: {
   requiredPermissions?: Permission[] | Permission
-  action?: PageButtonType
+  action?: PageAction
   targetPathForAction?: string
 }): boolean {
   const { requiredPermissions, action, targetPathForAction } = params

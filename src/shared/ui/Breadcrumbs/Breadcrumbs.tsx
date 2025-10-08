@@ -1,6 +1,8 @@
+import { useMemo } from 'react'
 import { ChevronRight } from 'lucide-react'
 import { Link, useMatches, type UIMatch } from 'react-router-dom'
 import type { AppRoute } from '@/app/routes/types'
+import { isNonIndexRoute } from '@/app/routes/utils/utils'
 
 type MatchWithRouteHandle = UIMatch<unknown, { route: AppRoute }>
 type Crumb = { pathname: string; label: string }
@@ -39,15 +41,19 @@ function allocateMobile(prev: string, last: string) {
 export function Breadcrumbs() {
   const matches = useMatches() as MatchWithRouteHandle[]
 
-  const crumbs: Crumb[] = matches
-    .filter((m) => {
-      const route = m.handle?.route
-      return Boolean(route?.label) && Boolean(route?.path)
-    })
-    .map((m) => {
-      const route = m.handle.route
-      return { pathname: m.pathname, label: route.label }
-    })
+  const crumbs = useMemo(() => {
+    return (
+      matches
+        // Приводим каждый match к Crumb | null
+        .map<Crumb | null>((m) => {
+          const route = m.handle.route
+          if (!isNonIndexRoute(route)) return null
+          return { pathname: m.pathname, label: route.label }
+        })
+        // Аккуратно сужаем тип предикатом
+        .filter((c): c is Crumb => c !== null)
+    )
+  }, [matches])
 
   const len = crumbs.length
   const lastCrumb = crumbs[len - 1]
@@ -91,7 +97,7 @@ export function Breadcrumbs() {
                 className={`link-hover ${isLast ? 'pointer-events-none text-gray-800 dark:text-gray-200' : ''}`}
                 title={crumb.label}
               >
-                {/* Мобилка: показываем оптимизированный по словам текст + подстраховка truncate */}
+                {/* Мобайл: показываем оптимизированный по словам текст + подстраховка truncate */}
                 <span className="block truncate md:hidden">{mobileLabel}</span>
                 {/* Десктоп: исходный текст без обрезки */}
                 <span className="hidden md:inline">{crumb.label}</span>

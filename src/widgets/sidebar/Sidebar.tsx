@@ -1,5 +1,5 @@
 import React from 'react'
-import type { AppRoute } from '@/app/routes/types'
+import { isNonIndexRoute } from '@/app/routes/utils/utils'
 import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
 import { getFullPath } from '@/utils/path'
 import MenuItem from '@/widgets/sidebar/MenuItem'
@@ -34,16 +34,18 @@ const Sidebar: React.FC = () => {
         <div className="-mr-[var(--sbw,8px)] flex-1 overflow-y-auto pr-[var(--sbw,0px)] pb-14 [scrollbar-gutter:stable]">
           <nav onClick={(e) => e.stopPropagation()}>
             {visibleRoutes
+              .filter(isNonIndexRoute)
               .filter((route) => route.inSidebar !== false)
               .map((route) => {
-                const visibleChildren = route.children?.filter(
-                  (child: AppRoute) => child.inSidebar !== false,
-                )
+                // Берём ТОЛЬКО неиндексные видимые дочерние
+                const visibleChildren = route.children
+                  ?.filter(isNonIndexRoute)
+                  .filter((child) => child.inSidebar !== false)
 
                 if (visibleChildren && visibleChildren.length > 0) {
                   return (
                     <SubMenu key={route.key} id={route.key} label={route.label} Icon={route.icon}>
-                      {visibleChildren.map((child: AppRoute) => (
+                      {visibleChildren.map((child) => (
                         <MenuItem
                           key={child.key}
                           label={child.label}

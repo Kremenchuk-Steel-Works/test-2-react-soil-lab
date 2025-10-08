@@ -1,4 +1,4 @@
-import type { PageButtonType } from '@/app/routes/types'
+import type { PageAction } from '@/app/routes/types'
 import { logger } from '@/shared/lib/logger'
 import { BUTTON_DEFINITIONS, type ButtonDefinition } from '@/widgets/page/button.config'
 
@@ -9,7 +9,7 @@ export type PreparedButtonProps = ButtonDefinition & {
 
 // Чистая функция, которая не использует хуки
 export function prepareButtonLogic(
-  type: PageButtonType,
+  type: PageAction,
   hasAccess: boolean,
   onClick: () => void,
 ): PreparedButtonProps | null {

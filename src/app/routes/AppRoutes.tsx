@@ -3,8 +3,9 @@ import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-do
 import { PATHS } from '@/app/routes/paths'
 import ProtectedRoute from '@/app/routes/ProtectedRoute'
 import { APP_ROUTES } from '@/app/routes/routes'
-import type { AppRoute } from '@/app/routes/types'
+import { type AppRoute } from '@/app/routes/types'
 import { UnAuthRoute } from '@/app/routes/UnAuthRoute'
+import { isIndexRoute } from '@/app/routes/utils/utils'
 import LoginPage from '@/pages/LoginPage'
 import LoadingPage from '@/pages/system/LoadingPage'
 
@@ -12,7 +13,6 @@ import LoadingPage from '@/pages/system/LoadingPage'
 const mapRoutes = (routes: AppRoute[]): RouteObject[] => {
   return routes.map((route) => {
     const { Component, children, path } = route
-    const isIndex = path === ''
 
     // Создаем элемент с Suspense
     const elementWithSuspense = (
@@ -23,7 +23,7 @@ const mapRoutes = (routes: AppRoute[]): RouteObject[] => {
       </ProtectedRoute>
     )
 
-    if (isIndex) {
+    if (isIndexRoute(route)) {
       return {
         index: true,
         element: elementWithSuspense,
