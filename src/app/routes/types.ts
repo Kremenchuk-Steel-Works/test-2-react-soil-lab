@@ -67,15 +67,3 @@ export interface IndexRoute<P = Record<string, never>> {
 
 /** Универсальный тип приложения: либо обычный роут, либо индексный. */
 export type AppRoute<P = Record<string, never>> = NonIndexRoute<P> | IndexRoute<P>
-
-// export interface AppRoute<P = Record<string, never>> {
-//   key: string
-//   path: string
-//   label: string
-//   icon: LucideIcon
-//   Component: RouteComponent<P>
-//   requiredPermissions?: Permission[]
-//   inSidebar?: boolean
-//   children?: AppRoute[]
-//   meta?: RouteMeta
-// }
