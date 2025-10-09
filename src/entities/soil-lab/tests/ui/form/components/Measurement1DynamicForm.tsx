@@ -66,12 +66,36 @@ export function MoisturePercentDynamicForm() {
   })
 }
 
-export function StrengthDynamicForm() {
-  return Measurement1DynamicForm({
-    title: compressiveStrength.label.short,
-    type: TestType.compressive_strength,
+export function CompressiveStrengthDynamicForm() {
+  const Form = useFormKit<Measurement1FormFields>()
+  const { responseData, meta } = useDynamicMeta<Option[], SampleDetailResponse, Meta>()
+  const F = useTestsFormFields(Form, {
+    responseData,
   })
+
+  return (
+    <>
+      {/* <F.sampleId /> */}
+
+      {/* <F.moldingSandRecipe /> */}
+
+      {/* <F.type /> */}
+
+      <F.Title text={compressiveStrength.label.short} />
+
+      <F.experimentalCompressiveStrength />
+
+      <F.SubmitButton text={meta?.submitBtnName} disabled={meta?.isSubmitting} />
+    </>
+  )
 }
+
+// export function CompressiveStrengthDynamicForm() {
+//   return Measurement1DynamicForm({
+//     title: compressiveStrength.label.short,
+//     type: TestType.compressive_strength,
+//   })
+// }
 
 export function TensileStrengthDynamicForm() {
   return Measurement1DynamicForm({

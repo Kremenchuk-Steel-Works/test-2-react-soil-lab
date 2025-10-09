@@ -3,10 +3,10 @@ import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-r
 import { SamplesMoldingSandRecipe } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
 import { testsFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
 import {
+  CompressiveStrengthDynamicForm,
   GasFormingPropertyDynamicForm,
   GasPermabilityDynamicForm,
   MoisturePercentDynamicForm,
-  StrengthDynamicForm,
   TensileStrengthAfter0HoursDynamicForm,
   TensileStrengthAfter1HourDynamicForm,
   TensileStrengthAfter3HoursDynamicForm,
@@ -16,6 +16,7 @@ import {
 import { TestType } from '@/shared/api/soil-lab/model'
 import { createScopedSectionsConfig } from '@/shared/lib/zod/dynamic-sections-scoped'
 import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-types'
+import { withComputed } from '@/shared/lib/zod/unit-conversion/withComputed'
 import { withUnitConversion } from '@/shared/lib/zod/unit-conversion/withUnitConversion'
 import { zn } from '@/shared/lib/zod/zod-normalize'
 
@@ -38,16 +39,26 @@ export const testsDynamicSections = createScopedSectionsConfig({
         // Міцність
         {
           conditions: { [type.key]: (v) => v === TestType.compressive_strength },
-          Component: StrengthDynamicForm,
+          Component: CompressiveStrengthDynamicForm,
           schema: z.object({
-            [measurement1.key]: withUnitConversion(zn(z.number()), {
-              from: Units.N_PER_CM2,
-              to: Units.KGF_PER_CM2,
-              round: 2,
-              min: 0.1,
-              max: 5,
-            }),
+            [measurement1.key]: withComputed(
+              z.object({
+                m1: zn(z.number()), // маса залишку
+                m: zn(z.number().positive()), // маса наважки
+              }),
+              ({ m1, m }) => (m1 / m) * 100,
+              { round: 2, range: { min: 0, max: 100 } },
+            ),
           }),
+          // schema: z.object({
+          //   [measurement1.key]: withUnitConversion(zn(z.number()), {
+          //     from: Units.N_PER_CM2,
+          //     to: Units.KGF_PER_CM2,
+          //     round: 2,
+          //     min: 0.1,
+          //     max: 5,
+          //   }),
+          // }),
         },
         // Газопроникність
         {
@@ -81,7 +92,7 @@ export const testsDynamicSections = createScopedSectionsConfig({
         // Міцність
         {
           conditions: { [type.key]: (v) => v === TestType.compressive_strength },
-          Component: StrengthDynamicForm,
+          Component: CompressiveStrengthDynamicForm,
           schema: z.object({
             [measurement1.key]: withUnitConversion(zn(z.number()), {
               from: Units.N_PER_CM2,
@@ -124,7 +135,7 @@ export const testsDynamicSections = createScopedSectionsConfig({
         // Міцність
         {
           conditions: { [type.key]: (v) => v === TestType.compressive_strength },
-          Component: StrengthDynamicForm,
+          Component: CompressiveStrengthDynamicForm,
           schema: z.object({
             [measurement1.key]: withUnitConversion(zn(z.number()), {
               from: Units.N_PER_CM2,

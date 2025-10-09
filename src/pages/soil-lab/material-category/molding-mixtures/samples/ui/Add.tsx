@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { PageAction, segment } from '@/app/routes/types'
 import { samplesMoldingSandRecipeMoldingMixturesOptions } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
 import type { SamplesCreateOptions } from '@/entities/soil-lab/samples/ui/form/fields'
 import SamplesCreate from '@/features/soil-lab/samples/create/ui/SamplesCreate'
@@ -14,7 +15,7 @@ export default function SamplesAddPage() {
 
   const onSuccess = useCallback(
     (res: SampleDetailResponse) => {
-      void navigate(`../${res.id}/update`)
+      void navigate(`../${res.id}/${segment(PageAction.update)}`)
     },
     [navigate],
   )
