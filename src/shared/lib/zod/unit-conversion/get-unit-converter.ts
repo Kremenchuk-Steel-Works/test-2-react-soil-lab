@@ -1,46 +1,79 @@
-import type {
-  ConverterFn,
-  Instrument,
-  Unit,
-  UnitConversionConfig,
-} from '@/shared/lib/zod/unit-conversion/unit-types'
+import type { ConverterFn, Instrument, Unit, UnitConversionConfig } from './unit-types'
 import { ALL_CONVERSIONS } from './units'
 
-/**
- * Опции подбора конвертера единиц измерения.
- */
-export type UnitConverterOptions = {
+/** Опции подбора конвертера */
+export type UnitConverterOptions = Readonly<{
   /** Прибор, для которого нужна специфичная формула (если есть) */
   instrument?: Instrument
+}>
+
+/** Внутреннее представление набора формул для пары from→to */
+type Bucket = Readonly<{
+  /** Формула без привязки к прибору (может отсутствовать) */
+  universal?: UnitConversionConfig
+  /** Набор «приборных» формул (может быть пустым) */
+  instrumented: ReadonlyArray<UnitConversionConfig>
+}>
+
+/** Ключ пары from→to */
+function pairKey(from: Unit, to: Unit): string {
+  return `${from}→${to}`
 }
 
-/**
- * Проверяет, соответствует ли целевой прибор условию `instrument`
- * в конфигурации (одно значение или массив значений).
- */
-function matchesInstrument(
-  candidate: UnitConversionConfig['instrument'],
-  target: Instrument,
-): boolean {
-  if (candidate === undefined) return false
-  return Array.isArray(candidate) ? candidate.includes(target) : candidate === target
-}
+/** ❗Разрешённое расширение: приводим литеральный кортеж к общему виду */
+const CONVERSIONS: readonly UnitConversionConfig[] =
+  ALL_CONVERSIONS as readonly UnitConversionConfig[]
 
-/**
- * Возвращает уникальный список приборов, упомянутых в переданных конфигурациях.
- */
-function listInstruments(candidates: readonly UnitConversionConfig[]): Instrument[] {
-  const acc: Instrument[] = []
-  for (const c of candidates) {
-    const ins = c.instrument
-    if (!ins) continue
-    if (Array.isArray(ins)) {
-      for (const i of ins) if (!acc.includes(i)) acc.push(i)
+/** Индексируем все формулы по паре единиц (один раз при загрузке модуля) */
+const INDEX: ReadonlyMap<string, Bucket> = (() => {
+  const map = new Map<
+    string,
+    { universal?: UnitConversionConfig; instrumented: UnitConversionConfig[] }
+  >()
+
+  for (const cfg of CONVERSIONS) {
+    const k = pairKey(cfg.from, cfg.to)
+    const bucket = map.get(k) ?? { universal: undefined, instrumented: [] }
+
+    if (cfg.instrument === undefined) {
+      // Храним одну «универсальную» формулу (первая победила)
+      if (!bucket.universal) bucket.universal = cfg
     } else {
-      if (!acc.includes(ins)) acc.push(ins)
+      bucket.instrumented.push(cfg)
     }
+
+    map.set(k, bucket)
   }
-  return acc
+
+  // Замораживаем/нормализуем к Readonly
+  const readonly = new Map<string, Bucket>()
+  for (const [k, b] of map) {
+    readonly.set(k, { universal: b.universal, instrumented: b.instrumented.slice() })
+  }
+  return readonly
+})()
+
+/** Уникальный список приборов, доступных в «приборных» формулах корзины */
+function listInstrumentsOf(bucket: Bucket): readonly Instrument[] {
+  const set = new Set<Instrument>()
+  for (const c of bucket.instrumented) {
+    const ins = c.instrument! // здесь точно есть (ветка instrumented)
+    if (Array.isArray(ins)) ins.forEach((i) => set.add(i))
+    else set.add(ins)
+  }
+  return [...set]
+}
+
+/** Поиск «приборной» формулы под конкретный прибор */
+function findInstrumented(
+  bucket: Bucket,
+  instrument: Instrument,
+): UnitConversionConfig | undefined {
+  for (const c of bucket.instrumented) {
+    const ins = c.instrument!
+    if (Array.isArray(ins) ? ins.includes(instrument) : ins === instrument) return c
+  }
+  return undefined
 }
 
 /**
@@ -48,9 +81,12 @@ function listInstruments(candidates: readonly UnitConversionConfig[]): Instrumen
  *
  * Правила:
  * - Если `from === to` — возвращается тождественная функция.
- * - Если указан `instrument` — ищется точное совпадение по прибору.
- * - Если есть хотя бы одна «приборная» формула, но прибор не указан — просим указать прибор.
- * - Иначе берётся универсальная формула (без привязки к прибору).
+ * - Если указан `instrument` — ищется точное совпадение по прибору;
+ *   при отсутствии совпадения и наличии «приборных» формул — ошибка с перечислением доступных приборов.
+ *   если «приборных» нет — берём универсальную формулу (если есть).
+ * - Если `instrument` НЕ указан:
+ *   — если есть хотя бы одна «приборная» формула — ошибка «требуется указать прибор»;
+ *   — иначе берём универсальную формулу.
  *
  * Бросает ошибку, если подходящей формулы нет.
  */
@@ -61,44 +97,38 @@ export function getUnitConverter(
 ): ConverterFn {
   if (from === to) return (x) => x
 
-  const candidates = ALL_CONVERSIONS.filter((c) => c.from === from && c.to === to)
-  if (candidates.length === 0) {
+  const bucket = INDEX.get(pairKey(from, to))
+  if (!bucket) {
     throw new Error(`Нет формулы для ${from} → ${to}`)
   }
 
-  const withInstrument = candidates.filter((c) => c.instrument !== undefined)
-  const withoutInstrument = candidates.find((c) => c.instrument === undefined)
+  const { instrument } = opts
 
-  // Если инструмент указан — требуется точное совпадение,
-  // иначе, если приборных формул вообще нет, допускаем универсальную.
-  if (opts.instrument) {
-    const exact = candidates.find((c) => matchesInstrument(c.instrument, opts.instrument!))
+  if (instrument) {
+    const exact = findInstrumented(bucket, instrument)
     if (exact) return exact.formula
 
-    if (withInstrument.length > 0) {
-      const allowed = listInstruments(withInstrument).join(', ')
+    if (bucket.instrumented.length > 0) {
+      const allowed = listInstrumentsOf(bucket).join(', ')
       throw new Error(
         `Для ${from} → ${to} есть приборные формулы (${allowed}), ` +
-          `но прибор "${opts.instrument}" не поддерживается`,
+          `но прибор "${instrument}" не поддерживается`,
       )
     }
 
-    if (withoutInstrument) return withoutInstrument.formula
+    // Прибор указан, но «приборных» формул нет — используем универсальную, если она есть
+    if (bucket.universal) return bucket.universal.formula
 
-    // Теоретически недостижимо, но оставим безопасный fallback
-    return candidates[0].formula
+    throw new Error(`Нет подходящей формулы для ${from} → ${to}`)
   }
 
-  // Инструмент НЕ указан.
-  // Если есть хотя бы одна приборная формула — требуем явный выбор прибора.
-  if (withInstrument.length > 0) {
-    const allowed = listInstruments(withInstrument).join(', ')
+  // Инструмент НЕ указан
+  if (bucket.instrumented.length > 0) {
+    const allowed = listInstrumentsOf(bucket).join(', ')
     throw new Error(`Для ${from} → ${to} требуется указать прибор (один из: ${allowed})`)
   }
 
-  // Иначе — используем универсальную формулу (без привязки к прибору).
-  if (withoutInstrument) return withoutInstrument.formula
+  if (bucket.universal) return bucket.universal.formula
 
-  // Теоретически недостижимо (так как withInstrument уже проверили)
-  return candidates[0].formula
+  throw new Error(`Нет подходящей формулы для ${from} → ${to}`)
 }

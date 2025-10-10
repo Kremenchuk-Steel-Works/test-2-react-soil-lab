@@ -1,8 +1,5 @@
-import {
-  Instruments,
-  Units,
-  type UnitConversionConfig,
-} from '@/shared/lib/zod/unit-conversion/unit-types'
+import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-registry'
+import type { UnitConversionConfig } from '@/shared/lib/zod/unit-conversion/unit-types'
 
 /** База: чистая конверсия единиц (для отчётности/СИ) */
 const CM3_TO_M3 = 1e-6
@@ -135,7 +132,7 @@ const { fwd: SI_E8_TO_PN_LPIR1, inv: PN_TO_SI_E8_LPIR1 } = makePiecewise(
  *  — SI<->PN и SI<->SI_E8: чистые единицы
  *  — SI_E8<->PN: piecewise для конкретного прибора (LPiR-1), с метаданными instrument
  */
-export const PERMEABILITY_CONVERSIONS: UnitConversionConfig[] = [
+export const PERMEABILITY_CONVERSIONS = [
   // SI <-> PN (размерности)
   { from: Units.SI, to: Units.PN, formula: (x) => x * PN_PER_SI },
   { from: Units.PN, to: Units.SI, formula: (x) => x / PN_PER_SI },
@@ -157,4 +154,4 @@ export const PERMEABILITY_CONVERSIONS: UnitConversionConfig[] = [
     formula: (x) => PN_TO_SI_E8_LPIR1(x),
     instrument: Instruments.LPIR1,
   },
-]
+] as const satisfies UnitConversionConfig[]

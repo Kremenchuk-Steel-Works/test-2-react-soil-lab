@@ -1,26 +1,5 @@
+import type { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-registry'
 import type { ValueOf } from '@/types/utility'
-
-/** Общий словарь единиц */
-export const Units = {
-  // Pressure
-  N_PER_CM2: 'Н/см²',
-  KGF_PER_CM2: 'кгс/см²',
-  // Permability
-  SI: 'm²/Pa·s',
-  SI_E8: '10⁻⁸ m²/Pa·s',
-  PN: 'од.',
-} as const
-
-/** Общий реестр приборов */
-export const Instruments = {
-  // Permability
-  LPIR1: 'LPiR-1',
-} as const
-
-// Карта пар, которые требуют instrument
-export type RequireInstrumentPairs =
-  | `${typeof Units.SI_E8}→${typeof Units.PN}`
-  | `${typeof Units.PN}→${typeof Units.SI_E8}`
 
 export type Unit = ValueOf<typeof Units>
 export type Instrument = ValueOf<typeof Instruments>

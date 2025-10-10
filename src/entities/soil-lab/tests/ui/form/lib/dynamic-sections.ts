@@ -15,8 +15,9 @@ import {
 } from '@/entities/soil-lab/tests/ui/form/components/Measurement1DynamicForm'
 import { TestType } from '@/shared/api/soil-lab/model'
 import { createScopedSectionsConfig } from '@/shared/lib/zod/dynamic-sections-scoped'
-import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-types'
-import { withComputed } from '@/shared/lib/zod/unit-conversion/withComputed'
+import { Transforms } from '@/shared/lib/zod/unit-conversion/transforms'
+import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-registry'
+import { withFormulaTransform } from '@/shared/lib/zod/unit-conversion/withFormulaTransform'
 import { withUnitConversion } from '@/shared/lib/zod/unit-conversion/withUnitConversion'
 import { zn } from '@/shared/lib/zod/zod-normalize'
 
@@ -26,8 +27,17 @@ const { measurement1, type } = testsFieldRegistry
 export const measurement1FormSchema = z.object({
   [measurement1.key]: zn(z.number()),
 })
-
 export type Measurement1FormFields = z.infer<typeof measurement1FormSchema>
+
+export const measurement1CompressiveStrengthFormSchema = z.object({
+  [measurement1.key]: z.object({
+    m1: zn(z.number()),
+    m: zn(z.number().positive()),
+  }),
+})
+export type Measurement1CompressiveStrengthFormFields = z.infer<
+  typeof measurement1CompressiveStrengthFormSchema
+>
 
 export const testsDynamicSections = createScopedSectionsConfig({
   [measurement1.key]: [
@@ -41,13 +51,17 @@ export const testsDynamicSections = createScopedSectionsConfig({
           conditions: { [type.key]: (v) => v === TestType.compressive_strength },
           Component: CompressiveStrengthDynamicForm,
           schema: z.object({
-            [measurement1.key]: withComputed(
+            [measurement1.key]: withFormulaTransform(
               z.object({
                 m1: zn(z.number()), // маса залишку
                 m: zn(z.number().positive()), // маса наважки
               }),
-              ({ m1, m }) => (m1 / m) * 100,
-              { round: 2, range: { min: 0, max: 100 } },
+              {
+                transform: Transforms.CLAY_COMPONENT_OF_SAND_TRANSFORM,
+                round: 2,
+                min: 0,
+                max: 100,
+              },
             ),
           }),
           // schema: z.object({

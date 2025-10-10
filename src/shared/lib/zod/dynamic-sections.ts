@@ -203,3 +203,109 @@ export function checkConditions(
   }
   return true
 }
+
+export type DeepContainer = Record<string, unknown> | unknown[]
+
+type SetDeepOptions = {
+  /** Перезаписывать существующее значение на конечном ключе */
+  overwrite?: boolean
+}
+
+/** Быстрый и типобезопасный предикат на запрещённые ключи */
+function isForbiddenKey(key: string): boolean {
+  return key === '__proto__' || key === 'prototype' || key === 'constructor'
+  // Альтернатива без switch: const FORBIDDEN = new Set<string>(['__proto__','prototype','constructor']); return FORBIDDEN.has(key)
+}
+
+function isIndexToken(token: string): boolean {
+  return /^\d+$/.test(token)
+}
+
+function isObjectOrArray(v: unknown): v is DeepContainer {
+  return typeof v === 'object' && v !== null
+}
+
+function tokenizePath(path: string): string[] {
+  // 'a.b[0].c' -> ['a','b','0','c']
+  // 'a[10][2]' -> ['a','10','2']
+  return path.match(/[^.[\]]+/g) ?? []
+}
+
+/**
+ * Безопасная установка значения по пути вида "a.b[0].c".
+ * - поддерживает массивы и объекты
+ * - защищена от prototype-pollution
+ * - без any/unsafe-операций
+ */
+export function setDeep(
+  obj: Record<string, unknown>,
+  path: string,
+  value: unknown,
+  opts: SetDeepOptions = {},
+): void {
+  const { overwrite = true } = opts
+  const tokens = tokenizePath(path)
+  if (tokens.length === 0) return
+
+  // ранняя проверка на запрещённые ключи
+  for (const t of tokens) {
+    if (isForbiddenKey(t)) return
+  }
+
+  let cur: DeepContainer = obj
+
+  for (let i = 0; i < tokens.length; i++) {
+    const keyToken = tokens[i]
+    const isLast = i === tokens.length - 1
+    const nextToken = tokens[i + 1]
+    const nextIsIndex = nextToken != null && isIndexToken(nextToken)
+    const keyIsIndex = isIndexToken(keyToken)
+
+    if (Array.isArray(cur)) {
+      // Текущий узел — массив
+      const idx = keyIsIndex ? Number(keyToken) : Number.NaN
+      if (!Number.isInteger(idx) || idx < 0) return
+
+      if (isLast) {
+        if (!overwrite && cur[idx] !== undefined) return
+        cur[idx] = value
+        return
+      }
+
+      let next: unknown = cur[idx] // <-- нет implicit any
+      const shouldBeArray = nextIsIndex
+
+      if (!isObjectOrArray(next) || (shouldBeArray && !Array.isArray(next))) {
+        next = shouldBeArray ? [] : {}
+        cur[idx] = next
+      }
+
+      cur = next as DeepContainer
+    } else {
+      // Текущий узел — объект
+      const key = keyToken
+
+      if (isLast) {
+        if (
+          !overwrite &&
+          Object.prototype.hasOwnProperty.call(cur, key) &&
+          cur[key] !== undefined
+        ) {
+          return
+        }
+        cur[key] = value
+        return
+      }
+
+      let next: unknown = cur[key]
+      const shouldBeArray = nextIsIndex
+
+      if (!isObjectOrArray(next) || (shouldBeArray && !Array.isArray(next))) {
+        next = shouldBeArray ? [] : {}
+        cur[key] = next
+      }
+
+      cur = next as DeepContainer
+    }
+  }
+}

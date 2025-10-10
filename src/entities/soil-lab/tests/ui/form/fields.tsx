@@ -1,5 +1,5 @@
 import { useMemo, useRef } from 'react'
-import type { FieldValues, Path } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
 import { samplesMoldingSandRecipeOptions } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
 import {
@@ -16,7 +16,6 @@ import FormSelectField from '@/shared/ui/react-hook-form/fields/FormReactSelect'
 import type { FormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
 import { makeBinders } from '@/utils/react-hook-form/makeBinders'
 
-const asPath = <U extends FieldValues>(name: string) => name as unknown as Path<U>
 type Ctx = { responseData?: SampleDetailResponse }
 
 export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx: Ctx) {
@@ -24,7 +23,7 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
   ctxRef.current = ctx
 
   const Fields = useMemo(() => {
-    const { F, V } = makeBinders<T, Ctx>(ctxRef)
+    const { F, FA, V } = makeBinders<T, Ctx>(ctxRef)
 
     const { moldingSandRecipe } = samplesFieldRegistry
     const { sampleId, type, measurement1 } = testsFieldRegistry
@@ -174,23 +173,26 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
       )),
 
       // Experimental
-      experimentalCompressiveStrength: F(measurement1.key, (name) => (
-        <>
-          <Form.WithError name={name}>
-            <Form.Field name={asPath<T>(`${measurement1.key}.m1`)}>
-              {({ register }) => (
-                <InputField label="m₁ - маса залишку, г *" type="float" {...register} />
-              )}
-            </Form.Field>
+      experimentalCompressiveStrength: FA(
+        [measurement1.key, `${measurement1.key}.m1`, `${measurement1.key}.m`] as const,
+        ([rootName, m1Name, mName]) => (
+          <>
+            <Form.WithError name={rootName}>
+              <Form.Field name={m1Name}>
+                {({ register }) => (
+                  <InputField label="Маса наважки, г *" type="float" {...register} />
+                )}
+              </Form.Field>
 
-            <Form.Field name={asPath<T>(`${measurement1.key}.m`)}>
-              {({ register }) => (
-                <InputField label="m - маса наважки, г *" type="float" {...register} />
-              )}
-            </Form.Field>
-          </Form.WithError>
-        </>
-      )),
+              <Form.Field name={mName}>
+                {({ register }) => (
+                  <InputField label="Маса наважки, г *" type="float" {...register} />
+                )}
+              </Form.Field>
+            </Form.WithError>
+          </>
+        ),
+      ),
 
       SubmitButton: V(
         'SubmitButton',

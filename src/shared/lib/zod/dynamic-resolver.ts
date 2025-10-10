@@ -4,6 +4,7 @@ import {
   buildValueNormalizerFromZod,
   checkConditions,
   flattenRules,
+  setDeep,
   type DynamicSectionsConfig,
 } from '@/shared/lib/zod/dynamic-sections'
 import { selectCandidatesFromTree } from '@/shared/lib/zod/dynamic-sections-scoped'
@@ -98,7 +99,7 @@ export function createDynamicResolver<TFieldValues extends FieldValues>(
       } else {
         for (const iss of (parsed as { error: ZodError }).error.issues) {
           const name = iss.path.map(String).join('.')
-          if (!errorsMap[name]) errorsMap[name] = { type: `zod_rule_${i}`, message: iss.message }
+          setDeep(errorsMap, name, { type: `zod_rule_${i}`, message: iss.message })
         }
       }
     }
@@ -117,7 +118,7 @@ export function createDynamicResolver<TFieldValues extends FieldValues>(
       if (!baseParsed.success) {
         for (const iss of (baseParsed as { error: ZodError }).error.issues) {
           const name = iss.path.map(String).join('.')
-          if (!errorsMap[name]) errorsMap[name] = { type: 'zod_base', message: iss.message }
+          setDeep(errorsMap, name, { type: 'zod_base', message: iss.message })
         }
       } else {
         // Применяем базовые transform только к НЕперекрытым ключам

@@ -3,7 +3,7 @@ import { PERMEABILITY_CONVERSIONS } from './permeability'
 import { PRESSURE_CONVERSIONS } from './pressure'
 
 /** Единый список всех формул */
-export const ALL_CONVERSIONS: UnitConversionConfig[] = [
+export const ALL_CONVERSIONS = [
   ...PRESSURE_CONVERSIONS,
   ...PERMEABILITY_CONVERSIONS,
-]
+] as const satisfies readonly UnitConversionConfig[]

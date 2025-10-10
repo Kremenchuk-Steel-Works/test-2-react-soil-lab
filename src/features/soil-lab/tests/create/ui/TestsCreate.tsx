@@ -19,7 +19,7 @@ import {
   type SampleDetailResponse,
 } from '@/shared/api/soil-lab/model'
 import { getErrorMessage } from '@/shared/lib/axios'
-import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-types'
+import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-registry'
 import { withUnitConversion } from '@/shared/lib/zod/unit-conversion/withUnitConversion'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
