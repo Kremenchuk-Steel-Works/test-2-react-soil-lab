@@ -19,6 +19,7 @@ import { Transforms } from '@/shared/lib/zod/unit-conversion/transforms'
 import { Instruments, Units } from '@/shared/lib/zod/unit-conversion/unit-registry'
 import { withFormulaTransform } from '@/shared/lib/zod/unit-conversion/withFormulaTransform'
 import { withUnitConversion } from '@/shared/lib/zod/unit-conversion/withUnitConversion'
+import { objectFromInputs } from '@/shared/lib/zod/utils'
 import { zn } from '@/shared/lib/zod/zod-normalize'
 
 const { moldingSandRecipe } = samplesFieldRegistry
@@ -52,18 +53,33 @@ export const testsDynamicSections = createScopedSectionsConfig({
           Component: CompressiveStrengthDynamicForm,
           schema: z.object({
             [measurement1.key]: withFormulaTransform(
-              z.object({
-                m1: zn(z.number()), // маса залишку
-                m: zn(z.number().positive()), // маса наважки
-              }),
+              objectFromInputs(Transforms.AFS_GRAIN_FINENESS_NUMBER_TRANSFORM.inputs, (z) =>
+                zn(z.number()),
+              ),
               {
-                transform: Transforms.CLAY_COMPONENT_OF_SAND_TRANSFORM,
-                round: 2,
+                transform: Transforms.AFS_GRAIN_FINENESS_NUMBER_TRANSFORM,
+                round: 1,
                 min: 0,
-                max: 100,
+                max: 0,
               },
             ),
           }),
+
+          // schema: z.object({
+          //   [measurement1.key]: withFormulaTransform(
+          //     z.object({
+          //       m1: zn(z.number()), // маса залишку
+          //       m: zn(z.number().positive()), // маса наважки
+          //     }),
+          //     {
+          //       transform: Transforms.CLAY_COMPONENT_OF_SAND_TRANSFORM,
+          //       round: 2,
+          //       min: 0,
+          //       max: 100,
+          //     },
+          //   ),
+          // }),
+
           // schema: z.object({
           //   [measurement1.key]: withUnitConversion(zn(z.number()), {
           //     from: Units.N_PER_CM2,

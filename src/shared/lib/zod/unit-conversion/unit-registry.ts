@@ -9,6 +9,8 @@ export const Units = {
   PN: 'од.',
   // Generic
   PERCENT: '%',
+  // Density
+  G_PER_CM3: 'г/см³',
 } as const
 
 /** Общий реестр приборов */

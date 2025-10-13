@@ -1,8 +1,18 @@
+import { AFS_GRAIN_FINENESS_NUMBER_TRANSFORM } from '@/shared/lib/zod/unit-conversion/transforms/afsGrainFinenessNumber'
+import { BULK_DENSITY_TRANSFORM } from '@/shared/lib/zod/unit-conversion/transforms/bulkDensity'
+import { CLAY_CONTENT_TRANSFORM } from '@/shared/lib/zod/unit-conversion/transforms/clayContent'
+import { PARTICLE_SIZE_DISTRIBUTION_TRANSFORM } from '@/shared/lib/zod/unit-conversion/transforms/particleSizeDistribution'
+import { THERMAL_STABILITY_TRANSFORM } from '@/shared/lib/zod/unit-conversion/transforms/thermalStability'
+import { WATER_ABSORPTION_TRANSFORM } from '@/shared/lib/zod/unit-conversion/transforms/waterAbsorption'
 import type { TransformSpec } from '../transform-types'
-import { CLAY_COMPONENT_OF_SAND_TRANSFORM } from './clayComponentOfSand'
 
 export const Transforms = {
-  CLAY_COMPONENT_OF_SAND_TRANSFORM,
+  PARTICLE_SIZE_DISTRIBUTION_TRANSFORM,
+  CLAY_CONTENT_TRANSFORM,
+  WATER_ABSORPTION_TRANSFORM,
+  THERMAL_STABILITY_TRANSFORM,
+  BULK_DENSITY_TRANSFORM,
+  AFS_GRAIN_FINENESS_NUMBER_TRANSFORM,
 } as const satisfies Readonly<Record<string, TransformSpec<Record<string, number>>>>
 
 /** Когда нужен список — делаем его из словаря */

@@ -8,6 +8,8 @@ import {
 } from '@/entities/soil-lab/tests/model/fields-registry'
 import { testsTypeOptions } from '@/entities/soil-lab/tests/model/type'
 import { TestType, type SampleDetailResponse } from '@/shared/api/soil-lab/model'
+import { Transforms } from '@/shared/lib/zod/unit-conversion/transforms'
+import type { AfsGrainFinenessNumberArgs } from '@/shared/lib/zod/unit-conversion/transforms/afsGrainFinenessNumber'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 import InputField from '@/shared/ui/input-field/InputField'
@@ -17,6 +19,20 @@ import type { FormKit } from '@/shared/ui/react-hook-form/FormKit/formKit'
 import { makeBinders } from '@/utils/react-hook-form/makeBinders'
 
 type Ctx = { responseData?: SampleDetailResponse }
+
+const AFS_LABELS: Record<keyof AfsGrainFinenessNumberArgs, string> = {
+  sieve1p25MmPercent: 'Сито 1.25 мм, %',
+  sieve1MmPercent: 'Сито 1.0 мм, %',
+  sieve0p7MmPercent: 'Сито 0.7 мм, %',
+  sieve0p5MmPercent: 'Сито 0.5 мм, %',
+  sieve0p355MmPercent: 'Сито 0.355 мм, %',
+  sieve0p25MmPercent: 'Сито 0.25 мм, %',
+  sieve0p18MmPercent: 'Сито 0.18 мм, %',
+  sieve0p125MmPercent: 'Сито 0.125 мм, %',
+  sieve0p09MmPercent: 'Сито 0.09 мм, %',
+  sieve0p063MmPercent: 'Сито 0.063 мм, %',
+  panPercent: 'Піддон, %',
+} as const
 
 export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx: Ctx) {
   const ctxRef = useRef(ctx)
@@ -174,25 +190,49 @@ export function useTestsFormFields<T extends FieldValues>(Form: FormKit<T>, ctx:
 
       // Experimental
       experimentalCompressiveStrength: FA(
-        [measurement1.key, `${measurement1.key}.m1`, `${measurement1.key}.m`] as const,
-        ([rootName, m1Name, mName]) => (
+        [
+          measurement1.key,
+          ...Transforms.AFS_GRAIN_FINENESS_NUMBER_TRANSFORM.inputs.map(
+            (p) => `${measurement1.key}.${p}` as const,
+          ),
+        ] as const,
+        ([rootName, ...argPaths]) => (
           <>
             <Form.WithError name={rootName}>
-              <Form.Field name={m1Name}>
-                {({ register }) => (
-                  <InputField label="Маса наважки, г *" type="float" {...register} />
-                )}
-              </Form.Field>
-
-              <Form.Field name={mName}>
-                {({ register }) => (
-                  <InputField label="Маса наважки, г *" type="float" {...register} />
-                )}
-              </Form.Field>
+              {argPaths.map((path, i) => {
+                const k = Transforms.AFS_GRAIN_FINENESS_NUMBER_TRANSFORM.inputs[i]
+                const label = AFS_LABELS[k]
+                return (
+                  <Form.Field key={path} name={path}>
+                    {({ register }) => <InputField label={label} type="float" {...register} />}
+                  </Form.Field>
+                )
+              })}
             </Form.WithError>
           </>
         ),
       ),
+
+      // experimentalCompressiveStrength: FA(
+      //   [measurement1.key, `${measurement1.key}.m1`, `${measurement1.key}.m`] as const,
+      //   ([rootName, m1Name, mName]) => (
+      //     <>
+      //       <Form.WithError name={rootName}>
+      //         <Form.Field name={m1Name}>
+      //           {({ register }) => (
+      //             <InputField label="Маса наважки, г *" type="float" {...register} />
+      //           )}
+      //         </Form.Field>
+
+      //         <Form.Field name={mName}>
+      //           {({ register }) => (
+      //             <InputField label="Маса наважки, г *" type="float" {...register} />
+      //           )}
+      //         </Form.Field>
+      //       </Form.WithError>
+      //     </>
+      //   ),
+      // ),
 
       SubmitButton: V(
         'SubmitButton',
