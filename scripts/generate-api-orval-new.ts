@@ -1,5 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import path from 'path'
+import { fileURLToPath } from 'url'
 import { createOrvalConfig } from '../orval.config.template'
 
 // --- Типизация конфига для надежности ---
@@ -28,18 +29,41 @@ function readApiConfig(): ApiConfig {
   return parsed
 }
 
-async function downloadSchema(url: string, outFile: string): Promise<void> {
-  // Node 18+ имеет глобальный fetch
-  const res = await fetch(url, {
-    // Попросим json/yaml, но сохраняем как есть (без преобразований)
-    headers: { accept: 'application/json, application/yaml, text/yaml, */*' },
-  })
-  if (!res.ok) {
-    throw new Error(`Failed to download schema: ${res.status} ${res.statusText}`)
+function isHttpUrl(u: string): boolean {
+  return /^https?:\/\//i.test(u)
+}
+
+function isFileUrl(u: string): boolean {
+  return /^file:\/\//i.test(u)
+}
+
+async function downloadSchema(src: string, outFile: string): Promise<void> {
+  // http/https — грузим через fetch, локальные — копируем через fs
+  if (isHttpUrl(src)) {
+    const res = await fetch(src, {
+      headers: { accept: 'application/json, application/yaml, text/yaml, */*' },
+    })
+    if (!res.ok) {
+      throw new Error(`Failed to download schema: ${res.status} ${res.statusText}`)
+    }
+    const ab = await res.arrayBuffer()
+    writeFileSync(outFile, Buffer.from(ab))
+    return
   }
-  const ab = await res.arrayBuffer()
-  const buf = Buffer.from(ab)
-  writeFileSync(outFile, buf)
+
+  let localPath: string
+  if (isFileUrl(src)) {
+    localPath = fileURLToPath(src)
+  } else {
+    localPath = path.isAbsolute(src) ? src : path.resolve(process.cwd(), src)
+  }
+
+  if (!existsSync(localPath)) {
+    throw new Error(`Local schema not found at ${localPath}`)
+  }
+
+  const data = readFileSync(localPath)
+  writeFileSync(outFile, data)
 }
 
 // --- Основная логика ---

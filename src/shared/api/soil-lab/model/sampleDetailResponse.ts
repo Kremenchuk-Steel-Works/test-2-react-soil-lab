@@ -4,11 +4,13 @@
  * soil_laboratory
  * OpenAPI spec version: 0.1.0
  */
+import type { MaterialShortResponse } from './materialShortResponse'
+import type { MaterialSourceShortResponse } from './materialSourceShortResponse'
 import type { SampleDetailResponseCreatedById } from './sampleDetailResponseCreatedById'
 import type { SampleDetailResponseDeletedAt } from './sampleDetailResponseDeletedAt'
 import type { SampleDetailResponseNote } from './sampleDetailResponseNote'
 import type { SampleDetailResponseUpdatedById } from './sampleDetailResponseUpdatedById'
-import type { TestShortResponse } from './testShortResponse'
+import type { TestResultShortResponse } from './testResultShortResponse'
 
 export interface SampleDetailResponse {
   deletedAt?: SampleDetailResponseDeletedAt
@@ -17,9 +19,11 @@ export interface SampleDetailResponse {
   updatedAt: string
   updatedById?: SampleDetailResponseUpdatedById
   id: string
-  moldingSandRecipe: string
+  material: MaterialShortResponse
+  materialSource: MaterialSourceShortResponse
+  temperature: number
   receivedAt: string
-  tests: TestShortResponse[]
+  testResults: TestResultShortResponse[]
   note: SampleDetailResponseNote
   readonly isDeleted: boolean
 }

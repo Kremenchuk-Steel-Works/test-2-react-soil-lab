@@ -26,7 +26,7 @@ import type {
   HTTPValidationError,
   SampleCreate,
   SampleDetailResponse,
-  SampleListResponse,
+  SamplePaginatedListResponse,
   SamplesReportGenerationRequest,
 } from '../../model'
 
@@ -37,7 +37,7 @@ export const getSamplesListApiV1SamplesGet = (
   params?: GetSamplesListApiV1SamplesGetParams,
   signal?: AbortSignal,
 ) => {
-  return customMutator<SampleListResponse>({
+  return customMutator<SamplePaginatedListResponse>({
     url: `/api/v1/samples/`,
     method: 'GET',
     params,

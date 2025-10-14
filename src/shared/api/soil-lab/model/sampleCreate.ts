@@ -7,11 +7,9 @@
 import type { SampleCreateNote } from './sampleCreateNote'
 
 export interface SampleCreate {
-  /**
-   * @minLength 1
-   * @maxLength 50
-   */
-  moldingSandRecipe: string
+  materialId: string
+  materialSourceId: string
+  temperature: number
   receivedAt: string
   note?: SampleCreateNote
 }

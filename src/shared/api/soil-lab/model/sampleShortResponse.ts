@@ -4,9 +4,12 @@
  * soil_laboratory
  * OpenAPI spec version: 0.1.0
  */
+import type { MaterialShortResponse } from './materialShortResponse'
+import type { MaterialSourceShortResponse } from './materialSourceShortResponse'
 
 export interface SampleShortResponse {
   id: string
-  moldingSandRecipe: string
+  material: MaterialShortResponse
+  materialSource: MaterialSourceShortResponse
   receivedAt: string
 }
