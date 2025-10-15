@@ -2,19 +2,22 @@ import { lazy } from 'react'
 import { CirclePlus, Info, RefreshCcw, ShieldCheck } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import { PageAction, segment, type AppRoute } from '@/app/routes/types'
+import { createRouteKeyNs } from '@/app/routes/utils/route-key'
 
-const AdminRolesLayout = lazy(() => import('@/pages/admin-panel/roles/Layout'))
-const AdminRolesList = lazy(() => import('@/pages/admin-panel/roles/list/List'))
-const AdminRolesAdd = lazy(() => import('@/pages/admin-panel/roles/Add'))
-const AdminRolesDetails = lazy(() => import('@/pages/admin-panel/roles/Details'))
-const AdminRolesUpdate = lazy(() => import('@/pages/admin-panel/roles/Update'))
+const AdminRolesLayoutPage = lazy(() => import('@/pages/admin-panel/roles/Layout'))
+const AdminRolesListPage = lazy(() => import('@/pages/admin-panel/roles/list/List'))
+const AdminRolesNewPage = lazy(() => import('@/pages/admin-panel/roles/New'))
+const AdminRolesDetailsPage = lazy(() => import('@/pages/admin-panel/roles/Details'))
+const AdminRolesEditPage = lazy(() => import('@/pages/admin-panel/roles/Edit'))
+
+const routeKeys = createRouteKeyNs('admin', 'roles')
 
 export const rolesRoutes: AppRoute = {
-  key: 'adminRoles',
+  key: routeKeys(),
   path: 'roles',
   label: 'Ролі',
   icon: ShieldCheck,
-  Component: AdminRolesLayout,
+  Component: AdminRolesLayoutPage,
   meta: {
     buttons: [PageAction.create],
     actionPermissions: {
@@ -24,21 +27,21 @@ export const rolesRoutes: AppRoute = {
   children: [
     {
       index: true,
-      Component: AdminRolesList,
+      Component: AdminRolesListPage,
     },
     {
-      key: 'adminRolesAdd',
+      key: routeKeys(segment(PageAction.create)),
       path: segment(PageAction.create),
       label: 'Додати',
       icon: CirclePlus,
-      Component: AdminRolesAdd,
+      Component: AdminRolesNewPage,
     },
     {
-      key: 'adminRolesDetail',
+      key: routeKeys('detail'),
       path: ':id',
       label: 'Деталі',
       icon: Info,
-      Component: AdminRolesDetails,
+      Component: AdminRolesDetailsPage,
       meta: {
         buttons: [PageAction.update],
         actionPermissions: {
@@ -47,11 +50,11 @@ export const rolesRoutes: AppRoute = {
       },
     },
     {
-      key: 'adminRolesUpdate',
+      key: routeKeys(segment(PageAction.update)),
       path: `:id/${segment(PageAction.update)}`,
       label: 'Оновити',
       icon: RefreshCcw,
-      Component: AdminRolesUpdate,
+      Component: AdminRolesEditPage,
     },
   ],
 }

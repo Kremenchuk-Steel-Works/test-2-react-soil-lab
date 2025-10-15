@@ -1,42 +1,30 @@
-import type { TestCreate, TestDetailResponse, TestType } from '@/shared/api/soil-lab/model'
+import type { TestResultCreate, TestResultDetailResponse } from '@/shared/api/soil-lab/model'
 import { type SnakeToCamel } from '@/types/utility'
 import { createFieldRegistry } from '@/utils/react-hook-form/createFieldRegistry'
 
-export const testsFieldRegistry = createFieldRegistry.forType<TestCreate>()({
+export const testsFieldRegistry = createFieldRegistry.forType<TestResultCreate>()({
   sampleId: {
-    label: { default: 'ID' },
+    label: { default: 'ID Зразка' },
   },
-  type: {
-    label: { default: 'Тип' },
+  parameterId: {
+    label: { default: 'ID Випробування' },
   },
-  measurement1: {
-    label: { default: 'Вимірювання 1' },
+  measurements: {
+    label: { default: 'Вимірювання' },
   },
 } as const)
 
-export const testsResponseFieldRegistry = createFieldRegistry.forType<TestDetailResponse>()({
-  type: testsFieldRegistry.type,
+export const testsResponseFieldRegistry = createFieldRegistry.forType<TestResultDetailResponse>()({
+  parameter: testsFieldRegistry.parameterId,
+  measurements: testsFieldRegistry.measurements,
   createdAt: {
     label: { default: 'Дата створення' },
   },
-  measurement1: testsFieldRegistry.measurement1,
-  measurement2: {
-    label: { default: 'Вимірювання 2' },
-  },
-  measurement3: {
-    label: { default: 'Вимірювання 3' },
-  },
-  selectedMeasurement1: {
-    label: { default: 'Обраний вимір 1' },
-  },
-  selectedMeasurement2: {
-    label: { default: 'Обраний вимір 2' },
-  },
-  differencePercent: {
-    label: { default: 'Різниця (%)' },
-  },
-  meanMeasurement: {
+  meanValue: {
     label: { default: 'Середнє значення' },
+  },
+  variationPercentage: {
+    label: { default: 'Різниця (%)' },
   },
   lowerLimit: {
     label: { default: 'Мінімальне допустиме значення' },
@@ -44,7 +32,7 @@ export const testsResponseFieldRegistry = createFieldRegistry.forType<TestDetail
   upperLimit: {
     label: { default: 'Максимальне допустиме значення' },
   },
-  status: {
+  isCompliant: {
     label: { default: 'Статус' },
   },
 } as const)

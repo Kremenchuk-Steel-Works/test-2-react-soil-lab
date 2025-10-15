@@ -7,7 +7,7 @@ import { useUrlPagination } from '@/shared/hooks/useUrlPagination'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import { DataTable } from '@/widgets/data-table/DataTable'
 
-export default function AdminUsersList() {
+export default function AdminUsersListPage() {
   // Состояние из URL
   const { page, perPage, setSearchParams } = useUrlPagination()
 

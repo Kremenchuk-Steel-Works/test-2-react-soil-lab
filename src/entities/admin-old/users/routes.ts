@@ -2,19 +2,22 @@ import { lazy } from 'react'
 import { CirclePlus, Info, RefreshCcw, Users } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import { PageAction, segment, type AppRoute } from '@/app/routes/types'
+import { createRouteKeyNs } from '@/app/routes/utils/route-key'
 
-const AdminUsersLayout = lazy(() => import('@/pages/admin-panel/users/Layout'))
-const AdminUsersList = lazy(() => import('@/pages/admin-panel/users/list/List'))
-const AdminUsersAdd = lazy(() => import('@/pages/admin-panel/users/Add'))
-const AdminUsersDetails = lazy(() => import('@/pages/admin-panel/users/Details'))
-const AdminUsersUpdate = lazy(() => import('@/pages/admin-panel/users/Update'))
+const AdminUsersLayoutPage = lazy(() => import('@/pages/admin-panel/users/Layout'))
+const AdminUsersListPage = lazy(() => import('@/pages/admin-panel/users/list/List'))
+const AdminUsersNewPage = lazy(() => import('@/pages/admin-panel/users/New'))
+const AdminUsersDetailsPage = lazy(() => import('@/pages/admin-panel/users/Details'))
+const AdminUsersEditPage = lazy(() => import('@/pages/admin-panel/users/Edit'))
+
+const routeKeys = createRouteKeyNs('admin', 'users')
 
 export const usersRoutes: AppRoute = {
-  key: 'adminUsers',
+  key: routeKeys(),
   path: 'users',
   label: 'Користувачі',
   icon: Users,
-  Component: AdminUsersLayout,
+  Component: AdminUsersLayoutPage,
   meta: {
     buttons: [PageAction.create],
     actionPermissions: {
@@ -24,21 +27,21 @@ export const usersRoutes: AppRoute = {
   children: [
     {
       index: true,
-      Component: AdminUsersList,
+      Component: AdminUsersListPage,
     },
     {
-      key: 'adminUsersAdd',
+      key: routeKeys(segment(PageAction.create)),
       path: segment(PageAction.create),
       label: 'Додати',
       icon: CirclePlus,
-      Component: AdminUsersAdd,
+      Component: AdminUsersNewPage,
     },
     {
-      key: 'adminUsersDetail',
+      key: routeKeys('detail'),
       path: ':id',
       label: 'Деталі',
       icon: Info,
-      Component: AdminUsersDetails,
+      Component: AdminUsersDetailsPage,
       meta: {
         buttons: [PageAction.update],
         actionPermissions: {
@@ -47,11 +50,11 @@ export const usersRoutes: AppRoute = {
       },
     },
     {
-      key: 'adminUsersUpdate',
+      key: routeKeys(segment(PageAction.update)),
       path: `:id/${segment(PageAction.update)}`,
       label: 'Оновити',
       icon: RefreshCcw,
-      Component: AdminUsersUpdate,
+      Component: AdminUsersEditPage,
     },
   ],
 }

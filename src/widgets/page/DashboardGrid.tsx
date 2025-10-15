@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import type { RouteKey } from '@/app/routes/types'
 import { isNonIndexRoute } from '@/app/routes/utils/utils'
 import { useVisibleRoutes } from '@/shared/hooks/usePermissions'
 import Button from '@/shared/ui/button/Button'
@@ -7,7 +8,7 @@ import { findRouteByKey } from '@/utils/routes/routeUtils'
 import RouteTableView from '@/widgets/page/RouteTableView'
 
 type DashboardGridProps = {
-  parentRouteKey: string
+  parentRouteKey: RouteKey
   variant?: 'buttons' | 'table'
 }
 

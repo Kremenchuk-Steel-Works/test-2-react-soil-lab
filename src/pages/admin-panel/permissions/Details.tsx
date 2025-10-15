@@ -5,7 +5,7 @@ import { permissionService } from '@/entities/admin-old/permissions/services/ser
 import type { PermissionDetailResponse } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
-export default function AdminPermissionsDetails() {
+export default function AdminPermissionsDetailsPage() {
   const { id } = useParams<{ id: string }>()
 
   const {

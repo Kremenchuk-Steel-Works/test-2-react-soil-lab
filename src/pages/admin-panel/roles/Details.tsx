@@ -5,7 +5,7 @@ import { roleService } from '@/entities/admin-old/roles/services/service'
 import type { RoleDetailResponse } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
-export default function AdminRolesDetails() {
+export default function AdminRolesDetailsPage() {
   const { id } = useParams<{ id: string }>()
 
   const {

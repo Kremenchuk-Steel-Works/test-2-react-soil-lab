@@ -9,6 +9,7 @@ import type { MaterialSourceShortResponse } from './materialSourceShortResponse'
 import type { SampleListItemResponseCreatedById } from './sampleListItemResponseCreatedById'
 import type { SampleListItemResponseDeletedAt } from './sampleListItemResponseDeletedAt'
 import type { SampleListItemResponseUpdatedById } from './sampleListItemResponseUpdatedById'
+import type { TestResultShortResponse } from './testResultShortResponse'
 
 export interface SampleListItemResponse {
   deletedAt?: SampleListItemResponseDeletedAt
@@ -20,5 +21,7 @@ export interface SampleListItemResponse {
   material: MaterialShortResponse
   materialSource: MaterialSourceShortResponse
   receivedAt: string
+  temperature: number
+  testResults: TestResultShortResponse[]
   readonly isDeleted: boolean
 }

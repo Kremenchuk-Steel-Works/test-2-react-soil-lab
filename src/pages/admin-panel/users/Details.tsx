@@ -5,7 +5,7 @@ import { userService } from '@/entities/admin-old/users/services/service'
 import type { UserDetailResponse } from '@/shared/api/soil-lab/model'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 
-export default function AdminUsersDetails() {
+export default function AdminUsersDetailsPage() {
   const { id } = useParams<{ id: string }>()
 
   const {

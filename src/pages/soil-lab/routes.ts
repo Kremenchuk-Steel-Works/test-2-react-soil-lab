@@ -2,13 +2,17 @@ import { lazy } from 'react'
 import { FlaskConical } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import type { AppRoute } from '@/app/routes/types'
-import { samplesMaterialCategoryRoutes } from '@/pages/soil-lab/material-category/routes'
+import { createRouteKeyNs } from '@/app/routes/utils/route-key'
+import { coreMixturesCO2SamplesRoutes } from '@/pages/soil-lab/material-category/core-mixtures-co2/samples/routes'
+import { moldingMixturesSamplesRoutes } from '@/pages/soil-lab/material-category/molding-mixtures/samples/routes'
 
 const SoilLabLayoutPage = lazy(() => import('@/pages/soil-lab/ui/Layout'))
-const SoilLabMainPage = lazy(() => import('@/pages/soil-lab/ui/Main'))
+const SoilLabMainPage = lazy(() => import('@/pages/soil-lab/ui/Index'))
+
+const routeKeys = createRouteKeyNs('soilLab')
 
 export const soilLabRoutes: AppRoute = {
-  key: 'soilLab',
+  key: routeKeys(),
   path: '/soil-lab',
   label: 'Лабораторія сумішей',
   icon: FlaskConical,
@@ -19,6 +23,7 @@ export const soilLabRoutes: AppRoute = {
       index: true,
       Component: SoilLabMainPage,
     },
-    ...samplesMaterialCategoryRoutes,
+    coreMixturesCO2SamplesRoutes,
+    moldingMixturesSamplesRoutes,
   ],
 }

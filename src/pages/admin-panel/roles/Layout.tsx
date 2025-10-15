@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom'
 
-export default function AdminRolesLayout() {
+export default function AdminRolesLayoutPage() {
   return (
     <div className="flex flex-1 flex-col space-y-2">
       <Outlet />

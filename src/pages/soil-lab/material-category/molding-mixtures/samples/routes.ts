@@ -2,17 +2,20 @@ import { lazy } from 'react'
 import { CirclePlus, ClipboardList, Info, RefreshCcw } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import { PageAction, segment, type AppRoute } from '@/app/routes/types'
+import { createRouteKeyNs } from '@/app/routes/utils/route-key'
 
 const SamplesListPage = lazy(() => import('./ui/list/List'))
-const SamplesAddPage = lazy(() => import('./ui/Add'))
+const SamplesNewPage = lazy(() => import('./ui/New'))
 const SamplesLayoutPage = lazy(() => import('@/pages/soil-lab/samples/ui/Layout'))
 const SamplesDetailsPage = lazy(() => import('@/pages/soil-lab/samples/ui/Details'))
-const TestsAddPage = lazy(() => import('@/pages/soil-lab/tests/ui/Add'))
+const TestsNewPage = lazy(() => import('@/pages/soil-lab/tests/ui/New'))
+
+const routeKeys = createRouteKeyNs('soilLab', 'moldingMixtures', 'samples')
 
 export const moldingMixturesSamplesRoutes: AppRoute = {
-  key: 'moldingMixturesSamples',
-  path: 'samples',
-  label: 'Зразки',
+  key: routeKeys(),
+  path: 'molding-mixtures',
+  label: 'Формувальні суміші',
   icon: ClipboardList,
   Component: SamplesLayoutPage,
   requiredPermissions: [PERMISSIONS.SAMPLES_READ],
@@ -28,15 +31,15 @@ export const moldingMixturesSamplesRoutes: AppRoute = {
       Component: SamplesListPage,
     },
     {
-      key: 'moldingMixturesSamplesAdd',
+      key: routeKeys(segment(PageAction.create)),
       path: segment(PageAction.create),
       label: 'Додати',
       icon: CirclePlus,
-      Component: SamplesAddPage,
+      Component: SamplesNewPage,
       requiredPermissions: [PERMISSIONS.SAMPLES_CREATE],
     },
     {
-      key: 'moldingMixturesSamplesDetail',
+      key: routeKeys('detail'),
       path: ':id',
       label: 'Деталі',
       icon: Info,
@@ -55,11 +58,11 @@ export const moldingMixturesSamplesRoutes: AppRoute = {
           Component: SamplesDetailsPage,
         },
         {
-          key: 'moldingMixturesSamplesUpdate',
+          key: routeKeys(segment(PageAction.update)),
           path: segment(PageAction.update),
           label: 'Оновити',
           icon: RefreshCcw,
-          Component: TestsAddPage,
+          Component: TestsNewPage,
           requiredPermissions: [PERMISSIONS.SAMPLES_CREATE],
         },
       ],

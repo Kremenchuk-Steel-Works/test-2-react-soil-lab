@@ -18,6 +18,9 @@ export const PageSegment = {
 export type PageSegment = ValueOf<typeof PageSegment>
 export const segment = (action: PageAction): PageSegment => PageSegment[action]
 
+export type Brand<T, B extends string> = T & { readonly __brand: B }
+export type RouteKey = Brand<string, 'RouteKey'>
+
 export interface RouteMeta {
   buttons?: PageAction[]
   actionPermissions?: Partial<Record<PageAction, Permission[]>>
@@ -37,7 +40,7 @@ type RouteComponent<P = Record<string, never>> =
  */
 export interface NonIndexRoute<P = Record<string, never>> {
   index?: false
-  key: string
+  key: RouteKey
   path: string
   label: string
   icon: LucideIcon

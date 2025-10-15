@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
-import type { SamplesCreateOptions } from '@/entities/soil-lab/samples/ui/form/fields'
+import { useSamplesFormOptions } from '@/entities/soil-lab/samples/hooks/useSamplesFormOptions'
 import {
   samplesCreateFormSchema,
   type SamplesCreateFormFields,
@@ -18,7 +18,7 @@ const logger = createLogger('SamplesCreateForm')
 type FormFields = SamplesCreateFormFields
 const schema = samplesCreateFormSchema
 
-type SamplesFormProps = FormProps<FormFields, SampleDetailResponse> & SamplesCreateOptions
+type SamplesFormProps = FormProps<FormFields, SampleDetailResponse>
 
 const Form = SamplesCreateFormKit
 
@@ -27,7 +27,6 @@ export function SamplesCreateForm({
   responseData,
   onSubmit,
   submitBtnName,
-  options,
 }: SamplesFormProps) {
   const form = useForm<FormFields>({
     resolver: zodResolver(schema),
@@ -38,6 +37,10 @@ export function SamplesCreateForm({
     setError,
     formState: { isSubmitting },
   } = form
+
+  // Options
+  const options = useSamplesFormOptions(responseData)
+
   // Submit
   const submitHandler: SubmitHandler<FormFields> = async (data) => {
     try {

@@ -42,6 +42,27 @@ export const getGetSamplesListApiV1SamplesGetResponseMock = (
       name: faker.string.alpha({ length: { min: 10, max: 20 } }),
     },
     receivedAt: `${faker.date.past().toISOString().split('.')[0]}Z`,
+    temperature: faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+    testResults: Array.from({ length: faker.number.int({ min: 1, max: 10 }) }, (_, i) => i + 1).map(
+      () => ({
+        id: faker.string.uuid(),
+        parameter: {
+          id: faker.string.uuid(),
+          code: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          name: faker.string.alpha({ length: { min: 10, max: 20 } }),
+          units: faker.string.alpha({ length: { min: 10, max: 20 } }),
+        },
+        meanValue: faker.helpers.arrayElement([
+          faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+          null,
+        ]),
+        variationPercentage: faker.helpers.arrayElement([
+          faker.number.float({ min: undefined, max: undefined, fractionDigits: 2 }),
+          null,
+        ]),
+        isCompliant: faker.datatype.boolean(),
+      }),
+    ),
     isDeleted: faker.datatype.boolean(),
   })),
   page: faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),

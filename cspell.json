@@ -38,6 +38,7 @@
     "LPIR",
     "APIV",
     "lerp",
+    "ppht",
 
     // IT Jargon (Cyrillic)
     "пагинированный",
@@ -94,6 +95,12 @@
     "валідації",
     "підключення",
     "підключитися",
+    "ппхт",
+    "Формувальність",
+    "Обсиплювальність",
+    "Ущільнювальність",
+    "Колоїдальність",
+    "периклазохромітовий",
 
     // Foreign Words & Names
     "İstanbul",
@@ -106,6 +113,13 @@
     "financials",
     "dedup",
     "unrequired",
-    "idxs"
+    "idxs",
+    "granulometric",
+    "colloidality",
+
+    // Brands, materials
+    "teno",
+    "isotec",
+    "velvalite"
   ]
 }
