@@ -1,7 +1,7 @@
 import z from 'zod'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
 import { SamplesMoldingSandRecipe } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
-import { testsFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
+import { testsFieldRegistry } from '@/entities/soil-lab/test-results/model/fields-registry'
 import {
   CompressiveStrengthDynamicForm,
   GasFormingPropertyDynamicForm,
@@ -12,7 +12,7 @@ import {
   TensileStrengthAfter3HoursDynamicForm,
   TensileStrengthAfter24HoursDynamicForm,
   TensileStrengthDynamicForm,
-} from '@/entities/soil-lab/tests/ui/form/components/Measurement1DynamicForm'
+} from '@/entities/soil-lab/test-results/ui/form/components/Measurement1DynamicForm'
 import { TestType } from '@/shared/api/soil-lab/model'
 import { createScopedSectionsConfig } from '@/shared/lib/zod/dynamic-sections-scoped'
 import { Transforms } from '@/shared/lib/zod/unit-conversion/transforms'

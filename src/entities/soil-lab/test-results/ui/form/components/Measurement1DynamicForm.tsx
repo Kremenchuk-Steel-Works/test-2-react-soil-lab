@@ -1,9 +1,9 @@
-import { testsTypeFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
-import { useTestsFormFields } from '@/entities/soil-lab/tests/ui/form/fields'
+import { testsTypeFieldRegistry } from '@/entities/soil-lab/test-results/model/fields-registry'
+import { useTestsFormFields } from '@/entities/soil-lab/test-results/ui/form/fields'
 import type {
   Measurement1CompressiveStrengthFormFields,
   Measurement1FormFields,
-} from '@/entities/soil-lab/tests/ui/form/lib/dynamic-sections'
+} from '@/entities/soil-lab/test-results/ui/form/lib/dynamic-sections'
 import { TestType, type SampleDetailResponse } from '@/shared/api/soil-lab/model'
 import { useDynamicMeta } from '@/shared/ui/react-hook-form/dynamic-fields/DynamicFieldsContext'
 import { useFormKit } from '@/shared/ui/react-hook-form/FormKit/useFormKit'

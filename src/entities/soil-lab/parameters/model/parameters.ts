@@ -1,6 +1,6 @@
 import { dictFromKeys } from '@/utils/dict'
 
-export const samplesParametersLabels = {
+export const testResultParametersLabels = {
   // Міцність
   compressive_strength: 'Міцність на стискання',
   tensile_strength: 'Міцність на розрив',
@@ -9,7 +9,7 @@ export const samplesParametersLabels = {
   tensile_strength_after_2_hours: 'Міцність на розрив через 2 год',
   tensile_strength_after_3_hours: 'Міцність на розрив через 3 год',
   tensile_strength_after_24_hours: 'Міцність на розрив через 24 год',
-  residual_compressive_strength: 'Залишкова міцність (Міцність на стискання)',
+  residual_compressive_strength: 'Залишкова міцність',
   strength_in_moisture_condensation_zone: 'Міцність у зоні конденсації вологи',
   // Газові властивості
   gas_permeability: 'Газопроникність',
@@ -47,5 +47,5 @@ export const samplesParametersLabels = {
   appearance: 'Зовнішній вигляд',
   afs_index: 'Показник AFS',
 } as const
-export type SamplesParameters = keyof typeof samplesParametersLabels
-export const SamplesParameters = dictFromKeys(samplesParametersLabels)
+export type TestResultParameters = keyof typeof testResultParametersLabels
+export const TestResultParameters = dictFromKeys(testResultParametersLabels)

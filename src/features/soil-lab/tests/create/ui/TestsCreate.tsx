@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import type { DeepPartial } from 'react-hook-form'
 import { samplesService } from '@/entities/soil-lab/samples/api/service'
-import { testsService } from '@/entities/soil-lab/tests/api/service'
+import { testsService } from '@/entities/soil-lab/test-results/api/service'
 import type { TestsCreateFormFields } from '@/features/soil-lab/tests/create/model/schema'
 import { TestsCreateForm } from '@/features/soil-lab/tests/create/ui/TestsCreateForm'
 import {

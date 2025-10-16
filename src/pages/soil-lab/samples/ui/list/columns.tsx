@@ -6,10 +6,10 @@ import {
   type SamplesParameters,
 } from '@/entities/soil-lab/parameters/model/parameters'
 import { samplesResponseFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { testTypeToUnit } from '@/entities/soil-lab/tests/lib/testTypeToUnit'
-import { testsStatusLabels } from '@/entities/soil-lab/tests/model/status'
-import { testsTypeLabels } from '@/entities/soil-lab/tests/model/type'
-import { TestStatusPill } from '@/entities/soil-lab/tests/ui/status-pill/TestStatusPill'
+import { toTestResultStatus } from '@/entities/soil-lab/test-results/lib/isСompliant'
+import { testTypeToUnit } from '@/entities/soil-lab/test-results/lib/testParameterToUnit'
+import { testsTypeLabels } from '@/entities/soil-lab/test-results/model/type'
+import { TestStatusPill } from '@/entities/soil-lab/test-results/ui/status-pill/TestStatusPill'
 import {
   type MaterialShortResponse,
   type MaterialSourceShortResponse,
@@ -64,7 +64,7 @@ export const samplesColumns = [
 
             const unit = testTypeToUnit(parameterCode)
             const unitValue = `${test.meanValue} ${unit}`
-            const title = labelFromDict(testsStatusLabels, test.isCompliant)
+            const title = toTestResultStatus(test.isCompliant)
 
             return (
               <TestStatusPill isCompliant={test.isCompliant}>

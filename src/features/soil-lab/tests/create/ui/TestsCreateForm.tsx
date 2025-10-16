@@ -1,5 +1,5 @@
 import { FormProvider, useForm, type SubmitHandler } from 'react-hook-form'
-import { testsDynamicSections } from '@/entities/soil-lab/tests/ui/form/lib/dynamic-sections'
+import { testsDynamicSections } from '@/entities/soil-lab/test-results/ui/form/lib/dynamic-sections'
 import {
   testsCreateFormSchema,
   type TestsCreateFormFields,

@@ -1,14 +1,15 @@
 import { ChevronRight } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { PageAction } from '@/app/routes/types'
+import { samplesMaterialsLabels } from '@/entities/soil-lab/materials/model/materials'
+import { samplesMaterialSourcesLabels } from '@/entities/soil-lab/materialSources/model/materialSources'
 import { samplesService } from '@/entities/soil-lab/samples/api/service'
 import { samplesResponseFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { samplesMoldingSandRecipeLabels } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
-import { testTypeToUnit } from '@/entities/soil-lab/tests/lib/testTypeToUnit'
-import { testsResponseFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
-import { testsStatusLabels } from '@/entities/soil-lab/tests/model/status'
-import { testsTypeLabels } from '@/entities/soil-lab/tests/model/type'
-import { TestStatusPill } from '@/entities/soil-lab/tests/ui/status-pill/TestStatusPill'
+import { toTestResultStatus } from '@/entities/soil-lab/test-results/lib/isСompliant'
+import { testTypeToUnit } from '@/entities/soil-lab/test-results/lib/testParameterToUnit'
+import { testsResponseFieldRegistry } from '@/entities/soil-lab/test-results/model/fields-registry'
+import { testsTypeLabels } from '@/entities/soil-lab/test-results/model/type'
+import { TestStatusPill } from '@/entities/soil-lab/test-results/ui/status-pill/TestStatusPill'
 import SamplesDeletePage from '@/pages/soil-lab/samples/ui/Delete'
 import LoadingPage from '@/pages/system/LoadingPage'
 import { getErrorMessage } from '@/shared/lib/axios'
@@ -43,19 +44,26 @@ export default function SamplesDetailsPage() {
     return <AlertMessage type={AlertType.WARNING} message="Дані не знайдені" />
   }
 
-  const { moldingSandRecipe, note, receivedAt, tests } = samplesResponseFieldRegistry
-  const { meanMeasurement } = testsResponseFieldRegistry
+  const { material, materialSource, temperature, testResults, note, receivedAt } =
+    samplesResponseFieldRegistry
+  const { meanValue } = testsResponseFieldRegistry
 
   return (
     <>
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        <InfoCard label={moldingSandRecipe.label.default}>
-          {labelFromDict(samplesMoldingSandRecipeLabels, responseData.moldingSandRecipe)}
-        </InfoCard>
-
         <InfoCard label={receivedAt.label.default}>
           {formatUiDate(responseData.receivedAt)}
         </InfoCard>
+
+        <InfoCard label={material.label.default}>
+          {labelFromDict(samplesMaterialsLabels, responseData.material)}
+        </InfoCard>
+
+        <InfoCard label={materialSource.label.default}>
+          {labelFromDict(samplesMaterialSourcesLabels, responseData.materialSource)}
+        </InfoCard>
+
+        <InfoCard label={temperature.label.default}>{responseData.temperature}</InfoCard>
 
         {(responseData.note ?? '') !== '' && (
           <InfoCard label={note.label.default} className="sm:col-span-2 xl:col-span-3">
@@ -67,17 +75,17 @@ export default function SamplesDetailsPage() {
       </section>
 
       {/* Перелік випробувань */}
-      {responseData.tests.length > 0 && (
+      {responseData.testResults.length > 0 && (
         <section className="mt-2">
           <h6 className="mb-2 text-base font-medium text-gray-500 dark:text-slate-400">
-            {tests.label.default}
+            {testResults.label.default}
           </h6>
 
           <ul role="list" className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {responseData.tests.map((test) => {
-              const typeLabel = labelFromDict(testsTypeLabels, test.type)
-              const statusLabel = labelFromDict(testsStatusLabels, test.status)
-              const unit = testTypeToUnit(test.type)
+            {responseData.testResults.map((test) => {
+              const parameterLabel = labelFromDict(testsTypeLabels, test.parameter)
+              const statusLabel = toTestResultStatus(test.isCompliant)
+              const unit = testTypeToUnit(test.isCompliant)
 
               return (
                 <li key={test.id}>
@@ -87,19 +95,22 @@ export default function SamplesDetailsPage() {
                   >
                     <div className="flex items-start justify-between gap-3">
                       <h6 className="font-medium text-slate-900 transition group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-300">
-                        {typeLabel}
+                        {parameterLabel}
                       </h6>
 
                       <div className="shrink-0 whitespace-nowrap">
-                        <TestStatusPill status={test.status}>{statusLabel}</TestStatusPill>
+                        <TestStatusPill isCompliant={test.isCompliant}>
+                          {statusLabel}
+                        </TestStatusPill>
                       </div>
                     </div>
 
                     <div className="mt-2 text-base text-slate-500 dark:text-slate-400">
-                      {meanMeasurement.label.default}
+                      {meanValue.label.default}
                     </div>
+
                     <div className="mt-0.5 text-base font-semibold text-slate-900 dark:text-slate-100">
-                      {test.meanMeasurement} {unit}
+                      {test.meanValue} {unit}
                     </div>
 
                     <div className="mt-3 hidden items-center text-base text-slate-400 sm:flex">

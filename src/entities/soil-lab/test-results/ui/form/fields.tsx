@@ -5,8 +5,8 @@ import { samplesMoldingSandRecipeOptions } from '@/entities/soil-lab/samples/mod
 import {
   testsFieldRegistry,
   testsTypeFieldRegistry,
-} from '@/entities/soil-lab/tests/model/fields-registry'
-import { testsTypeOptions } from '@/entities/soil-lab/tests/model/type'
+} from '@/entities/soil-lab/test-results/model/fields-registry'
+import { testsTypeOptions } from '@/entities/soil-lab/test-results/model/type'
 import { TestType, type SampleDetailResponse } from '@/shared/api/soil-lab/model'
 import { Transforms } from '@/shared/lib/zod/unit-conversion/transforms'
 import type { AfsGrainFinenessNumberArgs } from '@/shared/lib/zod/unit-conversion/transforms/afsGrainFinenessNumber'

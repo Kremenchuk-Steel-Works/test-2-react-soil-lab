@@ -3,10 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getPathByKey } from '@/app/routes/utils/utils'
 import { samplesService } from '@/entities/soil-lab/samples/api/service'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { testTypeToUnit } from '@/entities/soil-lab/tests/lib/testTypeToUnit'
-import { testsFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
-import { testsTypeLabels } from '@/entities/soil-lab/tests/model/type'
-import { testsDynamicSections } from '@/entities/soil-lab/tests/ui/form/lib/dynamic-sections'
+import { testTypeToUnit } from '@/entities/soil-lab/test-results/lib/testParameterToUnit'
+import { testsFieldRegistry } from '@/entities/soil-lab/test-results/model/fields-registry'
+import { testsTypeLabels } from '@/entities/soil-lab/test-results/model/type'
+import { testsDynamicSections } from '@/entities/soil-lab/test-results/ui/form/lib/dynamic-sections'
 import {
   testsCreateFormSchema,
   type TestsCreateFormFields,

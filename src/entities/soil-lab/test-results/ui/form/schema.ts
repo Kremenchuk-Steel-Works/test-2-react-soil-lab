@@ -1,7 +1,7 @@
 import z from 'zod'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
 import { samplesBaseFormSchema } from '@/entities/soil-lab/samples/ui/form/schema'
-import { testsFieldRegistry } from '@/entities/soil-lab/tests/model/fields-registry'
+import { testsFieldRegistry } from '@/entities/soil-lab/test-results/model/fields-registry'
 import { TestType } from '@/shared/api/soil-lab/model'
 import { zn } from '@/shared/lib/zod/zod-normalize'
 

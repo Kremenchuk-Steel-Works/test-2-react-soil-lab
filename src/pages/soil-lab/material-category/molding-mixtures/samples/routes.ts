@@ -3,6 +3,7 @@ import { CirclePlus, ClipboardList, Info, RefreshCcw } from 'lucide-react'
 import { PERMISSIONS } from '@/app/routes/permissions'
 import { PageAction, segment, type AppRoute } from '@/app/routes/types'
 import { createRouteKeyNs } from '@/app/routes/utils/route-key'
+import { samplesMaterialTypesLabels } from '@/entities/soil-lab/materialTypes/model/materialTypes'
 
 const SamplesListPage = lazy(() => import('./ui/list/List'))
 const SamplesNewPage = lazy(() => import('./ui/New'))
@@ -10,12 +11,13 @@ const SamplesLayoutPage = lazy(() => import('@/pages/soil-lab/samples/ui/Layout'
 const SamplesDetailsPage = lazy(() => import('@/pages/soil-lab/samples/ui/Details'))
 const TestsNewPage = lazy(() => import('@/pages/soil-lab/tests/ui/New'))
 
+const { moldingMixtures } = samplesMaterialTypesLabels
 const routeKeys = createRouteKeyNs('soilLab', 'moldingMixtures', 'samples')
 
 export const moldingMixturesSamplesRoutes: AppRoute = {
   key: routeKeys(),
   path: 'molding-mixtures',
-  label: 'Формувальні суміші',
+  label: moldingMixtures,
   icon: ClipboardList,
   Component: SamplesLayoutPage,
   requiredPermissions: [PERMISSIONS.SAMPLES_READ],
