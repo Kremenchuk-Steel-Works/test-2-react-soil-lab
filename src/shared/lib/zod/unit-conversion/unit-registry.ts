@@ -3,6 +3,7 @@ export const Units = {
   // Pressure
   N_PER_CM2: 'Н/см²',
   KGF_PER_CM2: 'кгс/см²',
+  K_PA: 'кПа',
   // Permability
   SI: 'm²/Pa·s',
   SI_E8: '10⁻⁸ m²/Pa·s',

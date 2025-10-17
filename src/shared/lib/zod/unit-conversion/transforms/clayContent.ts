@@ -1,7 +1,10 @@
 import type { TransformSpec } from '../transform-types'
 import { Units } from '../unit-registry'
 
-export type ClayContentArgs = { m: number; m1: number }
+export type ClayContentArgs = {
+  m: number
+  m1: number
+}
 
 /** Глиниста складова, % */
 export const CLAY_CONTENT_TRANSFORM: TransformSpec<ClayContentArgs> = {

@@ -5,7 +5,7 @@ import { samplesMaterialsLabels } from '@/entities/soil-lab/materials/model/mate
 import { samplesMaterialSourcesLabels } from '@/entities/soil-lab/materialSources/model/materialSources'
 import { samplesService } from '@/entities/soil-lab/samples/api/service'
 import { samplesResponseFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { toTestResultStatus } from '@/entities/soil-lab/test-results/lib/isСompliant'
+import { toTestResultStatus } from '@/entities/soil-lab/test-results/lib/isCompliant'
 import { testTypeToUnit } from '@/entities/soil-lab/test-results/lib/testParameterToUnit'
 import { testsResponseFieldRegistry } from '@/entities/soil-lab/test-results/model/fields-registry'
 import { testsTypeLabels } from '@/entities/soil-lab/test-results/model/type'

@@ -2,13 +2,12 @@ import { createColumnHelper } from '@tanstack/react-table'
 import { samplesMaterialsLabels } from '@/entities/soil-lab/materials/model/materials'
 import { samplesMaterialSourcesLabels } from '@/entities/soil-lab/materialSources/model/materialSources'
 import {
-  samplesParametersLabels,
-  type SamplesParameters,
+  testResultParametersLabels,
+  type TestResultParameters,
 } from '@/entities/soil-lab/parameters/model/parameters'
 import { samplesResponseFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { toTestResultStatus } from '@/entities/soil-lab/test-results/lib/isСompliant'
+import { toTestResultStatus } from '@/entities/soil-lab/test-results/lib/isCompliant'
 import { testTypeToUnit } from '@/entities/soil-lab/test-results/lib/testParameterToUnit'
-import { testsTypeLabels } from '@/entities/soil-lab/test-results/model/type'
 import { TestStatusPill } from '@/entities/soil-lab/test-results/ui/status-pill/TestStatusPill'
 import {
   type MaterialShortResponse,
@@ -21,7 +20,7 @@ import { dateColumn, displayColumn, linkColumn } from '@/widgets/data-table'
 
 const columnHelper = createColumnHelper<SampleListItemResponse>()
 const { material, materialSource, receivedAt } = samplesResponseFieldRegistry
-const samplesParameters = Object.keys(samplesParametersLabels) as SamplesParameters[]
+const samplesParameters = Object.keys(testResultParametersLabels) as TestResultParameters[]
 
 export const samplesColumns = [
   columnHelper.accessor(receivedAt.key, {
@@ -56,7 +55,7 @@ export const samplesColumns = [
     columnHelper.accessor(
       (row) => row.testResults?.find((t) => t.parameter.code === parameterCode) ?? null,
       {
-        header: labelFromDict(testsTypeLabels, parameterCode),
+        header: labelFromDict(testResultParametersLabels, parameterCode),
         size: 220,
         ...displayColumn<SampleListItemResponse, TestResultShortResponse | null>({
           formatter: (test) => {

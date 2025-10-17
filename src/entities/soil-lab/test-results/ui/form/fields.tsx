@@ -1,15 +1,9 @@
 import { useMemo, useRef } from 'react'
 import type { FieldValues } from 'react-hook-form'
 import { samplesFieldRegistry } from '@/entities/soil-lab/samples/model/fields-registry'
-import { samplesMoldingSandRecipeOptions } from '@/entities/soil-lab/samples/model/moldingSandRecipe'
-import {
-  testsFieldRegistry,
-  testsTypeFieldRegistry,
-} from '@/entities/soil-lab/test-results/model/fields-registry'
-import { testsTypeOptions } from '@/entities/soil-lab/test-results/model/type'
-import { TestType, type SampleDetailResponse } from '@/shared/api/soil-lab/model'
+import { testsFieldRegistry } from '@/entities/soil-lab/test-results/model/fields-registry'
+import { type SampleDetailResponse } from '@/shared/api/soil-lab/model'
 import { Transforms } from '@/shared/lib/zod/unit-conversion/transforms'
-import type { AfsGrainFinenessNumberArgs } from '@/shared/lib/zod/unit-conversion/transforms/afsGrainFinenessNumber'
 import AlertMessage, { AlertType } from '@/shared/ui/alert-message/AlertMessage'
 import Button from '@/shared/ui/button/Button'
 import InputField from '@/shared/ui/input-field/InputField'

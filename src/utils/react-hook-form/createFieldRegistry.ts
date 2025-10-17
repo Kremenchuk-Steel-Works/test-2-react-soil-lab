@@ -22,9 +22,10 @@ type FieldObjOf<V> = V extends (...args: unknown[]) => infer R ? R : V
 type LabelSpecOf<M, K extends Extract<keyof M, string>> =
   FieldObjOf<NonNullable<M[K]>> extends { label: infer L } ? L : never
 
+// исключаем служебные поля (и только их)
 type SectionKeysOf<M, K extends Extract<keyof M, string>> = Exclude<
   keyof FieldObjOf<NonNullable<M[K]>>,
-  'label'
+  'label' | 'key'
 > &
   string
 
@@ -63,17 +64,18 @@ export type Registry<M> = Readonly<{
 
 /**
  * Токен, который возвращает реестр (_уже_ собранное поле).
- * Индекс-сигнатура допускает ResolvedDict, чтобы безболезненно копировать секции.
+ * Никаких «вычитаний» ключей через Exclude — даём дополнительные поля как unknown,
+ * а далее фильтруем/валидаируем рантаймом.
  */
 type FieldTokenLike = Readonly<
   {
     readonly key: string
-    readonly label: ResolvedDict
-  } & { [k: string]: ResolvedDict | string }
+    readonly label: SectionInput
+  } & Record<string, unknown>
 >
 
-/** Разрешаем: спецификацию или уже собранный токен */
-type FieldSpecOrToken = FieldSpecInput | FieldTokenLike
+/** Разрешаем: спецификацию или уже собранный токен; у спеки запрещаем key */
+type FieldSpecOrToken = (FieldSpecInput & { key?: never }) | FieldTokenLike
 
 type Shape<Allowed extends string = string> = Readonly<Partial<Record<Allowed, FieldSpecOrToken>>>
 
@@ -96,7 +98,11 @@ const isFieldTokenLike = (v: unknown): v is FieldTokenLike => {
   const rec = v as Record<string, unknown>
   if (typeof rec.key !== 'string') return false
   const lbl = rec.label
-  return isResolvedDict(lbl)
+  return (
+    typeof lbl === 'object' &&
+    lbl !== null &&
+    typeof (lbl as { default?: unknown }).default === 'string'
+  )
 }
 
 /* ---------- utils ---------- */
@@ -206,7 +212,6 @@ export const createFieldRegistry: CreateFieldRegistry = Object.assign(_createFie
     }
   },
   fromKeys<const A extends readonly [string, ...string[]]>(...keys: A) {
-    // помечаем использование для eslint @typescript-eslint/no-unused-vars
     void keys
     return function <const R extends Shape<A[number]>>(shape: NoExtraKeys<R, A[number]>) {
       return _createFieldRegistry(shape)

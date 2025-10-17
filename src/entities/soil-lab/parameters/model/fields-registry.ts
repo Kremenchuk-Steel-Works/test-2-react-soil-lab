@@ -6,7 +6,7 @@ import type { SnakeToCamel } from '@/types/utility'
 import { createFieldRegistry } from '@/utils/react-hook-form/createFieldRegistry'
 
 const {
-  active_clay_percent,
+  active_clay,
   afs_index,
   appearance,
   bulk_density,
@@ -27,7 +27,7 @@ const {
   moisture_before_cooler_percent,
   moisture_percent,
   moldability,
-  ph,
+  power_of_hydrogen,
   residual_compressive_strength,
   strength_in_moisture_condensation_zone,
   temperature_after_cooler_celsius,
@@ -51,311 +51,326 @@ export const testResultParametersFieldRegistry = createFieldRegistry.forKeys<
   // Міцність
   compressiveStrength: {
     label: {
-      short: 'Міцність на стиск',
-      default: 'Міцність на стиск (кгс/см²)',
-      raw: 'Міцність на стиск (Н/см²)',
+      short: `${compressive_strength}`,
+      default: `${compressive_strength} (кгс/см²)`,
+      raw: `${compressive_strength} (Н/см²)`,
     },
     unit: {
-      default: 'кгс/см²',
-      raw: 'Н/см²',
+      default: `кгс/см²`,
+      raw: `Н/см²`,
     },
   },
   tensileStrength: {
     label: {
-      short: 'Міцність на розрив у висушеному стані',
-      default: 'Міцність на розрив у висушеному стані (МПа)',
-      raw: 'Міцність на розрив у висушеному стані (CHANGE)',
+      short: `${tensile_strength}`,
+      default: `${tensile_strength} (МПа)`,
     },
-    unit: { default: 'МПа', raw: 'CHANGE' },
+    unit: { default: `МПа` },
   },
   tensileStrengthAfter0Hours: {
     label: {
-      short: 'Міцність на розрив одразу',
-      default: 'Міцність на розрив одразу (МПа)',
-      raw: 'Міцність на розрив одразу (CHANGE)',
+      short: `${tensile_strength_after_0_hours}`,
+      default: `${tensile_strength_after_0_hours} (МПа)`,
     },
-    unit: { default: 'МПа', raw: 'CHANGE' },
+    unit: { default: `МПа` },
   },
   tensileStrengthAfter1Hour: {
     label: {
-      short: 'Міцність на розрив через 1 годину',
-      default: 'Міцність на розрив через 1 годину (МПа)',
-      raw: 'Міцність на розрив через 1 годину (CHANGE)',
+      short: `${tensile_strength_after_1_hour}`,
+      default: `${tensile_strength_after_1_hour} (МПа)`,
     },
-    unit: { default: 'МПа', raw: 'CHANGE' },
+    unit: { default: `МПа` },
   },
   tensileStrengthAfter2Hours: {
     label: {
-      short: 'Міцність на розрив через 2 години',
-      default: 'Міцність на розрив через 2 години (МПа)',
-      raw: 'Міцність на розрив через 2 години (CHANGE)',
+      short: `${tensile_strength_after_2_hours}`,
+      default: `${tensile_strength_after_2_hours} (МПа)`,
     },
-    unit: { default: 'МПа', raw: 'CHANGE' },
+    unit: { default: `МПа` },
   },
   tensileStrengthAfter3Hours: {
     label: {
-      short: 'Міцність на розрив через 3 години',
-      default: 'Міцність на розрив через 3 години (МПа)',
-      raw: 'Міцність на розрив через 3 години (CHANGE)',
+      short: `${tensile_strength_after_3_hours}`,
+      default: `${tensile_strength_after_3_hours} (МПа)`,
     },
-    unit: { default: 'МПа', raw: 'CHANGE' },
+    unit: { default: `МПа` },
   },
   tensileStrengthAfter24Hours: {
     label: {
-      short: 'Міцність на розрив через 24 години',
-      default: 'Міцність на розрив через 24 години (МПа)',
-      raw: 'Міцність на розрив через 24 години (CHANGE)',
+      short: `${tensile_strength_after_24_hours}`,
+      default: `${tensile_strength_after_24_hours} (МПа)`,
     },
-    unit: { default: 'МПа', raw: 'CHANGE' },
+    unit: { default: `МПа` },
   },
   residualCompressiveStrength: {
     label: {
-      short: 'Залишкова міцність',
-      default: 'Залишкова міцність (Міцність на стискання) (CHANGE)',
-      raw: 'Залишкова міцність (Міцність на стискання) (CHANGE)',
+      short: `${residual_compressive_strength}`,
+      default: `${residual_compressive_strength} (кгс/см²)`,
+      raw: `${residual_compressive_strength} (Н/см²)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `кгс/см²`, raw: `Н/см²` },
   },
   strengthInMoistureCondensationZone: {
     label: {
-      short: 'Міцність у зоні конденсації вологи',
-      default: 'Міцність у зоні конденсації вологи (CHANGE)',
-      raw: 'Міцність у зоні конденсації вологи (CHANGE)',
+      short: `${strength_in_moisture_condensation_zone}`,
+      default: `${strength_in_moisture_condensation_zone} (кгс/см²)`,
+      raw: `${strength_in_moisture_condensation_zone} (кПа)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `кгс/см²`, raw: `кПа` },
   },
 
   // Газові властивості
   gasPermeability: {
     label: {
-      short: 'Газопроникність',
-      default: 'Газопроникність (од.)',
-      raw: 'Газопроникність (m²/Pa·s)',
+      short: `${gas_permeability}`,
+      default: `${gas_permeability} (од.)`,
+      raw: `${gas_permeability} (m²/Pa·s)`,
     },
-    unit: { default: 'од.', raw: 'm²/Pa·s' },
+    unit: { default: `од.`, raw: `m²/Pa·s` },
   },
   gasFormingProperty: {
     label: {
-      short: 'Газоутворююча властивість',
-      default: 'Газоутворююча властивість (МПа)',
-      raw: 'Газоутворююча властивість (CHANGE)',
+      short: `${gas_forming_property}`,
+      default: `${gas_forming_property} (см³/г)`,
     },
-    unit: { default: 'МПа', raw: 'CHANGE' },
+    unit: { default: `см³/г` },
   },
 
   // Вологість / Температура
   moisturePercent: {
-    label: { short: 'Вологість', default: 'Вологість (%)', raw: 'Вологість (CHANGE)' },
-    unit: { default: '%', raw: 'CHANGE' },
+    label: { short: `${moisture_percent}`, default: `${moisture_percent} (%)` },
+    unit: { default: `%` },
   },
   moistureBeforeCoolerPercent: {
     label: {
-      short: 'Вологість до охолоджувача',
-      default: 'Вологість до охолоджувача (%)',
-      raw: 'Вологість до охолоджувача (CHANGE)',
+      short: `${moisture_before_cooler_percent}`,
+      default: `${moisture_before_cooler_percent} (%)`,
     },
-    unit: { default: '%', raw: 'CHANGE' },
+    unit: { default: `%` },
   },
   moistureAfterCoolerPercent: {
     label: {
-      short: 'Вологість після охолоджувача',
-      default: 'Вологість після охолоджувача (%)',
-      raw: 'Вологість після охолоджувача (CHANGE)',
+      short: `${moisture_after_cooler_percent}`,
+      default: `${moisture_after_cooler_percent} (%)`,
     },
-    unit: { default: '%', raw: 'CHANGE' },
+    unit: { default: `%` },
   },
   temperatureCelsius: {
     label: {
-      short: 'Температура',
-      default: 'Температура (°C)',
-      raw: 'Температура (CHANGE)',
+      short: `${temperature_celsius}`,
+      default: `${temperature_celsius} (°C)`,
     },
-    unit: { default: '°C', raw: 'CHANGE' },
+    unit: { default: `°C` },
   },
   temperatureBeforeCoolerCelsius: {
     label: {
-      short: 'Температура до охолоджувача',
-      default: 'Температура до охолоджувача (°C)',
-      raw: 'Температура до охолоджувача (CHANGE)',
+      short: `${temperature_before_cooler_celsius}`,
+      default: `${temperature_before_cooler_celsius} (°C)`,
     },
-    unit: { default: '°C', raw: 'CHANGE' },
+    unit: { default: `°C` },
   },
   temperatureAfterCoolerCelsius: {
     label: {
-      short: 'Температура після охолоджувача',
-      default: 'Температура після охолоджувача (°C)',
-      raw: 'Температура після охолоджувача (CHANGE)',
+      short: `${temperature_after_cooler_celsius}`,
+      default: `${temperature_after_cooler_celsius} (°C)`,
     },
-    unit: { default: '°C', raw: 'CHANGE' },
+    unit: { default: `°C` },
   },
 
   // Технологічні показники формувальних сумішей
   moldability: {
     label: {
-      short: 'Формувальність',
-      default: 'Формувальність (CHANGE)',
-      raw: 'Формувальність (CHANGE)',
+      short: `${moldability}`,
+      default: `${moldability} (%)`,
+      m: `Маса зразка суміші (г)`,
+      m1: `Маса пройденої суміші (г)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `%`, m: `г`, m1: `г` },
   },
   friabilityAfter0Hours: {
     label: {
-      short: 'Обсиплювальність зразу',
-      default: 'Обсиплювальність зразу (%)',
-      raw: 'Обсиплювальність зразу (CHANGE)',
+      short: `${friability_after_0_hours}`,
+      default: `${friability_after_0_hours} (%)`,
+      m: `Маса зразка до випробування (г)`,
+      m1: `Маса зразка після випробування (г)`,
     },
-    unit: { default: '%', raw: 'CHANGE' },
+    unit: { default: `%`, m: `г`, m1: `г` },
   },
   friabilityAfter1Hour: {
     label: {
-      short: 'Обсиплювальність через 1 годину',
-      default: 'Обсиплювальність через 1 годину (%)',
-      raw: 'Обсиплювальність через 1 годину (CHANGE)',
+      short: `${friability_after_1_hour}`,
+      default: `${friability_after_1_hour} (%)`,
+      m: `Маса зразка до випробування (г)`,
+      m1: `Маса зразка після випробування (г)`,
     },
-    unit: { default: '%', raw: 'CHANGE' },
+    unit: { default: `%`, m: `г`, m1: `г` },
   },
   flowability: {
     label: {
-      short: 'Плинність',
-      default: 'Плинність (CHANGE)',
-      raw: 'Плинність (CHANGE)',
+      short: `${flowability}`,
+      default: `${flowability} (%)`,
+      hA: `Твердість зразка у точці A (од.)`,
+      hB: `Твердість зразка у точці B (од.)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `%`, hA: `од.`, hB: `од.` },
   },
   compactability: {
     label: {
-      short: 'Ущільнювальність',
-      default: 'Ущільнювальність (CHANGE)',
-      raw: 'Ущільнювальність (CHANGE)',
+      short: `${compactability}`,
+      default: `${compactability} (%)`,
+      h: `Висота суміші, гільзи до ущільнення (мм)`,
+      h1: `висота суміші, гільзи після ущільнення (мм)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `%`, h: `мм`, h1: `мм` },
   },
 
   // Гранулометрія / склад
   clayContentPercent: {
     label: {
-      short: 'Глиниста складова',
-      default: 'Глиниста складова (%)',
-      raw: 'Глиниста складова (CHANGE)',
+      short: `${clay_content_percent}`,
+      default: `${clay_content_percent} (%)`,
+      m: `Маса наважки (г)`,
+      m1: `Маса наважки після видалення глинистої складової (г)`,
     },
-    unit: { default: '%', raw: 'CHANGE' },
+    unit: { default: `%`, m: `г`, m1: `г` },
   },
-  activeClayPercent: {
+  activeClay: {
     label: {
-      short: 'Активна глина',
-      default: 'Активна глина (%)',
-      raw: 'Активна глина (CHANGE)',
+      short: `${active_clay}`,
+      default: `${active_clay} (мл)`,
     },
-    unit: { default: '%', raw: 'CHANGE' },
+    unit: { default: `мл` },
   },
   granulometricComposition: {
     label: {
-      short: 'Гранулометричний склад',
-      default: 'Гранулометричний склад (CHANGE)',
-      raw: 'Гранулометричний склад (CHANGE)',
+      short: `${granulometric_composition}`,
+      default: `Масова доля залишку`,
+      raw: `Маса залишку`,
+      sieve2p5MmMass: `на ситі 2.5 мм`,
+      sieve1p6MmMass: `на ситі 1.6 мм`,
+      sieve1MmMass: `на ситі 1.0 мм`,
+      sieve0p63MmMass: `на ситі 0.63 мм`,
+      sieve0p4MmMass: `на ситі 0.4 мм`,
+      sieve0p315MmMass: `на ситі 0.315 мм`,
+      sieve0p2MmMass: `на ситі 0.2 мм`,
+      sieve0p16MmMass: `на ситі 0.16 мм`,
+      sieve0p1MmMass: `на ситі 0.1 мм`,
+      sieve0p063MmMass: `на ситі 0.063 мм`,
+      sieve0p05MmMass: `на ситі 0.05 мм`,
+      panMass: `на піддоні`,
+      initialSampleMass: `Маса вихідної наважки (г)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `%`, raw: `г` },
   },
   meanGrainSize: {
     label: {
-      short: 'Середній розмір зерна',
-      default: 'Середній розмір зерна (CHANGE)',
-      raw: 'Середній розмір зерна (CHANGE)',
+      short: `${mean_grain_size}`,
+      default: `Середній розмір зерна (мм)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `мм` },
   },
   uniformityCoefficient: {
     label: {
-      short: 'Коефіцієнт однорідності',
-      default: 'Коефіцієнт однорідності (CHANGE)',
-      raw: 'Коефіцієнт однорідності (CHANGE)',
+      short: `${uniformity_coefficient}`,
+      default: `${uniformity_coefficient} (%)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `%` },
   },
 
   // Хімічні/колоїдні
-  ph: {
+  powerOfHydrogen: {
     label: {
-      short: 'Водневий показник, pH',
-      default: 'Водневий показник, pH (CHANGE)',
-      raw: 'Водневий показник, pH (CHANGE)',
+      short: `${power_of_hydrogen}`,
+      default: `${power_of_hydrogen} (од.)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `од.` },
   },
   waterAbsorptionPercent: {
     label: {
-      short: 'Водопоглинання',
-      default: 'Водопоглинання (%)',
-      raw: 'Водопоглинання (CHANGE)',
+      short: `${water_absorption_percent}`,
+      default: `${water_absorption_percent} (%)`,
+      m: `Маса наважки (г)`,
+      m1: `Загальний об’єм доданої води (мм)`,
     },
-    unit: { default: '%', raw: 'CHANGE' },
+    unit: { default: `%`, m: `г`, m1: `мм` },
   },
   colloidalityPercent: {
     label: {
-      short: 'Колоїдальність',
-      default: 'Колоїдальність (%)',
-      raw: 'Колоїдальність (CHANGE)',
+      short: `${colloidality_percent}`,
+      default: `${colloidality_percent} (%)`,
+      raw: `Об’єм осаду глини у пробірці, (см³)`,
     },
-    unit: { default: '%', raw: 'CHANGE' },
+    unit: { default: `%`, raw: `см³` },
   },
   thermalStability: {
     label: {
-      short: 'Термічна стійкість',
-      default: 'Термічна стійкість (CHANGE)',
-      raw: 'Термічна стійкість (CHANGE)',
+      short: `${thermal_stability}`,
+      default: `${thermal_stability} (од.)`,
+      sigma1: `Межа міцності на стискання у вологому стані суміші (кгс/см²)`,
+      sigma2: `Результат випробування (кгс/см²)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `од.`, sigma1: `кгс/см²`, sigma2: `кгс/см²` },
   },
 
   // Фізичні
   density: {
     label: {
-      short: 'Щільність',
-      default: 'Щільність (CHANGE)',
-      raw: 'Щільність (CHANGE)',
+      short: `${density}`,
+      default: `${density} (г/см³)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `г/см³` },
   },
   viscosity: {
     label: {
-      short: "В'язкість",
-      default: "В'язкість (CHANGE)",
-      raw: "В'язкість (CHANGE)",
+      short: `${viscosity}`,
+      default: `${viscosity} (с)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `с` },
   },
   bulkDensity: {
     label: {
-      short: 'Насипна щільність',
-      default: 'Насипна щільність (CHANGE)',
-      raw: 'Насипна щільність (CHANGE)',
+      short: `${bulk_density}`,
+      default: `${bulk_density} (г/см³)`,
+      m: `Маса матеріалу (см³)`,
+      V: `Об’єм (г)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `г/см³`, m: `см³`, V: `г` },
   },
   bulkWeight: {
     label: {
-      short: 'Насипна вага',
-      default: 'Насипна вага (CHANGE)',
-      raw: 'Насипна вага (CHANGE)',
+      short: `${bulk_weight}`,
+      default: `${bulk_weight} (г/см³)`,
+      m: `Маса матеріалу (см³)`,
+      V: `Об’єм (г)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `г/см³`, m: `см³`, V: `г` },
   },
 
   // Оглядові/індекси
   appearance: {
     label: {
-      short: 'Зовнішній вигляд',
-      default: 'Зовнішній вигляд (CHANGE)',
-      raw: 'Зовнішній вигляд (CHANGE)',
+      default: `${appearance}`,
+      raw: `Відповідає вимогам`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
   },
   afsIndex: {
     label: {
-      short: 'Показник AFS',
-      default: 'Показник AFS (CHANGE)',
-      raw: 'Показник AFS (CHANGE)',
+      short: `${afs_index}`,
+      default: `Масова доля залишку`,
+      raw: `Маса залишку`,
+      sieve1p25MmMass: `на ситі 1.25 мм`,
+      sieve1MmMass: `на ситі 1.0 мм`,
+      sieve0p7MmMass: `на ситі 0.7 мм`,
+      sieve0p5MmMass: `на ситі 0.5 мм`,
+      sieve0p355MmMass: `на ситі 0.355 мм`,
+      sieve0p25MmMass: `на ситі 0.25 мм`,
+      sieve0p18MmMass: `на ситі 0.18 мм`,
+      sieve0p125MmMass: `на ситі 0.125 мм`,
+      sieve0p09MmMass: `на ситі 0.09 мм`,
+      sieve0p063MmMass: `на ситі 0.063 мм`,
+      panMass: `на піддоні`,
+      initialSampleMass: `Маса вихідної наважки (г)`,
     },
-    unit: { default: 'CHANGE', raw: 'CHANGE' },
+    unit: { default: `%`, raw: `г` },
   },
 })

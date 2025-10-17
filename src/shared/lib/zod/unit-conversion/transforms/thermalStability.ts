@@ -2,7 +2,10 @@ import { withUnitConversion } from '@/shared/lib/zod/unit-conversion/withUnitCon
 import type { TransformSpec } from '../transform-types'
 import { Units } from '../unit-registry'
 
-export type ThermalStabilityArgs = { sigma1: number; sigma2: number }
+export type ThermalStabilityArgs = {
+  sigma1: number
+  sigma2: number
+}
 
 /**
  * Термічна стійкість: T = σ1 / σ2 (од.)

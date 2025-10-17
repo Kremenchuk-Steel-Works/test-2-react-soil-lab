@@ -1,56 +1,77 @@
+import { Transforms } from '@/shared/lib/zod/unit-conversion/transforms'
+import { withFormulaTransform } from '@/shared/lib/zod/unit-conversion/withFormulaTransform'
 import type { TransformSpec } from '../transform-types'
 import { Units } from '../unit-registry'
 
 /**
- * Ключи входов зафиксированы в одном месте — INPUTS.
- * Тип Args выводится из INPUTS как Record<key, number>, т.е. строго "словарь чисел".
- * Это удовлетворяет ограничению Args extends Record<string, number>.
+ * Ключи «сырых» входов: массы остатков по ситам + общая масса навески.
+ * Важно: список сит соответствует стандартным множителям AFS.
  */
-const INPUTS = [
-  'sieve1p25MmPercent',
-  'sieve1MmPercent',
-  'sieve0p7MmPercent',
-  'sieve0p5MmPercent',
-  'sieve0p355MmPercent',
-  'sieve0p25MmPercent',
-  'sieve0p18MmPercent',
-  'sieve0p125MmPercent',
-  'sieve0p09MmPercent',
-  'sieve0p063MmPercent',
-  'panPercent',
+const SIEVE_MASS_KEYS = [
+  'sieve1p25MmMass',
+  'sieve1MmMass',
+  'sieve0p7MmMass',
+  'sieve0p5MmMass',
+  'sieve0p355MmMass',
+  'sieve0p25MmMass',
+  'sieve0p18MmMass',
+  'sieve0p125MmMass',
+  'sieve0p09MmMass',
+  'sieve0p063MmMass',
+  'panMass',
 ] as const
 
-export type AfsGrainFinenessNumberArgs = Record<(typeof INPUTS)[number], number>
+type SieveKey = (typeof SIEVE_MASS_KEYS)[number]
+
+export type AfsGrainFinenessNumberMassArgs = Readonly<
+  Record<SieveKey | 'initialSampleMass', number>
+>
 
 /**
- * Фиксированные множители AFS для стандартного набора сит.
- * Через `satisfies Record<keyof Args, number>` компилятор проверит,
- * что перечислены все и только допустимые ключи.
+ * Фиксированные множители AFS для каждого сита.
+ * Проверяем полноту ключей типом satisfies.
  */
-const MULTIPLYERS = {
-  sieve1p25MmPercent: 10,
-  sieve1MmPercent: 15,
-  sieve0p7MmPercent: 18,
-  sieve0p5MmPercent: 25,
-  sieve0p355MmPercent: 35,
-  sieve0p25MmPercent: 45,
-  sieve0p18MmPercent: 60,
-  sieve0p125MmPercent: 80,
-  sieve0p09MmPercent: 120,
-  sieve0p063MmPercent: 170,
-  panPercent: 230,
-} as const satisfies Record<keyof AfsGrainFinenessNumberArgs, number>
+const MULTIPLIERS = {
+  sieve1p25MmMass: 10,
+  sieve1MmMass: 15,
+  sieve0p7MmMass: 18,
+  sieve0p5MmMass: 25,
+  sieve0p355MmMass: 35,
+  sieve0p25MmMass: 45,
+  sieve0p18MmMass: 60,
+  sieve0p125MmMass: 80,
+  sieve0p09MmMass: 120,
+  sieve0p063MmMass: 170,
+  panMass: 230,
+} as const satisfies Record<SieveKey, number>
 
 /**
- * Показник AFS
- * GFN = (Σ (fraction_i[%] * multiplier_i)) / 100  (од.)
+ * Показник AFS (GFN) из СЫРЫХ масс:
+ * 1) Для каждого сита считаем процент через универсальную формулу: (m1 / m) * 100
+ * 2) Применяем множители AFS и делим на 100: GFN = Σ(p_i * k_i) / 100
  */
-export const AFS_GRAIN_FINENESS_NUMBER_TRANSFORM: TransformSpec<AfsGrainFinenessNumberArgs> = {
+export const AFS_GRAIN_FINENESS_NUMBER_TRANSFORM: TransformSpec<AfsGrainFinenessNumberMassArgs> = {
   id: 'afsGrainFinenessNumber',
-  inputs: INPUTS,
+  inputs: [...SIEVE_MASS_KEYS, 'initialSampleMass'] as const,
   compute(a) {
-    const sum = INPUTS.reduce((acc, k) => acc + a[k] * MULTIPLYERS[k], 0)
-    return sum / 100
+    const m = a.initialSampleMass
+    if (!Number.isFinite(m) || m <= 0) return Number.NaN
+
+    let weightedSum = 0
+
+    for (const key of SIEVE_MASS_KEYS) {
+      const m1 = a[key]
+      if (!Number.isFinite(m1) || m1 < 0) return Number.NaN
+
+      const percent = withFormulaTransform({
+        transform: Transforms.PARTICLE_SIZE_DISTRIBUTION_TRANSFORM,
+        known: { m, m1 },
+      })
+
+      weightedSum += percent * MULTIPLIERS[key]
+    }
+
+    return weightedSum / 100
   },
   unit: Units.PN,
 }

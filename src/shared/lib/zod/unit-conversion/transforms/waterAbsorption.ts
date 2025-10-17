@@ -1,7 +1,10 @@
 import type { TransformSpec } from '../transform-types'
 import { Units } from '../unit-registry'
 
-export type WaterAbsorptionArgs = { m: number; m1: number }
+export type WaterAbsorptionArgs = {
+  m: number
+  m1: number
+}
 
 /** Водопоглинання бентоніту: B = m1 / m (од.) */
 export const WATER_ABSORPTION_TRANSFORM: TransformSpec<WaterAbsorptionArgs> = {
